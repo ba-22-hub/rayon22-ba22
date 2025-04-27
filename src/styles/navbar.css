@@ -4,6 +4,14 @@
     margin-top: 65px;
 }
 
+.navbar-logo {
+    height: 50px; /* ou la hauteur que tu veux */
+    width: auto;
+    object-fit: contain;
+    display: block; /* SUPER IMPORTANT pour que l'image prenne sa taille et ne s'effondre pas */
+  }
+
+
 .navbar-menu {
     list-style: none;
     display: flex;

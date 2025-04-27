@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 
 // Importing the style
-//import './styles/App.css'
 import './styles/navbar.css'
 
 // Importing all the pages
