@@ -1,0 +1,71 @@
+.navbar {
+    background-color: #333;
+    padding: 0;
+    width: 100%; /* occupe toute la largeur */
+  }
+  
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* étale les éléments sur toute la barre */
+    align-items: center; /* centre verticalement */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .navbar-menu > li {
+    position: relative;
+  }
+  
+  .navbar-menu > li > a,
+  .navbar-menu > li > .dropdown-title {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .navbar-menu > li > a:hover,
+  .navbar-menu > li > .dropdown-title:hover {
+    background-color: #444;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 200px;
+    z-index: 1000;
+  }
+  
+  .dropdown-menu li {
+    border-bottom: 1px solid #555;
+  }
+  
+  .dropdown-menu li:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-menu li a {
+    padding: 12px 20px;
+    display: block;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .dropdown-menu li a:hover {
+    background-color: #555;
+  }
+  
+  /* Affiche le sous-menu au survol */
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
