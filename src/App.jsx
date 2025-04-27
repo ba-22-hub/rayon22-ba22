@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 // Importing the style
-import './styles/App.css'
+//import './styles/App.css'
 import './styles/navbar.css'
 
 // Importing all the pages
@@ -29,6 +29,7 @@ function App() {
         <Router>
           <nav className="navbar">
             <ul className="navbar-menu">
+              <li><Link to="/">Accueil</Link></li>
               <li><Link to="/about">Qui sommes-nous ?</Link></li>
               <li><Link to="/how-it-works">Comment ça marche ?</Link></li>
               

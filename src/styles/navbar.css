@@ -1,38 +1,38 @@
 .navbar {
     background-color: #333;
-    padding: 0;
-    width: 100%; /* occupe toute la largeur */
-  }
-  
-  .navbar-menu {
+    width: 100%;
+    margin-top: 65px;
+}
+
+.navbar-menu {
     list-style: none;
     display: flex;
-    justify-content: space-between; /* étale les éléments sur toute la barre */
-    align-items: center; /* centre verticalement */
+    justify-content: space-between;
+    align-items: center;
     margin: 0;
     padding: 0;
     width: 100%;
-  }
-  
-  .navbar-menu > li {
+}
+
+.navbar-menu > li {
     position: relative;
-  }
-  
-  .navbar-menu > li > a,
-  .navbar-menu > li > .dropdown-title {
+}
+
+.navbar-menu > li > a,
+.navbar-menu > li > .dropdown-title {
     display: block;
-    padding: 15px 20px;
+    padding: 20px 20px; /* <-- ICI on ajoute du padding interne pour donner de la hauteur aux éléments */
     color: white;
     text-decoration: none;
     cursor: pointer;
-  }
-  
-  .navbar-menu > li > a:hover,
-  .navbar-menu > li > .dropdown-title:hover {
+}
+
+.navbar-menu > li > a:hover,
+.navbar-menu > li > .dropdown-title:hover {
     background-color: #444;
-  }
-  
-  .dropdown-menu {
+}
+
+.dropdown-menu {
     display: none;
     position: absolute;
     top: 100%;
@@ -43,29 +43,28 @@
     margin: 0;
     min-width: 200px;
     z-index: 1000;
-  }
-  
-  .dropdown-menu li {
+}
+
+.dropdown-menu li {
     border-bottom: 1px solid #555;
-  }
-  
-  .dropdown-menu li:last-child {
+}
+
+.dropdown-menu li:last-child {
     border-bottom: none;
-  }
-  
-  .dropdown-menu li a {
+}
+
+.dropdown-menu li a {
     padding: 12px 20px;
     display: block;
     color: white;
     text-decoration: none;
-  }
-  
-  .dropdown-menu li a:hover {
+}
+
+.dropdown-menu li a:hover {
     background-color: #555;
-  }
-  
-  /* Affiche le sous-menu au survol */
-  .dropdown:hover .dropdown-menu {
+}
+
+/* Affiche le sous-menu au survol */
+.dropdown:hover .dropdown-menu {
     display: block;
-  }
-  
+}
