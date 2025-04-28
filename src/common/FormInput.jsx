@@ -1,10 +1,10 @@
-function FormInput({inputText}) {
+function FormInput({ inputText, name, value, onChange }) {
     return (
         <>
-            <label>{inputText}</label><br></br>
-            <input type="text" name="name" /><br></br><br></br>
+            <label>{inputText}</label><br />
+            <input type="text" name={name} value={value} onChange={onChange} /><br /><br />
         </>
-    )
+    );
 }
 
 export default FormInput
