@@ -8,7 +8,12 @@ import LoremIpsum from "../common/LoremIpsum"
 function More() {
     return (
         <>
-            <h1>This is the More Page</h1>
+            <h1>Toujours plus !</h1>
+            
+            <h2>Infos pratique</h2>
+            <LoremIpsum></LoremIpsum>
+
+            <h2>Retours presse</h2>
             <LoremIpsum></LoremIpsum>
         </>
     )
