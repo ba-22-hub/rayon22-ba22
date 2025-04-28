@@ -75,8 +75,13 @@ function Register() {
 
             {/* Register form */}
             <form onSubmit={handleSubmit}>
-                {/* TODO : add gender input */}
-                {/* Homme | Femme */}
+                <div>
+                    <label>Genre</label><br></br>
+                    <input type="radio" name="gender" value="male" checked={formData.gender === "male"} onChange={handleChange} />
+                    Homme
+                    <input type="radio" name="gender" value="female" checked={formData.gender === "female"} onChange={handleChange}/>
+                    Femme
+                </div>
                 <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
                 <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
                 {/* TODO : add birthday input */}
