@@ -5,6 +5,7 @@ import { useState } from 'react';
 import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput"
 import PageButton from "../common/PageButton"
+import FunctionButton from '../common/FunctionButton';
 
 /**
  * The Register page.
@@ -26,14 +27,21 @@ function Register() {
         situation: '',
         quotient: '',
         wageType: '',
-        otherWage: ''
+        otherWage: '',
+        readInfo: false,
+        acceptTerms: false
     });
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
         
-        if (name === "wageType") {
+        if (type === "checkbox") {
+            setFormData({
+                ...formData,
+                [name]: checked
+            });
+        } else if (name === "wageType") {
             setFormData(prevData => ({
                 ...prevData,
                 wageType: value,
@@ -82,7 +90,9 @@ function Register() {
             situation: '',
             quotient: '',
             wageType: '',
-            otherWage: ''
+            otherWage: '',
+            readInfo: false,
+            acceptTerms: false
         });
 
         alert('Votre compte a bien été créé ! Merci.');
@@ -149,6 +159,24 @@ function Register() {
                 </div><br />
                 
                 <p>L’inscription nécessitera un contact avec nos équipes. Dans certains cas, un rendez-vous avec une assistante sociale de proximité sera nécessaire. Dans tous les cas, une validation des conditions de ressources sera réalisée. Au plus vite inscrit, au plus vite livré.</p>
+
+                <div>
+                    <input
+                        type="checkbox"
+                        name="readInfo"
+                        checked={formData.readInfo}
+                        onChange={handleChange}
+                    />
+                    <label>J’ai lu et compris ces informations.</label><br />
+
+                    <input
+                        type="checkbox"
+                        name="acceptTerms"
+                        checked={formData.acceptTerms}
+                        onChange={handleChange}
+                    />
+                    <label>J’accepte les conditions d’utilisation.</label>
+                </div>
 
                 <button type="submit">Valider</button>
             </form>
