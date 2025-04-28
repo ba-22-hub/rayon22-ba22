@@ -49,10 +49,16 @@ function Contact() {
     }
     return (
         <>
-            <h1>This is the Contact Page</h1>
-            <LoremIpsum></LoremIpsum>
+            <h1>Contactez-nous</h1>
+            <h2>Un contact si besoin</h2>
+            <p>
+                Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j’adresse un message (pour un problème de commande préciser la date de commande).
+
+                Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
+            </p>
+
             <div>
-                <h1>Formulaire de contact</h1>
+                <h2>Formulaire de contact</h2>
 
                 {/* Contact form */}
                 <form onSubmit={handleSubmit}>
