@@ -81,7 +81,7 @@ function Register() {
                     Homme
                     <input type="radio" name="gender" value="female" checked={formData.gender === "female"} onChange={handleChange}/>
                     Femme
-                </div>
+                </div><br></br>
                 <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
                 <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
                 <label>Date de naissance :</label><br />
@@ -97,8 +97,17 @@ function Register() {
                 <FormInput inputText="Rue :" name="street" value={formData.street} onChange={handleChange} />
                 <FormInput inputText="Complément d'adresse :" name="addr" value={formData.addr} onChange={handleChange} />
                 <FormInput inputText="Code postal :" name="postalCode" value={formData.postalCode} onChange={handleChange} />
-                {/* TODO : add situation input */}
-                {/* Votre situation : Salarié | Sans emploi | Étudiant | Retraité */}
+                <div>
+                    <label>Situation</label><br></br>
+                    <input type="radio" name="situation" value="employee" checked={formData.situation === "employee"} onChange={handleChange} />
+                    Salarié
+                    <input type="radio" name="situation" value="jobless" checked={formData.situation === "jobless"} onChange={handleChange}/>
+                    Sans emploi
+                    <input type="radio" name="situation" value="student" checked={formData.situation === "student"} onChange={handleChange}/>
+                    Étudiant
+                    <input type="radio" name="situation" value="retired" checked={formData.situation === "retired"} onChange={handleChange}/>
+                    Retraité
+                </div><br></br>
                 <FormInput inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} />
                 {/* TODO : add wage input */}
                 {/* Vos revenus : Salaire ou pension | Bourse étudiante | Aide (RSA, APL) | Autres */}
