@@ -1,6 +1,8 @@
 // Importing dependencies
 import { useNavigate } from 'react-router-dom';
 
+// Importing common components
+import FunctionButton from "./FunctionButton"
 /**
  * A button to navigate to a particular page on the website.
  * @param {Object} props - The component props. 
@@ -13,10 +15,8 @@ function PageButton({buttonText, page}) {
     const navigate = useNavigate();
 
     return (
-        <button onClick={() => {navigate(page);}}>
-          {buttonText}
-        </button>
-      );
+      <FunctionButton buttonText={buttonText} fun={() => {navigate(page);}}></FunctionButton>
+    );
 }
 
 export default PageButton
