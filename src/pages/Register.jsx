@@ -84,8 +84,13 @@ function Register() {
                 </div>
                 <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
                 <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
-                {/* TODO : add birthday input */}
-                {/* Date de naissance : dd/mm/yy */}
+                <label>Date de naissance :</label><br />
+                <input
+                    type="date"
+                    name="birthday"
+                    value={formData.birthday}
+                    onChange={handleChange}
+                /><br /><br />
                 <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
                 <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
                 <FormInput inputText="Votre commune :" name="region" value={formData.region} onChange={handleChange} />
