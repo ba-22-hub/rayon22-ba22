@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The News page.
+ * @returns {React.ReactElement} News component.
+ */
 function News() {
     return (
         <>

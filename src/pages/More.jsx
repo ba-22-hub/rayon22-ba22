@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The More page.
+ * @returns {React.ReactElement} More component.
+ */
 function More() {
     return (
         <>

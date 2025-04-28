@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The Login page.
+ * @returns {React.ReactElement} Login component.
+ */
 function Login() {
     return (
         <>

@@ -1,3 +1,4 @@
+// Importing dependencies
 import {
   BrowserRouter as Router,
   Routes,
@@ -23,15 +24,22 @@ import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
 
+/**
+ * A component wrapping all the website pages.
+ * @returns {React.ReactElement} App component.
+ */
 function App() {
     return (
         <Router>
+
+          {/* Horizontal navigation bar to choose the page of the website we want to visit */}
           <nav className="navbar">
             <ul className="navbar-menu">
               <li><Link to="/">Accueil</Link></li>
               <li><Link to="/about">Qui sommes-nous ?</Link></li>
               <li><Link to="/how-it-works">Comment ça marche ?</Link></li>
               
+              {/* Dropdown menu to choose between browsing the catalog or check the shopping cart */}
               <li className="dropdown">
                 <span className="dropdown-title">Commander</span>
                 <ul className="dropdown-menu">
@@ -49,6 +57,7 @@ function App() {
             </ul>
           </nav>
     
+          {/* Creating the routes to the website pages */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

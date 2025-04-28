@@ -1,6 +1,11 @@
+// Importing common components
 import PageButton from "../common/PageButton"
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The Home page.
+ * @returns {React.ReactElement} Home component.
+ */
 function Home() {
     return (
         <>

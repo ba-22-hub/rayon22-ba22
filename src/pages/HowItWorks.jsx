@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The How It Works page.
+ * @returns {React.ReactElement} HowItWorks component.
+ */
 function HowItWorks() {
     return (
         <>

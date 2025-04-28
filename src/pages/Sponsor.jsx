@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The Sponsor page.
+ * @returns {React.ReactElement} Sponsor component.
+ */
 function Sponsor() {
     return (
         <>

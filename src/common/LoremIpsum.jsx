@@ -1,3 +1,7 @@
+/**
+ * A basic Lorem ipsum paragraph.
+ * @returns {React.ReactElement} LoremIpsum component.
+ */
 function LoremIpsum() {
     return (
         <>

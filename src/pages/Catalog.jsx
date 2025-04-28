@@ -1,5 +1,10 @@
+// Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+/**
+ * The Catalog page.
+ * @returns {React.ReactElement} Catalog component.
+ */
 function Catalog() {
     return (
         <>
