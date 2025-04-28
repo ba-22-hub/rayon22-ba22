@@ -13,7 +13,7 @@ import PageButton from "../common/PageButton"
 function Register() {
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
-        sex: '',
+        gender: '',
         firstName: '',
         lastName: '',
         birthday: '',
@@ -46,7 +46,7 @@ function Register() {
 
         // resets the inputs and formData to blank
         setFormData({
-            sex: '',
+            gender: '',
             firstName: '',
             lastName: '',
             birthday: '',
@@ -75,7 +75,7 @@ function Register() {
 
             {/* Register form */}
             <form onSubmit={handleSubmit}>
-                {/* TODO : add sex input */}
+                {/* TODO : add gender input */}
                 {/* Homme | Femme */}
                 <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
                 <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
