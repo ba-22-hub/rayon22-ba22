@@ -1,3 +1,4 @@
+// Importing dependencies
 import { useState } from 'react';
 
 // Importing common components
