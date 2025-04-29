@@ -25,12 +25,16 @@ import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
 
+// Importing common components
+import Footer from "./common/Footer.jsx";
+
 /**
  * A component wrapping all the website pages.
  * @returns {React.ReactElement} App component.
  */
 function App() {
     return (
+      <>
         <Router>
 
           {/* Horizontal navigation bar to choose the page of the website we want to visit */}
@@ -57,7 +61,7 @@ function App() {
               <li><Link to="/news">Actualité</Link></li>
             </ul>
           </nav>
-    
+
           {/* Creating the routes to the website pages */}
           <Routes>
             <Route path="/" element={<Home />} />
@@ -74,6 +78,9 @@ function App() {
             <Route path="/sponsor" element={<Sponsor />} />
           </Routes>
         </Router>
+
+        <Footer></Footer>
+      </>
       );
 }
 
