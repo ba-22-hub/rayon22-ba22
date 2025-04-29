@@ -16,6 +16,7 @@ import About from './pages/About.jsx'
 import Cart from './pages/Cart.jsx'
 import Catalog from './pages/Catalog.jsx'
 import Contact from './pages/Contact.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
 import Home from './pages/Home.jsx'
 import HowItWorks from './pages/HowItWorks.jsx'
 import Login from './pages/Login.jsx'
@@ -64,6 +65,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/login" element={<Login />} />
             <Route path="/more" element={<More />} />

@@ -4,7 +4,6 @@ import { useState } from 'react';
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
-import PageButton from "../common/PageButton";
 
 /**
  * The Login page.
@@ -13,8 +12,8 @@ import PageButton from "../common/PageButton";
 function Login() {
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
-        mail: '',
-        password: ''
+        password: '',
+        passwordConfirm: ''
     });
 
     // function to set the new formData value whenever the inputs are changed
@@ -35,26 +34,23 @@ function Login() {
 
         // resets the inputs and formData to blank
         setFormData({
-            mail: '',
-            password: ''
+            password: '',
+            passwordConfirm: ''
         });
     }
 
     return (
         <>
-            <h1>Bienvenue sur votre Espace Utilisateur</h1>
-            <h2>Connectez vous en utilisant le formulaire ci-dessous</h2>
+            <h2>Presque terminé !</h2>
+            <h2>Plus qu'une étape !</h2>
+
+            <h1>Création du mot de passe</h1>
 
             <form onSubmit={handleSubmit}>
-                <FormInput inputText={'Adresse email'} name={'mail'} value={formData.mail} onChange={handleChange}></FormInput>
                 <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
-                {/* TODO : change the FunctionButton to a PageButton to toggle to a forgot password page */}
-                <button type="submit">Je me connecte</button>
+                <FormInput inputText={'Confirmation du mot de passe'} name={'passwordConfirm'} value={formData.passwordConfirm} onChange={handleChange}></FormInput>
+                <button type="submit">Confirmer le compte</button>
             </form>
-            <PageButton buttonText={'Mot de passe oublié ?'} page={'/forgot-password'}></PageButton>
-
-            <h2>Vous n'avez pas encore de compte ?</h2>
-            <PageButton buttonText={'Créez votre compte'} page={'/register'}></PageButton>
         </>
     )
 }
