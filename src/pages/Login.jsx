@@ -48,7 +48,6 @@ function Login() {
             <form onSubmit={handleSubmit}>
                 <FormInput inputText={'Adresse email'} name={'mail'} value={formData.mail} onChange={handleChange}></FormInput>
                 <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
-                {/* TODO : change the FunctionButton to a PageButton to toggle to a forgot password page */}
                 <button type="submit">Je me connecte</button>
             </form>
             <PageButton buttonText={'Mot de passe oublié ?'} page={'/forgot-password'}></PageButton>
