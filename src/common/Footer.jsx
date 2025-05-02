@@ -11,19 +11,11 @@ import {
 const Footer = () => {
     return (
         <Box>
-            <h1
-                style={{
-                    color: "green",
-                    textAlign: "center",
-                    marginTop: "10px",
-                }}
-            >
-                A Computer Science Portal for Geeks!
-            </h1>
             <FooterContainer>
                 <Row>
                     <Column>
-                        <Heading>About Us</Heading>
+                        <Heading>Heading</Heading>
+                        <p>le RAYON est une initiative des Banques Alimentaires</p>
                         <FooterLink href="#">
                             Aim
                         </FooterLink>
