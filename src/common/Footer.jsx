@@ -1,3 +1,4 @@
+// Importing dependencies
 import React from "react";
 import {
     Box,
@@ -8,68 +9,48 @@ import {
     Heading,
 } from "../styles/FooterStyles";
 
+// Importing assets
+import rayonLogo from "../assets/logo.png"
+import banqueLogo from "../assets/banquesAlimentaires.png"
+
 const Footer = () => {
     return (
         <Box>
             <FooterContainer>
                 <Row>
+
                     <Column>
-                        <Heading>Heading</Heading>
+                    <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+                        <a href="/">
+                            <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
+                        </a>
+                        <a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
+                            <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
+                        </a>
+                    </div>
                         <p>le RAYON est une initiative des Banques Alimentaires</p>
+                    </Column>
+
+                    <Column>
                         <FooterLink href="#">
-                            Aim
+                            Mentions Légales
                         </FooterLink>
                         <FooterLink href="#">
-                            Vision
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Testimonials
+                            Politique d’utilisation des cookies
                         </FooterLink>
                     </Column>
+
                     <Column>
-                        <Heading>Services</Heading>
                         <FooterLink href="#">
-                            Writing
+                            Charte de fonctionnement
                         </FooterLink>
                         <FooterLink href="#">
-                            Internships
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Coding
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Teaching
+                            Politique d’utilisation des cookies
                         </FooterLink>
                     </Column>
+
                     <Column>
-                        <Heading>Contact Us</Heading>
-                        <FooterLink href="#">
-                            Uttar Pradesh
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Ahemdabad
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Indore
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Mumbai
-                        </FooterLink>
-                    </Column>
-                    <Column>
-                        <Heading>Social Media</Heading>
-                        <FooterLink href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                            <i className="fab fa-facebook-f">
-                                <span
-                                    style={{
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    Facebook
-                                </span>
-                            </i>
-                        </FooterLink>
-                        <FooterLink href="#">
+                        <FooterLink href="https://www.instagram.com/banque.alimentaire22/">
                             <i className="fab fa-instagram">
                                 <span
                                     style={{
@@ -80,29 +61,11 @@ const Footer = () => {
                                 </span>
                             </i>
                         </FooterLink>
-                        <FooterLink href="#">
-                            <i className="fab fa-twitter">
-                                <span
-                                    style={{
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    Twitter
-                                </span>
-                            </i>
-                        </FooterLink>
-                        <FooterLink href="#">
-                            <i className="fab fa-youtube">
-                                <span
-                                    style={{
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    Youtube
-                                </span>
-                            </i>
+                        <FooterLink href="mailto:ba220@banquealimentaire.org">
+                            ba220@banquealimentaire.org
                         </FooterLink>
                     </Column>
+
                 </Row>
             </FooterContainer>
         </Box>

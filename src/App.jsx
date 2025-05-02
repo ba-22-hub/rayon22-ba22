@@ -11,6 +11,10 @@ import {
 // Importing the style
 import './styles/navbar.css'
 
+// Importing assets
+import rayonLogo from "./assets/logo.png"
+import banqueLogo from "./assets/banquesAlimentaires.png"
+
 // Importing all the pages
 import About from './pages/About.jsx'
 import Cart from './pages/Cart.jsx'
@@ -40,7 +44,16 @@ function App() {
           {/* Horizontal navigation bar to choose the page of the website we want to visit */}
           <nav className="navbar">
             <ul className="navbar-menu">
-              <li><Link to="/">Accueil</Link></li>
+            <li>
+              <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+                <Link to="/">
+                  <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
+                </Link>
+                <a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
+                  <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
+                </a>
+              </div>
+            </li>
               <li><Link to="/about">Qui sommes-nous ?</Link></li>
               <li><Link to="/how-it-works">Comment ça marche ?</Link></li>
               

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const Box = styled.div`
   padding: 2% 1%;
-  background: black;
+  background: #3435ff;
   width: 100%;
 `;
 
@@ -28,7 +28,7 @@ export const Row = styled.div`
     auto-fit,
     minmax(0, 1fr)
   ); /* Colonnes qui remplissent tout l'espace */
-  gap: 0px;
+  gap: 5px;
   width: 100%;
 
   @media (max-width: 1000px) {
@@ -43,7 +43,7 @@ export const FooterLink = styled.a`
   text-decoration: none;
 
   &:hover {
-    color: green;
+    color: #ff8200;
     transition: 200ms ease-in;
   }
 `;
