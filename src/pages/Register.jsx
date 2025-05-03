@@ -1,7 +1,5 @@
-// TODO : Add a file uploading functionality
-
 // Importing dependencies
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
@@ -31,8 +29,12 @@ function Register() {
         wageType: '',
         otherWage: '',
         readInfo: false,
-        acceptTerms: false
+        acceptTerms: false,
+        file: null
     });
+
+    // ref to the file field content
+    const fileInputRef = useRef(null);
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
@@ -55,6 +57,15 @@ function Register() {
                 [name]: value
             }));
         }
+    }
+
+    // function to set the new file formData field value whenever the input changes
+    function handleFileChange(e) {
+        const file = e.target.files[0];
+        setFormData({
+            ...formData,
+            file: file
+        });
     }
 
     // function for the other wage text input
@@ -94,8 +105,14 @@ function Register() {
             wageType: '',
             otherWage: '',
             readInfo: false,
-            acceptTerms: false
+            acceptTerms: false,
+            file: null
         });
+
+        // manually emptying the file field
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
 
         alert('Votre compte a bien été créé ! Merci.');
     }
@@ -159,6 +176,9 @@ function Register() {
                         </>
                     )}
                 </div><br />
+
+                <label>Document requis :</label><br></br>
+                <input type='file' accept='.pdf' name='file' onChange={handleFileChange} ref={fileInputRef} /><br></br><br></br>
                 
                 <p>L’inscription nécessitera un contact avec nos équipes. Dans certains cas, un rendez-vous avec une assistante sociale de proximité sera nécessaire. Dans tous les cas, une validation des conditions de ressources sera réalisée. Au plus vite inscrit, au plus vite livré.</p>
 

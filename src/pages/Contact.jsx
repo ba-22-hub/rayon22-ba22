@@ -1,7 +1,5 @@
-// TODO : Add a file uploading functionality
-
 // Importing dependencies
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
@@ -19,8 +17,12 @@ function Contact() {
         lastName: '',
         email: '',
         phone: '',
-        message: ''
+        message: '',
+        file: null
     });
+
+    // ref to the file field content
+    const fileInputRef = useRef(null);
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
@@ -31,7 +33,16 @@ function Contact() {
         });
     }
 
-    // function to hadle the form submit
+    // function to set the new file formData field value whenever the input changes
+    function handleFileChange(e) {
+        const file = e.target.files[0];
+        setFormData({
+            ...formData,
+            file: file
+        });
+    }
+
+    // function to handle the form submit
     function handleSubmit(e) {
         e.preventDefault();
         // printing the formData content in the console for now
@@ -44,8 +55,14 @@ function Contact() {
             lastName: '',
             email: '',
             phone: '',
-            message: ''
+            message: '',
+            file: null
         });
+
+        // manually emptying the file field
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
 
         // sending the customer an alert to notify the form has successfully been submited
         alert('Votre message a bien été envoyé ! Merci.');
@@ -70,6 +87,8 @@ function Contact() {
                     <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
                     <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
                     <FormTextArea textAreaName="Message :" name="message" value={formData.message} onChange={handleChange} />
+                    <label>Document requis :</label><br></br>
+                    <input type='file' accept='.pdf' name='file' onChange={handleFileChange} ref={fileInputRef} /><br></br><br></br>
                     <button type="submit">Envoyer</button>
                 </form>
 
