@@ -1,7 +1,9 @@
 .navbar {
-    background-color: #333;
+    background-color: #FFFFFF;
     width: 100%;
     margin-top: 65px;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
 }
 
 .navbar-logo {
@@ -30,7 +32,7 @@
 .navbar-menu > li > .dropdown-title {
     display: block;
     padding: 20px 20px; /* <-- ICI on ajoute du padding interne pour donner de la hauteur aux éléments */
-    color: white;
+    color: #3435FF;
     text-decoration: none;
     cursor: pointer;
 }

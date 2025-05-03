@@ -10,8 +10,8 @@ import {
 } from "../styles/FooterStyles";
 
 // Importing assets
-import rayonLogo from "../assets/logo.png"
-import banqueLogo from "../assets/banquesAlimentaires.png"
+import rayonLogo from "../assets/logos/logo.png"
+import banqueLogo from "../assets/logos/banquesAlimentaires.png"
 
 const Footer = () => {
     return (

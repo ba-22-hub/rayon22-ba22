@@ -5,9 +5,9 @@
  * @param {(e: any) => any} props.fun - The function to call when the button is clicked. 
  * @returns {React.ReactElement} FunctionButton component.
  */
-function FunctionButton({buttonText, fun}) {
+function FunctionButton({buttonText, fun, className}) {
     return (
-        <button onClick={fun}>
+        <button className={className} onClick={fun}>
           {buttonText}
         </button>
       );

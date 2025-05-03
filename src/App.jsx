@@ -12,8 +12,8 @@ import {
 import './styles/navbar.css'
 
 // Importing assets
-import rayonLogo from "./assets/logo.png"
-import banqueLogo from "./assets/banquesAlimentaires.png"
+import rayonLogo from "./assets/logos/roundLogo.png"
+import banqueLogo from "./assets/logos/banquesAlimentaires.png"
 
 // Importing all the pages
 import About from './pages/About.jsx'
@@ -49,9 +49,9 @@ function App() {
                 <Link to="/">
                   <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
                 </Link>
-                <a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
+                {/*<a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
                   <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
-                </a>
+                </a>*/}
               </div>
             </li>
               <li><Link to="/about">Qui sommes-nous ?</Link></li>
