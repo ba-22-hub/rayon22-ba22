@@ -10,12 +10,12 @@ import FunctionButton from "./FunctionButton"
  * @param {string} props.page - The route the button takes. 
  * @returns {React.ReactElement} PageButton component.
  */
-function PageButton({buttonText, page, className}) {
+function PageButton({buttonText, page}) {
     // useNavigate returns a function that needs to be stored to be used
     const navigate = useNavigate();
 
     return (
-      <FunctionButton className={className} buttonText={buttonText} fun={() => {navigate(page);}}></FunctionButton>
+      <FunctionButton className="PageButton" buttonText={buttonText} fun={() => {navigate(page);}}></FunctionButton>
     );
 }
 

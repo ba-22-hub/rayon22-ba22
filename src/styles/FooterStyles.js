@@ -27,7 +27,7 @@ export const Column = styled.div`
 
 export const Row = styled.div`
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr 1fr; /* Première colonne plus large */
+  grid-template-columns: 1.2fr 0.9fr 0.9fr 0.9fr; /* Première colonne plus large */
   gap: 5px;
   width: 100%;
 

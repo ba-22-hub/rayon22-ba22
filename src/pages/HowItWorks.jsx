@@ -2,6 +2,9 @@
 import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "../common/PageButton"
 
+// Importing the style
+import '../styles/how.css'
+
 /**
  * The How It Works page.
  * @returns {React.ReactElement} HowItWorks component.
@@ -9,15 +12,17 @@ import PageButton from "../common/PageButton"
 function HowItWorks() {
     return (
         <>
-            <h1>Quand je veux où je veux !</h1>
-            <p>
-                Je commande par internet quand je veux à mon épicerie solidaire et je me fais livrer où je veux en point relais près de chez moi ou de mon lieu d’étude.
-
-                Les prix sont encadrés entre 10% et 30% de leur valeur en magasin. J’ai le choix de produits variés en alimentaire (produit secs) ou d’hygiène et d’entretien avec toutefois une limitation mensuelle par mois.
-
-                L’inscription est indispensable car l’accès à l’épicerie en ligne est sous conditions de ressources.
-            </p>
-            <PageButton buttonText={'Se Connecter'} page={'/login'}></PageButton>
+            <div className="bluediv">
+                <h1>Quand je <orange>veux</orange> où je <orange>veux</orange> !</h1>
+                <p>
+                    <strong>Je commande</strong> par internet quand je veux à mon épicerie solidaire et je me fais livrer où je veux en <strong>point relais</strong> près de chez moi ou de mon lieu d’étude.
+                    <span style={{ display: 'block', marginTop: '1rem' }}></span>
+                    Les prix sont encadrés entre <strong>10% et 30%</strong> de leur valeur en magasin. J’ai le choix de produits variés en alimentaire (produit secs) ou d’hygiène et d’entretien avec toutefois une <strong>limitation mensuelle par mois</strong>.
+                    <span style={{ display: 'block', marginTop: '1rem' }}></span>
+                    <strong>L’inscription est indispensable</strong> car l’accès à l’épicerie en ligne est sous conditions de ressources.
+                </p>
+                <PageButton buttonText={'Se Connecter'} page={'/login'}></PageButton>
+            </div>
 
             <h2>Un contact si besoin</h2>
             <p>
