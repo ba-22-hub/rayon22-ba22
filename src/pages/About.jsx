@@ -15,7 +15,7 @@ import '../styles/about.css'
 function About() {
     return (
         <>
-            <div className="bluediv">
+            <div className="bluediv3">
                 <h1>Les banques alimentaires, premier <orange>réseau</orange> de distribution d’aide alimentaire en <orange>France</orange></h1>
                 <p>
                     Le <strong>Rayon 22</strong> est une épicerie sociale et solidaire dont l’objectif est d’accompagner les personnes en difficulté financière en leur donnant accès à une alimentation à petits prix sur tout le territoire des Côtes d’Armor.

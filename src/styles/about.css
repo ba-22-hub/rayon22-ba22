@@ -1,20 +1,20 @@
 /* bluediv */
 
-.bluediv {
+.bluediv3 {
     color: white;
     background: #3435FF;
     box-sizing: border-box;
+    padding-left: 78px;
 }
 
-.bluediv h1 {
+.bluediv3 h1 {
     width: 1139px;
     height: 150px;
     padding-top: 33px;
-    padding-left: 78px;
     margin-bottom: 170px;
 }
 
-.bluediv p {
+.bluediv3 p {
     width: 1023px;
     height: 236px;
 }

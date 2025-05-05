@@ -12,7 +12,7 @@ import '../styles/how.css'
 function HowItWorks() {
     return (
         <>
-            <div className="bluediv">
+            <div className="bluediv2">
                 <h1>Quand je <orange>veux</orange> où je <orange>veux</orange> !</h1>
                 <p>
                     <strong>Je commande</strong> par internet quand je veux à mon épicerie solidaire et je me fais livrer où je veux en <strong>point relais</strong> près de chez moi ou de mon lieu d’étude.
