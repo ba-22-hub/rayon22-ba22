@@ -1,0 +1,44 @@
+/* bluediv */
+
+.bluediv {
+    color: white;
+    background: #3435FF;
+    box-sizing: border-box;
+}
+
+.bluediv h1 {
+    width: 1139px;
+    height: 150px;
+    padding-top: 33px;
+    padding-left: 78px;
+    padding-bottom: 116px;
+}
+
+.bluediv p {
+    width: 1023px;
+    height: 236px;
+}
+
+/* basketdiv */
+
+.basketdiv {
+    margin-top: 16px;
+    margin-left: 58px;
+}
+
+.basketdiv h2 {
+    width: 587px;
+    margin-top: 142px;
+}
+
+.basketdiv p {
+    width: 325px;
+    margin-left: 39px;
+    margin-right: 160px;
+}
+
+.basketdiv .basket {
+    height: 579px;
+    width: 509px;
+    margin-bottom: 126px;
+}
