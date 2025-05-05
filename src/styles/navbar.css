@@ -39,7 +39,7 @@
 
 .navbar-menu > li > a:hover,
 .navbar-menu > li > .dropdown-title:hover {
-    background-color: #444;
+    background-color: #FF8200;
 }
 
 .dropdown-menu {
@@ -47,7 +47,8 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #444;
+    color: #3435FF;
+    background-color: #FFFFFF;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -56,7 +57,7 @@
 }
 
 .dropdown-menu li {
-    border-bottom: 1px solid #555;
+    border-bottom: 1px solid #FF8200;
 }
 
 .dropdown-menu li:last-child {
@@ -66,12 +67,12 @@
 .dropdown-menu li a {
     padding: 12px 20px;
     display: block;
-    color: white;
+    color: #3435FF;
     text-decoration: none;
 }
 
 .dropdown-menu li a:hover {
-    background-color: #555;
+    background-color: #FF8200;
 }
 
 /* Affiche le sous-menu au survol */
