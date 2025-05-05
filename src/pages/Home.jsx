@@ -7,7 +7,6 @@ import '../styles/home.css'
 
 // Importing assets
 import wideLogo from "../assets/logos/bigLogo.png"
-import bigRoundLogo from "../assets/logos/bigRoundLogo.png"
 import orangeWoman from "../assets/Photos/giletorange2.png"
 import plate from "../assets/Photos/plate.png"
 import shape from "../assets/shapes/numberShape.png"
