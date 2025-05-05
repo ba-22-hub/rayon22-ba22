@@ -8,6 +8,7 @@ export const Box = styled.div`
   padding: 2% 1%;
   background: #3435ff;
   width: 100%;
+  color: white;
 `;
 
 export const FooterContainer = styled.div`
@@ -20,16 +21,13 @@ export const FooterContainer = styled.div`
 export const Column = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centrer horizontalement */
-  text-align: center; /* Centrer le texte */
+  align-items: center;
+  text-align: center;
 `;
 
 export const Row = styled.div`
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(0, 1fr)
-  ); /* Colonnes qui remplissent tout l'espace */
+  grid-template-columns: 1.2fr 1fr 1fr 1fr; /* Première colonne plus large */
   gap: 5px;
   width: 100%;
 
