@@ -8,6 +8,7 @@ import '../styles/home.css'
 // Importing assets
 import wideLogo from "../assets/logos/bigLogo.png"
 import bigRoundLogo from "../assets/logos/bigRoundLogo.png"
+import orangeWoman from "../assets/Photos/giletorange2.png"
 import plate from "../assets/Photos/plate.png"
 import shape from "../assets/shapes/numberShape.png"
 
@@ -34,7 +35,7 @@ function Home() {
             </div>
 
             <div className="roundLogo" style={{display: "flex"}}>
-                <img src={bigRoundLogo}></img>
+                <img src={orangeWoman} style={{width: 600, height: 452}}></img>
                 <div>
                     <h2>C'est quoi le principe?</h2>
                     <p>
