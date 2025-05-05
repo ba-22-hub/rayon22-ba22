@@ -33,6 +33,14 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-size: 70px;
+}
+h2 {
+  font-size: 40px;
+}
+
+p {
+  font-size: 16px;
 }
 
 button {
@@ -69,4 +77,9 @@ button:focus-visible {
 
 orange {
   color: #FF8200;
+}
+
+.PageButton {
+  width: 324px;
+  height: 40px;
 }
