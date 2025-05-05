@@ -1,3 +1,5 @@
+// TODO : convert this js file to a css one for more clean code
+
 // components/FooterStyles.js
 
 import styled from "styled-components";
