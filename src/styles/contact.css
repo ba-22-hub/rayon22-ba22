@@ -1,0 +1,63 @@
+.bluediv5 {
+    background-color: #3435FF;
+    height: 204px;
+    color: white;
+}
+
+.bluediv5 h1 {
+    padding-top: 52px;
+    margin-left: 460px;
+}
+
+.contactText {
+    margin-left: 174px;
+    margin-right: 113px;
+}
+
+.contactText h2 {
+    margin-top: 195px;
+}
+
+.contactText p {
+    width: 409px;
+}
+
+.form {
+    margin-top: 69px;
+    padding-top: 10px;
+    padding-left: 44px;
+    padding-right: 44px;
+    background-color: white;
+    margin-bottom: 59px;
+}
+
+.form input {
+    height: 36px;
+    margin-bottom: 40px;
+    margin-top: 8.92px;
+    width: 570px;
+}
+
+.form textarea {
+    width: 570px;
+    height: 184px;
+}
+
+.logo {
+    width: 202px;
+    height: 202px;
+    margin-left: 58px;
+    margin-top: 30px;
+    transform: rotate(-13.55deg);
+}
+
+.name input {
+    width: 230px;
+    margin-right: 49px;
+}
+
+.form button {
+    width: 500px;
+    height: 42px;
+    margin-left: 35px;
+}

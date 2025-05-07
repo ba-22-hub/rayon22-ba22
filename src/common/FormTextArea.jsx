@@ -11,7 +11,7 @@ function FormTextArea({ textAreaName, name, value, onChange }) {
     return (
         <>
             <label>{textAreaName}</label><br />
-            <textarea name={name} value={value} onChange={onChange} /><br /><br />
+            <textarea name={name} value={value} onChange={onChange} style={{resize: "none"}} /><br /><br />
         </>
     );
 }

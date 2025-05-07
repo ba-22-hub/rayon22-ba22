@@ -6,6 +6,12 @@ import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput"
 import FormTextArea from "../common/FormTextArea"
 
+// Importing the style
+import '../styles/contact.css'
+
+// Importing assets
+import roundLogo from "../assets/logos/roundLogo.png"
+
 /**
  * The Contact page.
  * @returns {React.ReactElement} Contact component.
@@ -69,29 +75,39 @@ function Contact() {
     }
     return (
         <>
-            <h1>Contactez-nous</h1>
-            <h2>Un contact si besoin</h2>
-            <p>
-                Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j’adresse un message (pour un problème de commande préciser la date de commande).
+            <div className="bluediv5">
+                <h1>Contactez-nous</h1>
+            </div>
 
-                Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
-            </p>
+            <div style={{display: "flex"}}>
+                <div className="contactText">
+                    <h2>Un contact si besoin</h2>
+                    <p>
+                        Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j’adresse un message (pour un problème de commande préciser la date de commande).
+                        <span style={{ display: 'block', marginTop: '1rem' }}></span>
+                        Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
+                    </p>
+                    <img src={roundLogo} className="logo"></img>
+                </div>
 
-            <div>
-                <h2>Formulaire de contact</h2>
+                <div className="form">
+                    <h2>Formulaire de contact</h2>
 
-                {/* Contact form */}
-                <form onSubmit={handleSubmit}>
-                    <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
-                    <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
-                    <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
-                    <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
-                    <FormTextArea textAreaName="Message :" name="message" value={formData.message} onChange={handleChange} />
-                    <label>Document requis :</label><br></br>
-                    <input type='file' accept='.pdf' name='file' onChange={handleFileChange} ref={fileInputRef} /><br></br><br></br>
-                    <button type="submit">Envoyer</button>
-                </form>
+                    {/* Contact form */}
+                    <form onSubmit={handleSubmit}>
+                        <div className="name" style={{display: "flex"}}>
+                            <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
+                            <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
+                        </div>
+                        <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
+                        <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
+                        <FormTextArea textAreaName="Message :" name="message" value={formData.message} onChange={handleChange} />
+                        <label>Document requis :</label><br></br>
+                        <input type='file' accept='.pdf' name='file' onChange={handleFileChange} ref={fileInputRef} /><br></br><br></br>
+                        <button type="submit">Envoyer</button>
+                    </form>
 
+                </div>
             </div>
         </>
     )
