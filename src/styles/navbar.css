@@ -12,6 +12,7 @@
     width: auto;
     object-fit: contain;
     display: block; /* SUPER IMPORTANT pour que l'image prenne sa taille et ne s'effondre pas */
+    margin-left: 50px;
   }
 
 
@@ -41,6 +42,11 @@
 .navbar-menu > li > a:hover,
 .navbar-menu > li > .dropdown-title:hover {
     background-color: #FF8200;
+}
+
+.navbar-menu img {
+    margin-left: 16px;
+    margin-top: 5px;
 }
 
 .dropdown-menu {
