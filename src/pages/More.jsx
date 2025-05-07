@@ -1,6 +1,12 @@
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
+// Importing the style
+import '../styles/more.css'
+
+// Importing assets
+import student from "../assets/Photos/etudiante1.png"
+
 /**
  * The More page.
  * @returns {React.ReactElement} More component.
@@ -8,13 +14,20 @@ import LoremIpsum from "../common/LoremIpsum"
 function More() {
     return (
         <>
-            <h1>Toujours plus !</h1>
+            <div className="bluediv4">
+                <h1>Toujours plus !</h1>
+                <img src={student}></img>
+            </div>
             
-            <h2>Infos pratique</h2>
-            <LoremIpsum></LoremIpsum>
+            <div className="divInfo">
+                <h2>Infos pratique</h2>
+                <LoremIpsum></LoremIpsum>
+            </div>
 
-            <h2>Retours presse</h2>
-            <LoremIpsum></LoremIpsum>
+            <div className="divPresse">
+                <h2>Retours presse</h2>
+                <LoremIpsum></LoremIpsum>
+            </div>
         </>
     )
 }
