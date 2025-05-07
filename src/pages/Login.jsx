@@ -6,6 +6,9 @@ import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
 
+// Importing the style
+import '../styles/login.css'
+
 /**
  * The Login page.
  * @returns {React.ReactElement} Login component.
@@ -42,18 +45,20 @@ function Login() {
 
     return (
         <>
-            <h1>Bienvenue sur votre Espace Utilisateur</h1>
-            <h2>Connectez vous en utilisant le formulaire ci-dessous</h2>
+            <div className="login">
+                <h1>Bienvenue sur votre Espace Utilisateur</h1>
+                <p>Connectez vous en utilisant le formulaire ci-dessous</p>
 
-            <form onSubmit={handleSubmit}>
-                <FormInput inputText={'Adresse email'} name={'mail'} value={formData.mail} onChange={handleChange}></FormInput>
-                <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
-                <button type="submit">Je me connecte</button>
-            </form>
-            <PageButton buttonText={'Mot de passe oublié ?'} page={'/forgot-password'}></PageButton>
+                <form onSubmit={handleSubmit}>
+                    <FormInput inputText={'Adresse email'} name={'mail'} value={formData.mail} onChange={handleChange}></FormInput>
+                    <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
+                    <PageButton className="forgot" buttonText={'Mot de passe oublié ?'} page={'/forgot-password'}></PageButton>
+                    <button type="submit">Je me connecte</button>
+                </form>
 
-            <h2>Vous n'avez pas encore de compte ?</h2>
-            <PageButton buttonText={'Créez votre compte'} page={'/register'}></PageButton>
+                <p>Vous n'avez pas encore de compte ?</p>
+                <PageButton buttonText={'Créez votre compte'} page={'/register'}></PageButton>
+            </div>
         </>
     )
 }

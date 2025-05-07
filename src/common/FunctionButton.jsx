@@ -7,9 +7,11 @@
  */
 function FunctionButton({buttonText, fun, className}) {
     return (
-        <button className={className} onClick={fun}>
-          {buttonText}
-        </button>
+        <div>
+          <button className={className} onClick={fun}>
+            {buttonText}
+          </button>
+        </div>
       );
 }
 
