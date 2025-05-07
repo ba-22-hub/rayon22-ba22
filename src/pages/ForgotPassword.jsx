@@ -5,6 +5,12 @@ import { useState } from 'react';
 import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 
+// Importing the style
+import '../styles/password.css'
+
+// Importing assets
+import illustration from "../assets/logos/password.png"
+
 /**
  * The Login page.
  * @returns {React.ReactElement} Login component.
@@ -41,16 +47,23 @@ function Login() {
 
     return (
         <>
-            <h2>Presque terminé !</h2>
-            <h2>Plus qu'une étape !</h2>
+            <div className="password">
+                <div className="title">
+                    <h1>Presque terminé !</h1>
+                    <h1>Plus qu'une étape !</h1>
+                </div>
 
-            <h1>Création du mot de passe</h1>
+                <img src={illustration}></img>
 
-            <form onSubmit={handleSubmit}>
-                <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
-                <FormInput inputText={'Confirmation du mot de passe'} name={'passwordConfirm'} value={formData.passwordConfirm} onChange={handleChange}></FormInput>
-                <button type="submit">Confirmer le compte</button>
-            </form>
+                <h1>Création du mot de passe</h1>
+
+                <form onSubmit={handleSubmit}>
+                    <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange}></FormInput>
+                    <FormInput inputText={'Confirmation du mot de passe'} name={'passwordConfirm'} value={formData.passwordConfirm} onChange={handleChange}></FormInput>
+                    <p>Votre mot de passe doit faire 8 caractères minimum</p>
+                    <button type="submit">Confirmer le compte</button>
+                </form>
+            </div>
         </>
     )
 }
