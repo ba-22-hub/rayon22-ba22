@@ -1,0 +1,41 @@
+.register {
+    background-color: white;
+    width: 918px;
+    margin-left: 300px;
+}
+
+.register h1 {
+    text-align: center;
+    padding-top: 32px;
+}
+
+.register input {
+    margin-left: 48px;
+    margin-top: 10px;
+    margin-bottom: 21px;
+}
+
+.register .FormInput {
+    width: 762px;
+    height: 42px;
+}
+
+.register label {
+    margin-left: 48px;
+}
+
+.register .date {
+    color: #1C7FD5;
+    margin-bottom: 0px;
+    width: 190px;
+    height: 44px;
+}
+
+/* .situation input {
+}
+
+.revenus {
+}
+
+.legal {
+} */

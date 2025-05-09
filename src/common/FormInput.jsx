@@ -11,7 +11,7 @@ function FormInput({ inputText, name, value, onChange }) {
     return (
         <div>
             <div><label>{inputText}</label></div>
-            <div><input type="text" name={name} value={value} onChange={onChange} /></div>
+            <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>
         </div>
     );
 }

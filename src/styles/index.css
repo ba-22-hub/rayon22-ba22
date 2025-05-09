@@ -80,6 +80,20 @@ orange {
   color: #FF8200;
 }
 
+red {
+  color: red;
+}
+
+black {
+  color: black;
+}
+
+input {
+  border-radius: 7px;
+  border-width: 1px;
+  border-color: #3435FF;
+}
+
 .PageButton {
   width: 324px;
   height: 40px;

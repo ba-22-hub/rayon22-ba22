@@ -40,8 +40,11 @@
 
 .form textarea {
     width: 570px;
-    margin-top: 8.92px;
     height: 184px;
+    margin-top: 8.92px;
+    border-radius: 7px;
+    border-width: 1px;
+    border-color: #3435FF;
 }
 
 .logo {
