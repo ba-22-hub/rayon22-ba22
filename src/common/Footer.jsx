@@ -1,74 +1,64 @@
 // Importing dependencies
 import React from "react";
-import {
-    Box,
-    FooterContainer,
-    Row,
-    Column,
-    FooterLink,
-    Heading,
-} from "../styles/FooterStyles";
+
+// Importing styles
+import "../styles/Footer.css";
 
 // Importing assets
-import rayonLogo from "../assets/logos/logo.png"
-import banqueLogo from "../assets/logos/banquesAlimentaires.png"
+import rayonLogo from "../assets/logos/logo.png";
+import banqueLogo from "../assets/logos/banquesAlimentaires.png";
 
 const Footer = () => {
     return (
-        <Box>
-            <FooterContainer>
-                <Row>
+        <div className="footer-box">
+            <div className="footer-container">
+                <div className="footer-row">
 
-                    <Column>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                        <a href="/">
-                            <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
+                    <div className="footer-column">
+                        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+                            <a href="/">
+                                <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
+                            </a>
+                            <a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
+                                <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
+                            </a>
+                        </div>
+                        <p>le RAYON est une initiative des Banques Alimentaires</p>
+                    </div>
+
+                    <div className="footer-column">
+                        <a href="#" className="footer-link">
+                            Mentions Légales
                         </a>
-                        <a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
-                            <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
+                        <a href="#" className="footer-link">
+                            Politique d’utilisation des cookies
                         </a>
                     </div>
-                        <p>le RAYON est une initiative des Banques Alimentaires</p>
-                    </Column>
 
-                    <Column>
-                        <FooterLink href="#">
-                            Mentions Légales
-                        </FooterLink>
-                        <FooterLink href="#">
-                            Politique d’utilisation des cookies
-                        </FooterLink>
-                    </Column>
-
-                    <Column>
-                        <FooterLink href="#">
+                    <div className="footer-column">
+                        <a href="#" className="footer-link">
                             Charte de fonctionnement
-                        </FooterLink>
-                        <FooterLink href="#">
+                        </a>
+                        <a href="#" className="footer-link">
                             Politique d’utilisation des cookies
-                        </FooterLink>
-                    </Column>
+                        </a>
+                    </div>
 
-                    <Column>
-                        <FooterLink href="https://www.instagram.com/banque.alimentaire22/">
+                    <div className="footer-column">
+                        <a href="https://www.instagram.com/banque.alimentaire22/" className="footer-link">
                             <i className="fab fa-instagram">
-                                <span
-                                    style={{
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    Instagram
-                                </span>
+                                <span style={{ marginLeft: "10px" }}>Instagram</span>
                             </i>
-                        </FooterLink>
-                        <FooterLink href="mailto:ba220@banquealimentaire.org">
+                        </a>
+                        <a href="mailto:ba220@banquealimentaire.org" className="footer-link">
                             ba220@banquealimentaire.org
-                        </FooterLink>
-                    </Column>
+                        </a>
+                    </div>
 
-                </Row>
-            </FooterContainer>
-        </Box>
+                </div>
+            </div>
+        </div>
     );
 };
+
 export default Footer;
