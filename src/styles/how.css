@@ -9,14 +9,20 @@
 
 .bluediv2 h1 {
     width: 717px;
-    height: 50px;
-    padding-top: 33px;
-    margin-bottom: 140px;
+    /* height: 50px; */
+    /* padding-top: 33px; */
+    margin-bottom: 30px;
 }
 
 .bluediv2 p {
-    width: 867px;
-    height: 180px;
+    /* width: 867px;
+    height: 180px; */
+}
+
+.bluediv2 .biggerP {
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .bluediv2 .PageButton {
@@ -26,6 +32,24 @@
 .bluediv2 img {
     margin-right: 120px;
     margin-top: 20px;
+}
+
+/* infoDiv */
+
+.infoDiv {
+    margin-top: 117px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.infoDiv img {
+    width: 520px;
+    height: 419px;
+    transform: rotate(5.83deg);
+    margin-top: 112px;
+    margin-left: 128px;
 }
 
 /* div2 */
@@ -44,8 +68,8 @@
 
 .div2 img {
     margin-top: 41px;
-    padding-left: 140px;
     margin-bottom: 51px;
+    margin-left: 140px;
 }
 
 .div2 .h2 {

@@ -1,6 +1,7 @@
 // Importing common components
 import PageButton from "../common/PageButton"
 import LoremIpsum from "../common/LoremIpsum"
+import ShapeNumber from "../common/ShapeNumber"
 
 // Importing the style
 import '../styles/home.css'
@@ -9,7 +10,6 @@ import '../styles/home.css'
 import wideLogo from "../assets/logos/bigLogo.png"
 import orangeWoman from "../assets/Photos/giletorange2.png"
 import plate from "../assets/Photos/plate.png"
-import shape from "../assets/shapes/numberShape.png"
 
 /**
  * The Home page.
@@ -49,29 +49,20 @@ function Home() {
             <div className="platediv" style={{display: "flex"}}>
                 <img className="plate" src={plate}></img>
                 <div>
-                    <div className="numberedShape">
-                        <img className="numberShape" src={shape}></img>
-                        <span className="shapeNumber">01</span>
-                    </div>
+                    <ShapeNumber nb={"01"}></ShapeNumber>
                     <h3>Inscription</h3>
                     <p>
                         Crée ton espace et remplis le formulaire
                         d’inscription.
                     </p>
-                    <div className="numberedShape">
-                        <img className="numberShape" src={shape}></img>
-                        <span className="shapeNumber">02</span>
-                    </div>
+                    <ShapeNumber nb={"02"}></ShapeNumber>
                     <h3>Étude de dossier</h3>
                     <p>
                         Une fois ton dossier envoyé, il est étudié
                         par notre équipe. Dans certains cas, un rendez-vous avec une assistante sociale de proximité sera nécessaire. Dans tout les cas, une validation des conditions de ressources sera réalisée. Tu peux suivre
                         l’évolution de ton dossier à tout moment.
                     </p>
-                    <div className="numberedShape">
-                        <img className="numberShape" src={shape}></img>
-                        <span className="shapeNumber">03</span>
-                    </div>
+                    <ShapeNumber nb={"03"}></ShapeNumber>
                     <h3>À vos courses !</h3>
                     <p>
                         Si ton dossier est admis, tu pourras commander et faire tes courses à
