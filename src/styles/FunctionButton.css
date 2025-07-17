@@ -1,0 +1,23 @@
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #FF8200;
+  color: white;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.PageButton {
+  width: 324px;
+  height: 40px;
+}

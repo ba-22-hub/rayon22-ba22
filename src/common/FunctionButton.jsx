@@ -1,3 +1,6 @@
+// Importing style
+import '../styles/FunctionButton.css'
+
 /**
  * A button to call a particular function when clicked.
  * @param {Object} props - The component props. 
