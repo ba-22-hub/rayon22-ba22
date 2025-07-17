@@ -22,15 +22,15 @@ function Home() {
                 <h1>Pour <orange>accéder</orange> à notre épicerie en ligne </h1>
                 <div style={{display: "flex"}}>
                     <p>
-                        Le <strong>Rayon 22</strong> est une épicerie sociale et solidaire dont l’objectif est d’accompagner les personnes en difficulté financière en leur donnant accès à une alimentation à petits prix sur tout le territoire des Côtes d’Armor.
+                        Le <strong>Rayon 22</strong> est une épicerie sociale et solidaire dont l’objectif est d’accompagner les personnes pour qui une aide alimentaire représente un soutien non négligeable pour leurs quotidiens, en leur donnant accès à des produits alimentaires à petits prix, partout sur le territoire des Côtes-d’Armor.
                         <span style={{ display: 'block', marginTop: '1rem' }}></span>
-                        Le <strong>Rayon 22</strong> permet aussi de donner accès à l’aide alimentaire aux personnes qui ne peuvent se rendre aux distributions de nos partenaires.
+                        Le <strong>Rayon 22</strong>  permet aussi de donner accès à l’aide alimentaire aux personnes qui ne peuvent se rendre aux distributions de nos partenaires.
                         <span style={{ display: 'block', marginTop: '1rem' }}></span>
-                        Pour accéder à notre <strong>épicerie en ligne</strong> en point relais, il faut vous connecter à un compte.
+                        Afin de pouvoir commander des produits, il vous faut vous connecter à un compte.
                     </p>
-                    <img src={wideLogo} style={{width: 700, height: 324}}></img>
+                    <img src={orangeWoman} style={{width: 600, height: 452}}></img>
                 </div>
-                <PageButton buttonText={'Se Connecter'} page={'/login'} className="PageButton"></PageButton>
+                <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="PageButton"></PageButton>
             </div>
 
             <div className="roundLogo" style={{display: "flex"}}>
