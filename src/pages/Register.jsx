@@ -38,9 +38,20 @@ function Register() {
         acceptTerms: false,
         file: null
     });
+    const [step, setStep] = useState(1);
 
     // ref to the file field content
     const fileInputRef = useRef(null);
+
+    function changepage(step){
+        if(step > 3) {
+            step = 3;
+        }
+        if(step < 1) {
+            step = 1;
+        }
+        setStep(step);
+    }
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
@@ -127,16 +138,16 @@ function Register() {
         <>
             <div className="register">
                 <h1>Création d’un compte</h1>
+                { step == 1 && (<RegisterStep1 />)}
+                { step == 2 && (<RegisterStep2 />)}
+                { step ==3 && (<RegisterStep3  mail={"mail.example@gmail.com"}/>)}
 
-                <RegisterStep1 />
-                <RegisterStep2 />
-                <RegisterStep3  mail={"mail.example@gmail.com"}/>
-                
-
-              
-
-                <PageButton buttonText={'Retour à la page d\'accueil'}  page={'/'} />
+                <div className='navigation-buttons'>
+                <button onClick={() => changepage(step - 1)}>Page précédente</button>
+                <button onClick={() => changepage(step + 1)}>Page suivante</button>
+                </div>
             </div>
+
         </>
     );
 }

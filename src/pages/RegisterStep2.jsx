@@ -71,6 +71,13 @@ function RegisterStep2() {
         });
 
     }
+    // function for the other wage text input
+    function handleOtherWageChange(e) {
+        setFormData(prevData => ({
+            ...prevData,
+            otherWage: e.target.value
+        }));
+    }
 
     return (
         <>
@@ -132,7 +139,6 @@ function RegisterStep2() {
                 </div><br />
 
                 <button type="submit" className='register-button'>Valider</button> <br />
-                <button className='register-button'>Page précédente</button>
             </form>
         </>
     )

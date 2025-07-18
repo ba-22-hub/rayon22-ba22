@@ -60,6 +60,19 @@
     height: 300px;
 }
 
+.navigation-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navigation-buttons button{
+    color : #FF8200; 
+    background-color: white;
+    border: 1px solid #FF8200;
+    padding : 1%;
+    margin : 1%;
+}
 /* .situation input {
 }
 

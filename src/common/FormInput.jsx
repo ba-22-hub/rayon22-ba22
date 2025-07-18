@@ -8,23 +8,14 @@
  * @returns {React.ReactElement} FormInput component.
  */
 function FormInput({ inputText, name, value, onChange, isStarred = false }) {
-    // If the input is starred, add a red asterisk to the label
-    if (isStarred) {
-        return (
+
+    return (
         <div>
-            <div><label>{inputText} <red>*</red></label></div>
-            <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} required /></div>
+            <div><label>{inputText}{isStarred &&( <red>*</red>)}</label></div>
+            <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>
         </div>
     );
-    
-    } else {
-        return (
-            <div>
-                <div><label>{inputText}</label></div>
-                <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>
-            </div>
-        );
-    }
+
 }
 
 export default FormInput
