@@ -26,21 +26,20 @@ body {
   margin: 0;
   display: block;
   place-items: center;
-  min-width: 320px;
+  min-width: 20rem; /* 320px */
   min-height: 100vh;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 4.375rem; /* 70px */
   line-height: 1.1;
-  font-size: 70px;
 }
 h2 {
-  font-size: 40px;
+  font-size: 2.5rem; /* 40px */
 }
 
 p {
-  font-size: 16px;
+  font-size: 1rem; /* 16px */
 }
 
 /*@media (prefers-color-scheme: light) {
@@ -69,7 +68,7 @@ black {
 }
 
 input {
-  border-radius: 7px;
-  border-width: 1px;
+  border-radius: 0.4375rem; /* 7px */
+  border-width: 0.0625rem; /* 1px */
   border-color: #3435FF;
 }

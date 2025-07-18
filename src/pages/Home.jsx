@@ -33,6 +33,11 @@ function Home() {
                 <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="PageButton"></PageButton>
             </div>
 
+            <div style={{ display: 'flex', justifyContent: 'center'}}>
+                <div style={{ width: '50%', height: '207px', border: '1px solid #3435FF', boxSizing: 'border-box'}}></div>
+                <div style={{ width: '50%', height: '207px', border: '1px solid #3435FF', boxSizing: 'border-box'}}></div>
+            </div>
+
             <div className="roundLogo" style={{display: "flex"}}>
                 <img src={orangeWoman} style={{width: 600, height: 452}}></img>
                 <div>

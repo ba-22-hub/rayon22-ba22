@@ -1,33 +1,33 @@
 .bluediv4 {
     background-color: #3435FF;
-    height: 527px;
+    height: 32.94rem; /* 527px */
     color: white;
 }
 
 .bluediv4 h1 {
-    margin-left: 480px;
-    padding-top: 38px;
-    margin-bottom: 46px;
+    margin-left: 30rem; /* 480px */
+    padding-top: 2.38rem; /* 38px */
+    margin-bottom: 2.88rem; /* 46px */
 }
 
 .bluediv4 img {
-    width: 1536px;
-    height: 411px;
+    width: 100%; /* 1536px on 1600px screen, but use 96vw for responsiveness */
+    height: 25.69rem; /* 411px */
     object-fit: cover;
 }
 
 .divInfo {
-    padding-top: 74px;
+    padding-top: 4.63rem; /* 74px */
 }
 
 .divInfo h2 {
-    margin-left: 84px;
+    margin-left: 5.25rem; /* 84px */
 }
 
 .divPresse {
-    padding-top: 143px;
+    padding-top: 8.94rem; /* 143px */
 }
 
 .divPresse h2 {
-    margin-left: 84px;
+    margin-left: 5.25rem; /* 84px */
 }

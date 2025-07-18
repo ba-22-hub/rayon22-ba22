@@ -4,40 +4,40 @@
     color: white;
     background: #3435FF;
     box-sizing: border-box;
-    padding-left: 78px;
+    padding-left: 4.88rem; /* 78px */
 }
 
 .bluediv2 h1 {
-    width: 717px;
-    /* height: 50px; */
-    /* padding-top: 33px; */
-    margin-bottom: 30px;
+    width: 44.81vw; /* 717px on 1600px screen */
+    /* height: 3.13rem; 50px */
+    /* padding-top: 2.06rem; 33px */
+    margin-bottom: 1.88rem; /* 30px */
 }
 
 .bluediv2 p {
-    /* width: 867px;
-    height: 180px; */
+    /* width: 54.19vw; 867px on 1600px screen */
+    /* height: 11.25rem; 180px */
 }
 
 .bluediv2 .biggerP {
-    font-size: 30px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    font-size: 1.875rem; /* 30px */
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .bluediv2 .PageButton {
-    margin-bottom: 35px;
+    margin-bottom: 2.19rem; /* 35px */
 }
 
 .bluediv2 img {
-    margin-right: 120px;
-    margin-top: 20px;
+    margin-right: 7.5rem; /* 120px */
+    margin-top: 1.25rem; /* 20px */
 }
 
 /* infoDiv */
 
 .infoDiv {
-    margin-top: 117px;
+    margin-top: 7.31rem; /* 117px */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,33 +45,33 @@
 }
 
 .infoDiv img {
-    width: 520px;
-    height: 419px;
+    width: 32.5rem; /* 520px */
+    height: 26.19rem; /* 419px */
     transform: rotate(5.83deg);
-    margin-top: 112px;
-    margin-left: 128px;
+    margin-top: 7rem; /* 112px */
+    margin-left: 8rem; /* 128px */
 }
 
 /* div2 */
 
 .div2 {
-    padding-left: 78px;
+    padding-left: 4.88rem; /* 78px */
 }
 
 .div2 .p1 {
-    width: 515px;
+    width: 32.19rem; /* 515px */
 }
 
 .div2 .p2 {
-    width: 387px;
+    width: 24.19rem; /* 387px */
 }
 
 .div2 img {
-    margin-top: 41px;
-    margin-bottom: 51px;
-    margin-left: 140px;
+    margin-top: 2.56rem; /* 41px */
+    margin-bottom: 3.19rem; /* 51px */
+    margin-left: 8.75rem; /* 140px */
 }
 
 .div2 .h2 {
-    margin-top: 80px;
+    margin-top: 5rem; /* 80px */
 }

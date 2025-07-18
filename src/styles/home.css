@@ -7,78 +7,78 @@
 }
 
 .bluediv h1 {
-    width: 752px;
-    height: 129px;
-    padding-top: 33px;
-    padding-left: 78px;
+    width: 47vw;
+    height: 8vw;
+    padding-top: 2.06rem; /* 33px */
+    padding-left: 4.88rem; /* 78px */
 }
 
 .bluediv p {
-    margin-left: 78px;
-    margin-top: 130px;
-    width: 629px;
-    font-size: 22px;
+    margin-left: 4.88rem; /* 78px */
+    margin-top: 8.13rem; /* 130px */
+    width: 39.31vw;
+    font-size: 1.375rem; /* 22px */
 }
 
 .bluediv img {
-    margin-top: 49px;
-    margin-left: 156px;
+    margin-top: 3.06rem; /* 49px */
+    margin-left: 9.75rem; /* 156px */
 }
 
 .bluediv .PageButton {
-    margin-top: 14px;
-    margin-left: 78px;
-    margin-bottom: 33px;
+    margin-top: 0.88rem; /* 14px */
+    margin-left: 4.88rem; /* 78px */
+    margin-bottom: 2.06rem; /* 33px */
 }
 
 /* roundLogo */
 
 .roundLogo {
-    padding-top: 73px;
+    padding-top: 4.56rem; /* 73px */
 }
 
 .roundLogo img {
-    margin-top: 134px;
-    margin-left: 105px;
-    margin-right: 109px;
+    margin-top: 8.38rem; /* 134px */
+    margin-left: 6.56rem; /* 105px */
+    margin-right: 6.81rem; /* 109px */
 }
 
 .roundLogo h2 {
-    margin-top: 177px;
+    margin-top: 11.06rem; /* 177px */
 }
 
 .roundLogo p {
-    width: 450px;
+    width: 28.13rem; /* 450px */
 }
 
 .roundLogo .PageButton {
-    margin-top: 28px;
+    margin-top: 1.75rem; /* 28px */
 }
 
 /* platediv */
 
 .platediv {
-    margin-top: 72px;
+    margin-top: 4.5rem; /* 72px */
 }
 
 .platediv .plate {
-    width: 558.1683393509807px;
-    height: 489.0022158560616px;
+    width: 34.88vw; /* 558.16px on 1600px screen */
+    height: 30.56vw; /* 489px on 1600px screen */
     transform: rotate(7deg);
-    padding-left: 133px;
-    padding-right: 230px;
+    padding-left: 8.31rem; /* 133px */
+    padding-right: 14.38rem; /* 230px */
 }
 
 .platediv p {
-    margin-top: 2px;
-    width: 450px;
+    margin-top: 0.13rem; /* 2px */
+    width: 28.13rem; /* 450px */
 }
 
 .platediv h3 {
-    margin-top: 0px;
-    margin-bottom: 2px;
+    margin-top: 0;
+    margin-bottom: 0.13rem; /* 2px */
 }
 
 .platediv .PageButton {
-    margin-top: 32px;
+    margin-top: 2rem; /* 32px */
 }

@@ -1,7 +1,7 @@
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  font-size: 18px;
+  border-radius: 0.5rem; /* 8px */
+  border: 0.0625rem solid transparent; /* 1px */
+  font-size: 1.125rem; /* 18px */
   font-weight: 500;
   font-family: 'Courier New', Courier, monospace;
   background-color: #FF8200;
@@ -14,10 +14,10 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 0.25rem auto -webkit-focus-ring-color; /* 4px */
 }
 
 .PageButton {
-  width: 324px;
-  height: 40px;
+  width: 20.25rem; /* 324px */
+  height: 2.5rem; /* 40px */
 }
