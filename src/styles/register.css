@@ -31,11 +31,45 @@
     height: 44px;
 }
 
+
+.register .center {
+    text-align: center;
+}
+
+.register-button {
+    /* bouton au centre*/
+    text-align: center;
+    margin-left: 25%;
+    margin-bottom: 10px;
+    width: 50%;
+    background-color: #FF8200;
+    color: white;
+}
+
+.img-center {
+    height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-center img {
+    width: 300px;
+    height: 300px;
+}
+
 /* .situation input {
 }
 
 .revenus {
 }
-
+*/
 .legal {
-} */
+    width: 30rem;
+    background: rgb(184, 183, 183);
+    padding: 10px;
+    margin-left: 48px;
+    border-radius: 10px;
+}
