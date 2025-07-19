@@ -12,7 +12,7 @@ function More() {
     return (
         <>
             {/* Hero section with blue background */}
-            <div className="bg-rayonblue h-[527px] text-white">
+            <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-[527px] text-white">
                 <h1 className="ml-[480px] pt-10 mb-12 text-2xl font-bold">Toujours plus !</h1>
                 <img src={student} className="w-full h-[411px] object-cover" alt="Student" />
             </div>

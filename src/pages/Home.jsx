@@ -16,19 +16,19 @@ function Home() {
     return (
         <>
             {/* Hero section with blue background */}
-            <div className="text-white bg-rayonblue box-border">
-                <h1 className="w-[47vw] h-[8vw] pt-8 pl-20">Pour <span className="text-rayonorange">accéder</span> à notre épicerie en ligne </h1>
+            <div className="text-white bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] box-border pb-12">
+                <h1 className="w-[47vw] pt-8 pl-20 text-7xl font-semibold mb-8">Pour <span className="text-rayonorange">accéder</span> à notre épicerie en ligne </h1>
                 <div className="flex">
-                    <p className="ml-20 mt-32 w-[39.31vw] text-xl">
+                    <p className="ml-20 mt-4 w-[39.31vw] text-xl">
                         Le <strong>Rayon 22</strong> est une épicerie sociale et solidaire dont l'objectif est d'accompagner les personnes pour qui une aide alimentaire représente un soutien non négligeable pour leurs quotidiens, en leur donnant accès à des produits alimentaires à petits prix, partout sur le territoire des Côtes-d'Armor.
                         <span className="block mt-4"></span>
                         Le <strong>Rayon 22</strong>  permet aussi de donner accès à l'aide alimentaire aux personnes qui ne peuvent se rendre aux distributions de nos partenaires.
                         <span className="block mt-4"></span>
                         Afin de pouvoir commander des produits, il vous faut vous connecter à un compte.
                     </p>
-                    <img src={orangeWoman} className="mt-12 ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
+                    <img src={orangeWoman} className="ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
                 </div>
-                <div className="mt-4 ml-20 mb-8">
+                <div className="ml-20 mb-8">
                     <PageButton buttonText={'Se Connecter ➜'} page={'/login'} />
                 </div>
             </div>

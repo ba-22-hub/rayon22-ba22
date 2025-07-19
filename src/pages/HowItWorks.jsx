@@ -15,7 +15,7 @@ function HowItWorks() {
     return (
         <>
             {/* Hero section with blue background */}
-            <div className="text-white bg-rayonblue box-border pl-20 flex">
+            <div className="text-white bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] box-border pl-20 flex">
                 <div>
                     <h1 className="w-[44.81vw] mb-8">Faites vos <span className="text-rayonorange">courses</span> à petit prix en ligne et recevez-les près de <span className="text-rayonorange">chez vous !</span></h1>
                     <p>

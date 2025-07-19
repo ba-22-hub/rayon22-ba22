@@ -73,7 +73,7 @@ function Contact() {
     return (
         <>
             {/* Header section with blue background */}
-            <div className="bg-rayonblue h-52 text-white">
+            <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-52 text-white">
                 <h1 className="pt-14 ml-[460px] text-xl font-bold">Contactez-nous</h1>
             </div>
 

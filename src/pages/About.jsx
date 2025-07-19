@@ -13,7 +13,7 @@ function About() {
   return (
     <div className="w-full min-h-screen bg-white relative">
       {/* HERO SECTION */}
-      <section className="w-full bg-rayonblue relative overflow-hidden px-4 sm:px-8 md:px-0 pt-12 pb-8">
+      <section className="w-full bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] relative overflow-hidden px-4 sm:px-8 md:px-0 pt-12 pb-8">
         <div className="max-w-6xl mx-auto relative z-10">
           <h1 className="text-white font-bold leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6">
             Les banques alimentaires,<br />
