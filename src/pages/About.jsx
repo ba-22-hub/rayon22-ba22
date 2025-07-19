@@ -11,7 +11,7 @@ import logo from "../assets/logos/logo2.png";
  */
 function About() {
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full min-h-screen bg-white relative">
       {/* HERO SECTION */}
       <section className="w-full bg-rayonblue relative overflow-hidden px-4 sm:px-8 md:px-0 pt-12 pb-8">
         <div className="max-w-6xl mx-auto relative z-10">
@@ -32,21 +32,24 @@ function About() {
             </p>
           </div>
         </div>
-        <img src={ticketLogo} alt="ticket logo" className="absolute top-8 right-8 w-32 md:w-48 rotate-6 drop-shadow-2xl z-20" />
       </section>
+      
+      {/* TICKET LOGO OVERLAPPING */}
+      <img src={ticketLogo} alt="ticket logo" className="absolute top-[400px] right-8 w-32 md:w-48 rotate-6 drop-shadow-2xl z-50" />
 
-      {/* MAIN IMAGE */}
-      <div className="w-full overflow-hidden">
-        <img src={womanShelf} alt="Woman at shelf" className="w-full max-h-[420px] object-cover object-left" style={{ height: '340px' }} />
-      </div>
-
-      {/* INFO CARDS */}
-      <section className="w-full flex justify-center bg-white py-14 px-2 sm:px-8 md:px-0">
-        <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
+      {/* MAIN IMAGE WITH OVERLAPPING CARDS */}
+      <div className="w-full relative">
+        <div className="w-full h-[621px] overflow-hidden">
+          <img src={womanShelf} alt="Woman at shelf" className="w-[210%] h-[210%] object-cover origin-top-left object-left-top transform -translate-y-[15%]"/>
+        </div>
+        
+        {/* INFO CARDS STARTING AT IMAGE MIDPOINT */}
+        <div className="absolute top-[310px] left-0 right-0 flex justify-center px-2 sm:px-8 md:px-0">
+          <div className="flex flex-col md:flex-row gap-[25%] w-full max-w-5xl">
           {/* LEFT CARD */}
           <div className="flex-1 bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
-            <div className="flex items-center justify-center w-32 h-32 bg-[#FFF6E9] rounded-full mb-4">
-              <img src={birdLogo} alt="Banque Alimentaire logo" className="w-20 h-20 object-contain" />
+            <div className="flex items-center justify-center mb-4">
+              <img src={birdLogo} alt="Banque Alimentaire logo" className="w-32 h-32 object-contain" />
             </div>
             <h2 className="text-[#3435FF] font-bold text-2xl mb-3 text-center">La banque alimentaire des côtes d’Armor</h2>
             <p className="text-center text-base text-[#3435FF] mb-2">
@@ -58,12 +61,12 @@ function About() {
             <p className="text-center text-base text-[#3435FF] mb-4">
               Vous voulez en savoir plus sur l’organisation de la banque alimentaire ?
             </p>
-            <a href="#" className="mt-2 bg-[#FF8200] text-white px-8 py-3 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">site national BA →</a>
+            <a href="https://www.banquealimentaire.org/" className="mt-2 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">site national BA →</a>
           </div>
           {/* RIGHT CARD */}
-          <div className="flex-1 bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
-            <div className="flex items-center justify-center w-32 h-32 bg-[#F3F4FF] rounded-full mb-4">
-              <img src={logo} alt="RAYON logo" className="w-20 h-20 object-contain" />
+          <div className="flex-1 bg-[#F3F4FF] rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
+            <div className="flex items-center justify-center w-40 h-40 bg-[#F3F4FF] rounded-full mb-4">
+              <img src={logo} alt="RAYON logo" className="w-28 h-28 object-contain" />
             </div>
             <h2 className="text-[#3435FF] font-bold text-2xl mb-3 text-center">Le réseau le RAYON</h2>
             <p className="text-center text-base text-[#3435FF] mb-2">
@@ -72,10 +75,14 @@ function About() {
             <p className="text-center text-base text-[#3435FF] mb-4">
               À l’heure actuelle, six <span className="font-bold">épiceries solidaires</span> sont réparties à travers la France.
             </p>
-            <a href="#" className="mt-2 bg-[#3435FF] text-white px-8 py-3 rounded-full font-mono text-base font-semibold shadow hover:bg-[#5253ff] transition-all">site national le RAYON →</a>
+            <a href="#" className="mt-2 bg-[#3435FF] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#5253ff] transition-all">site national le RAYON →</a>
+          </div>
           </div>
         </div>
-      </section>
+      </div>
+      
+      {/* SPACER TO ACCOUNT FOR CARD OVERFLOW */}
+      <div className="h-80"></div>
     </div>
   )
 }
