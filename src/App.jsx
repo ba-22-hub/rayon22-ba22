@@ -14,6 +14,7 @@ import './styles/navbar.css'
 // Importing assets
 import rayonLogo from "./assets/logos/roundLogo.png"
 import banqueLogo from "./assets/logos/banquesAlimentaires.png"
+import avatar from "./assets/Assets/avatar2.png"
 
 // Importing all the pages
 import About from './pages/About.jsx'
@@ -38,41 +39,54 @@ import Footer from "./common/Footer.jsx";
  */
 function App() {
     return (
-      <>
+      <div className="min-h-screen bg-[#FEF7F1]">
         <Router>
 
           {/* Horizontal navigation bar to choose the page of the website we want to visit */}
-          <nav className="navbar">
-            <ul className="navbar-menu">
-            <li>
-              <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-                <Link to="/">
-                  <img src={rayonLogo} alt="logo1" style={{ height: "35px" }} />
-                </Link>
-                {/*<a href="https://www.banquealimentaire.org" target="_blank" rel="noopener noreferrer">
-                  <img src={banqueLogo} alt="logo2" style={{ height: "35px" }} />
-                </a>*/}
+          <nav className="bg-white shadow-lg border-b border-gray-200 mb-8 mt-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center h-16">
+                {/* Logo */}
+                <div className="flex-shrink-0">
+                  <Link to="/">
+                    <img src={rayonLogo} alt="RAYON logo" className="h-10 w-10" />
+                  </Link>
+                </div>
+                
+                {/* Navigation Links */}
+                <div className="hidden md:block">
+                  <div className="ml-10 flex items-baseline space-x-8">
+                    <Link to="/about" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Qui sommes-nous ?
+                    </Link>
+                    <Link to="/how-it-works" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Comment ça marche ?
+                    </Link>
+                    <Link to="/catalog" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Nos produits
+                    </Link>
+                    <Link to="/more" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Toujours plus
+                    </Link>
+                    <Link to="/contact" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Nous contacter
+                    </Link>
+                  </div>
+                </div>
+                
+                {/* Right side - Inscription button and Avatar */}
+                <div className="flex items-center space-x-4">
+                  <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
+                    S'inscrire
+                  </Link>
+                  <Link to="/login" className="flex-shrink-0">
+                    <div className="bg-[#FF8200] p-1 rounded-lg h-10 w-10 flex items-center justify-center">
+                      <img src={avatar} alt="User avatar" className="h-8 w-8 rounded-full" />
+                    </div>
+                  </Link>
+                </div>
               </div>
-            </li>
-              <li><Link to="/about">Qui sommes-nous ?</Link></li>
-              <li><Link to="/how-it-works">Comment ça marche ?</Link></li>
-              
-              {/* Dropdown menu to choose between browsing the catalog or check the shopping cart */}
-              <li className="dropdown">
-                <span className="dropdown-title">Commander</span>
-                <ul className="dropdown-menu">
-                  <li><Link to="/catalog">Catalogue de produits</Link></li>
-                  <li><Link to="/cart">Mon panier</Link></li>
-                </ul>
-              </li>
-    
-              <li><Link to="/more">Toujours plus</Link></li>
-              <li><Link to="/contact">Nous contacter</Link></li>
-              <li><Link to="/register">Inscription</Link></li>
-              <li><Link to="/login">Connexion</Link></li>
-              <li><Link to="/sponsor">Sponsors</Link></li>
-              <li><Link to="/news">Actualité</Link></li>
-            </ul>
+            </div>
           </nav>
 
           {/* Creating the routes to the website pages */}
@@ -92,8 +106,10 @@ function App() {
           </Routes>
         </Router>
 
-        <Footer></Footer>
-      </>
+        <div className="bg-[#FEF7F1]">
+          <Footer></Footer>
+        </div>
+      </div>
       );
 }
 
