@@ -3,8 +3,6 @@ import PageButton from "../common/PageButton"
 import LoremIpsum from "../common/LoremIpsum"
 import ShapeNumber from "../common/ShapeNumber"
 
-// Styles converted to Tailwind classes
-
 // Importing assets
 import wideLogo from "../assets/logos/bigLogo.png"
 import orangeWoman from "../assets/Photos/giletorange2.png"

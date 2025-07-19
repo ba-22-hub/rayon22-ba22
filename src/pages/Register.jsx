@@ -7,8 +7,6 @@ import FormInput from "../common/FormInput"
 import PageButton from "../common/PageButton"
 import FunctionButton from '../common/FunctionButton';
 
-// Importing the style
-import '../styles/register.css'
 
 /**
  * The Register page.

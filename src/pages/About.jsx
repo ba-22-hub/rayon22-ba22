@@ -3,7 +3,7 @@
 import birdLogo from "../assets/logos/birdLogo.png";
 import womanShelf from "../assets/Photos/womanShelf.jpg";
 import ticketLogo from "../assets/Assets/ticket-logo.png";
-import logo from "../assets/logos/logo.png";
+import logo from "../assets/logos/logo2.png";
 
 /**
  * The About page.
@@ -37,7 +37,7 @@ function About() {
 
       {/* MAIN IMAGE */}
       <div className="w-full overflow-hidden">
-        <img src={womanShelf} alt="Woman at shelf" className="w-full max-h-[420px] object-cover object-center" style={{ height: '340px' }} />
+        <img src={womanShelf} alt="Woman at shelf" className="w-full max-h-[420px] object-cover object-left" style={{ height: '340px' }} />
       </div>
 
       {/* INFO CARDS */}

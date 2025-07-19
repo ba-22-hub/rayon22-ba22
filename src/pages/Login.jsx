@@ -6,8 +6,6 @@ import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
 
-// Styles converted to Tailwind classes
-
 /**
  * The Login page.
  * @returns {React.ReactElement} Login component.

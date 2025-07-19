@@ -2,8 +2,6 @@
 import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "../common/PageButton"
 
-// Styles converted to Tailwind classes
-
 // Importing assets
 import mosaique from "../assets/Photos/mosaique.png"
 import bigRoundLogo from "../assets/logos/bigRoundLogo.png"

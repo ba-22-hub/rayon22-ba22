@@ -1,8 +1,6 @@
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
-// Styles converted to Tailwind classes
-
 // Importing assets
 import student from "../assets/Photos/etudiante1.png"
 
