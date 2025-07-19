@@ -9,6 +9,7 @@ import FunctionButton from '../common/FunctionButton';
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
+import Steper from '../common/Steper';
 
 // Importing the style
 import '../styles/register.css'
@@ -138,6 +139,7 @@ function Register() {
         <>
             <div className="register">
                 <h1>Création d’un compte</h1>
+                <Steper steps={['Étape 1', 'Étape 2', 'Confirmation']} currentStep={step} />
                 { step == 1 && (<RegisterStep1 />)}
                 { step == 2 && (<RegisterStep2 />)}
                 { step ==3 && (<RegisterStep3  mail={"mail.example@gmail.com"}/>)}
