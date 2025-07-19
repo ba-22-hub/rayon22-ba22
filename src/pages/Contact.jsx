@@ -6,8 +6,7 @@ import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput"
 import FormTextArea from "../common/FormTextArea"
 
-// Importing the style
-import '../styles/contact.css'
+// Styles converted to Tailwind classes
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
@@ -75,36 +74,55 @@ function Contact() {
     }
     return (
         <>
-            <div className="bluediv5">
-                <h1>Contactez-nous</h1>
+            {/* Header section with blue background */}
+            <div className="bg-rayonblue h-52 text-white">
+                <h1 className="pt-14 ml-[460px] text-xl font-bold">Contactez-nous</h1>
             </div>
 
-            <div style={{display: "flex"}}>
-                <div className="contactText">
-                    <h2>Un contact si besoin</h2>
-                    <p>
-                        Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j’adresse un message (pour un problème de commande préciser la date de commande).
-                        <span style={{ display: 'block', marginTop: '1rem' }}></span>
-                        Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
+            <div className="flex">
+                {/* Contact text section */}
+                <div className="ml-44 mr-28">
+                    <h2 className="mt-48 text-lg font-semibold mb-4">Un contact si besoin</h2>
+                    <p className="w-96 text-sm leading-relaxed">
+                        Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j'adresse un message (pour un problème de commande préciser la date de commande).
+                        <span className="block mt-4"></span>
+                        Je serai recontacté au numéro de téléphone ou l'adresse mail donné lors de mon inscription.
                     </p>
-                    <img src={roundLogo} className="logo"></img>
+                    <img src={roundLogo} className="w-52 h-52 ml-14 mt-8 transform -rotate-[13.55deg]" alt="Logo" />
                 </div>
 
-                <div className="form">
-                    <h2>Formulaire de contact</h2>
+                {/* Contact form section */}
+                <div className="mt-16 pt-2 px-11 bg-white mb-16">
+                    <h2 className="text-lg font-semibold mb-4">Formulaire de contact</h2>
 
                     {/* Contact form */}
                     <form onSubmit={handleSubmit}>
-                        <div className="name" style={{display: "flex"}}>
-                            <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
-                            <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
+                        <div className="flex gap-12">
+                            <div className="flex-1">
+                                <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
+                            </div>
+                            <div className="flex-1">
+                                <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
+                            </div>
                         </div>
                         <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
                         <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
                         <FormTextArea textAreaName="Message :" name="message" value={formData.message} onChange={handleChange} />
-                        <label>Document requis :</label><br></br>
-                        <input type='file' accept='.pdf' name='file' onChange={handleFileChange} ref={fileInputRef} /><br></br><br></br>
-                        <button type="submit">Envoyer</button>
+                        <label className="block text-sm font-medium mb-2">Document requis :</label>
+                        <input 
+                            type='file' 
+                            accept='.pdf' 
+                            name='file' 
+                            onChange={handleFileChange} 
+                            ref={fileInputRef} 
+                            className="mb-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rayonblue file:text-white hover:file:bg-blue-600"
+                        />
+                        <button 
+                            type="submit" 
+                            className="w-[500px] h-11 ml-9 mb-8 bg-rayonblue text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+                        >
+                            Envoyer
+                        </button>
                     </form>
 
                 </div>
