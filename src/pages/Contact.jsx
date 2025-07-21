@@ -102,6 +102,7 @@ function Contact() {
                       name="firstName" 
                       value={formData.firstName} 
                       onChange={handleChange} 
+                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                     />
                   </div>
                   <div className="flex-1">
@@ -110,6 +111,7 @@ function Contact() {
                       name="lastName" 
                       value={formData.lastName} 
                       onChange={handleChange} 
+                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                     />
                   </div>
                 </div>
@@ -120,6 +122,7 @@ function Contact() {
                     name="email" 
                     value={formData.email} 
                     onChange={handleChange} 
+                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                   />
                 </div>
       
@@ -129,6 +132,7 @@ function Contact() {
                     name="phone" 
                     value={formData.phone} 
                     onChange={handleChange} 
+                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                   />
                 </div>
       
@@ -137,6 +141,7 @@ function Contact() {
                   name="message" 
                   value={formData.message} 
                   onChange={handleChange} 
+                  className="h-64 border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                 />
       
                 <label className="block text-sm font-medium text-[#2E2EFF] mb-2">Document requis :</label>
