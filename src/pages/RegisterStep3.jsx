@@ -1,5 +1,4 @@
 
-import '../styles/register.css'
 import imageMail from '../assets/shapes/sendedMail.png';
 
 import { useState, useRef } from 'react';

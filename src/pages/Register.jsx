@@ -98,8 +98,8 @@ function Register() {
 
     return (
         <>
-            <div className="register">
-                <h1>Création d’un compte</h1>
+            <div className="bg-white w-[918px] ml-[10%] mb-[5%]">
+                <h1 className="text-center text-rayonblue text-[3.2em] leading-tight pt-[2%]">Création d’un compte</h1>
                 <Steper steps={['Étape 1', 'Étape 2', 'Confirmation']} currentStep={step} />
                 {step == 1 && (<RegisterStep1
                     data={formData.step1}

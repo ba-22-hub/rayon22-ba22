@@ -1,13 +1,10 @@
 // Importing dependencies
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importing common components
 import FormInput from "../common/FormInput"
 
-// Importing the style
-import '../styles/register.css'
-import { fileURLToPath } from 'url';
-import { on } from 'events';
+
 
 /**
  * The Register page for the first step.
@@ -45,39 +42,38 @@ function RegisterStep1({ data, onDataChange, onNext }) {
         e.preventDefault();
 
         console.log("Form submitted with data:", formData);
-        onNext();       
+        onNext();
 
     }
 
     return (
         <>
             <span style={{ display: 'block', marginTop: '6rem' }}></span>
-            <p className='center'><red>Les informations avec une étoile rouge sont indispensables pour instruire votre dossier.</red></p>
+            <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables pour instruire votre dossier.</p>
             <span style={{ display: 'block', marginTop: '2rem' }}></span>
-            <p className='center'>
-                <black>
-                    Essayez de remplir le maximum de rubriques en ligne et préparez vos réponses pour compléter en direct les rubriques lors du rappel de nos équipes.<br />
-                    Ajoutez vos dépenses au même titre que vos revenus.
-                </black>
+            <p className='text-center text-black m-[1rem] text-[1.3rem] mrl-[8%]'>
+                Essayez de remplir le maximum de rubriques en ligne et préparez vos réponses pour compléter en direct les rubriques lors du rappel de nos équipes.<br />
+                Ajoutez vos dépenses au même titre que vos revenus
             </p>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Genre <red>*</red></label><br />
-                    <input type="radio" name="gender" value="male" checked={formData.gender === "male"} onChange={handleChange} /> Homme
-                    <input type="radio" name="gender" value="female" checked={formData.gender === "female"} onChange={handleChange} /> Femme
-                    <input type="radio" name="gender" value="other" checked={formData.gender === "other"} onChange={handleChange} /> Autre
+                    <label className="text-rayonblue ml-[8%]">Genre <a className="text-red">*</a></label><br />
+                    <input className="ml-[8%]" type="radio" name="gender" value="male" checked={formData.gender === "male"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Homme</a>
+                    <input className="ml-8" type="radio" name="gender" value="female" checked={formData.gender === "female"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Femme</a>
+                    <input className="ml-8" type="radio" name="gender" value="other" checked={formData.gender === "other"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Autre</a>
                 </div><br />
 
                 <FormInput inputText="Prénom" name="firstName" value={formData.firstName} onChange={handleChange} isStarred={true} />
                 <FormInput inputText="Nom" name="lastName" value={formData.lastName} onChange={handleChange} isStarred={true} />
 
-                <label>Date de naissance <red>*</red></label><br />
-                <input className="date" type="date" name="birthday" value={formData.birthday} onChange={handleChange} /><br /><br />
+                <label className="text-rayonblue ml-[8%]">Date de naissance <a className="text-red">*</a></label><br />
+                <input className="rounded-lg border border-rayonblue h-[2.3rem] ml-[8%] text-rayonlightblue mt-1 mb-[-10px] w-[20%]" type="date" name="birthday" value={formData.birthday} onChange={handleChange} /><br /><br />
 
                 <FormInput inputText="Téléphone" name="phone" value={formData.phone} onChange={handleChange} isStarred={true} />
                 <FormInput inputText="Adresse mail" name="email" value={formData.email} onChange={handleChange} isStarred={true} />
 
-                <button type="submit" className='register-button'>Suivant</button>
+                <button type="submit" className='text-center w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]  '>Suivant</button>
+                <button className='text-center text-rayonorange bg-white w-[50%] ml-[25%] mb-[4%] h-[2rem] rounded-lg border border-rayonorange '>J'ai déjà un compte</button>
             </form>
         </>
     )

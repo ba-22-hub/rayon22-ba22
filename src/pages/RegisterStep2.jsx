@@ -8,8 +8,6 @@ import PageButton from "../common/PageButton"
 import FunctionButton from '../common/FunctionButton';
 
 // Importing the style
-import '../styles/register.css'
-import { on } from 'events';
 
 /**
  * The Register page for the first step.
