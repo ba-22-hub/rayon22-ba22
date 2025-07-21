@@ -12,7 +12,8 @@ function FormInput({ inputText, name, value, onChange, isStarred = false }) {
     return (
         <div>
             <div><label>{inputText}{isStarred &&( <red>*</red>)}</label></div>
-            <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>
+            {isStarred && (<div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} required/></div>)}
+            {!isStarred && (<div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>)}
         </div>
     );
 

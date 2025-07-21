@@ -1,5 +1,5 @@
 // Importing dependencies
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
@@ -9,24 +9,18 @@ import FunctionButton from '../common/FunctionButton';
 
 // Importing the style
 import '../styles/register.css'
+import { on } from 'events';
 
 /**
  * The Register page for the first step.
  * @returns {React.ReactElement} RegisterStep1 component.
  */
-function RegisterStep2() {
-    const [formData, setFormData] = useState({
-        address: '',
-        addAddress: '',
-        city: '',
-        postalCode: '',
-        situation: '',
-        quotient: '',
-        wageType: '',
-        otherWage: '',
-        readInfo: false,
-        acceptTerms: false
-    })
+function RegisterStep2({data, onDataChange, onNext, onPrevious}) {
+    const [formData, setFormData] = useState(data)
+
+    useEffect(() => {
+            onDataChange(formData);
+        }, [formData]);
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
@@ -56,19 +50,7 @@ function RegisterStep2() {
 
         console.log("Form submitted with data:", formData);
 
-        // reset the form data after submission
-        setFormData({
-            address: '',
-            addAddress: '',
-            city: '',
-            postalCode: '',
-            situation: '',
-            quotient: '',
-            wageType: '',
-            otherWage: '',
-            readInfo: false,
-            acceptTerms: false
-        });
+        onNext();
 
     }
     // function for the other wage text input
@@ -126,6 +108,7 @@ function RegisterStep2() {
                         name="readInfo"
                         checked={formData.readInfo}
                         onChange={handleChange}
+                        required
                     />
                     <label>J’ai lu et compris ces informations.</label><br />
 
@@ -134,11 +117,14 @@ function RegisterStep2() {
                         name="acceptTerms"
                         checked={formData.acceptTerms}
                         onChange={handleChange}
+                        required
                     />
-                    <label>J’accepte les conditions d’utilisation.</label><br />
+                    <label>J’accepte les conditions d’utilisation.    </label>
+                    <span href="" className='link-CU'>Lire les conditions d'utilisation</span>
                 </div><br />
 
                 <button type="submit" className='register-button'>Valider</button> <br />
+                <button onClick={onPrevious} className='previous-button'>⮪ Précédent</button>
             </form>
         </>
     )

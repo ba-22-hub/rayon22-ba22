@@ -21,118 +21,81 @@ import '../styles/register.css'
 function Register() {
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
-        gender: '',
-        firstName: '',
-        lastName: '',
-        birthday: '',
-        phone: '',
-        email: '',
-        region: '',
-        street: '',
-        addr: '',
-        postalCode: '',
-        situation: '',
-        quotient: '',
-        wageType: '',
-        otherWage: '',
-        readInfo: false,
-        acceptTerms: false,
-        file: null
-    });
-    const [step, setStep] = useState(1);
+        'step1': {
 
-    // ref to the file field content
-    const fileInputRef = useRef(null);
-
-    function changepage(step){
-        if(step > 3) {
-            step = 3;
-        }
-        if(step < 1) {
-            step = 1;
-        }
-        setStep(step);
-    }
-
-    // function to set the new formData value whenever the inputs are changed
-    function handleChange(e) {
-        const { name, value, type, checked } = e.target;
-        
-        if (type === "checkbox") {
-            setFormData({
-                ...formData,
-                [name]: checked
-            });
-        } else if (name === "wageType") {
-            setFormData(prevData => ({
-                ...prevData,
-                wageType: value,
-                otherWage: '' // reset otherWage if another option selected
-            }));
-        } else {
-            setFormData(prevData => ({
-                ...prevData,
-                [name]: value
-            }));
-        }
-    }
-
-    // function to set the new file formData field value whenever the input changes
-    function handleFileChange(e) {
-        const file = e.target.files[0];
-        setFormData({
-            ...formData,
-            file: file
-        });
-    }
-
-    // function for the other wage text input
-    function handleOtherWageChange(e) {
-        setFormData(prevData => ({
-            ...prevData,
-            otherWage: e.target.value
-        }));
-    }
-
-    // function to handle the form submit
-    function handleSubmit(e) {
-        e.preventDefault();
-        
-        // preparing wage info before sending
-        const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
-        
-        console.log({
-            ...formData,
-            wage: finalWage
-        });
-
-        // resets the inputs and formData to blank
-        setFormData({
             gender: '',
             firstName: '',
             lastName: '',
             birthday: '',
             phone: '',
             email: '',
-            region: '',
-            street: '',
-            addr: '',
+        },
+        'step2': {
+            address: '',
+            addAddress: '',
+            city: '',
             postalCode: '',
             situation: '',
             quotient: '',
             wageType: '',
             otherWage: '',
             readInfo: false,
-            acceptTerms: false,
-            file: null
-        });
+            acceptTerms: false
+        }
+    });
+    const [step, setStep] = useState(1);
+
+    // ref to the file field content
+    // const fileInputRef = useRef(null);
+
+    function changepage(step) {
+        if (step > 3) {
+            step = 3;
+        }
+        if (step < 1) {
+            step = 1;
+        }
+        setStep(step);
+    }
+
+    // Fonction pour mettre à jour les données d'une étape
+    const updateStepData = (step, data) => {
+        setFormData(prev => ({
+            ...prev,
+            [step]: data
+        }));
+        console.log("Updated formData:", formData);
+    };
+
+    // function to set the new file formData field value whenever the input changes
+    // function handleFileChange(e) {
+    //     const file = e.target.files[0];
+    //     setFormData({
+    //         ...formData,
+    //         file: file
+    //     });
+    // }
+
+    // function to handle the form submit
+    function handleSubmit(e) {
+
+        // preparing wage info before sending
+        const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
+
+        formData.step2.wageType = finalWage;
+
+        console.log("Form submitted with data:", formData, "Need API call to send this data");
+        
 
         // manually emptying the file field
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
+        // if (fileInputRef.current) {
+        //     fileInputRef.current.value = '';
+        // }
 
-        alert('Votre compte a bien été créé ! Merci.');
+        // no need to reset the form data here it will be done after quiting the register page
+
+        // alert('Votre compte a bien été créé ! Merci.');
+        changepage(3); // go to the confirmation step
     }
 
     return (
@@ -140,14 +103,19 @@ function Register() {
             <div className="register">
                 <h1>Création d’un compte</h1>
                 <Steper steps={['Étape 1', 'Étape 2', 'Confirmation']} currentStep={step} />
-                { step == 1 && (<RegisterStep1 />)}
-                { step == 2 && (<RegisterStep2 />)}
-                { step ==3 && (<RegisterStep3  mail={"mail.example@gmail.com"}/>)}
+                {step == 1 && (<RegisterStep1
+                    data={formData.step1}
+                    onDataChange={(data) => updateStepData('step1', data)}
+                    onNext={() => changepage(step + 1)}
+                />)}
+                {step == 2 && (<RegisterStep2 
+                    data={formData.step2}
+                    onDataChange={(data) => updateStepData('step2', data)}
+                    onNext={() => handleSubmit()}
+                    onPrevious={() => changepage(step - 1)}
+                />)}
+                {step == 3 && (<RegisterStep3 mail={formData.step1.email} />)}
 
-                <div className='navigation-buttons'>
-                <button onClick={() => changepage(step - 1)}>Page précédente</button>
-                <button onClick={() => changepage(step + 1)}>Page suivante</button>
-                </div>
             </div>
 
         </>

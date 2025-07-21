@@ -2,6 +2,7 @@
     background-color: white;
     width: 918px;
     margin-left: 300px;
+    margin-bottom: 5%;
 }
 
 .register h1 {
@@ -60,18 +61,25 @@
     height: 300px;
 }
 
-.navigation-buttons{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.link-CU {
+    color: #1C7FD5;
+    text-decoration: underline;
+    font-size: small;
+    margin-left: 30%;
+    margin-top: -5%;
 }
 
-.navigation-buttons button{
+
+.previous-button{
     color : #FF8200; 
     background-color: white;
     border: 1px solid #FF8200;
-    padding : 1%;
-    margin : 1%;
+    margin-left: 25%;
+    width: 50%;
+    height: 3rem;
+    margin-bottom: 10px;
+
+
 }
 /* .situation input {
 }
