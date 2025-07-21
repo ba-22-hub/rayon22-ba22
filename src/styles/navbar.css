@@ -1,88 +1,90 @@
 .navbar {
-    background-color: #FFFFFF;
-    width: 100%;
-    margin-top: 65px;
-    font-family: 'Courier New', Courier, monospace;
-    box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.25);
-    width: 1536px;
+  background-color: #FFFFFF;
+  width: 100%;
+  max-width: 96vw; /* ou 100vw selon ton layout */
+  margin-top: 4rem; /* 65px ≈ 4.0625rem arrondi à 4rem */
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 0.3125rem 0.625rem 0.125rem rgba(0, 0, 0, 0.25); /* 5px 10px 2px */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
 }
 
 .navbar-logo {
-    height: 50px; /* ou la hauteur que tu veux */
-    width: auto;
-    object-fit: contain;
-    display: block; /* SUPER IMPORTANT pour que l'image prenne sa taille et ne s'effondre pas */
-    margin-left: 50px;
-  }
-
+  height: 3.125rem; /* 50px */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin-left: 3.125rem; /* 50px */
+}
 
 .navbar-menu {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .navbar-menu > li {
-    position: relative;
+  position: relative;
 }
 
 .navbar-menu > li > a,
 .navbar-menu > li > .dropdown-title {
-    display: block;
-    padding: 20px 20px; /* <-- ICI on ajoute du padding interne pour donner de la hauteur aux éléments */
-    color: #3435FF;
-    text-decoration: none;
-    cursor: pointer;
+  display: block;
+  padding: 1.25rem 1.25rem; /* 20px */
+  color: #3435FF;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .navbar-menu > li > a:hover,
 .navbar-menu > li > .dropdown-title:hover {
-    background-color: #FF8200;
+  background-color: #FF8200;
 }
 
 .navbar-menu img {
-    margin-left: 16px;
-    margin-top: 5px;
+  margin-left: 1rem; /* 16px */
+  margin-top: 0.3125rem; /* 5px */
 }
 
 .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    color: #3435FF;
-    background-color: #FFFFFF;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    min-width: 200px;
-    z-index: 1000;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  color: #3435FF;
+  background-color: #FFFFFF;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 12.5rem; /* 200px */
+  z-index: 1000;
 }
 
 .dropdown-menu li {
-    border-bottom: 1px solid #FF8200;
+  border-bottom: 1px solid #FF8200;
 }
 
 .dropdown-menu li:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .dropdown-menu li a {
-    padding: 12px 20px;
-    display: block;
-    color: #3435FF;
-    text-decoration: none;
+  padding: 0.75rem 1.25rem; /* 12px 20px */
+  display: block;
+  color: #3435FF;
+  text-decoration: none;
 }
 
 .dropdown-menu li a:hover {
-    background-color: #FF8200;
+  background-color: #FF8200;
 }
 
 /* Affiche le sous-menu au survol */
 .dropdown:hover .dropdown-menu {
-    display: block;
+  display: block;
 }

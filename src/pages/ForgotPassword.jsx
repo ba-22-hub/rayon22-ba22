@@ -5,9 +5,6 @@ import { useState } from 'react';
 import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 
-// Importing the style
-import '../styles/password.css'
-
 // Importing assets
 import illustration from "../assets/logos/password.png"
 

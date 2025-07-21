@@ -1,9 +1,6 @@
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
 
-// Importing the style
-import '../styles/more.css'
-
 // Importing assets
 import student from "../assets/Photos/etudiante1.png"
 
@@ -14,19 +11,22 @@ import student from "../assets/Photos/etudiante1.png"
 function More() {
     return (
         <>
-            <div className="bluediv4">
-                <h1>Toujours plus !</h1>
-                <img src={student}></img>
+            {/* Hero section with blue background */}
+            <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-[527px] text-white">
+                <h1 className="ml-[480px] pt-10 mb-12 text-2xl font-bold">Toujours plus !</h1>
+                <img src={student} className="w-full h-[411px] object-cover" alt="Student" />
             </div>
             
-            <div className="divInfo">
-                <h2>Infos pratique</h2>
-                <LoremIpsum></LoremIpsum>
+            {/* Info pratique section */}
+            <div className="pt-20">
+                <h2 className="ml-20 text-xl font-semibold mb-4">Infos pratique</h2>
+                <LoremIpsum />
             </div>
 
-            <div className="divPresse">
-                <h2>Retours presse</h2>
-                <LoremIpsum></LoremIpsum>
+            {/* Retours presse section */}
+            <div className="pt-36">
+                <h2 className="ml-20 text-xl font-semibold mb-4">Retours presse</h2>
+                <LoremIpsum />
             </div>
         </>
     )

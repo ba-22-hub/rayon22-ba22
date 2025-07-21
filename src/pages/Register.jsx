@@ -11,8 +11,6 @@ import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
 import Steper from '../common/Steper';
 
-// Importing the style
-import '../styles/register.css'
 
 /**
  * The Register page.
