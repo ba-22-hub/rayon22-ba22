@@ -11,7 +11,7 @@ function FormInput({ inputText, name, value, onChange }) {
     return (
         <div>
             <div><label>{inputText}</label></div>
-            <div><input className="FormInput" type="text" name={name} value={value} onChange={onChange} /></div>
+            <div><input className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full" type="text" name={name} value={value} onChange={onChange} /></div>
         </div>
     );
 }

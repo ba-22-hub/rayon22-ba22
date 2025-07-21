@@ -11,7 +11,7 @@ function FormTextArea({ textAreaName, name, value, onChange }) {
     return (
         <>
             <label>{textAreaName}</label><br />
-            <textarea name={name} value={value} onChange={onChange} style={{resize: "none"}} /><br /><br />
+            <textarea className="h-64 border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full" name={name} value={value} onChange={onChange} style={{resize: "none"}} /><br /><br />
         </>
     );
 }
