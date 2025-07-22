@@ -53,7 +53,7 @@ function Login() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="w-[65%] mx-auto">
           <FormInput
-            inputText={<span>Adresse email <span className="text-red-500">*</span></span>}
+            inputText={<span className="text-rayonblue">Adresse email <span className="text-red-500">*</span></span>}
             name={'mail'}
             value={formData.mail}
             onChange={handleChange}
@@ -62,7 +62,7 @@ function Login() {
         </div>
         <div className="w-[65%] mx-auto">
           <FormInput
-            inputText={<span>Mot de passe <span className="text-red-500">*</span></span>}
+            inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
             name={'password'}
             value={formData.password}
             onChange={handleChange}
