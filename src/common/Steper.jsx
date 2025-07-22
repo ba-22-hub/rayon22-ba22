@@ -1,86 +1,22 @@
 
 function Steper({ steps, currentStep }) {
     const nbSteps = steps.length;
-    const widthline = (3 + 6) + 'rem'
 
     return (
         <>
-            <style>
-                {`
-                .steper{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .step {
-                    z-index: 4;
-                    justify-content: center;
-                    align-items: center;
-                    display: flex;
-                    flex-direction: column; 
-                    width : 6rem ; 
-                    margin-left: -1rem;
-                    margin-right: -1rem;
-                }
-                .disque{
-                    z-index: 2;
-                    background-color :  #FF8200; 
-                    border-radius: 50%;
-                    width : 3rem ; 
-                    height : 3rem;
-                    justify-content: center;
-                    align-items: center;
-                    display: flex;
-                    z-index: 2;
-
-                }
-                .circle{
-                    z-index: 3;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width : 4rem ;
-                    height : 4rem ;
-                    border-radius: 50%;
-                    border: 2px solid black;
-                }
-            
-                .line{
-                    margin-top : 4%;
-                    width: 9rem; 
-                    height: 2px;
-                    background-color: black;
-                    z-index: 1;
-                }
-                .show-active{
-                    margin-top : -7px; 
-                    height: 12px;
-                    width : 15px;   ; 
-                    margin-bottom: 0.5rem;
-                }
-                .active .show-active{
-                    border: 10px solid transparent;
-                    border-bottom-color: #FF8200;
-                    margin-top: -10px;
-                    margin-bottom: 0.2rem;
-                }
-                
-            `}
-            </style>
-            <div className="steper">
+            <div className="flex flex-row justify-center items-center mt-2% w-[100%]">
                 {steps.map((step, index) => (
                     <>
-                    <div key={index} className={`step ${currentStep === index + 1 ? 'active' : ''} center`}>
+                    <div key={index} className={`z-[4] justify-center items-center flex flex-col w-24 -ml-5 -mr-5`}>
                         <span className="step-label"><black>{step}</black></span><br />
-                        <div className="show-active"></div>
-                        <div className="circle">
-                            <div className="disque">
+                        <div className={`-mt-[7px] h-4 w-[15px] mb-2 ${currentStep === index + 1 ? 'border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-rayonorange -mt-[10px] mb-0.5' : ''}`}></div>
+                        <div className="z-[3] flex justify-center items-center w-14 h-14 rounded-full border-2 border-black">
+                            <div className="z-[2] bg-rayonorange rounded-full w-10 h-10 justify-center items-center flex">
                                 <p className="step-number"><black>{index + 1}</black></p>
                             </div>
                         </div>
                     </div>
-                    { index < nbSteps - 1 && (<div className="line"></div>)}
+                    { index < nbSteps - 1 && (<div className="mt-[4.3%] w-40 h-0.5 bg-black z-[1]"></div>)}
                     </>
                 ))}
             </div>

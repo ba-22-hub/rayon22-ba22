@@ -77,7 +77,7 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
 
                 <FormInput inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} isStarred={true} />
 
-                <div className="revenus">
+                <div>
                     <label className="text-rayonblue ml-[8%]">Vos revenus <a className="text-red">*</a></label><br />
                     <input className="ml-[8%]" type="radio" name="wageType" value="salary" checked={formData.wageType === "salary"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salaire ou pension</a>
                     <input className="ml-8" type="radio" name="wageType" value="scholarship" checked={formData.wageType === "scholarship"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Bourse</a>
