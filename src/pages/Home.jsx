@@ -37,7 +37,7 @@ function Home() {
                     <img src={orangeWoman} className="ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
                 </div>
                 <div className="ml-20 mb-8">
-                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} />
+                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
                 </div>
             </div>
 
@@ -123,7 +123,7 @@ function Home() {
                 
                 {/* Button */}
                 <div className="flex justify-center mt-12">
-                    <PageButton buttonText={'Je m\'inscris →'} page={'/register'} />
+                    <PageButton buttonText={'Je m\'inscris ➔'} page={'/register'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
                 </div>
             </div>
 
@@ -208,7 +208,7 @@ function Home() {
                         </div>
                         
                         <div>
-                            <PageButton buttonText={'Toujours plus →'} page={'/more'} />
+                            <PageButton buttonText={'Toujours plus ➔'} page={'/more'} className={'text-white bg-rayonorange rounded-tight w-[70%] h-[2em]'}/>
                         </div>
                     </div>
                 </div>
