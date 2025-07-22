@@ -41,36 +41,64 @@ function Login() {
     }
 
     return (
-        <>
-            <div className="bg-white w-[65.56vw] ml-[15.63vw] mt-32 mb-10">
-                <h1 className="pt-14 text-center text-2xl font-bold">Bienvenue sur votre Espace Utilisateur</h1>
-                <p className="text-black text-lg text-center">Connectez vous en utilisant le formulaire ci-dessous</p>
+  <>
+    <div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
+      <h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
+        Bienvenue sur votre Espace Utilisateur
+      </h1>
+      <p className="text-black text-base text-center mb-10 mt-4">
+        Connectez vous en utilisant le formulaire ci-dessous
+      </p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="ml-[12.81vw]">
-                        <FormInput inputText={'Adresse email'} name={'mail'} value={formData.mail} onChange={handleChange} />
-                    </div>
-                    <div className="ml-[12.81vw]">
-                        <FormInput inputText={'Mot de passe'} name={'password'} value={formData.password} onChange={handleChange} />
-                    </div>
-                    <div className="ml-[31.06vw]">
-                        <PageButton buttonText={'Mot de passe oublié ?'} page={'/forgot-password'} />
-                    </div>
-                    <button 
-                        type="submit" 
-                        className="ml-[16.81vw] w-[500px] h-11 mt-14 mb-12 bg-rayonblue text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                    >
-                        Je me connecte
-                    </button>
-                </form>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="w-[65%] mx-auto">
+          <FormInput
+            inputText={<span>Adresse email <span className="text-red-500">*</span></span>}
+            name={'mail'}
+            value={formData.mail}
+            onChange={handleChange}
+            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+          />
+        </div>
+        <div className="w-[65%] mx-auto">
+          <FormInput
+            inputText={<span>Mot de passe <span className="text-red-500">*</span></span>}
+            name={'password'}
+            value={formData.password}
+            onChange={handleChange}
+            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+          />
+        </div>
+        <div className="text-right w-[65%] mx-auto">
+          <PageButton
+            buttonText={'Mot de passe oublié ?'}
+            page={'/forgot-password'}
+            className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
+          />
+        </div>
+        <div className="w-full flex justify-center">
+          <PageButton
+            buttonText={'Je me connecte'}
+            type="submit"
+            className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+          />
+        </div>
+      </form>
 
-                <p className="text-black text-lg text-center">Vous n'avez pas encore de compte ?</p>
-                <div className="text-center">
-                    <PageButton buttonText={'Créez votre compte'} page={'/register'} />
-                </div>
-            </div>
-        </>
-    )
+      <p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
+        Vous n'avez pas encore de compte ?
+      </p>
+      <div className="flex justify-center">
+        <PageButton
+          buttonText={'Créez votre compte'}
+          page={'/register'}
+            className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+        />
+      </div>
+    </div>
+  </>
+)
+
 }
 
 export default Login

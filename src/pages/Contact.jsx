@@ -2,7 +2,6 @@
 import { useState, useRef } from 'react';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput"
 import FormTextArea from "../common/FormTextArea"
 
@@ -72,61 +71,102 @@ function Contact() {
     }
     return (
         <>
-            {/* Header section with blue background */}
-            <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-52 text-white">
-                <h1 className="pt-14 ml-[460px] text-xl font-bold">Contactez-nous</h1>
+          {/* Header */}
+          <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-52 text-white flex items-center justify-center">
+            <h1 className="text-5xl font-bold">Contactez-nous</h1>
+          </div>
+      
+          <div className="flex justify-center bg-[#FFF8F4] pb-20">
+            {/* Left Text Section */}
+            <div className="w-[35%] mt-24 pr-16">
+              <h2 className="text-[#2E2EFF] text-3xl font-bold mb-6">Un contact si besoin</h2>
+              <p className="text-[#2E2EFF] text-xl leading-relaxed">
+                Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...)
+                ou un sujet concernant ma situation personnelle, j’adresse un message (pour un problème de commande
+                préciser la date de commande).
+                <br /><br />
+                Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
+              </p>
+              <img src={roundLogo} alt="Logo" className="w-80 mt-16 ml-12 -rotate-[13.55deg]" />
             </div>
-
-            <div className="flex">
-                {/* Contact text section */}
-                <div className="ml-44 mr-28">
-                    <h2 className="mt-48 text-lg font-semibold mb-4">Un contact si besoin</h2>
-                    <p className="w-96 text-sm leading-relaxed">
-                        Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...) ou un sujet concernant ma situation personnelle, j'adresse un message (pour un problème de commande préciser la date de commande).
-                        <span className="block mt-4"></span>
-                        Je serai recontacté au numéro de téléphone ou l'adresse mail donné lors de mon inscription.
-                    </p>
-                    <img src={roundLogo} className="w-52 h-52 ml-14 mt-8 transform -rotate-[13.55deg]" alt="Logo" />
+      
+            {/* Right Form Section */}
+            <div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] mt-16">
+              <h2 className="text-[#2E2EFF] text-2xl font-bold mb-6">Formulaire de contact</h2>
+      
+              <form onSubmit={handleSubmit}>
+                <div className="flex gap-6 mb-4">
+                  <div className="flex-1">
+                    <FormInput 
+                      inputText={<span>Prénom <span className="text-red-500">*</span></span>} 
+                      name="firstName" 
+                      value={formData.firstName} 
+                      onChange={handleChange} 
+                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <FormInput 
+                      inputText={<span>Nom <span className="text-red-500">*</span></span>} 
+                      name="lastName" 
+                      value={formData.lastName} 
+                      onChange={handleChange} 
+                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                    />
+                  </div>
                 </div>
-
-                {/* Contact form section */}
-                <div className="mt-16 pt-2 px-11 bg-white mb-16">
-                    <h2 className="text-lg font-semibold mb-4">Formulaire de contact</h2>
-
-                    {/* Contact form */}
-                    <form onSubmit={handleSubmit}>
-                        <div className="flex gap-12">
-                            <div className="flex-1">
-                                <FormInput inputText="Prénom :" name="firstName" value={formData.firstName} onChange={handleChange} />
-                            </div>
-                            <div className="flex-1">
-                                <FormInput inputText="Nom :" name="lastName" value={formData.lastName} onChange={handleChange} />
-                            </div>
-                        </div>
-                        <FormInput inputText="Adresse e-mail :" name="email" value={formData.email} onChange={handleChange} />
-                        <FormInput inputText="Téléphone :" name="phone" value={formData.phone} onChange={handleChange} />
-                        <FormTextArea textAreaName="Message :" name="message" value={formData.message} onChange={handleChange} />
-                        <label className="block text-sm font-medium mb-2">Document requis :</label>
-                        <input 
-                            type='file' 
-                            accept='.pdf' 
-                            name='file' 
-                            onChange={handleFileChange} 
-                            ref={fileInputRef} 
-                            className="mb-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rayonblue file:text-white hover:file:bg-blue-600"
-                        />
-                        <button 
-                            type="submit" 
-                            className="w-[500px] h-11 ml-9 mb-8 bg-rayonblue text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                        >
-                            Envoyer
-                        </button>
-                    </form>
-
+      
+                <div className="mb-4">
+                  <FormInput 
+                    inputText={<span>Adresse e-mail <span className="text-red-500">*</span></span>} 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                  />
                 </div>
+      
+                <div className="mb-4">
+                  <FormInput 
+                    inputText={<span>Téléphone <span className="text-red-500">*</span></span>} 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleChange} 
+                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                  />
+                </div>
+      
+                <FormTextArea 
+                  textAreaName={<span>Message <span className="text-red-500">*</span></span>} 
+                  name="message" 
+                  value={formData.message} 
+                  onChange={handleChange} 
+                  className="h-64 border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                />
+      
+                <label className="block text-sm font-medium text-[#2E2EFF] mb-2">Document requis :</label>
+                <input 
+                  type='file' 
+                  accept='.pdf' 
+                  name='file' 
+                  onChange={handleFileChange} 
+                  ref={fileInputRef} 
+                  className="mb-6 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
+                />
+      
+                <div className="flex justify-center">
+                  <button 
+                    type="submit" 
+                    className="bg-[#FF7A00] text-white font-light tracking-wider w-full py-3 rounded-lg text-sm hover:bg-orange-600 transition"
+                  >
+                    Envoyer
+                  </button>
+                </div>
+              </form>
             </div>
+          </div>
         </>
-    )
+      )
 }
 
 export default Contact
