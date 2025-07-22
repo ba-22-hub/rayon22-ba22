@@ -21,7 +21,7 @@ function About() {
             d’aide alimentaire en <span className="text-rayonorange">France</span>
           </h1>
           <div className="mt-4 max-w-3xl">
-            <p className="font-semibold text-white text-base md:text-lg">
+            <p className="text-white text-base md:text-lg">
               <span className="font-bold text-white">Le Rayon 22</span> est une épicerie sociale et solidaire dont l’objectif est d’accompagner les personnes en difficulté financière en leur donnant accès à une alimentation à petits prix sur tout le territoire des Côtes d’Armor.
             </p>
             <p className="mt-2 text-white text-base md:text-lg">
