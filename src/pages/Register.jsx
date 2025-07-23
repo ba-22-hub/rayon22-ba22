@@ -62,7 +62,6 @@ function Register() {
             ...prev,
             [step]: data
         }));
-        console.log("Updated formData:", formData);
     };
 
     // function to set the new file formData field value whenever the input changes
@@ -98,7 +97,7 @@ function Register() {
 
     return (
         <>
-            <div className="bg-white w-[918px] ml-[10%] mb-[5%]">
+            <div className="bg-white w-[60%] ml-[20%] mb-[5%]">
                 <h1 className="text-center text-rayonblue text-[5em] leading-tight pt-[2%] font-bold">Création d’un compte</h1>
                 <Steper steps={['Étape 1', 'Étape 2', 'Confirmation']} currentStep={step} />
                 {step == 1 && (<RegisterStep1
