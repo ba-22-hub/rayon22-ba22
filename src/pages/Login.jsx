@@ -5,6 +5,7 @@ import { useState } from 'react';
 import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
+import Account from './Account';
 
 /**
  * The Login page.
@@ -95,6 +96,10 @@ function Login() {
             className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
         />
       </div>
+    </div>
+    <div>
+      <Account 
+        client={{birthday: "0023-09-23",  email: "no@martin.bzh", firstName: "Nolwenn", gender: "female", lastName: "Martin", phone: "0943439843", acceptTerms: true, addAddress: "", address: "25 rue de la lune ", city: "Brest", otherWage: "", postalCode: "29000", quotient: "un certain nombre", readInfo: true, situation: "jobless", wageType: undefined}}/>
     </div>
   </>
 )
