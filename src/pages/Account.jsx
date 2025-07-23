@@ -27,8 +27,8 @@ function Account({ client }) {
 
     return (
         <>
-            <div className="w-[60%] ml-[20%] p-[8%] bg-white">
-                <h1 className="text-center text-rayonblue text-[5em] leading-tight pt-[2%] font-bold">Mon Compte</h1>
+            <div className="w-[66%] ml-[17%] p-[8%] bg-white rounded-2xl shadow-sm mb-[4%]">
+                <h1 className="text-center text-rayonblue text-[4.3em] leading-tight pt-[2%] font-bold">Bienvenue sur votre Espace Utilisateur</h1>
                 <div className="flex flex-row">
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[48%] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
