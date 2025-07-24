@@ -62,10 +62,10 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
     return (
         <>
             <form onSubmit={handleSubmit} className='mlr-[8%] mt-[6rem]'>
-                <FormInput className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} />
-                <FormInput className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Complément d'adresse :" name="addAddress" value={formData.addr} onChange={handleChange} />
-                <FormInput className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Votre commune :" name="city" value={formData.region} onChange={handleChange} isStarred={true} />
-                <FormInput className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Code postal :" name="postalCode" value={formData.postalCode} onChange={handleChange} isStarred={true} />
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} />
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Complément d'adresse :" name="addAddress" value={formData.addr} onChange={handleChange} />
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Votre commune :" name="city" value={formData.region} onChange={handleChange} isStarred={true} />
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Code postal :" name="postalCode" value={formData.postalCode} onChange={handleChange} isStarred={true} />
 
                 <div>
                     <label className="text-rayonblue ml-[8%]">Situation <a className="text-red">*</a></label><br />
@@ -75,7 +75,7 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
                     <input className="ml-8" type="radio" name="situation" value="retired" checked={formData.situation === "retired"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Retraité</a>
                 </div><br />
 
-                <FormInput className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} isStarred={true} />
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} isStarred={true} />
 
                 <div>
                     <label className="text-rayonblue ml-[8%]">Vos revenus <a className="text-red">*</a></label><br />
