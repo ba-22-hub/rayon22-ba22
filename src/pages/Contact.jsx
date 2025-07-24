@@ -97,50 +97,62 @@ function Contact() {
               <form onSubmit={handleSubmit}>
                 <div className="flex gap-6 mb-4">
                   <div className="flex-1">
+
+                    {/* First Name */}
                     <FormInput 
-                      inputText={<span>Prénom <span className="text-red-500">*</span></span>} 
+                      inputText={"Prénom"} 
                       name="firstName" 
                       value={formData.firstName} 
                       onChange={handleChange} 
+                      isStarred={true} 
                       className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                     />
                   </div>
+
+                  {/* Last Name */}
                   <div className="flex-1">
                     <FormInput 
-                      inputText={<span>Nom <span className="text-red-500">*</span></span>} 
+                      inputText={"Nom"} 
                       name="lastName" 
                       value={formData.lastName} 
                       onChange={handleChange} 
+                      isStarred={true} 
                       className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                     />
                   </div>
                 </div>
       
-                <div className="mb-4">
+                {/* Email */}
+                <div className="flex-1 mb-5">
                   <FormInput 
-                    inputText={<span>Adresse e-mail <span className="text-red-500">*</span></span>} 
+                    inputText={"Adresse e-mail"} 
                     name="email" 
                     value={formData.email} 
                     onChange={handleChange} 
+                    isStarred={true} 
                     className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                   />
                 </div>
       
-                <div className="mb-4">
+                {/* Phone */}
+                <div className="flex-1 mb-5">
                   <FormInput 
-                    inputText={<span>Téléphone <span className="text-red-500">*</span></span>} 
+                    inputText={"Téléphone"} 
                     name="phone" 
                     value={formData.phone} 
                     onChange={handleChange} 
+                    isStarred={true}  
                     className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                   />
                 </div>
       
+                {/* Message */}
                 <FormTextArea 
-                  textAreaName={<span>Message <span className="text-red-500">*</span></span>} 
+                  textAreaName={"Message"} 
                   name="message" 
                   value={formData.message} 
                   onChange={handleChange} 
+                  isStarred={true}
                   className="h-64 border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                 />
       
