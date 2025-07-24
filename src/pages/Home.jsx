@@ -182,7 +182,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#FF8200] font-semibold text-3xl">85%</span>
+                                    <span className="text-[#FF8200] font-semibold text-3xl">85%</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> vivent avec moins de 200€ par mois.</span>
                                 </p>
                             </div>
@@ -190,7 +190,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#3435FF] font-semibold text-3xl">1 sur 5</span>
+                                    <span className="text-[#3435FF] font-semibold text-3xl">1 sur 5</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> est en insécurité alimentaire.</span>
                                 </p>
                             </div>
@@ -198,7 +198,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#FF8200] font-semibold text-3xl">47%</span>
+                                    <span className="text-[#FF8200] font-semibold text-3xl">47%</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> ont dû renoncer à des soins de santé.</span>
                                 </p>
                             </div>
