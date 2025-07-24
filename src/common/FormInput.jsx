@@ -8,13 +8,18 @@
  * @param {(e: any) => void} props.onChange - The function to call whenever the value changes.
  * @returns {React.ReactElement} FormInput component.
  */
-function FormInput({ className, inputText, name, value, onChange }) {
+
+function FormInput({ className, inputText, name, value, onChange, isStarred = false }) {
+
     return (
         <div>
-            <div><label>{inputText}</label></div>
-            <div><input className={className} type="text" name={name} value={value} onChange={onChange} /></div>
+            <div><label className="text-rayonblue ml-[8%]">{inputText}{isStarred &&( <a className="text-red"> *</a>)}</label></div>
+            {isStarred && (<div><input className={className} type="text" name={name} value={value} onChange={onChange} required/></div>)}
+            {!isStarred && (<div><input className={className} type="text" name={name} value={value} onChange={onChange} /></div>)}
         </div>
-    );
-}
+)}
+
+
 
 export default FormInput
+
