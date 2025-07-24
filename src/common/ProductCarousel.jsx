@@ -3,28 +3,47 @@ import "slick-carousel/slick/slick-theme.css";
 
 
 import Slider from "react-slick";
-import plate from "../assets/logos/bigRoundLogo.png"; // remplace avec tes vraies images
+import plate from "../assets/logos/bigRoundLogo.png"; 
 
-const mockProducts = [
+{/* TODO: Add here the real showcase products (the showcase isn't linked tho the database) */}
+
+const showcaseProducts = [
   {
-    name: "Pâtes complètes",
+    name: "Pâte torti",
     image: plate,
-    price: "2.50€",
-    salePrice: "1.00€",
+    price: "0.50€",
+    salePrice: "0.05€",
   },
   {
-    name: "Lait demi-écrémé",
+    name: "Riz 10 minutes",
     image: plate,
-    price: "1.20€",
-    salePrice: "0.60€",
+    price: "0.50€",
+    salePrice: "0.10€",
   },
   {
-    name: "Riz basmati",
+    name: "Lentilles cuisinées",
     image: plate,
-    price: "3.00€",
-    salePrice: "1.50€",
+    price: "0.50€",
+    salePrice: "0.05€",
   },
-  // Ajoute autant de produits que tu veux
+  {
+    name: "Haricot vert extra-fin",
+    image: plate,
+    price: "1€",
+    salePrice: "0.10€",
+  },
+  {
+    name: "Thon",
+    image: plate,
+    price: "1.50€",
+    salePrice: "0.15€",
+  },
+  {
+    name: "3 gratte épongge",
+    image: plate,
+    price: "1.50€",
+    salePrice: "0.15€",
+  },
 ];
 
 const ProductCarousel = () => {
@@ -43,7 +62,7 @@ const ProductCarousel = () => {
   return (
     <div className="px-8 max-w-7xl mx-auto mb-16">
       <Slider {...settings}>
-        {mockProducts.map((product, idx) => (
+        {showcaseProducts.map((product, idx) => (
           <div key={idx} className="p-4">
             <div className="bg-white shadow-md rounded-xl overflow-hidden text-center">
               <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
