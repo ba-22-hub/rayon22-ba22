@@ -2,6 +2,7 @@
 import PageButton from "../common/PageButton"
 import LoremIpsum from "../common/LoremIpsum"
 import ShapeNumber from "../common/ShapeNumber"
+import ProductCarousel from "../common/ProductCarousel"
 
 // Importing assets
 import wideLogo from "../assets/logos/bigLogo.png"
@@ -129,7 +130,7 @@ function Home() {
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <LoremIpsum />
+            <ProductCarousel />
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">
