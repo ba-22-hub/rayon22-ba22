@@ -97,10 +97,6 @@ function Login() {
         />
       </div>
     </div>
-    <div>
-      <Account 
-        client={{birthday: "0023-09-23",  email: "no@martin.bzh", firstName: "Nolwenn", gender: "female", lastName: "Martin", phone: "0943439843", acceptTerms: true, addAddress: "", address: "25 rue de la lune ", city: "Brest", otherWage: "", postalCode: "29000", quotient: "un certain nombre", readInfo: true, situation: "jobless", wageType: "salary"}}/>
-    </div>
   </>
 )
 
