@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 // Importing common components
 import LoremIpsum from "../common/LoremIpsum"
@@ -73,8 +74,11 @@ function Register() {
     //     });
     // }
 
+    // Creating a Supabase client instance
+    const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+
     // function to handle the form submit
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
 
         // preparing wage info before sending
         const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
@@ -83,15 +87,21 @@ function Register() {
 
         console.log("Form submitted with data:", formData, "Need API call to send this data");
         
+        const email = formData.step1.email;
 
-        // manually emptying the file field
-        // if (fileInputRef.current) {
-        //     fileInputRef.current.value = '';
-        // }
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: "admin1234",
+            options: {
+                emailRedirectTo: 'https://tonsite.com/create-password' // important: where supabase redirects after email click
+            }
+        });
 
-        // no need to reset the form data here it will be done after quiting the register page
+        if (error) {
+            console.error("Erreur lors de la création Supabase:", error.message);
+            return;
+        }
 
-        // alert('Votre compte a bien été créé ! Merci.');
         changepage(3); // go to the confirmation step
     }
 

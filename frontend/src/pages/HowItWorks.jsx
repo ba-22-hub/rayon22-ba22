@@ -33,7 +33,7 @@ function HowItWorks() {
                         <strong>L'inscription est indispensable</strong> car l'accès à l'épicerie en ligne est sous conditions de ressources.
                     </p>
                     <div className="mt-12 mb-9">
-                        <PageButton buttonText={'Se Connecter ➔'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
+                        <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="bg-rayonorange w-80 h-10"/>
                     </div>
                 </div>
                 <img src={mosaique} className="w-[555px] h-[469px] mr-32 mt-20" alt="Mosaique" />
@@ -52,7 +52,7 @@ function HowItWorks() {
                     {/* Content */}
                     <div className="flex-1 pl-0 md:pl-12 space-y-6">
                         {/* Step 01 */}
-                        <div className="flex items-start">
+                        <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
                                 <ShapeNumber nb={"01"} />
                             </div>
@@ -65,7 +65,7 @@ function HowItWorks() {
                         </div>
                         
                         {/* Step 02 */}
-                        <div className="flex items-start">
+                        <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
                                 <ShapeNumber nb={"02"} />
                             </div>
@@ -78,8 +78,8 @@ function HowItWorks() {
                         </div>
                         
                         {/* Step 03 */}
-                        <div className="flex items-start">
-                            <div className="mr-4 flex-shrink-0 ">
+                        <div className="flex items-center">
+                            <div className="mr-4 flex-shrink-0">
                                 <ShapeNumber nb={"03"} />
                             </div>
                             <div>
@@ -91,7 +91,7 @@ function HowItWorks() {
                         </div>
                         
                         {/* Step 04 */}
-                        <div className="flex items-start">
+                        <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
                                 <ShapeNumber nb={"04"} />
                             </div>
