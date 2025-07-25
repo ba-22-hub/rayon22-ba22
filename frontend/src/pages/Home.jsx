@@ -2,6 +2,7 @@
 import PageButton from "../common/PageButton"
 import LoremIpsum from "../common/LoremIpsum"
 import ShapeNumber from "../common/ShapeNumber"
+import ProductCarousel from "../common/ProductCarousel"
 
 // Importing assets
 import wideLogo from "../assets/logos/bigLogo.png"
@@ -37,7 +38,7 @@ function Home() {
                     <img src={orangeWoman} className="ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
                 </div>
                 <div className="ml-20 mb-8">
-                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} />
+                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
                 </div>
             </div>
 
@@ -123,13 +124,13 @@ function Home() {
                 
                 {/* Button */}
                 <div className="flex justify-center mt-12">
-                    <PageButton buttonText={'Je m\'inscris →'} page={'/register'} />
+                    <PageButton buttonText={'Je m\'inscris ➔'} page={'/register'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
                 </div>
             </div>
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <LoremIpsum />
+            <ProductCarousel />
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">
@@ -181,7 +182,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#FF8200] font-semibold text-3xl">85%</span>
+                                    <span className="text-[#FF8200] font-semibold text-3xl">85%</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> vivent avec moins de 200€ par mois.</span>
                                 </p>
                             </div>
@@ -189,7 +190,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#3435FF] font-semibold text-3xl">1 sur 5</span>
+                                    <span className="text-[#3435FF] font-semibold text-3xl">1 sur 5</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> est en insécurité alimentaire.</span>
                                 </p>
                             </div>
@@ -197,7 +198,7 @@ function Home() {
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="font-bold text-[#FF8200] font-semibold text-3xl">47%</span>
+                                    <span className="text-[#FF8200] font-semibold text-3xl">47%</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> ont dû renoncer à des soins de santé.</span>
                                 </p>
                             </div>
@@ -208,7 +209,7 @@ function Home() {
                         </div>
                         
                         <div>
-                            <PageButton buttonText={'Toujours plus →'} page={'/more'} />
+                            <PageButton buttonText={'Toujours plus ➔'} page={'/more'} className={'text-white bg-rayonorange rounded-tight w-[70%] h-[2em]'}/>
                         </div>
                     </div>
                 </div>
