@@ -91,9 +91,9 @@ function Register() {
 
         const { data, error } = await supabase.auth.signUp({
             email: email,
-            password: "admin1234",
+            password: "admin1234", // TODO : get the password from the form
             options: {
-                emailRedirectTo: 'https://tonsite.com/create-password' // important: where supabase redirects after email click
+                emailRedirectTo: "http://localhost:5173/login" // TODO : change this URL to the production one
             }
         });
 
@@ -101,6 +101,8 @@ function Register() {
             console.error("Erreur lors de la création Supabase:", error.message);
             return;
         }
+
+        alert("Un email de confirmation a été envoyé !");
 
         changepage(3); // go to the confirmation step
     }
