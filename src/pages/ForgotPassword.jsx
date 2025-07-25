@@ -63,14 +63,14 @@ function Login() {
       {/* Formulaire */}
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
         <FormInput
-          inputText={<span>Mot de passe <span className="text-red-500">*</span></span>}
+          inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
           name="password"
           value={formData.password}
           onChange={handleChange}
           className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
         />
         <FormInput
-          inputText={<span>Confirmation du mot de passe <span className="text-red-500">*</span></span>}
+          inputText={<span className="text-rayonblue">Confirmation du mot de passe <span className="text-red-500">*</span></span>}
           name="passwordConfirm"
           value={formData.passwordConfirm}
           onChange={handleChange}
