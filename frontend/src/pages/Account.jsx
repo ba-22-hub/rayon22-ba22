@@ -78,7 +78,7 @@ function Account({ client }) {
             <label className="font-semibold w-[23%] mt-2 mb-2">{label} : </label>
             {editing ? (
                 <input
-                    className="ml-3 border border-rayonorange rounded-lg w-[78%] mt-1 mb-1 text-rayonorange"
+                    className="ml-3 border border-rayonorange rounded-lg w-[78%] mt-1 mb-1 text-rayonorange pl-2"
                     name={fieldName}
                     value={clientEdit[fieldName]}
                     onChange={handleChange}
@@ -148,6 +148,7 @@ function Account({ client }) {
                     <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                     <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                 </div>
+                
                 {!editing ? (
                     <button
                         className="text-white text-center bg-rayonorange w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]"
@@ -170,6 +171,7 @@ function Account({ client }) {
                     </div>
                 )
                 }
+
             </div>
         </>
     )

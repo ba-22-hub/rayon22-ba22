@@ -17,6 +17,7 @@ function Login() {
         mail: '',
         password: ''
     });
+    const [isLogged, setIsLogged] = useState(false)
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
@@ -33,6 +34,8 @@ function Login() {
         // printing the formData content in the console for now
         // TODO : connect with the server
         console.log(formData);
+        console.log("Check API ?")
+        setIsLogged(true)
 
         // resets the inputs and formData to blank
         setFormData({
@@ -43,60 +46,68 @@ function Login() {
 
     return (
   <>
-    <div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
-      <h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
-        Bienvenue sur votre Espace Utilisateur
-      </h1>
-      <p className="text-black text-base text-center mb-10 mt-4">
-        Connectez vous en utilisant le formulaire ci-dessous
-      </p>
+      { isLogged ? 
+      (
+        // PENSER À CHANGER LE CODE ET RAJOUTER LE CLIENT QUI S'EST AUTHENTIFIÉ
+        <Account 
+        client={{birthday: "0023-09-23",  email: "no@martin.bzh", firstName: "Nolwenn", gender: "female", lastName: "Martin", phone: "0943439843", acceptTerms: true, addAddress: "", address: "25 rue de la lune ", city: "Brest", otherWage: "", postalCode: "29000", quotient: "un certain nombre", readInfo: true, situation: "jobless", wageType: "salary"}}/>
+    
+      ) : (
+      <div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
+        <h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
+          Bienvenue sur votre Espace Utilisateur
+        </h1>
+        <p className="text-black text-base text-center mb-10 mt-4">
+          Connectez vous en utilisant le formulaire ci-dessous
+        </p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="w-[65%] mx-auto">
-          <FormInput
-            inputText={<span className="text-rayonblue">Adresse email <span className="text-red-500">*</span></span>}
-            name={'mail'}
-            value={formData.mail}
-            onChange={handleChange}
-            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-          />
-        </div>
-        <div className="w-[65%] mx-auto">
-          <FormInput
-            inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
-            name={'password'}
-            value={formData.password}
-            onChange={handleChange}
-            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-          />
-        </div>
-        <div className="text-right w-[65%] mx-auto">
-          <PageButton
-            buttonText={'Mot de passe oublié ?'}
-            page={'/forgot-password'}
-            className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
-          />
-        </div>
-        <div className="w-full flex justify-center">
-          <PageButton
-            buttonText={'Je me connecte'}
-            type="submit"
-            className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
-          />
-        </div>
-      </form>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="w-[65%] mx-auto">
+            <FormInput
+              inputText={<span className="text-rayonblue">Adresse email <span className="text-red-500">*</span></span>}
+              name={'mail'}
+              value={formData.mail}
+              onChange={handleChange}
+              className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+            />
+          </div>
+          <div className="w-[65%] mx-auto">
+            <FormInput
+              inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
+              name={'password'}
+              value={formData.password}
+              onChange={handleChange}
+              className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+            />
+          </div>
+          <div className="text-right w-[65%] mx-auto">
+            <PageButton
+              buttonText={'Mot de passe oublié ?'}
+              page={'/forgot-password'}
+              className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
+            />
+          </div>
+          <div className="w-full flex justify-center">
+            <PageButton
+              buttonText={'Je me connecte'}
+              type="submit"
+              className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+            />
+          </div>
+        </form>
 
-      <p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
-        Vous n'avez pas encore de compte ?
-      </p>
-      <div className="flex justify-center">
-        <PageButton
-          buttonText={'Créez votre compte'}
-          page={'/register'}
-            className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
-        />
+        <p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
+          Vous n'avez pas encore de compte ?
+        </p>
+        <div className="flex justify-center">
+          <PageButton
+            buttonText={'Créez votre compte'}
+            page={'/register'}
+              className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+          />
+        </div>
       </div>
-    </div>
+    )}
   </>
 )
 
