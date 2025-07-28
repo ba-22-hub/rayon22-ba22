@@ -72,6 +72,10 @@ function Account({ client }) {
         setEditing(false)
     }
 
+    function handleFileSelection() {
+        console.log("Un fichier a été déposé")
+    }
+
     // on factorise l'élément le plus volumineux 
     const renderField = (label, fieldName) => (
         <div className="flex flex-row text-rayonblue">
@@ -148,7 +152,21 @@ function Account({ client }) {
                     <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                     <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                 </div>
-                
+                <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[100%] p-2">
+                    <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                    <div className="flex flex-row">
+                        <input
+                            className="bg-rayonorange w-[50%] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
+                            type="file"
+                            accept=".pdf"
+                            onChange={handleFileSelection}
+                            name="fileSelector"
+                        ></input>
+                        <button
+                            className="text-rayonorange text-center bg-white w-[24%] h-[2rem] ml-4 border border-rayonorange"
+                        >Valider 🗸</button>
+                    </div>
+                </div>
                 {!editing ? (
                     <button
                         className="text-white text-center bg-rayonorange w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]"
