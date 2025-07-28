@@ -10,6 +10,7 @@ import FunctionButton from '../common/FunctionButton';
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
+import RegisterStep4 from './RegisterStep4';
 import Steper from '../common/Steper';
 
 
@@ -40,6 +41,9 @@ function Register() {
             otherWage: '',
             readInfo: false,
             acceptTerms: false
+        }, 
+        'step3' : {
+            "password" : ''
         }
     });
     const [step, setStep] = useState(1);
@@ -48,8 +52,8 @@ function Register() {
     // const fileInputRef = useRef(null);
 
     function changepage(step) {
-        if (step > 3) {
-            step = 3;
+        if (step > 4) {
+            step = 4;
         }
         if (step < 1) {
             step = 1;
@@ -59,10 +63,12 @@ function Register() {
 
     // Fonction pour mettre à jour les données d'une étape
     const updateStepData = (step, data) => {
+        
         setFormData(prev => ({
             ...prev,
             [step]: data
         }));
+        console.log(formData[step])
     };
 
     // function to set the new file formData field value whenever the input changes
@@ -80,14 +86,15 @@ function Register() {
     // function to handle the form submit
     async function handleSubmit(e) {
 
-        // preparing wage info before sending
-        const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
+        // // preparing wage info before sending
+        // const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
 
-        formData.step2.wageType = finalWage;
+        // formData.step2.wageType = finalWage;
 
         console.log("Form submitted with data:", formData, "Need API call to send this data");
         
         const email = formData.step1.email;
+        const password = formData.step3.password ; 
 
         const { data, error } = await supabase.auth.signUp({
             email: email,
@@ -102,9 +109,9 @@ function Register() {
             return;
         }
 
-        alert("Un email de confirmation a été envoyé !");
 
-        changepage(3); // go to the confirmation step
+        changepage(4); // go to the confirmation step
+
     }
 
     return (
@@ -120,10 +127,15 @@ function Register() {
                 {step == 2 && (<RegisterStep2 
                     data={formData.step2}
                     onDataChange={(data) => updateStepData('step2', data)}
-                    onNext={() => handleSubmit()}
+                    onNext={() => changepage(step + 1)}
                     onPrevious={() => changepage(step - 1)}
                 />)}
-                {step == 3 && (<RegisterStep3 mail={formData.step1.email} />)}
+                {step == 3 && (<RegisterStep3 
+                    onDataChange={(data) => updateStepData('step3', data)}
+                    onNext={() => handleSubmit()}
+                />)}
+                {step == 4 && (<RegisterStep4 mail={formData.step1.email} />)}
+                
 
             </div>
 

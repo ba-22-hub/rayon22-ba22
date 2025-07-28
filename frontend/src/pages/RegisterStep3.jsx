@@ -1,25 +1,105 @@
+// Importing dependencies
+import { useState } from 'react';
 
-import imageMail from '../assets/shapes/sendedMail.png';
+// Importing common components
+import LoremIpsum from "../common/LoremIpsum"
+import FormInput from "../common/FormInput";
 
-import { useState, useRef } from 'react';
+// Importing assets
+import illustration from "../assets/logos/password.png"
 
+/**
+ * The Login page.
+ * @returns {React.ReactElement} Login component.
+ */
+function RegisterStep3({onNext, onDataChange}) {
+    // useState init to store the form data in a JSON format
+    const [formData, setFormData] = useState({
+        password: '',
+        passwordConfirm: ''
+    });
 
-function RegisterStep3({mail}) {
+    // function to set the new formData value whenever the inputs are changed
+    function handleChange(e) {
+        // we set the formData value to the current input value
+        
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        onDataChange({"password" : formData.password})
+    }
 
+    // function to hadle the form submit
+    function handleSubmit(e) {
+        e.preventDefault();
+        // printing the formData content in the console for now
+        // TODO : connect with the server
+        console.log(formData);
 
+        onNext({"password" : formData.password})
+        
+
+    }
 
     return (
-        <>
-            <div className='flex items-center w-[100%] justify-center mt-[5%] '>
-                <img className="w-[40%] h-[40%]" src={imageMail}/>
-            </div>
-            <h2 className='text-center text-rayonblue text-[3.2em] leading-tight pt-[2%] font-bold'>Email de confirmation</h2>
-            <p className='text-center mr-[8%] ml-[8%] mt-8'><black>Un email de confirmation a été envoyé à  </black><span className="email">{mail}</span><black> afin de vérifier la validité de l'adresse. Une fois reçu, veuillez cliquer sur le lien pour finaliser votre inscription</black></p>
-            <button className='text-center-white w-[50%] ml-[25%] mb-[3%] mt-[5%] h-[2rem] bg-rayonorange'>Re-envoyer le mail</button>
-        </>
-    ) 
+    <>
+    <div className="bg-[#ffffff] w-[70vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm flex flex-col items-center justify-start py-16 px-4">
+      {/* Titre principal */}
+      <div className="text-center">
+        <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">
+          Vous avez presque terminé !
+          <br />
+          Plus qu’une étape !
+        </h1>
+      </div>
+
+      {/* Illustration */}
+      <img src={illustration} alt="Illustration" className="w-64 mt-10 mb-6" />
+
+      {/* Sous-titre */}
+      <h2 className="text-[#2E2EFF] text-4xl font-bold mb-6">Création du mot de passe</h2>
+
+      {/* Formulaire */}
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+        <FormInput
+          inputText={<span>Mot de passe <span className="text-red-500">*</span></span>}
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+        />
+        <FormInput
+          inputText={<span>Confirmation du mot de passe <span className="text-red-500">*</span></span>}
+          name="passwordConfirm"
+          value={formData.passwordConfirm}
+          onChange={handleChange}
+          className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+        />
+
+        {/* Bloc règles */}
+        <div className="bg-[#F0F0F0] rounded-lg px-6 py-4 text-sm text-[#2E2EFF] font-medium leading-relaxed mt-6">
+          <p className="mb-1 font-bold">Règles pour définir le mot de passe</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Doit contenir au moins 8 caractères</li>
+            <li>Doit contenir au moins un caractère en majuscule</li>
+            <li>Doit contenir au moins un caractère en minuscule</li>
+            <li>Doit contenir au moins un nombre</li>
+          </ul>
+        </div>
+
+        {/* Bouton */}
+        <button
+          type="submit"
+          className="w-full bg-[#FF8200] text-white py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition"
+        >
+            Créer mon mot de passe
+        </button>
+      </form>
+    </div>
+  </>
+)
+
 }
 
-
-
-export default RegisterStep3;
+export default RegisterStep3
