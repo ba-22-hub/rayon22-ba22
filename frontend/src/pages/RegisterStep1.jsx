@@ -75,7 +75,6 @@ function RegisterStep1({ data, onDataChange, onNext }) {
 
                 <button type="submit" className='text-center-white bg-rayonorange w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]'>Suivant</button>
             </form>
-            <button >J'ai déjà un compte</button>
             <PageButton 
                 className='text-center text-rayonorange bg-white w-[50%] ml-[25%] mb-[4%] h-[2rem] rounded-lg border border-rayonorange '
                 buttonText="J'ai déjà un compte"

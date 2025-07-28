@@ -68,7 +68,6 @@ function Register() {
             ...prev,
             [step]: data
         }));
-        console.log(formData[step])
     };
 
     // function to set the new file formData field value whenever the input changes
@@ -81,7 +80,7 @@ function Register() {
     // }
 
     // Creating a Supabase client instance
-    const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+    // const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     // function to handle the form submit
     async function handleSubmit(e) {
@@ -95,14 +94,15 @@ function Register() {
         
         const email = formData.step1.email;
         const password = formData.step3.password ; 
+        const error = null 
 
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: "admin1234",
-            options: {
-                emailRedirectTo: 'https://tonsite.com/create-password' // important: where supabase redirects after email click
-            }
-        });
+        // const { data, error } = await supabase.auth.signUp({
+        //     email: email,
+        //     password: "admin1234",
+        //     options: {
+        //         emailRedirectTo: 'https://tonsite.com/create-password' // important: where supabase redirects after email click
+        //     }
+        // });
 
         if (error) {
             console.error("Erreur lors de la création Supabase:", error.message);
