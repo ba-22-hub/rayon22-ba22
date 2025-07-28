@@ -98,7 +98,7 @@ function Register() {
 
         const { data, error } = await supabase.auth.signUp({
             email: email,
-            password: "admin1234", // TODO : get the password from the form
+            password: password,
             options: {
                 emailRedirectTo: "http://localhost:5173/login" // TODO : change this URL to the production one
             }
