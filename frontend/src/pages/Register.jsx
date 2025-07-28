@@ -1,12 +1,8 @@
 // Importing dependencies
-import { useState, useRef } from 'react';
+import { useState} from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
-import FormInput from "../common/FormInput"
-import PageButton from "../common/PageButton"
-import FunctionButton from '../common/FunctionButton';
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
