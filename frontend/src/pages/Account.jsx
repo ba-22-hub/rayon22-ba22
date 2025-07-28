@@ -37,6 +37,7 @@ function Account({ client }) {
 
     const [editing, setEditing] = useState(false)
     const [clientEdit, setClientEdit] = useState(client)
+    const [file, setFile] = useState(null)
     const genderOptions = ["male", "female", "other"]
     const situationOptions = ["employee", "jobless", "student", "retired"]
     const wageOptions = ["salary", "scholarship", "help", "other"]
@@ -72,8 +73,23 @@ function Account({ client }) {
         setEditing(false)
     }
 
-    function handleFileSelection() {
+    function handleFileSelection(e){
         console.log("Un fichier a été déposé")
+        const incomingFile = e.target.files[0]
+        console.log(incomingFile)
+        setFile(incomingFile)
+        console.log(incomingFile.name)
+    }
+
+    function handleFileSubmit() {
+        const formData = new FormData()
+        formData.append('file', file)
+        // fetch('url', {
+        //     method : 'POST', 
+        //     body : formData
+        // })
+        console.log("Fichier uploadé : ",  formData)
+        alert("Le fichier "+ file.name + "a bien été envoyé")
     }
 
     // on factorise l'élément le plus volumineux 
@@ -158,12 +174,13 @@ function Account({ client }) {
                         <input
                             className="bg-rayonorange w-[50%] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
                             type="file"
-                            accept=".pdf"
                             onChange={handleFileSelection}
+                            accept=".pdf"
                             name="fileSelector"
                         ></input>
                         <button
                             className="text-rayonorange text-center bg-white w-[24%] h-[2rem] ml-4 border border-rayonorange"
+                            onClick={handleFileSubmit}
                         >Valider 🗸</button>
                     </div>
                 </div>
