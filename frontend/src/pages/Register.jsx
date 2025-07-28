@@ -116,7 +116,7 @@ function Register() {
         <>
             <div className="bg-white w-[60%] ml-[20%] mb-[5%]">
                 <h1 className="text-center text-rayonblue text-[5em] leading-tight pt-[2%] font-bold">Création d’un compte</h1>
-                <Steper steps={['Étape 1', 'Étape 2', 'Confirmation']} currentStep={step} />
+                <Steper steps={['Étape 1', 'Étape 2', 'Mot de passe', 'Confirmation']} currentStep={step} />
                 {step == 1 && (<RegisterStep1
                     data={formData.step1}
                     onDataChange={(data) => updateStepData('step1', data)}

@@ -70,18 +70,9 @@ function RegisterStep3({ onNext, onDataChange }) {
 
 	return (
 		<>
-			<div className="bg-[#ffffff] w-[70vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm flex flex-col items-center justify-start py-16 px-4">
-				{/* Titre principal */}
-				<div className="text-center">
-					<h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">
-						Vous avez presque terminé !
-						<br />
-						Plus qu’une étape !
-					</h1>
-				</div>
-
+			<div className="bg-[#ffffff] mx-auto mt-2 mb-10 flex flex-col items-center justify-start py-10 px-4">
 				{/* Illustration */}
-				<img src={illustration} alt="Illustration" className="w-64 mt-10 mb-6" />
+				<img src={illustration} alt="Illustration" className="w-64 mt-3 mb-6" />
 
 				{/* Sous-titre */}
 				<h2 className="text-[#2E2EFF] text-4xl font-bold mb-6">Création du mot de passe</h2>
@@ -89,18 +80,21 @@ function RegisterStep3({ onNext, onDataChange }) {
 				{/* Formulaire */}
 				<form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
 					<FormInput
-						inputText={<span>Mot de passe <span className="text-red-500">*</span></span>}
+						inputText={<span>Mot de passe</span>}
 						type="password"
 						name="password"
 						onChange={handleChange}
 						className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+						isStarred={true}
 					/>
 					<FormInput
-						inputText={<span>Confirmation du mot de passe <span className="text-red-500">*</span></span>}
+						inputText={<span>Confirmation du mot de passe</span>}
 						type="password"
 						name="passwordConfirm"
 						onChange={handleChange}
 						className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+						isStarred={true}
+
 					/>
 
 					{/* Bloc règles */}
