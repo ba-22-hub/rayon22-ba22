@@ -3,44 +3,49 @@ import "slick-carousel/slick/slick-theme.css";
 
 
 import Slider from "react-slick";
-import plate from "../assets/logos/bigRoundLogo.png"; 
+import pasta from "../assets/Photos/Tortis.png"
+import rice from "../assets/Photos/Riz.png"
+import lentil from "../assets/Photos/Lentilles.png"
+import bean from "../assets/Photos/Haricot.png"
+import tuna from "../assets/Photos/Thon.png"
+import sponges from "../assets/Photos/Eponges.png"
 
 {/* TODO: Add here the real showcase products (the showcase isn't linked tho the database) */}
 
 const showcaseProducts = [
   {
     name: "Pâte torti",
-    image: plate,
+    image: pasta,
     price: "0.50€",
     salePrice: "0.05€",
   },
   {
     name: "Riz 10 minutes",
-    image: plate,
+    image: rice,
     price: "0.50€",
     salePrice: "0.10€",
   },
   {
     name: "Lentilles cuisinées",
-    image: plate,
+    image: lentil,
     price: "0.50€",
     salePrice: "0.05€",
   },
   {
     name: "Haricot vert extra-fin",
-    image: plate,
+    image: bean,
     price: "1€",
     salePrice: "0.10€",
   },
   {
     name: "Thon",
-    image: plate,
+    image: tuna,
     price: "1.50€",
     salePrice: "0.15€",
   },
   {
-    name: "3 gratte épongge",
-    image: plate,
+    name: "3 gratte éponge",
+    image: sponges,
     price: "1.50€",
     salePrice: "0.15€",
   },
