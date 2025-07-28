@@ -1,8 +1,8 @@
 // Importing dependencies
 import { useState } from 'react';
+import { supabase } from '../../lib/supabaseClient.js';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
 
@@ -27,11 +27,79 @@ function Login() {
     }
 
     // function to hadle the form submit
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        // printing the formData content in the console for now
-        // TODO : connect with the server
         console.log(formData);
+
+      // Auth Supabase
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+        email: formData.mail,
+        password: formData.password
+      });
+      
+      const { data: sessionData } = await supabase.auth.getSession();
+      console.log("Session:", sessionData?.session);
+
+
+    if (loginError) {
+      console.error("Erreur login:", loginError.message);
+      return;
+    }
+
+    const user = loginData.user;
+    const uid = user.id;
+
+    // Checks if the user already exists in the database
+    const { data: existingUser, error: fetchError } = await supabase
+      .from('User')
+      .select('id')
+      .eq('id', uid)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      // other error
+      console.error("Erreur lors de la vérification du user:", fetchError.message);
+      return;
+    }
+
+    if (!existingUser) {
+      const pendingData = localStorage.getItem("pendingUserData");
+      if (pendingData) {
+        const parsedData = JSON.parse(pendingData);
+
+        const newUser = {
+          id: uid,
+          email: parsedData.step1.email,
+          gender: parsedData.step1.gender,
+          firstName: parsedData.step1.firstName,
+          lastName: parsedData.step1.lastName,
+          birthday: parsedData.step1.birthday,
+          phone: parsedData.step1.phone,
+          address: parsedData.step2.address,
+          addAddress: parsedData.step2.addAddress,
+          city: parsedData.step2.city,
+          postalCode: parsedData.step2.postalCode,
+          situation: parsedData.step2.situation,
+          quotient: parsedData.step2.quotient,
+          wageType: parsedData.step2.wageType,
+          otherWage: parsedData.step2.otherWage,
+        };
+
+        const { error: insertError } = await supabase
+          .from('User')
+          .insert([newUser]);
+
+        if (insertError) {
+          console.error("Erreur lors de l'insertion :", insertError.message);
+          return;
+        }
+
+        localStorage.removeItem("pendingUserData");
+        console.log("Utilisateur inséré avec succès !");
+      }
+    }
+
+    console.log("Connexion réussie !");
 
         // resets the inputs and formData to blank
         setFormData({
@@ -53,19 +121,21 @@ function Login() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="w-[65%] mx-auto">
           <FormInput
-            inputText={<span className="text-rayonblue">Adresse email <span className="text-red-500">*</span></span>}
+            inputText={<span className="text-rayonblue">Adresse email</span>}
             name={'mail'}
             value={formData.mail}
             onChange={handleChange}
+            isStarred={true}
             className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
           />
         </div>
         <div className="w-[65%] mx-auto">
           <FormInput
-            inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
+            inputText={<span className="text-rayonblue">Mot de passe</span>}
             name={'password'}
             value={formData.password}
             onChange={handleChange}
+            isStarred={true}
             className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
           />
         </div>

@@ -1,12 +1,8 @@
 // Importing dependencies
 import { useState, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../../lib/supabaseClient.js';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
-import FormInput from "../common/FormInput"
-import PageButton from "../common/PageButton"
-import FunctionButton from '../common/FunctionButton';
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
@@ -71,25 +67,8 @@ function Register() {
         console.log(formData[step])
     };
 
-    // function to set the new file formData field value whenever the input changes
-    // function handleFileChange(e) {
-    //     const file = e.target.files[0];
-    //     setFormData({
-    //         ...formData,
-    //         file: file
-    //     });
-    // }
-
-    // Creating a Supabase client instance
-    const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
-
     // function to handle the form submit
     async function handleSubmit(e) {
-
-        // // preparing wage info before sending
-        // const finalWage = formData.wageType === 'other' ? formData.otherWage : formData.wageType;
-
-        // formData.step2.wageType = finalWage;
 
         console.log("Form submitted with data:", formData, "Need API call to send this data");
         
@@ -109,6 +88,8 @@ function Register() {
             return;
         }
 
+        // Saving locally the user info too use it after the mail verification
+        localStorage.setItem("pendingUserData", JSON.stringify(formData));
 
         changepage(4); // go to the confirmation step
 
