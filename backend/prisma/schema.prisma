@@ -15,14 +15,13 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           String   @unique
   gender       String
   firstName    String
   lastName     String
   birthday     DateTime
   phone        String
   email        String   @unique
-  password     String
   address      String
   addAddress   String
   city         String
@@ -31,7 +30,4 @@ model User {
   quotient     String
   wageType     String
   otherWage    String
-  readInfo     Boolean  @default(false)
-  acceptTerms  Boolean  @default(false)
-  createdAt    DateTime @default(now())
 }

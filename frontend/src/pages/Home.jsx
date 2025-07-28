@@ -1,13 +1,10 @@
 // Importing common components
 import PageButton from "../common/PageButton"
-import LoremIpsum from "../common/LoremIpsum"
 import ShapeNumber from "../common/ShapeNumber"
 import ProductCarousel from "../common/ProductCarousel"
 
 // Importing assets
-import wideLogo from "../assets/logos/bigLogo.png"
 import orangeWoman from "../assets/Photos/giletorange2.png"
-import plate from "../assets/Photos/plate.png"
 import instagram from "../assets/logos/instagram.png"
 import dpd from "../assets/logos/dpd.png"
 import mondialRelay from "../assets/logos/mondialRelay.png"

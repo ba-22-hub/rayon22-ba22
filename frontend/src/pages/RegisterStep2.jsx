@@ -1,11 +1,9 @@
 // Importing dependencies
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput"
-import PageButton from "../common/PageButton"
-import FunctionButton from '../common/FunctionButton';
+
 
 // Importing the style
 
