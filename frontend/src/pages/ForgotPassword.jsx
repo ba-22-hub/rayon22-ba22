@@ -2,7 +2,6 @@
 import { useState } from 'react';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 
 // Importing assets

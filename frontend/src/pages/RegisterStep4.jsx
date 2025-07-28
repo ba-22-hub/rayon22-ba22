@@ -1,7 +1,7 @@
 
 import imageMail from '../assets/shapes/sendedMail.png';
 
-import { useState, useRef } from 'react';
+
 
 
 function RegisterStep4({mail}) {
