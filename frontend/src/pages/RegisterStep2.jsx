@@ -67,20 +67,20 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
 
                 <div>
                     <label className="text-rayonblue ml-[8%]">Situation <a className="text-red">*</a></label><br />
-                    <input className="ml-[8%]" type="radio" name="situation" value="employee" checked={formData.situation === "employee"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salarié</a>
-                    <input className="ml-8" type="radio" name="situation" value="jobless" checked={formData.situation === "jobless"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Sans emploi</a>
-                    <input className="ml-8" type="radio" name="situation" value="student" checked={formData.situation === "student"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Étudiant</a>
-                    <input className="ml-8" type="radio" name="situation" value="retired" checked={formData.situation === "retired"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Retraité</a>
+                    <input className="ml-[8%]" type="radio" name="situation" value="Employé" checked={formData.situation === "Employé"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salarié</a>
+                    <input className="ml-8" type="radio" name="situation" value="Sans emploi" checked={formData.situation === "Sans enploi"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Sans emploi</a>
+                    <input className="ml-8" type="radio" name="situation" value="Étudiant" checked={formData.situation === "Étudiant"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Étudiant</a>
+                    <input className="ml-8" type="radio" name="situation" value="Retraité" checked={formData.situation === "Retraité"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Retraité</a>
                 </div><br />
 
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} isStarred={true} />
 
                 <div>
                     <label className="text-rayonblue ml-[8%]">Vos revenus <a className="text-red">*</a></label><br />
-                    <input className="ml-[8%]" type="radio" name="wageType" value="salary" checked={formData.wageType === "salary"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salaire ou pension</a>
-                    <input className="ml-8" type="radio" name="wageType" value="scholarship" checked={formData.wageType === "scholarship"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Bourse</a>
-                    <input className="ml-8" type="radio" name="wageType" value="help" checked={formData.wageType === "help"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Aide (RSA, APL)</a>
-                    <input className="ml-8" type="radio" name="wageType" value="other" checked={formData.wageType === "other"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Autres</a>
+                    <input className="ml-[8%]" type="radio" name="wageType" value="Salaire" checked={formData.wageType === "Salaire"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salaire ou pension</a>
+                    <input className="ml-8" type="radio" name="wageType" value="Bourse" checked={formData.wageType === "Bourse"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Bourse</a>
+                    <input className="ml-8" type="radio" name="wageType" value="Aides" checked={formData.wageType === "Aides"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Aide (RSA, APL)</a>
+                    <input className="ml-8" type="radio" name="wageType" value="Autre" checked={formData.wageType === "Autre"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Autres</a>
                     {formData.wageType === "other" && (
                         <>
                             <br />

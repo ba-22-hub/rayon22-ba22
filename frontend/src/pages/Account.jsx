@@ -38,13 +38,13 @@ function Account({ client }) {
     const [editing, setEditing] = useState(false)
     const [clientEdit, setClientEdit] = useState(client)
     const [file, setFile] = useState(null)
-    const genderOptions = ["male", "female", "other"]
-    const situationOptions = ["employee", "jobless", "student", "retired"]
-    const wageOptions = ["salary", "scholarship", "help", "other"]
+    const genderOptions = ["Homme", "Femme", "Autre"]
+    const situationOptions = ["Employé", "Sans emploi", "Étudiant", "Retraité"]
+    const wageOptions = ["Salaire", "Bourse", "Aide", "Autre"]
 
     function handleChange(e) {
         const { name, value } = e.target;
-        if (name == "wageType" && value == "other") {
+        if (name == "wageType" && value == "Autre") {
             const other = window.prompt("Quel est votre type de salaire ?");
             if (other) {
                 setClientEdit(prev => ({

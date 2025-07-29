@@ -59,9 +59,9 @@ function RegisterStep1({ data, onDataChange, onNext }) {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label className="ml-[8%] text-rayonblue">Genre <a className="text-red">*</a></label><br />
-                    <input className="ml-[8%]" type="radio" name="gender" value="male" checked={formData.gender === "male"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Homme</a>
-                    <input className="ml-8" type="radio" name="gender" value="female" checked={formData.gender === "female"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Femme</a>
-                    <input className="ml-8" type="radio" name="gender" value="other" checked={formData.gender === "other"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Autre</a>
+                    <input className="ml-[8%]" type="radio" name="gender" value="Homme" checked={formData.gender === "Homme"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Homme</a>
+                    <input className="ml-8" type="radio" name="gender" value="Femme" checked={formData.gender === "Femme"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Femme</a>
+                    <input className="ml-8" type="radio" name="gender" value="Autre" checked={formData.gender === "Autre"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Autre</a>
                 </div><br />
 
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Prénom" name="firstName" value={formData.firstName} onChange={handleChange} isStarred={true} />
