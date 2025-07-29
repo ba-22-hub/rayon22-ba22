@@ -106,11 +106,11 @@ function Account({ client }) {
 
         // on factorise l'élément le plus volumineux 
         const renderField = (label, fieldName) => (
-            <div className="flex flex-row text-rayonblue">
-                <label className="font-semibold w-[23%] mt-2 mb-2">{label} : </label>
+            <div className="flex flex-row text-rayonblue align-center items-center">
+                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
                 {editing ? (
                     <input
-                        className="ml-3 border border-rayonorange rounded-lg w-[78%] mt-1 mb-1 text-rayonorange pl-2"
+                        className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
                         name={fieldName}
                         value={clientEdit[fieldName]}
                         onChange={handleChange}
@@ -123,7 +123,7 @@ function Account({ client }) {
 
         const renderRadio = (label, fieldName, options) => (
             <div className="flex flex-row text-rayonblue mb-2">
-                <label className="font-semibold w-[23%] mt-2 mb-2">{label} :</label>
+                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
                 {editing ? (
                     <div className="flex text-rayonorange">
                         {options.map((option) => (
@@ -148,17 +148,17 @@ function Account({ client }) {
 
         return (
             <>
-                <div className="w-[66%] ml-[17%] p-[8%] bg-white rounded-2xl shadow-sm mb-[4%]">
+                <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
                     <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
                     <div className="flex flex-row">
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[49%] p-2">
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
                             {renderField("Nom", "lastName")}
                             {renderField("Prénom", "firstName")}
                             {renderRadio("Genre", "gender", genderOptions)}
 
                         </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[49%] ml-[2%] p-2">
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] ml-[2vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
                             {renderField("E-mail", "email")}
                             {renderField("Téléphone", "phone")}
@@ -168,37 +168,37 @@ function Account({ client }) {
                             {renderField("Code postal", "phone")}
                         </div>
                     </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[100%] p-2">
+                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
                         {renderRadio("Situation", "situation", situationOptions)}
                         {renderField("Quotient familial (CAF)", "quotient")}
                         {renderRadio("Type de salaire", "wageType", wageOptions)}
                     </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[100%] p-2">
+                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                     </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[100%] p-2">
+                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
                         <div className="flex flex-row">
                             <input
-                                className="bg-rayonorange w-[50%] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
+                                className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
                                 type="file"
                                 onChange={handleFileSelection}
                                 accept=".pdf"
                                 name="fileSelector"
                             ></input>
                             <button
-                                className="text-rayonorange text-center bg-white w-[24%] h-[2rem] ml-4 border border-rayonorange"
+                                className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
                                 onClick={handleFileSubmit}
                             >Valider 🗸</button>
                         </div>
                     </div>
                     {!editing ? (
                         <button
-                            className="text-white text-center bg-rayonorange w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]"
+                            className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
                             onClick={() => {
                                 setEditing(true)
                                 console.log("editmod enabled")
@@ -208,11 +208,11 @@ function Account({ client }) {
                     ) : (
                         <div className="flex flex-row">
                             <button
-                                className="text-white text-center bg-rayonorange w-[24%] ml-[25%] mb-3 mt-[10%] h-[2rem]"
+                                className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
                                 onClick={handleCancel}
                             >Annuler ✖</button>
                             <button
-                                className="text-rayonorange text-center bg-white w-[24%] ml-[2%] mb-3 mt-[10%] h-[2rem] border border-rayonorange"
+                                className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
                                 onClick={handleEdit}
                             >Valider 🗸</button>
                         </div>
