@@ -78,7 +78,9 @@ function Account({ client }) {
 
             console.log("Data changed : ", data)
             setEditing(false)
+            alert("Les informations ont été modifiées avec succès")
         } catch(err){
+            alert("Erreur lors de l'ajout dans la base de donnée")
             console.error("Error uptdating client... ",err.message )
         }
     }
