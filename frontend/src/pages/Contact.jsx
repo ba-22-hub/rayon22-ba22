@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState, useRef } from 'react';
+import { uploadPDF } from '@lib/sendPDF.js';
 
 // Importing common components
 import FormInput from "../common/FormInput"
@@ -49,6 +50,7 @@ function Contact() {
         e.preventDefault();
         // printing the formData content in the console for now
         // TODO : connect with the server
+        uploadPDF(formData.file)
         console.log(formData);
 
         // resets the inputs and formData to blank
