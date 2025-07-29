@@ -29,6 +29,7 @@ import More from './pages/More.jsx'
 import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
+import Account from "./pages/Account.jsx";  
 
 // Importing common components
 import Footer from "./common/Footer.jsx";
