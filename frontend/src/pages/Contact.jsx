@@ -16,10 +16,6 @@ import roundLogo from "../assets/logos/roundLogo.png"
 function Contact() {
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
         message: '',
         file: null
     });
@@ -55,10 +51,6 @@ function Contact() {
 
         // resets the inputs and formData to blank
         setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
             message: '',
             file: null
         });
@@ -93,60 +85,10 @@ function Contact() {
             </div>
       
             {/* Right Form Section */}
-            <div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] mt-16">
+            <div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] h-[45%] mt-16">
               <h2 className="text-[#2E2EFF] text-2xl font-bold mb-6">Formulaire de contact</h2>
       
               <form onSubmit={handleSubmit}>
-                <div className="flex gap-6 mb-4">
-                  <div className="flex-1">
-
-                    {/* First Name */}
-                    <FormInput 
-                      inputText={"Prénom"} 
-                      name="firstName" 
-                      value={formData.firstName} 
-                      onChange={handleChange} 
-                      isStarred={true} 
-                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                    />
-                  </div>
-
-                  {/* Last Name */}
-                  <div className="flex-1">
-                    <FormInput 
-                      inputText={"Nom"} 
-                      name="lastName" 
-                      value={formData.lastName} 
-                      onChange={handleChange} 
-                      isStarred={true} 
-                      className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                    />
-                  </div>
-                </div>
-      
-                {/* Email */}
-                <div className="flex-1 mb-5">
-                  <FormInput 
-                    inputText={"Adresse e-mail"} 
-                    name="email" 
-                    value={formData.email} 
-                    onChange={handleChange} 
-                    isStarred={true} 
-                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                  />
-                </div>
-      
-                {/* Phone */}
-                <div className="flex-1 mb-5">
-                  <FormInput 
-                    inputText={"Téléphone"} 
-                    name="phone" 
-                    value={formData.phone} 
-                    onChange={handleChange} 
-                    isStarred={true}  
-                    className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                  />
-                </div>
       
                 {/* Message */}
                 <FormTextArea 
@@ -158,6 +100,7 @@ function Contact() {
                   className="h-64 border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                 />
       
+                {/* File Upload */}
                 <label className="block text-sm font-medium text-[#2E2EFF] mb-2">Document requis :</label>
                 <input 
                   type='file' 
