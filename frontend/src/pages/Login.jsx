@@ -136,6 +136,7 @@ function Login() {
             value={formData.password}
             onChange={handleChange}
             isStarred={true}
+            type="password"
             className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
           />
         </div>
