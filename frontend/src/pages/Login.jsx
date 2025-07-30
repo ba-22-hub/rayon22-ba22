@@ -1,6 +1,7 @@
 // Importing dependencies
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
+import { useAuthor } from '../context/AuthorContext.jsx';
 
 // Importing common components
 import FormInput from "../common/FormInput";
@@ -19,6 +20,7 @@ function Login() {
 	});
 	const [isLogged, setIsLogged] = useState(false)
 	const [currentUser, setCurrentUser] = useState(null)
+	const {user, setUser} = useAuthor()
 
 	// function to set the new formData value whenever the inputs are changed
 	function handleChange(e) {
@@ -49,8 +51,7 @@ function Login() {
 			return;
 		}
 
-		const user = loginData.user;
-		const uid = user.id;
+		const uid = loginData.user.id;
 
 		// Checks if the user already exists in the database
 		const { data: existingUser, error: fetchError } = await supabase
@@ -106,6 +107,9 @@ function Login() {
 		// 
 		console.log("Connexion réussie ! ", existingUser);
 		
+		//updating session 
+		
+		// retrieving user's data
 		const { data: userdata, error: dberror } = await supabase
 		.from('User')
 		.select('*')
@@ -119,7 +123,6 @@ function Login() {
 			return;
 		}
 		setCurrentUser(userdata)
-		setIsLogged(true)
 		
 		
 		
@@ -128,11 +131,12 @@ function Login() {
 			mail: '',
 			password: ''
 		});
+		setUser(loginData.user)
 	}
 
 	return (
 		<>
-			{isLogged ?
+			{user && currentUser ?
 				(
 					// PENSER À CHANGER LE CODE ET RAJOUTER LE CLIENT QUI S'EST AUTHENTIFIÉ
 					<Account client={currentUser}/>
