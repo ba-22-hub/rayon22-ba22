@@ -1,4 +1,4 @@
-import { supabase } from '@lib/supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 async function uploadPDF(file) {
     const fileName = `${Date.now()}_${file.name}`;

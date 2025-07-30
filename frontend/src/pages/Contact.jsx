@@ -2,9 +2,10 @@
 import { useState, useRef } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
+import { getSignedPDFUrl } from '@lib/getPDF.js';
+import { listPDF } from '@lib/listPDF.js';
 
 // Importing common components
-import FormInput from "../common/FormInput"
 import FormTextArea from "../common/FormTextArea"
 
 // Importing assets
@@ -15,6 +16,11 @@ import roundLogo from "../assets/logos/roundLogo.png"
  * @returns {React.ReactElement} Contact component.
  */
 function Contact() {
+
+    // DEBUG : Listing PDF files and getting a signed URL for a specific file
+    listPDF()
+    getSignedPDFUrl('1753826196748_Projet_GL.pdf', 3600)
+
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
         message: '',
@@ -46,11 +52,13 @@ function Contact() {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        const name = formData.file ? `${Date.now()}_${formData.file.name}` : null;
+
         // creating the message object
         const newMessage = {
           user_id: '5bdcb168-8f30-46d6-a723-84dac0065514', // This will be set later
           message: formData.message,
-          pdf_name: `${Date.now()}_${formData.file.name}`
+          pdf_name: name,
         }
 
         // storing the message in the table and the file in the Supabase storage
@@ -62,7 +70,7 @@ function Contact() {
 					console.error("Erreur lors de l'insertion :", insertError.message);
 					return;
 				}
-        uploadPDF(formData.file)
+        formData.file ? uploadPDF(formData.file):
         console.log("Message inséré avec succès !\n", newMessage);
 
         // resets the inputs and formData to blank
@@ -122,7 +130,7 @@ function Contact() {
                   type='file' 
                   accept='.pdf' 
                   name='file' 
-                  onChange={handleFileChange} 
+                  onChange={(e) => {console.log("Fichier sélectionné :", e.target.files[0]);handleFileChange(e);}}
                   ref={fileInputRef} 
                   className="mb-6 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
                 />
