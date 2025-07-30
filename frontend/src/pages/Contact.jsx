@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState, useRef } from 'react';
+import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
 
 // Importing common components
@@ -42,12 +43,27 @@ function Contact() {
     }
 
     // function to handle the form submit
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        // printing the formData content in the console for now
-        // TODO : connect with the server
+
+        // creating the message object
+        const newMessage = {
+          user_id: '5bdcb168-8f30-46d6-a723-84dac0065514', // This will be set later
+          message: formData.message,
+          pdf_name: `${Date.now()}_${formData.file.name}`
+        }
+
+        // storing the message in the table and the file in the Supabase storage
+        const { error: insertError } = await supabase
+					.from('Messages')
+					.insert([newMessage]);
+
+				if (insertError) {
+					console.error("Erreur lors de l'insertion :", insertError.message);
+					return;
+				}
         uploadPDF(formData.file)
-        console.log(formData);
+        console.log("Message inséré avec succès !\n", newMessage);
 
         // resets the inputs and formData to blank
         setFormData({

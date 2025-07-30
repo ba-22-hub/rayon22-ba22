@@ -98,7 +98,7 @@ function Login() {
 				}
 
 				localStorage.removeItem("pendingUserData");
-				console.log("Utilisateur inséré avec succès !");
+				console.log("Utilisateur inséré avec succès !\n", newUser);
 			}
 		}
 
