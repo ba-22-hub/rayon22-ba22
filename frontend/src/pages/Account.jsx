@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import { supabase } from '../../lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 
@@ -23,20 +24,22 @@ function Account() {
      * readInfo: true
      * situation: "jobless"​
      * wageType: undefined
-     */
+    */
+
+   
 
 
-
-
-    const [editing, setEditing] = useState(false)
-    const [clientEdit, setClientEdit] = useState(null)
-    const [file, setFile] = useState(null)
-    const { user } = useAuthor()
+   const [editing, setEditing] = useState(false)
+   const [clientEdit, setClientEdit] = useState(null)
+   const [file, setFile] = useState(null)
+    const { user, logout } = useAuthor()
 
     // options for the radio buttons when the edit mod is enable
     const genderOptions = ["Homme", "Femme", "Autre"]
     const situationOptions = ["Employé", "Sans emploi", "Étudiant", "Retraité"]
     const wageOptions = ["Salaire", "Bourse", "Aide", "Autre"]
+    
+    let navigate = useNavigate()
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -137,6 +140,12 @@ function Account() {
         alert("Le fichier " + file.name + "a bien été envoyé")
     }
 
+    function handleDeconnection(){
+        logout()
+        console.log("Deconnexion...")
+        navigate('/login')
+    }
+
     // on factorise l'élément le plus volumineux 
     const renderField = (label, fieldName) => (
         <div className="flex flex-row text-rayonblue align-center items-center">
@@ -182,10 +191,14 @@ function Account() {
     return (
         <>
             {!clientEdit ? (
-                <p>Chargement des données...</p>
+                <p>Chargement des données... <br /> Recharger la page si le problème persiste</p>
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
                     <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
+                    <button
+                    onClick={handleDeconnection}
+                    className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
+                    >⏼ Déconnexion</button>
                     <div className="flex flex-row">
                         <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>

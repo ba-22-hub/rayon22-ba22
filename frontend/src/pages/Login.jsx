@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { useAuthor } from '../context/AuthorContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FormInput from "../common/FormInput";
@@ -18,6 +19,7 @@ function Login() {
 		password: ''
 	});
 	const { setUser } = useAuthor()
+	let navigate = useNavigate()
 
 	// function to set the new formData value whenever the inputs are changed
 	function handleChange(e) {
@@ -112,6 +114,8 @@ function Login() {
 
 		// update session
 		setUser(loginData.user)
+		navigate('/account')
+		
 	}
 
 	return (

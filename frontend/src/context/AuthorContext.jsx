@@ -24,11 +24,20 @@ function AuthorProvider({ children }) {
         return () => {
             listener.subscription.unsubscribe()
         }
-
-
+        
     }, [])
+
+    // logout function 
+    const logout = async () => {
+        // closing supabase session
+        await supabase.auth.signOut()
+        setUser(null)
+    }
+
+
+
     return (
-        <AuthorContext.Provider value={{ user, setUser }}>
+        <AuthorContext.Provider value={{ user, setUser, logout }}>
             {children}
         </AuthorContext.Provider>
     );
