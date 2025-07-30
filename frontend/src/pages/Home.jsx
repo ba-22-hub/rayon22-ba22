@@ -1,7 +1,7 @@
 // Importing common components
 import PageButton from "../common/PageButton"
 import ShapeNumber from "../common/ShapeNumber"
-import ProductCarousel from "../common/ProductCarousel"
+import ProductCarousel from "../common/ProductCarouselHome"
 
 // Importing assets
 import orangeWoman from "../assets/Photos/giletorange2.png"
@@ -13,6 +13,52 @@ import avatar from "../assets/Assets/avatar.png"
 import file from "../assets/Assets/file.png"
 import cart from "../assets/Assets/cart.png"
 import phoneApp from "../assets/Photos/phoneApp.png"
+import pasta from "../assets/Photos/Tortis.png"
+import rice from "../assets/Photos/Riz.png"
+import lentil from "../assets/Photos/Lentilles.png"
+import bean from "../assets/Photos/Haricot.png"
+import tuna from "../assets/Photos/Thon.png"
+import sponges from "../assets/Photos/Eponges.png"
+
+{/* Data product carousel */}
+const dataProductCarousel = [
+  {
+    name: "Pâte torti",
+    image: pasta,
+    price: "0.50€",
+    salePrice: "0.05€",
+  },
+  {
+    name: "Riz 10 minutes",
+    image: rice,
+    price: "0.50€",
+    salePrice: "0.10€",
+  },
+  {
+    name: "Lentilles cuisinées",
+    image: lentil,
+    price: "0.50€",
+    salePrice: "0.05€",
+  },
+  {
+    name: "Haricot vert extra-fin",
+    image: bean,
+    price: "1€",
+    salePrice: "0.10€",
+  },
+  {
+    name: "Thon",
+    image: tuna,
+    price: "1.50€",
+    salePrice: "0.15€",
+  },
+  {
+    name: "3 gratte éponge",
+    image: sponges,
+    price: "1.50€",
+    salePrice: "0.15€",
+  },
+];
 
 /**
  * The Home page.
@@ -127,7 +173,7 @@ function Home() {
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <ProductCarousel />
+            <ProductCarousel data={dataProductCarousel}/>
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">
