@@ -1,6 +1,19 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from "../../lib/supabaseClient.js"
 
+/*
+HOW TO USE THE CONTEXT ?? 
+1. import : import { useAuthor } from '../context/AuthorContext.jsx';
+2. declare what you need at the begining of the component
+    => const {user, setUser, logout } = useAuthor()
+
+user : current session,
+    /=> user.id is needed to interact with the db 
+setUser : to change the session
+logout : to end the session
+*/ 
+
+
 
 const AuthorContext = createContext()
 
