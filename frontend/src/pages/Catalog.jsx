@@ -1,6 +1,6 @@
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import ProductCarousel from "../common/ProductCarouselCatalog"
+import FunctionButton from "../common/FunctionButton"
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
@@ -18,6 +18,7 @@ const dataProductCarousel = [
     salePrice: "0.05€",
     weight: "500g",
     category: "féculent",
+    nbInCart: 7,
   },
   {
     name: "Riz 10 minutes",
@@ -26,6 +27,7 @@ const dataProductCarousel = [
     salePrice: "0.10€",
     weight: "450g",
     category: "féculent",
+    nbInCart: 0,
   },
   {
     name: "Lentilles cuisinées",
@@ -34,6 +36,7 @@ const dataProductCarousel = [
     salePrice: "0.05€",
     weight: "500g",
     category: "conserves",
+    nbInCart: 0,
   },
   {
     name: "Haricot vert extra-fin",
@@ -42,6 +45,7 @@ const dataProductCarousel = [
     salePrice: "0.10€",
     weight: "500g",
     category: "conserves",
+    nbInCart: 0,
   },
   {
     name: "Thon",
@@ -50,6 +54,7 @@ const dataProductCarousel = [
     salePrice: "0.15€",
     weight: "200g",
     category: "conserves",
+    nbInCart: 0,
   },
   {
     name: "3 gratte éponge",
@@ -58,6 +63,7 @@ const dataProductCarousel = [
     salePrice: "0.15€",
     weight: "10g",
     category: "hygiène",
+    nbInCart: 0,
   },
 ];
 
@@ -96,28 +102,32 @@ function Catalog() {
                 À noter que les images des produits sont non contractuelles et peuvent ne pas refléter fidèlement les marques ou références effectivement proposées.
                 </p>
             </div>
+
             {/* PASTA CAROUSEL */}
             <div className="flex items-start ...">  
-                <p className="text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pattes, riz, semoule...</p>
-                <a className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">Voir +</a>
+                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pattes, riz, semoule...</p>
+                <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +"/>
             </div>
             <ProductCarousel data={dataProductCarousel}/>
+
             {/* VEGETABLE CAROUSEL */}
             <div className="flex items-start ...">  
-                <p className="text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de légumes</p>
-                <a className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">Voir +</a>
+                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de légumes</p>
+                <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +"/>
             </div>
             <ProductCarousel data={dataProductCarousel}/>
+
             {/* FISH CAROUSEL */}
             <div className="flex items-start ...">  
-                <p className="text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de poisson</p>
-                <a className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">Voir +</a>
+                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de poisson</p>
+                <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +"/>
             </div>
             <ProductCarousel data={dataProductCarousel}/>
+
             {/* HYGIENE CAROUSEL */}
             <div className="flex items-start ...">  
-                <p className="text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Produit d'hygiène</p>
-                <a className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">Voir +</a>
+                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Produit d'hygiène</p>
+                <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +"/>
             </div>
             <ProductCarousel data={dataProductCarousel}/>
         </>

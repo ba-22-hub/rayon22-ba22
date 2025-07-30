@@ -1,5 +1,9 @@
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import { useState } from 'react';
+
+// Importing common components
+import FunctionButton from "../common/FunctionButton"
 
 
 import Slider from "react-slick";
@@ -43,6 +47,35 @@ function ProductCarousel({ data }) {
     prevArrow: <SamplePrevArrow />,
   };
 
+  function DisplayButtons({ product }) {
+    const [nbProd, setNbProd] = useState(product.nbInCart || 0)
+
+    const AddToCart = () => {
+      setNbProd(nbProd + 1)
+      product.nbInCart = nbProd
+    }
+
+    const RemoveFromCart = () => {
+      if (nbProd > 0) {
+        setNbProd(nbProd - 1)
+        product.nbInCart = nbProd
+      }
+    }
+
+    if (nbProd > 0) {
+      return <div className="flex jusitfy-end">
+          <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart}/>
+          <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+          <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart}/>
+        </div>
+    }
+    else {
+      return <div className="flex jusitfy-end">
+          <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart}/>
+        </div>
+    } 
+  }
+
   return (
     <div className="px-8 max-w-7xl mx-auto mb-16">
       <Slider {...settings}>
@@ -50,7 +83,12 @@ function ProductCarousel({ data }) {
           <div key={idx} className="p-4">
             <div className="bg-white shadow-md rounded-xl overflow-hidden">
               <div className="p-4">
-                <h3 className="text-[#3435FF] text-3xl font-semibold ml-0">{product.salePrice}</h3>
+
+                <div className="flex justify-between">
+                  <h3 className="text-[#3435FF] text-3xl font-semibold text-left">{product.salePrice}</h3>
+                  <DisplayButtons product={product}/>
+                </div>
+
                 <h3 className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}</h3>
               </div>
               <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
