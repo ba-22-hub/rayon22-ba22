@@ -1,11 +1,12 @@
 // Importing dependencies
 import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
+import { useAuthor } from '../context/AuthorContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
-import Account from './Account';
 
 /**
  * The Login page.
@@ -17,8 +18,8 @@ function Login() {
 		mail: '',
 		password: ''
 	});
-	const [isLogged, setIsLogged] = useState(false)
-	const [currentUser, setCurrentUser] = useState(null)
+	const { setUser } = useAuthor()
+	let navigate = useNavigate()
 
 	// function to set the new formData value whenever the inputs are changed
 	function handleChange(e) {
@@ -49,8 +50,7 @@ function Login() {
 			return;
 		}
 
-		const user = loginData.user;
-		const uid = user.id;
+		const uid = loginData.user.id;
 
 		// Checks if the user already exists in the database
 		const { data: existingUser, error: fetchError } = await supabase
@@ -103,98 +103,80 @@ function Login() {
 		}
 
 
-		// 
+		
 		console.log("Connexion réussie ! ", existingUser);
-		
-		const { data: userdata, error: dberror } = await supabase
-		.from('User')
-		.select('*')
-		.eq('id', uid)
-		.single();
-		
-		
-		if (dberror && dberror.code !== 'PGRST116') {
-			// other error
-			console.error("Erreur lors de la vérification du user:", fetchError.message);
-			return;
-		}
-		setCurrentUser(userdata)
-		setIsLogged(true)
-		
-		
-		
+
 		// resets the inputs and formData to blank
 		setFormData({
 			mail: '',
 			password: ''
 		});
+
+		// update session
+		setUser(loginData.user)
+		navigate('/account')
+		
 	}
 
 	return (
 		<>
-			{isLogged ?
-				(
-					// PENSER À CHANGER LE CODE ET RAJOUTER LE CLIENT QUI S'EST AUTHENTIFIÉ
-					<Account client={currentUser}/>
-
-				) : (
-					<div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
-						<h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
-							Bienvenue sur votre Espace Utilisateur
-						</h1>
-						<p className="text-black text-base text-center mb-10 mt-4">
-							Connectez vous en utilisant le formulaire ci-dessous
-						</p>
-						<form onSubmit={handleSubmit} className="space-y-6">
-							<div className="w-[65%] mx-auto">
-								<FormInput
-									inputText={<span className="text-rayonblue">Adresse email</span>}
-									name={'mail'}
-									value={formData.mail}
-									onChange={handleChange}
-									isStarred={true}
-									className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-								/>
-							</div>
-							<div className="w-[65%] mx-auto">
-								<FormInput
-									inputText={<span className="text-rayonblue">Mot de passe</span>}
-									name={'password'}
-									value={formData.password}
-									onChange={handleChange}
-									isStarred={true}
-									type="password"
-									className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-								/>
-							</div>
-							<div className="text-right w-[65%] mx-auto">
-								<PageButton
-									buttonText={'Mot de passe oublié ?'}
-									page={'/forgot-password'}
-									className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
-								/>
-							</div>
-							<div className="w-full flex justify-center">
-								<PageButton
-									buttonText={'Je me connecte'}
-									type="submit"
-									className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
-								/>
-							</div>
-						</form>
-
-						<p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
-							Vous n'avez pas encore de compte ?
-						</p>
-						<div className="flex justify-center">
-							<PageButton
-								buttonText={'Créez votre compte'}
-								page={'/register'}
-								className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
-							/>
-						</div>
+			<div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
+				<h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
+					Bienvenue sur votre Espace Utilisateur
+				</h1>
+				<p className="text-black text-base text-center mb-10 mt-4">
+					Connectez vous en utilisant le formulaire ci-dessous
+				</p>
+				<form onSubmit={handleSubmit} className="space-y-6">
+					<div className="w-[65%] mx-auto">
+						<FormInput
+							inputText={<span className="text-rayonblue">Adresse email</span>}
+							name={'mail'}
+							value={formData.mail}
+							onChange={handleChange}
+							isStarred={true}
+							className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+						/>
 					</div>
-				)}
+					<div className="w-[65%] mx-auto">
+						<FormInput
+							inputText={<span className="text-rayonblue">Mot de passe</span>}
+							name={'password'}
+							value={formData.password}
+							onChange={handleChange}
+							isStarred={true}
+							type="password"
+							className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+						/>
+					</div>
+					<div className="text-right w-[65%] mx-auto">
+						<PageButton
+							buttonText={'Mot de passe oublié ?'}
+							page={'/forgot-password'}
+							className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
+						/>
+					</div>
+					<div className="w-full flex justify-center">
+						<PageButton
+							buttonText={'Je me connecte'}
+							type="submit"
+							className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+						/>
+					</div>
+				</form>
+
+				<p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
+					Vous n'avez pas encore de compte ?
+				</p>
+				<div className="flex justify-center">
+					<PageButton
+						buttonText={'Créez votre compte'}
+						page={'/register'}
+						className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+					/>
+				</div>
+			</div>
+
 		</>
 	)
 

@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
+import { useAuthor } from "../context/AuthorContext.jsx";
 
 
 
-function Account({ client }) {
+function Account() {
     /**
      * Format attendu pour le client : 
      * birthday: "0023-09-23"
@@ -22,17 +24,51 @@ function Account({ client }) {
      * readInfo: true
      * situation: "jobless"​
      * wageType: undefined
-     */
+    */
+
+   
 
 
+   const [editing, setEditing] = useState(false)
+   const [clientEdit, setClientEdit] = useState(null)
+   const [file, setFile] = useState(null)
+    const { user, logout } = useAuthor()
 
-
-    const [editing, setEditing] = useState(false)
-    const [clientEdit, setClientEdit] = useState(client)
-    const [file, setFile] = useState(null)
+    // options for the radio buttons when the edit mod is enable
     const genderOptions = ["Homme", "Femme", "Autre"]
     const situationOptions = ["Employé", "Sans emploi", "Étudiant", "Retraité"]
     const wageOptions = ["Salaire", "Bourse", "Aide", "Autre"]
+    
+    let navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                // retrieving user's data
+                const uid = user.id
+                console.log(user)
+                const { data: userdata, error: dberror } = await supabase
+                    .from('User')
+                    .select('*')
+                    .eq('id', uid)
+                    .single();
+
+                if (dberror && dberror.code !== 'PGRST116') {
+                    // other error
+                    console.error("Erreur lors de la vérification du user:", dberror.message);
+                    return;
+                }
+
+                setClientEdit(userdata);
+            } catch (error) {
+                console.error("Erreur inattendue:", error.message);
+            }
+        }
+        fetchUserData()
+            .then(() => console.log("informations récupérée"))
+    }, [])
+
+
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -79,77 +115,90 @@ function Account({ client }) {
             console.log("Data changed : ", data)
             setEditing(false)
             alert("Les informations ont été modifiées avec succès")
-        } catch(err){
+        } catch (err) {
             alert("Erreur lors de l'ajout dans la base de donnée")
-            console.error("Error uptdating client... ",err.message )
+            console.error("Error uptdating client... ", err.message)
         }
     }
 
     function handleFileSelection(e) {
-            console.log("Un fichier a été déposé")
-            const incomingFile = e.target.files[0]
-            console.log(incomingFile)
-            setFile(incomingFile)
-            console.log(incomingFile.name)
-        }
+        console.log("Un fichier a été déposé")
+        const incomingFile = e.target.files[0]
+        console.log(incomingFile)
+        setFile(incomingFile)
+        console.log(incomingFile.name)
+    }
 
-        function handleFileSubmit() {
-            const formData = new FormData()
-            formData.append('file', file)
-            // fetch('url', {
-            //     method : 'POST', 
-            //     body : formData
-            // })
-            console.log("Fichier uploadé : ", formData)
-            alert("Le fichier " + file.name + "a bien été envoyé")
-        }
+    function handleFileSubmit() {
+        const formData = new FormData()
+        formData.append('file', file)
+        // fetch('url', {
+        //     method : 'POST', 
+        //     body : formData
+        // })
+        console.log("Fichier uploadé : ", formData)
+        alert("Le fichier " + file.name + "a bien été envoyé")
+    }
 
-        // on factorise l'élément le plus volumineux 
-        const renderField = (label, fieldName) => (
-            <div className="flex flex-row text-rayonblue align-center items-center">
-                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
-                {editing ? (
-                    <input
-                        className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
-                        name={fieldName}
-                        value={clientEdit[fieldName]}
-                        onChange={handleChange}
-                    />
-                ) : (
-                    <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-                )}
-            </div>
-        )
+    function handleDeconnection(){
+        logout()
+        console.log("Deconnexion...")
+        navigate('/login')
+    }
 
-        const renderRadio = (label, fieldName, options) => (
-            <div className="flex flex-row text-rayonblue mb-2">
-                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
-                {editing ? (
-                    <div className="flex text-rayonorange">
-                        {options.map((option) => (
-                            <label key={option} className="flex items-center ml-4">
-                                <input
-                                    className="mr-1"
-                                    type="radio"
-                                    name={fieldName}
-                                    value={option}
-                                    checked={clientEdit[fieldName] === option}
-                                    onChange={handleChange}
-                                />
-                                {option}
-                            </label>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-                )}
-            </div>
-        );
+    // on factorise l'élément le plus volumineux 
+    const renderField = (label, fieldName) => (
+        <div className="flex flex-row text-rayonblue align-center items-center">
+            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
+            {editing ? (
+                <input
+                    className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
+                    name={fieldName}
+                    value={clientEdit[fieldName]}
+                    onChange={handleChange}
+                />
+            ) : (
+                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
+            )}
+        </div>
+    )
 
-        return (
-            <>
+    const renderRadio = (label, fieldName, options) => (
+        <div className="flex flex-row text-rayonblue mb-2">
+            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
+            {editing ? (
+                <div className="flex text-rayonorange">
+                    {options.map((option) => (
+                        <label key={option} className="flex items-center ml-4">
+                            <input
+                                className="mr-1"
+                                type="radio"
+                                name={fieldName}
+                                value={option}
+                                checked={clientEdit[fieldName] === option}
+                                onChange={handleChange}
+                            />
+                            {option}
+                        </label>
+                    ))}
+                </div>
+            ) : (
+                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
+            )}
+        </div>
+    );
+
+    return (
+        <>
+            {!clientEdit ? (
+                <p>Chargement des données... <br /> Recharger la page si le problème persiste</p>
+            ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
                     <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
+                    <button
+                    onClick={handleDeconnection}
+                    className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
+                    >⏼ Déconnexion</button>
                     <div className="flex flex-row">
                         <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
@@ -220,12 +269,9 @@ function Account({ client }) {
                     }
 
                 </div>
-            </>
-        )
+            )}
+        </>
+    )
+}
 
-
-
-    }
-
-
-    export default Account;
+export default Account;
