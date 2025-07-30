@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import {supabase} from "../../lib/supabaseClient.js"
+import { supabase } from "../../lib/supabaseClient.js"
 
 
 const AuthorContext = createContext()
 
-function AuthorProvider({ children }){
+function AuthorProvider({ children }) {
 
     const [user, setUser] = useState(null)
 
@@ -27,7 +27,6 @@ function AuthorProvider({ children }){
 
 
     }, [])
-
     return (
         <AuthorContext.Provider value={{ user, setUser }}>
             {children}
@@ -38,4 +37,4 @@ function AuthorProvider({ children }){
 
 const useAuthor = () => useContext(AuthorContext)
 
-export {AuthorProvider, useAuthor}
+export { AuthorProvider, useAuthor }
