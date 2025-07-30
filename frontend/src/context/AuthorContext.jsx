@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase } from "../../lib/supabaseClient.js"
+import { supabase } from "@lib/supabaseClient.js"
 
 /*
 HOW TO USE THE CONTEXT ?? 

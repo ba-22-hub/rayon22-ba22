@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient.js';
+import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from '../context/AuthorContext.jsx';
 import { useNavigate } from 'react-router-dom';
 

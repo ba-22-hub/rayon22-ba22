@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import { supabase } from '../../lib/supabaseClient.js';
+import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 
 
