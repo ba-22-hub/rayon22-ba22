@@ -37,7 +37,7 @@ function ProductCarousel({ data }) {
     const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    variableWidth: true,
     slidesToScroll: 1,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
@@ -48,7 +48,7 @@ function ProductCarousel({ data }) {
   };
 
   function DisplayButtons({ product }) {
-    const [nbProd, setNbProd] = useState(product.nbInCart || 0)
+    const [nbProd, setNbProd] = useState(product.nbInCart)
 
     const AddToCart = () => {
       setNbProd(nbProd + 1)
@@ -77,11 +77,11 @@ function ProductCarousel({ data }) {
   }
 
   return (
-    <div className="px-8 max-w-7xl mx-auto mb-16">
+    <div className="px-8 mx-auto mb-12">
       <Slider {...settings}>
         {data.map((product, idx) => (
           <div key={idx} className="p-4">
-            <div className="bg-white shadow-md rounded-xl overflow-hidden">
+            <div className="bg-white shadow-md rounded-xl overflow-hidden w-60 ml-0.1">
               <div className="p-4">
 
                 <div className="flex justify-between">

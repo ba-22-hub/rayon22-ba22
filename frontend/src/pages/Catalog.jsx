@@ -65,6 +65,33 @@ const dataProductCarousel = [
     category: "hygiène",
     nbInCart: 0,
   },
+  {
+    name: "Pâte torti",
+    image: roundLogo,
+    price: "0.50€",
+    salePrice: "0.05€",
+    weight: "500g",
+    category: "féculent",
+    nbInCart: 7,
+  },
+  {
+    name: "Riz 10 minutes",
+    image: roundLogo,
+    price: "0.50€",
+    salePrice: "0.10€",
+    weight: "450g",
+    category: "féculent",
+    nbInCart: 0,
+  },
+  {
+    name: "Lentilles cuisinées",
+    image: roundLogo,
+    price: "0.50€",
+    salePrice: "0.05€",
+    weight: "500g",
+    category: "conserves",
+    nbInCart: 0,
+  },
 ];
 
 function Catalog() {
@@ -98,7 +125,7 @@ function Catalog() {
             </form>
 
             <div className="my-4 mx-20 items-center justify-center text-3xl text-center">
-                <p className="text-rayonorange mb-2 mx-20">
+                <p className="text-rayonorange mb-2 mx-10">
                 À noter que les images des produits sont non contractuelles et peuvent ne pas refléter fidèlement les marques ou références effectivement proposées.
                 </p>
             </div>
