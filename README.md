@@ -4,11 +4,8 @@
 
 npm run dev
 
-## Backend (Express + Prisma)
+## Backend 
 
-npx nodemon index.js  
+The database is managed by Supabase 
   
-if db updated : 
-- npx prisma generate
-- npx prisma db push --force-reset 
-
+(all the scripts and functions are in the backend lib folder)

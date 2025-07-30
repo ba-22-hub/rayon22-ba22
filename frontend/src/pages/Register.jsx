@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient.js';
+import { supabase } from '@lib/supabaseClient.js';
 
 // Importing common components
 import RegisterStep1 from './RegisterStep1';
