@@ -26,19 +26,20 @@ function Account() {
      * wageType: undefined
     */
 
-   
 
 
-   const [editing, setEditing] = useState(false)
-   const [clientEdit, setClientEdit] = useState(null)
-   const [file, setFile] = useState(null)
-    const { user, logout } = useAuthor()
+
+    const [editing, setEditing] = useState(false)
+    const [clientEdit, setClientEdit] = useState(null)
+    const [client, setClient] = useState(null)
+    const [file, setFile] = useState(null)
+    const { user, logout, loading } = useAuthor()
 
     // options for the radio buttons when the edit mod is enable
     const genderOptions = ["Homme", "Femme", "Autre"]
     const situationOptions = ["Employé", "Sans emploi", "Étudiant", "Retraité"]
     const wageOptions = ["Salaire", "Bourse", "Aide", "Autre"]
-    
+
     let navigate = useNavigate()
 
     useEffect(() => {
@@ -60,13 +61,13 @@ function Account() {
                 }
 
                 setClientEdit(userdata);
+                setClient(userdata);
             } catch (error) {
                 console.error("Erreur inattendue:", error.message);
             }
         }
         fetchUserData()
-            .then(() => console.log("informations récupérée"))
-    }, [])
+    }, [user])
 
 
 
@@ -140,7 +141,7 @@ function Account() {
         alert("Le fichier " + file.name + "a bien été envoyé")
     }
 
-    function handleDeconnection(){
+    function handleDeconnection() {
         logout()
         console.log("Deconnexion...")
         navigate('/login')
@@ -190,14 +191,14 @@ function Account() {
 
     return (
         <>
-            {!clientEdit ? (
-                <p>Chargement des données... <br /> Recharger la page si le problème persiste</p>
+            {loading || ! clientEdit ? (
+                <p>Chargement des données... </p>
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
                     <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
                     <button
-                    onClick={handleDeconnection}
-                    className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
+                        onClick={handleDeconnection}
+                        className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
                     >⏼ Déconnexion</button>
                     <div className="flex flex-row">
                         <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">

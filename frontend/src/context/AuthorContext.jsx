@@ -20,13 +20,15 @@ const AuthorContext = createContext()
 function AuthorProvider({ children }) {
 
     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     // check if a session is already open
     useEffect(() => {
         supabase.auth.getSession().then(({ data }) => {
             setUser(data.session?.user ?? null) // if exists return data.sessions.user, else user = null
+            setLoading(false)
         })
-
+        
 
         // listen author changes 
         const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
@@ -50,7 +52,7 @@ function AuthorProvider({ children }) {
 
 
     return (
-        <AuthorContext.Provider value={{ user, setUser, logout }}>
+        <AuthorContext.Provider value={{ user, setUser, logout, loading }}>
             {children}
         </AuthorContext.Provider>
     );
