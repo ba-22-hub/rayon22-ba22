@@ -5,6 +5,8 @@ const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState(null);
+  const [editMode, setEditMode] = useState(null);
+  const [editedUser, setEditedUser] = useState({});
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,6 +25,28 @@ const UserTable = () => {
 
   const toggleExpand = (id) => {
     setExpanded(prev => (prev === id ? null : id));
+    setEditMode(null);
+  };
+
+  const handleEdit = (user) => {
+    setEditMode(user.id);
+    setEditedUser(user);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUser(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleValidate = () => {
+    console.log('User modifié :', editedUser);
+    setEditMode(null);
+    // TODO: Call supabase update
+  };
+
+  const handleDelete = (id) => {
+    console.log('Suppression utilisateur :', id);
+    // TODO: Call supabase delete
   };
 
   return (
@@ -58,7 +82,7 @@ const UserTable = () => {
                   <td className="px-6 py-4">{user.phone}</td>
                   <td className="px-6 py-4">
                     <button
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 hover:underline mr-4"
                       onClick={() => toggleExpand(user.id)}
                     >
                       {expanded === user.id ? 'Fermer' : 'Déplier'}
@@ -68,17 +92,60 @@ const UserTable = () => {
                 {expanded === user.id && (
                   <tr className="bg-gray-50">
                     <td colSpan="5" className="px-6 py-4">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <p><strong>Sexe:</strong> {user.gender}</p>
-                        <p><strong>Date de naissance:</strong> {user.birthday}</p>
-                        <p><strong>Adresse:</strong> {user.address}</p>
-                        <p><strong>Complément d’adresse:</strong> {user.addAddress || '—'}</p>
-                        <p><strong>Ville:</strong> {user.city}</p>
-                        <p><strong>Code postal:</strong> {user.postalCode}</p>
-                        <p><strong>Situation:</strong> {user.situation}</p>
-                        <p><strong>Quotient:</strong> {user.quotient}</p>
-                        <p><strong>Type de revenu:</strong> {user.wageType}</p>
-                        <p><strong>Autres revenus:</strong> {user.otherWage || '—'}</p>
+                      <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                        {[
+                          ['gender', 'Sexe'],
+                          ['birthday', 'Date de naissance'],
+                          ['address', 'Adresse'],
+                          ['addAddress', 'Complément d’adresse'],
+                          ['city', 'Ville'],
+                          ['postalCode', 'Code postal'],
+                          ['situation', 'Situation'],
+                          ['quotient', 'Quotient'],
+                          ['wageType', 'Type de revenu'],
+                          ['otherWage', 'Autres revenus'],
+                        ].map(([field, label]) => (
+                          <div key={field}>
+                            <strong>{label}:</strong>{' '}
+                            {editMode === user.id ? (
+                              <input
+                                name={field}
+                                value={editedUser[field] || ''}
+                                onChange={handleChange}
+                                className="border px-2 py-1 rounded w-full mt-1"
+                              />
+                            ) : (
+                              <span className="ml-1">
+                                {user[field] || '—'}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-4">
+                        {editMode === user.id ? (
+                          <button
+                            onClick={handleValidate}
+                            className="px-4 py-2 bg-green text-white rounded"
+                          >
+                            Valider
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleEdit(user)}
+                            className="px-4 py-2 bg-blue-600 text-white rounded"
+                          >
+                            Modifier
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => handleDelete(user.id)}
+                          className="px-4 py-2 bg-rayonorange text-white rounded"
+                        >
+                          Supprimer
+                        </button>
                       </div>
                     </td>
                   </tr>
