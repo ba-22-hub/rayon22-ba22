@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@lib': path.resolve(__dirname, '../backend/lib'),
+      '@common': path.resolve(__dirname, 'src/common'),
     },
   },
 })
