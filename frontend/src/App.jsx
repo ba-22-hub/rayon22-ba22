@@ -33,6 +33,7 @@ import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
 import Account from "./pages/Account.jsx";  
+import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
 
 // Importing common components
 import Footer from "./common/Footer.jsx";
@@ -109,6 +110,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/sponsor" element={<Sponsor />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/dashboard/admin-login" element={<AdminLogin />} />
+            {/* Redirecting to Error404 page if the route does not exist */}
+            <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />
           </Routes>
         </Router>
 
