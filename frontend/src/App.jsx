@@ -36,6 +36,7 @@ import Account from "./pages/Account.jsx";
 import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
 import UserTable from "./pages/dashboard/UserTable.jsx";  
 import ProductTable from "./pages/dashboard/ProductTable.jsx";
+import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 
 // Importing common components
 import Footer from "./common/Footer.jsx";
@@ -115,6 +116,7 @@ function App() {
             <Route path="/dashboard/admin-login" element={<AdminLogin />} />
             <Route path="/dashboard/user-table" element={<UserTable />} />
             <Route path="/dashboard/product-table" element={<ProductTable/>} />
+            <Route path="/dashboard/messages" element={<MessagesDashboard />} />
             {/* Redirecting to Error404 page if the route does not exist */}
             <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />
           </Routes>
