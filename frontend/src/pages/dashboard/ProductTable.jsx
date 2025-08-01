@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@lib/supabaseClient";
+import FunctionButton from "@common/FunctionButton.jsx";
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -115,23 +116,23 @@ function ProductTable() {
                       />
                     </td>
                     <td className="p-2">
-                      <button className="bg-gray px-2 py-1 rounded" disabled>
-                        Browse
-                      </button>
+                      <FunctionButton
+                        className="bg-gray px-2 py-1 rounded"
+                        buttonText="Browse"
+                        fun={() => {}}
+                      />
                     </td>
                     <td className="p-2 space-x-2">
-                      <button
-                        onClick={handleValidate}
+                      <FunctionButton
                         className="bg-green text-white px-2 py-1 rounded"
-                      >
-                        Valider
-                      </button>
-                      <button
-                        onClick={() => setEditingProductId(null)}
+                        buttonText="Valider"
+                        fun={handleValidate}
+                      />
+                      <FunctionButton
                         className="bg-gray text-white px-2 py-1 rounded"
-                      >
-                        Annuler
-                      </button>
+                        buttonText="Annuler"
+                        fun={() => setEditingProductId(null)}
+                      />
                     </td>
                   </>
                 ) : (
@@ -142,23 +143,23 @@ function ProductTable() {
                     <td className="p-2">{p["weight_g"]}</td>
                     <td className="p-2">{p.category}</td>
                     <td className="p-2">
-                      <button className="bg-gray px-2 py-1 rounded" disabled>
-                        Browse
-                      </button>
+                      <FunctionButton
+                        className="bg-gray px-2 py-1 rounded"
+                        buttonText="Browse"
+                        fun={() => {}}
+                      />
                     </td>
                     <td className="p-2 space-x-2">
-                      <button
-                        onClick={() => handleEdit(p)}
+                      <FunctionButton
                         className="bg-blue-600 text-white px-2 py-1 rounded"
-                      >
-                        Modifier
-                      </button>
-                      <button
-                        onClick={() => console.log("Suppression :", p.id)}
+                        buttonText="Modifier"
+                        fun={() => handleEdit(p)}
+                      />
+                      <FunctionButton
                         className="bg-red text-white px-2 py-1 rounded"
-                      >
-                        Supprimer
-                      </button>
+                        buttonText="Supprimer"
+                        fun={() => console.log("Suppression :", p.id)}
+                      />
                     </td>
                   </>
                 )}
