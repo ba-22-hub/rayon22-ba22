@@ -6,6 +6,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import FormInput from "../common/FormInput";
 import PageButton from "../common/PageButton";
 import Account from './Account';
+import DashTest from './DashTest';
 
 /**
  * The Login page.
@@ -195,6 +196,7 @@ function Login() {
 						</div>
 					</div>
 				)}
+			<DashTest />
 		</>
 	)
 

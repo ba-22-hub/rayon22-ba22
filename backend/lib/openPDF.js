@@ -20,3 +20,5 @@ async function openPDF(fileName, expiresIn = 10) {
         console.error("Impossible de générer une URL signée pour ce fichier.");
     }
 }
+
+export { openPDF }

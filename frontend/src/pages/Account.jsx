@@ -79,153 +79,153 @@ function Account({ client }) {
             console.log("Data changed : ", data)
             setEditing(false)
             alert("Les informations ont été modifiées avec succès")
-        } catch(err){
+        } catch (err) {
             alert("Erreur lors de l'ajout dans la base de donnée")
-            console.error("Error uptdating client... ",err.message )
+            console.error("Error uptdating client... ", err.message)
         }
     }
 
     function handleFileSelection(e) {
-            console.log("Un fichier a été déposé")
-            const incomingFile = e.target.files[0]
-            console.log(incomingFile)
-            setFile(incomingFile)
-            console.log(incomingFile.name)
-        }
-
-        function handleFileSubmit() {
-            const formData = new FormData()
-            formData.append('file', file)
-            // fetch('url', {
-            //     method : 'POST', 
-            //     body : formData
-            // })
-            console.log("Fichier uploadé : ", formData)
-            alert("Le fichier " + file.name + "a bien été envoyé")
-        }
-
-        // on factorise l'élément le plus volumineux 
-        const renderField = (label, fieldName) => (
-            <div className="flex flex-row text-rayonblue align-center items-center">
-                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
-                {editing ? (
-                    <input
-                        className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
-                        name={fieldName}
-                        value={clientEdit[fieldName]}
-                        onChange={handleChange}
-                    />
-                ) : (
-                    <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-                )}
-            </div>
-        )
-
-        const renderRadio = (label, fieldName, options) => (
-            <div className="flex flex-row text-rayonblue mb-2">
-                <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
-                {editing ? (
-                    <div className="flex text-rayonorange">
-                        {options.map((option) => (
-                            <label key={option} className="flex items-center ml-4">
-                                <input
-                                    className="mr-1"
-                                    type="radio"
-                                    name={fieldName}
-                                    value={option}
-                                    checked={clientEdit[fieldName] === option}
-                                    onChange={handleChange}
-                                />
-                                {option}
-                            </label>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-                )}
-            </div>
-        );
-
-        return (
-            <>
-                <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
-                    <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
-                    <div className="flex flex-row">
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
-                            {renderField("Nom", "lastName")}
-                            {renderField("Prénom", "firstName")}
-                            {renderRadio("Genre", "gender", genderOptions)}
-
-                        </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] ml-[2vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
-                            {renderField("E-mail", "email")}
-                            {renderField("Téléphone", "phone")}
-                            {renderField("Adresse", "address")}
-                            {renderField("Précisions", "addAddress")}
-                            {renderField("Ville", "city")}
-                            {renderField("Code postal", "phone")}
-                        </div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
-                        {renderRadio("Situation", "situation", situationOptions)}
-                        {renderField("Quotient familial (CAF)", "quotient")}
-                        {renderRadio("Type de salaire", "wageType", wageOptions)}
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
-                        <div className="flex flex-row">
-                            <input
-                                className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
-                                type="file"
-                                onChange={handleFileSelection}
-                                accept=".pdf"
-                                name="fileSelector"
-                            ></input>
-                            <button
-                                className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
-                                onClick={handleFileSubmit}
-                            >Valider 🗸</button>
-                        </div>
-                    </div>
-                    {!editing ? (
-                        <button
-                            className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                            onClick={() => {
-                                setEditing(true)
-                                console.log("editmod enabled")
-                            }
-                            }
-                        >Modifier 🖉</button>
-                    ) : (
-                        <div className="flex flex-row">
-                            <button
-                                className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                                onClick={handleCancel}
-                            >Annuler ✖</button>
-                            <button
-                                className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
-                                onClick={handleEdit}
-                            >Valider 🗸</button>
-                        </div>
-                    )
-                    }
-
-                </div>
-            </>
-        )
-
-
-
+        console.log("Un fichier a été déposé")
+        const incomingFile = e.target.files[0]
+        console.log(incomingFile)
+        setFile(incomingFile)
+        console.log(incomingFile.name)
     }
 
+    function handleFileSubmit() {
+        const formData = new FormData()
+        formData.append('file', file)
+        // fetch('url', {
+        //     method : 'POST', 
+        //     body : formData
+        // })
+        console.log("Fichier uploadé : ", formData)
+        alert("Le fichier " + file.name + "a bien été envoyé")
+    }
 
-    export default Account;
+    // on factorise l'élément le plus volumineux 
+    const renderField = (label, fieldName) => (
+        <div className="flex flex-row text-rayonblue align-center items-center">
+            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
+            {editing ? (
+                <input
+                    className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
+                    name={fieldName}
+                    value={clientEdit[fieldName]}
+                    onChange={handleChange}
+                />
+            ) : (
+                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
+            )}
+        </div>
+    )
+
+    const renderRadio = (label, fieldName, options) => (
+        <div className="flex flex-row text-rayonblue mb-2">
+            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
+            {editing ? (
+                <div className="flex text-rayonorange">
+                    {options.map((option) => (
+                        <label key={option} className="flex items-center ml-4">
+                            <input
+                                className="mr-1"
+                                type="radio"
+                                name={fieldName}
+                                value={option}
+                                checked={clientEdit[fieldName] === option}
+                                onChange={handleChange}
+                            />
+                            {option}
+                        </label>
+                    ))}
+                </div>
+            ) : (
+                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
+            )}
+        </div>
+    );
+
+    return (
+        <>
+            <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
+                <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
+                <div className="flex flex-row">
+                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
+                        <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
+                        {renderField("Nom", "lastName")}
+                        {renderField("Prénom", "firstName")}
+                        {renderRadio("Genre", "gender", genderOptions)}
+
+                    </div>
+                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] ml-[2vw] p-2">
+                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
+                        {renderField("E-mail", "email")}
+                        {renderField("Téléphone", "phone")}
+                        {renderField("Adresse", "address")}
+                        {renderField("Précisions", "addAddress")}
+                        {renderField("Ville", "city")}
+                        {renderField("Code postal", "phone")}
+                    </div>
+                </div>
+                <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                    <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
+                    {renderRadio("Situation", "situation", situationOptions)}
+                    {renderField("Quotient familial (CAF)", "quotient")}
+                    {renderRadio("Type de salaire", "wageType", wageOptions)}
+                </div>
+                <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                    <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
+                    <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
+                    <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
+                    <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
+                </div>
+                <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                    <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                    <div className="flex flex-row">
+                        <input
+                            className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
+                            type="file"
+                            onChange={handleFileSelection}
+                            accept=".pdf"
+                            name="fileSelector"
+                        ></input>
+                        <button
+                            className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
+                            onClick={handleFileSubmit}
+                        >Valider 🗸</button>
+                    </div>
+                </div>
+                {!editing ? (
+                    <button
+                        className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                        onClick={() => {
+                            setEditing(true)
+                            console.log("editmod enabled")
+                        }
+                        }
+                    >Modifier 🖉</button>
+                ) : (
+                    <div className="flex flex-row">
+                        <button
+                            className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                            onClick={handleCancel}
+                        >Annuler ✖</button>
+                        <button
+                            className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
+                            onClick={handleEdit}
+                        >Valider 🗸</button>
+                    </div>
+                )
+                }
+
+            </div>
+        </>
+    )
+
+
+
+}
+
+
+export default Account;

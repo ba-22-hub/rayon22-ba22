@@ -13,19 +13,6 @@ async function uploadPDF(file) {
         console.error('Erreur lors de l’upload :', uploadError.message);
         return null;
     }
-
-    // 2. Generates a signed URL to access the uploaded file
-    // const { data: signedURLData, error: signedURLError } = await supabase.storage
-    //     .from('documents')
-    //     .createSignedUrl(fileName, 60 * 60); // URL valid for 1 hour
-
-    // if (signedURLError) {
-    //     console.error('Erreur lors de la création de l’URL signée :', signedURLError.message);
-    //     return null;
-    // }
-
-    // console.log('Fichier uploadé. URL signée :', signedURLData.signedUrl);
-    // return signedURLData.signedUrl;
 }
 
 export { uploadPDF };
