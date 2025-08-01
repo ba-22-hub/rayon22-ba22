@@ -3,7 +3,7 @@ import { supabase } from '@lib/supabaseClient.js';
 async function deletePDF(fileName){
     console.log("API call, deleting : ", fileName)
     const {data , error} = await supabase.storage
-        .from('document ')
+        .from('documents')
         .remove(fileName)
 
     if (uploadError) {
