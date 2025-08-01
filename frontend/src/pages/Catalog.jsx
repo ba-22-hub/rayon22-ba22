@@ -124,8 +124,8 @@ function Catalog() {
                 </div>
             </form>
 
-            <div className="my-4 mx-20 items-center justify-center text-3xl text-center">
-                <p className="text-rayonorange mb-2 mx-10">
+            <div className="my-4 items-center justify-center text-3xl text-center">
+                <p className="m-auto text-center w-[60%] text-rayonorange mb-2">
                 À noter que les images des produits sont non contractuelles et peuvent ne pas refléter fidèlement les marques ou références effectivement proposées.
                 </p>
             </div>
