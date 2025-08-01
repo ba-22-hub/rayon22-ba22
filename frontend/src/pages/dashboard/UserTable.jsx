@@ -1,5 +1,9 @@
+// Importing dependencies
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
+
+// Importing common components
+import FunctionButton from '@common/FunctionButton.jsx';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -41,12 +45,12 @@ const UserTable = () => {
   const handleValidate = () => {
     console.log('User modifié :', editedUser);
     setEditMode(null);
-    // TODO: Call supabase update
+    // TODO: Appel supabase update
   };
 
   const handleDelete = (id) => {
     console.log('Suppression utilisateur :', id);
-    // TODO: Call supabase delete
+    // TODO: Appel supabase delete
   };
 
   return (
@@ -76,17 +80,60 @@ const UserTable = () => {
             {filteredUsers.map(user => (
               <React.Fragment key={user.id}>
                 <tr>
-                  <td className="px-6 py-4">{user.firstName}</td>
-                  <td className="px-6 py-4">{user.lastName}</td>
-                  <td className="px-6 py-4">{user.email}</td>
-                  <td className="px-6 py-4">{user.phone}</td>
                   <td className="px-6 py-4">
-                    <button
-                      className="text-blue-600 hover:underline mr-4"
-                      onClick={() => toggleExpand(user.id)}
-                    >
-                      {expanded === user.id ? 'Fermer' : 'Déplier'}
-                    </button>
+                    {editMode === user.id ? (
+                      <input
+                        name="firstName"
+                        value={editedUser.firstName || ''}
+                        onChange={handleChange}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    ) : (
+                      user.firstName
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    {editMode === user.id ? (
+                      <input
+                        name="lastName"
+                        value={editedUser.lastName || ''}
+                        onChange={handleChange}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    ) : (
+                      user.lastName
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    {editMode === user.id ? (
+                      <input
+                        name="email"
+                        value={editedUser.email || ''}
+                        onChange={handleChange}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    ) : (
+                      user.email
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    {editMode === user.id ? (
+                      <input
+                        name="phone"
+                        value={editedUser.phone || ''}
+                        onChange={handleChange}
+                        className="border px-2 py-1 rounded w-full"
+                      />
+                    ) : (
+                      user.phone
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <FunctionButton
+                      buttonText={expanded === user.id ? 'Fermer' : 'Déplier'}
+                      fun={() => toggleExpand(user.id)}
+                      className="text-blue-600 hover:underline mr-4 bg-transparent p-0 shadow-none"
+                    />
                   </td>
                 </tr>
                 {expanded === user.id && (
@@ -125,27 +172,24 @@ const UserTable = () => {
 
                       <div className="flex gap-4">
                         {editMode === user.id ? (
-                          <button
-                            onClick={handleValidate}
+                          <FunctionButton
+                            buttonText="Valider"
+                            fun={handleValidate}
                             className="px-4 py-2 bg-green text-white rounded"
-                          >
-                            Valider
-                          </button>
+                          />
                         ) : (
-                          <button
-                            onClick={() => handleEdit(user)}
+                          <FunctionButton
+                            buttonText="Modifier"
+                            fun={() => handleEdit(user)}
                             className="px-4 py-2 bg-blue-600 text-white rounded"
-                          >
-                            Modifier
-                          </button>
+                          />
                         )}
 
-                        <button
-                          onClick={() => handleDelete(user.id)}
-                          className="px-4 py-2 bg-rayonorange text-white rounded"
-                        >
-                          Supprimer
-                        </button>
+                        <FunctionButton
+                          buttonText="Supprimer"
+                          fun={() => handleDelete(user.id)}
+                          className="px-4 py-2 bg-red text-white rounded"
+                        />
                       </div>
                     </td>
                   </tr>
@@ -154,7 +198,7 @@ const UserTable = () => {
             ))}
             {filteredUsers.length === 0 && (
               <tr>
-                <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                <td colSpan="5" className="px-6 py-4 text-center text-gray">
                   Aucun utilisateur trouvé.
                 </td>
               </tr>
