@@ -19,7 +19,7 @@ function Contact() {
 
     // DEBUG : Listing PDF files and getting a signed URL for a specific file
     listPDF()
-    getSignedPDFUrl('1753826196748_Projet_GL.pdf', 3600)
+    // getSignedPDFUrl('1753826196748_Projet_GL.pdf', 3600)
 
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
