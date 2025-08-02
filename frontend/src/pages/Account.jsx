@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
+import { uploadPDF } from '@lib/sendPDF.js'
 
 
 
@@ -138,6 +139,7 @@ function Account() {
         //     body : formData
         // })
         console.log("Fichier uploadé : ", formData)
+        uploadPDF(file)
         alert("Le fichier " + file.name + "a bien été envoyé")
     }
 
