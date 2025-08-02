@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { deleteUser } from '@lib/deleteUser';
+import { patchUser } from '@lib/patchUser';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -49,8 +50,10 @@ const UserTable = () => {
 
   const handleValidate = () => {
     console.log('User modifié :', editedUser);
-    setEditMode(null);
-    // TODO: Appel supabase update
+    patchUser(editMode, editedUser)
+      .then(()=>setUpdate(!update))
+      .then(()=>setEditMode(null))
+
   };
 
   const handleDelete = (id) => {
