@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
@@ -47,9 +48,27 @@ function MessagesDashboard() {
     }));
   };
 
-  const handleReplySend = (id, reply) => {
+  const handleReplySend = async (id, reply) => {
     console.log(`Réponse au message ${id} :`, reply);
-    // TODO : send the reply to the user using Nodemailer
+    const email = messages.find(msg => msg.id === id)?.User.email;
+    const firstName = messages.find(msg => msg.id === id)?.User.firstName;
+    const lastName = messages.find(msg => msg.id === id)?.User.lastName;
+    console.log('Email de l’utilisateur:', email);
+
+  if (!email) return console.error("Aucun email trouvé.");
+
+  try {
+    const result = await emailjs.send('service_ebvylqd', 'template_t2ldyj5', {
+      email: email,
+      name: `${firstName} ${lastName}`,
+      message: reply,
+    }, '_QJu22XnilS4i04rg');
+
+    console.log('Email envoyé !', result.text);
+  } catch (error) {
+    console.error('Erreur d’envoi :', error);
+  }
+  // handleDelete(id); // Delete the message after sending the reply
   };
 
   const handleDelete = async (id) => {
