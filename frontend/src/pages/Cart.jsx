@@ -27,215 +27,217 @@ const productsInCart = [
     {
         name: "Pâte torti",
         image: pasta,
-        price: "0.50",
-        salePrice: "0.05",
-        weight: "500",
+        price: 0.50,
+        salePrice: 0.05,
+        weight: 500,
         category: "féculent",
         nbInCart: 2,
     },
     {
         name: "Haricot vert extra-fin",
         image: bean,
-        price: "1",
-        salePrice: "0.30",
-        weight: "450",
+        price: 1,
+        salePrice: 0.30,
+        weight: 450,
         category: "conserves",
         nbInCart: 3,
     },
     {
         name: "Thon",
         image: tuna,
-        price: "1.50",
-        salePrice: "0.15",
-        weight: "200",
+        price: 1.50,
+        salePrice: 0.15,
+        weight: 200,
         category: "conserves",
         nbInCart: 1,
     },
     {
         name: "Riz 10 minutes",
         image: rice,
-        price: "0.50",
-        salePrice: "0.10",
-        weight: "450",
+        price: 0.50,
+        salePrice: 0.10,
+        weight: 450,
         category: "féculent",
         nbInCart: 2,
     },
     {
-        name: "Lentilles cuisinées",
-        image: lentil,
-        price: "0.50",
-        salePrice: "0.05",
-        weight: "450",
+        name: "Pâte torti",
+        image: pasta,
+        price: 0.50,
+        salePrice: 0.05,
+        weight: 500,
         category: "féculent",
         nbInCart: 2,
     },
     {
-        name: "3 gratte éponge",
-        image: sponges,
-        price: "1.50",
-        salePrice: "0.15",
-        weight: "450",
-        category: "hygiène",
+        name: "Haricot vert extra-fin",
+        image: bean,
+        price: 1,
+        salePrice: 0.30,
+        weight: 450,
+        category: "conserves",
+        nbInCart: 3,
+    },
+    {
+        name: "Thon",
+        image: tuna,
+        price: 1.50,
+        salePrice: 0.15,
+        weight: 200,
+        category: "conserves",
+        nbInCart: 1,
+    },
+    {
+        name: "Riz 10 minutes",
+        image: rice,
+        price: 0.50,
+        salePrice: 0.10,
+        weight: 450,
+        category: "féculent",
         nbInCart: 2,
     },
 ];
 
-function displayProductOnReceipt(product) {
-    const [nbProd, setNbProd] = useState(product.nbInCart)
 
-    function DisplayButtons({ product }) {
-        const AddToCart = () => {
-            setNbProd(nbProd + 1)
-            product.nbInCart = nbProd
-        }
+function Cart() {
+    const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
+    const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) / 1000)
+    const shippingCost = 1
 
-        const RemoveFromCart = () => {
-            if (nbProd > 0) {
-                setNbProd(nbProd - 1)
+    function roundTwoDigits(nb) {
+        return Math.round(nb*100)/100
+    }
+
+    function displayProductOnReceipt(product) {
+        const [nbProd, setNbProd] = useState(product.nbInCart)
+
+        function DisplayButtons({ product }) {
+            const AddToCart = () => {
+                setNbProd(nbProd + 1)
+                setProductsPriceTotal(roundTwoDigits(productsPriceTotal + product.salePrice))
+                setProductsWeightTotal(roundTwoDigits(productsWeightTotal + product.salePrice))
                 product.nbInCart = nbProd
             }
-            if (nbProd == 0) {
-                {/* Product removed from the list */ }
-                setNbProdInCart(nbProdInCart - 1)
+
+            const RemoveFromCart = () => {
+                setProductsPriceTotal(roundTwoDigits(productsPriceTotal - product.salePrice))
+                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.salePrice))
+                if (nbProd > 0) {
+                    setNbProd(nbProd - 1)
+                    product.nbInCart = nbProd
+                }
+                if (nbProd == 0) {
+                    {/* Product removed from the list */ }
+                    setNbProdInCart(nbProdInCart - 1)
+                }
+            }
+
+            if (nbProd == 1) {
+                return <div className="flex jusitfy-end">
+                    {/* TRASH CAN BUTTON */}
+                    <button type="button" class="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-1 py-0.5 mb-2" onClick={RemoveFromCart}>
+                        <svg viewBox="0 0 32 32" fill="currentColor" class="h-4 w-4">
+                            <path fill="currentColor" d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0Zm-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2h7.5Zm2.5 6.5a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0v-10Zm5-1a1 1 0 0 0-1 1v10a1 1 0 1 0 2 0v-10a1 1 0 0 0-1-1Z" />
+                        </svg>
+                    </button>
+                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+                    <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
+                </div>
+            }
+            else if (nbProd > 1) {
+                return <div className="flex jusitfy-end">
+                    {/* REGULAR MINUS BUTTON */}
+                    <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
+                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+                    <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
+                </div>
             }
         }
 
-        if (nbProd == 1) {
-            return <div className="flex jusitfy-end">
-                {/* TRASH CAN BUTTON */}
-                <button type="button" class="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-1 py-0.5 mb-2" onClick={RemoveFromCart}>
-                    <svg viewBox="0 0 32 32" fill="currentColor" class="h-4 w-4">
-                        <path fill="currentColor" d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0Zm-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2h7.5Zm2.5 6.5a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0v-10Zm5-1a1 1 0 0 0-1 1v10a1 1 0 1 0 2 0v-10a1 1 0 0 0-1-1Z" />
-                    </svg>
-                </button>
-                <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
-                <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
-            </div>
-        }
-        else if (nbProd > 1) {
-            return <div className="flex jusitfy-end">
-                {/* REGULAR MINUS BUTTON */}
-                <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
-                <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
-                <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
-            </div>
+        if (nbProd > 0) {
+            return (
+                <>
+                    <div className="grid grid-cols-5 text-[#3435FF]">
+                        <div className="col-span-1 col-start-1 content-center">
+                            <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
+                        </div>
+                        <div className="col-span-3 col-start-2 content-center">
+                            <p className="text-2xl font-semibold">{product.name}</p>
+                            <p className="text-s">{product.weight}g, {product.category}</p>
+                            <DisplayButtons product={product} />
+                        </div>
+                        <div className="col-span-1 col-start-5 content-center">
+                            <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
+                        </div>
+                    </div>
+                </>
+            )
         }
     }
 
-    if (nbProd > 0) {
+    function displayInfoOnCart(products) {
+
         return (
             <>
-                <div className="grid grid-cols-5 text-[#3435FF]">
-                    <div className="col-span-1 col-start-1 content-center">
-                        <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
+                <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
+                <div className="grid grid-flow-col grid-rows-6 gris-cols-3 gap-4 text-[#3435FF] mx-10">
+                    <div className="col-span-2 col-start-1 row-start-1 content-right">
+                        Total produits
                     </div>
-                    <div className="col-span-3 col-start-2 content-center">
-                        <p className="text-2xl font-semibold">{product.name}</p>
-                        <p className="text-s">{product.weight}g, {product.category}</p>
-                        <DisplayButtons product={product} />
+                    <div className="col-span-1 col-start-3 row-start-1 content-right">
+                        {productsPriceTotal}€
                     </div>
-                    <div className="col-span-1 col-start-5 content-center">
-                        <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
+                    <div className="col-span-2 col-start-1 row-start-2 content-right">
+                        Poids total du colis
+                    </div>
+                    <div className="col-span-1 col-start-3 row-start-2 content-right">
+                        {productsWeightTotal}kg
+                    </div>
+                    <div className="col-span-2 col-start-1 row-start-3 content-right">
+                        Frais de transport
+                    </div>
+                    <div className="col-span-1 col-start-3 row-start-3 content-right">
+                        {shippingCost}€
+                    </div>
+                    <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-4 content-right">
+                        <div className="relative">
+                            <img src={orangeCircle}></img>
+                            <div className="absolute top-4 left-7">Total</div>
+                        </div>
+                    </div>
+                    <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-4 content-right">
+                        {productsPriceTotal + shippingCost}€
                     </div>
                 </div>
+                <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-2xl font-semibold shadow hover:bg-[#ff9800]"} />
             </>
         )
     }
-}
-
-function displayEmptySlotProduct() {
-    {/* Returns an empty slot taking as much space as a product on the receipt */}
-    return (
-        <>
-            <div className="grid grid-cols-5 text-[#3435FF]">
-            </div>
-        </>
-    )
-}
-
-function displayInfoOnCart(products) {
-    const productsPriceTotal = Math.round((productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) * 100) / 100
-    const productsWeightTotal = Math.round((productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) * 100) / 100000
-    const shippingCost = 1
-
-    return (
-        <>
-            <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
-            <div className="grid grid-flow-col grid-rows-6 gris-cols-3 gap-4 text-[#3435FF] mx-10">
-                <div className="col-span-2 col-start-1 row-start-1 content-right">
-                    Total produits
-                </div>
-                <div className="col-span-1 col-start-3 row-start-1 content-right">
-                    {productsPriceTotal}€
-                </div>
-                <div className="col-span-2 col-start-1 row-start-2 content-right">
-                    Poids total du colis
-                </div>
-                <div className="col-span-1 col-start-3 row-start-2 content-right">
-                    {productsWeightTotal}kg
-                </div>
-                <div className="col-span-2 col-start-1 row-start-3 content-right">
-                    Frais de transport
-                </div>
-                <div className="col-span-1 col-start-3 row-start-3 content-right">
-                    {shippingCost}€
-                </div>
-                <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-4 content-right">
-                    <div className="relative">
-                        <img src={orangeCircle}></img>
-                        <div className="absolute top-4 left-7">Total</div>
-                    </div>
-                </div>
-                <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-4 content-right">
-                    {productsPriceTotal + shippingCost}€
-                </div>
-            </div>
-            <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800]"} />
-        </>
-    )
-}
-
-function displayAllProductsOnReceipt(products, nbProdInCart) {
-    const rows = []
-    if (nbProdInCart <= 5) {
-        rows.push(products.map((product) => (displayProductOnReceipt(product))))
-        for(let i = nbProdInCart; i < 5; i++) {
-            rows.push(displayEmptySlotProduct())
-        }
-    }
-    else {
-        rows.push(products.slice(0, 5).map((product) => (displayProductOnReceipt(product))))
-    }
-    return rows
-}
-
-function Cart() {
-    const [nbProdInCart, setNbProdInCart] = useState(productsInCart.length)
 
     return (
         <>
             {/* TITLE */}
-            <div className=" ml-10 mb-6">
+            <div className="ml-10 mb-6">
                 <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
                 <img src={orangeLine}></img>
             </div>
 
             <div>
                 <img className="absolute top-10 right-20 w-[30%]" src={blueRayonShape}></img>
-                <img className="absolute bottom-40 left-28 w-[20%]" src={orangeShape}></img>
+                <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
                 <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                {/* RECEIPT SECTION */}
+                    {/* RECEIPT SECTION */}
                     {/* PRODUCTS IN CART */}
                     <div className="m-10">
                         <a className="text-[#3435FF] m-10"></a>
-                        <div className="grid grid-rows-5 text-[#3435FF] m-5">
-                            {displayAllProductsOnReceipt(productsInCart, nbProdInCart)}
+                        <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
+                            {productsInCart.map((product) => (displayProductOnReceipt(product)))}
                         </div>
                     </div>
 
                     {/* INFO ON CART */}
                     <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
-                        {displayInfoOnCart({ productsInCart })}
+                        {displayInfoOnCart(productsInCart)}
                     </div>
                 </div>
             </div>
