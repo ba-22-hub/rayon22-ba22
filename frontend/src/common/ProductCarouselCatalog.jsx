@@ -85,16 +85,16 @@ function ProductCarousel({ data }) {
               <div className="p-4">
 
                 <div className="flex justify-between">
-                  <h3 className="text-[#3435FF] text-3xl font-semibold text-left">{product.salePrice}</h3>
+                  <h3 className="text-[#3435FF] text-3xl font-semibold text-left">{product.salePrice}€</h3>
                   <DisplayButtons product={product}/>
                 </div>
 
-                <h3 className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}</h3>
+                <h3 className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}€</h3>
               </div>
               <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
               <div className="p-4">
                 <p className="text-[#3435FF] text-lg font-semibold">{product.name}</p>
-                <p className="text-[#3435FF] text-xs">{product.weight}, {product.category}</p>
+                <p className="text-[#3435FF] text-xs">{product.weight}g, {product.category}</p>
               </div>
             </div>
           </div>

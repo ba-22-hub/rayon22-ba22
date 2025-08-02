@@ -6,15 +6,17 @@ import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "@common/PageButton.jsx";
 
 // Importing assets
-import receipt from "../assets/Photos/ticket_caisse.png"
-import orangeLine from "../assets/shapes/traitOrange.png"
-import orangeShape from "../assets/shapes/coupCrayonOrange.png"
-import blueRayonShape from "../assets/shapes/rayonsTraitsBleu.png"
-import orangeCircle from "../assets/shapes/cercleOrange.png"
+import receipt from "../assets/Assets/ticket-caisse-ecriture.png"
+import orangeLine from "../assets/Assets/Trait orange.png"
+import orangeShape from "../assets/Assets/Coup crayon orange.svg"
+import blueRayonShape from "../assets/Assets/Rayons traits bleus.svg"
+import orangeCircle from "../assets/Assets/Cercle orange crayon.png"
 import pasta from "../assets/Photos/Tortis.png"
+import rice from "../assets/Photos/Riz.png"
+import lentil from "../assets/Photos/Lentilles.png"
 import bean from "../assets/Photos/Haricot.png"
 import tuna from "../assets/Photos/Thon.png"
-import rice from "../assets/Photos/Riz.png"
+import sponges from "../assets/Photos/Eponges.png"
 
 /**
  * The Cart page.
@@ -29,7 +31,7 @@ const productsInCart = [
         salePrice: "0.05",
         weight: "500",
         category: "féculent",
-        nbInCart: 1,
+        nbInCart: 2,
     },
     {
         name: "Haricot vert extra-fin",
@@ -49,6 +51,33 @@ const productsInCart = [
         category: "conserves",
         nbInCart: 1,
     },
+    {
+        name: "Riz 10 minutes",
+        image: rice,
+        price: "0.50",
+        salePrice: "0.10",
+        weight: "450",
+        category: "féculent",
+        nbInCart: 2,
+    },
+    {
+        name: "Lentilles cuisinées",
+        image: lentil,
+        price: "0.50",
+        salePrice: "0.05",
+        weight: "450",
+        category: "féculent",
+        nbInCart: 2,
+    },
+    {
+        name: "3 gratte éponge",
+        image: sponges,
+        price: "1.50",
+        salePrice: "0.15",
+        weight: "450",
+        category: "hygiène",
+        nbInCart: 2,
+    },
 ];
 
 function displayProductOnReceipt(product) {
@@ -64,6 +93,10 @@ function displayProductOnReceipt(product) {
             if (nbProd > 0) {
                 setNbProd(nbProd - 1)
                 product.nbInCart = nbProd
+            }
+            if (nbProd == 0) {
+                {/* Product removed from the list */ }
+                setNbProdInCart(nbProdInCart - 1)
             }
         }
 
@@ -92,7 +125,7 @@ function displayProductOnReceipt(product) {
     if (nbProd > 0) {
         return (
             <>
-                <div className="grid grid-cols-5 text-[#3435FF] m-5">
+                <div className="grid grid-cols-5 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
                         <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
                     </div>
@@ -110,6 +143,16 @@ function displayProductOnReceipt(product) {
     }
 }
 
+function displayEmptySlotProduct() {
+    {/* Returns an empty slot taking as much space as a product on the receipt */}
+    return (
+        <>
+            <div className="grid grid-cols-5 text-[#3435FF]">
+            </div>
+        </>
+    )
+}
+
 function displayInfoOnCart(products) {
     const productsPriceTotal = Math.round((productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) * 100) / 100
     const productsWeightTotal = Math.round((productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) * 100) / 100000
@@ -117,8 +160,8 @@ function displayInfoOnCart(products) {
 
     return (
         <>
-            <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-10 mb-5 mx-10 text-xs text-rayonorange"} />
-            <div className="grid grid-flow-col grid-rows-6 gris-cols-3 gap-4 text-[#3435FF] ml-10">
+            <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
+            <div className="grid grid-flow-col grid-rows-6 gris-cols-3 gap-4 text-[#3435FF] mx-10">
                 <div className="col-span-2 col-start-1 row-start-1 content-right">
                     Total produits
                 </div>
@@ -143,15 +186,32 @@ function displayInfoOnCart(products) {
                         <div className="absolute top-4 left-7">Total</div>
                     </div>
                 </div>
-                <div className="mt-8 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-4 content-right">
+                <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-4 content-right">
                     {productsPriceTotal + shippingCost}€
                 </div>
             </div>
+            <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800]"} />
         </>
     )
 }
 
+function displayAllProductsOnReceipt(products, nbProdInCart) {
+    const rows = []
+    if (nbProdInCart <= 5) {
+        rows.push(products.map((product) => (displayProductOnReceipt(product))))
+        for(let i = nbProdInCart; i < 5; i++) {
+            rows.push(displayEmptySlotProduct())
+        }
+    }
+    else {
+        rows.push(products.slice(0, 5).map((product) => (displayProductOnReceipt(product))))
+    }
+    return rows
+}
+
 function Cart() {
+    const [nbProdInCart, setNbProdInCart] = useState(productsInCart.length)
+
     return (
         <>
             {/* TITLE */}
@@ -160,18 +220,23 @@ function Cart() {
                 <img src={orangeLine}></img>
             </div>
 
-            {/* RECEIPT SECTION */}
-            {/* RECEIPT */}
-            <div className="absolute inset-0 bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] min-h-screen align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                {/* PRODUCTS IN CART */}
-                <div className="relative m-10">
-                    <a className="grid grid-row-8 text-[#3435FF] m-10"></a>
-                    {productsInCart.map((product) => (displayProductOnReceipt(product)))}
-                </div>
+            <div>
+                <img className="absolute top-10 right-20 w-[30%]" src={blueRayonShape}></img>
+                <img className="absolute bottom-40 left-28 w-[20%]" src={orangeShape}></img>
+                <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
+                {/* RECEIPT SECTION */}
+                    {/* PRODUCTS IN CART */}
+                    <div className="m-10">
+                        <a className="text-[#3435FF] m-10"></a>
+                        <div className="grid grid-rows-5 text-[#3435FF] m-5">
+                            {displayAllProductsOnReceipt(productsInCart, nbProdInCart)}
+                        </div>
+                    </div>
 
-                {/* INFO ON CART */}
-                <div className="absolute inset-x-0 text-xl h-16 ml-10">
-                    {displayInfoOnCart({ productsInCart })}
+                    {/* INFO ON CART */}
+                    <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
+                        {displayInfoOnCart({ productsInCart })}
+                    </div>
                 </div>
             </div>
         </>
