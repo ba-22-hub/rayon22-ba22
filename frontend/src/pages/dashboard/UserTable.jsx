@@ -1,9 +1,12 @@
 // Importing dependencies
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
+import { deleteUser } from '@lib/deleteUser';
+import { patchUser } from '@lib/patchUser';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
+import { UNSAFE_createClientRoutesWithHMRRevalidationOptOut } from 'react-router-dom';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -11,15 +14,18 @@ const UserTable = () => {
   const [expanded, setExpanded] = useState(null);
   const [editMode, setEditMode] = useState(null);
   const [editedUser, setEditedUser] = useState({});
+  const [update, setUpdate] = useState(true)
 
   useEffect(() => {
     const fetchUsers = async () => {
       const { data, error } = await supabase.from('User').select('*');
       if (error) console.error('Erreur de chargement des utilisateurs :', error);
-      else setUsers(data);
+      else 
+        setUsers(data);
+        console.log(data)
     };
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [update]);
 
   const filteredUsers = users.filter(user =>
     `${user.firstName} ${user.lastName} ${user.email} ${user.phone}`
@@ -44,14 +50,19 @@ const UserTable = () => {
 
   const handleValidate = () => {
     console.log('User modifié :', editedUser);
-    setEditMode(null);
-    // TODO: Appel supabase update
+    patchUser(editMode, editedUser)
+      .then(()=>setUpdate(!update))
+      .then(()=>setEditMode(null))
+
   };
 
   const handleDelete = (id) => {
     console.log('Suppression utilisateur :', id);
-    // TODO: Appel supabase delete
-  };
+    deleteUser(id)
+      .then(() => console.log("Supression effectuée !"))
+      .then(() => setUpdate(!update))
+      .catch((e) => console.error("Une erreur est survenue : ", e))
+    };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

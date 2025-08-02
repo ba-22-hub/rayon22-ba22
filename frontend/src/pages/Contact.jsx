@@ -54,25 +54,42 @@ function Contact() {
 
         const name = formData.file ? `${Date.now()}_${formData.file.name}` : null;
 
-        // creating the message object
-        const newMessage = {
-          user_id: '5bdcb168-8f30-46d6-a723-84dac0065514', // This will be set later
-          message: formData.message,
-          pdf_name: name,
+        let uploadSuccess = true;
+
+        // First step : Upload the PDF file if it exists
+        if (formData.file) {
+            const { success, error } = await uploadPDF(formData.file, name);
+
+            if (!success) {
+                console.error("❌ Upload échoué :", error);
+                alert("Erreur lors de l'upload du fichier PDF.");
+                uploadSuccess = false;
+            }
         }
 
-        // storing the message in the table and the file in the Supabase storage
+        if (!uploadSuccess) return;
+
+        // Second step : Insert the message into the database
+        const newMessage = {
+            user_id: '5bdcb168-8f30-46d6-a723-84dac0065514', // Replace with actual user ID
+            message: formData.message,
+            pdf_name: name,
+        };
+
         const { error: insertError } = await supabase
-					.from('Messages')
-					.insert([newMessage]);
+            .from('Messages')
+            .insert([newMessage]);
 
-				if (insertError) {
-					console.error("Erreur lors de l'insertion :", insertError.message);
-					return;
-				}
-        formData.file ? uploadPDF(formData.file):
-        console.log("Message inséré avec succès !\n", newMessage);
+        if (insertError) {
+            console.error("❌ Erreur lors de l'insertion :", insertError.message);
+            alert("Erreur lors de l'envoi du message.");
+            return;
+        }
 
+        console.log("✅ Message inséré avec succès !", newMessage);
+
+        // Third step: Reset the form
+        
         // resets the inputs and formData to blank
         setFormData({
             message: '',

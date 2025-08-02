@@ -1,5 +1,10 @@
+// Importing dependencies
 import { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient';
+import { openPDF } from '@lib/openPDF.js';
+import { deletePDF } from '@lib/deletePDF';
+
+// Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
 
 function MessagesDashboard() {
@@ -48,7 +53,13 @@ function MessagesDashboard() {
   };
 
   const handleDelete = async (id) => {
-    const { error } = await supabase.from('Messages').delete().eq('id', id);
+    const fileName = messages.find(msg => msg.id === id)?.pdf_name;
+    console.log('Suppression du message avec ID:', id, 'et fichier:', fileName);
+    deletePDF(fileName)
+    const { data, error } = await supabase
+      .from('Messages')
+      .delete()
+      .eq('id', id);
     if (error) {
       console.error('Erreur de suppression:', error);
     } else {
@@ -59,6 +70,7 @@ function MessagesDashboard() {
   const handleDownloadPDF = (pdfName) => {
     console.log('Ouverture de:', pdfName);
     // Open the PDF in a new tab
+    openPDF(pdfName, 10);
   };
 
   return (
