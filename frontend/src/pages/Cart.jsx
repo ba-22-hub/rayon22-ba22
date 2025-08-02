@@ -101,7 +101,7 @@ const productsInCart = [
 
 function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
-    const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)) / 1000)
+    const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const shippingCost = 1
 
     function roundTwoDigits(nb) {
@@ -115,13 +115,13 @@ function Cart() {
             const AddToCart = () => {
                 setNbProd(nbProd + 1)
                 setProductsPriceTotal(roundTwoDigits(productsPriceTotal + product.salePrice))
-                setProductsWeightTotal(roundTwoDigits(productsWeightTotal + product.salePrice))
+                setProductsWeightTotal(roundTwoDigits(productsWeightTotal + product.weight))
                 product.nbInCart = nbProd
             }
 
             const RemoveFromCart = () => {
                 setProductsPriceTotal(roundTwoDigits(productsPriceTotal - product.salePrice))
-                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.salePrice))
+                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.weight))
                 if (nbProd > 0) {
                     setNbProd(nbProd - 1)
                     product.nbInCart = nbProd
@@ -191,7 +191,7 @@ function Cart() {
                         Poids total du colis
                     </div>
                     <div className="col-span-1 col-start-3 row-start-2 content-right">
-                        {productsWeightTotal}kg
+                        {productsWeightTotal / 1000}kg
                     </div>
                     <div className="col-span-2 col-start-1 row-start-3 content-right">
                         Frais de transport
