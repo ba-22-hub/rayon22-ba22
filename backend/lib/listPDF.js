@@ -1,0 +1,18 @@
+import { supabase } from './supabaseClient.js'
+
+/** * Lists PDF files in the Supabase storage bucket.
+ * @returns {Promise<void>} Logs the list of files or an error if the operation fails
+ */
+async function listPDF() {
+    const { data, error } = await supabase.storage
+        .from('documents')
+        .list('', { limit: 100 })
+
+    if (error) {
+        console.error('Erreur lors de la lecture du bucket :', error.message)
+    } else {
+        console.log('Fichiers dans le bucket :', data)
+    }
+}
+
+export { listPDF };

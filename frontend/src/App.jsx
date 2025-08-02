@@ -8,8 +8,11 @@ import {
   Outlet,
 } from "react-router-dom";
 
+import { useAuthor } from "./context/AuthorContext.jsx";
+
 // Importing the style
 import './styles/navbar.css'
+
 
 // Importing assets
 import rayonLogo from "./assets/logos/roundLogo.png"
@@ -30,6 +33,10 @@ import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
 import Account from "./pages/Account.jsx";  
+import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
+import UserTable from "./pages/dashboard/UserTable.jsx";  
+import ProductTable from "./pages/dashboard/ProductTable.jsx";
+import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 
 // Importing common components
 import Footer from "./common/Footer.jsx";
@@ -39,6 +46,7 @@ import Footer from "./common/Footer.jsx";
  * @returns {React.ReactElement} App component.
  */
 function App() {
+    const {user} = useAuthor()
     return (
       <div className="min-h-screen bg-[#FEF7F1]">
         <Router>
@@ -80,7 +88,7 @@ function App() {
                   <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
                     S'inscrire
                   </Link>
-                  <Link to="/login" className="flex-shrink-0">
+                  <Link to={`${user ? '/account' : '/login'}`} className="flex-shrink-0">
                     <div className="bg-[#FF8200] p-1 rounded-lg h-10 w-10 flex items-center justify-center">
                       <img src={avatar} alt="User avatar" className="h-8 w-8 rounded-full" />
                     </div>
@@ -104,6 +112,13 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/register" element={<Register />} />
             <Route path="/sponsor" element={<Sponsor />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/dashboard/admin-login" element={<AdminLogin />} />
+            <Route path="/dashboard/user-table" element={<UserTable />} />
+            <Route path="/dashboard/product-table" element={<ProductTable/>} />
+            <Route path="/dashboard/messages" element={<MessagesDashboard />} />
+            {/* Redirecting to Error404 page if the route does not exist */}
+            <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />
           </Routes>
         </Router>
 
