@@ -4,12 +4,14 @@ async function deletePDF(fileName){
     console.log("API call, deleting : ", fileName)
     const {data , error} = await supabase.storage
         .from('documents')
-        .remove(fileName)
+        .remove([fileName])
 
-    if (uploadError) {
-        console.error('Erreur lors de lal supression :', uploadError.message);
+    if (error) {
+        console.error('Erreur lors de lal supression :', error.message);
         return null;
     }
+    console.log(data)
+    return data
     
 }
 export {deletePDF}
