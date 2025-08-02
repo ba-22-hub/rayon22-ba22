@@ -71,11 +71,14 @@ function App() {
                     <Link to="/how-it-works" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                       Comment ça marche ?
                     </Link>
+                    <Link to="/more" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Toujours plus
+                    </Link>
                     <Link to="/catalog" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                       Nos produits
                     </Link>
-                    <Link to="/more" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
-                      Toujours plus
+                    <Link to="/cart" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                      Mon panier
                     </Link>
                     <Link to="/contact" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                       Nous contacter
