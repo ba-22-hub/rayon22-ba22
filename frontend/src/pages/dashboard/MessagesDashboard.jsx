@@ -1,5 +1,9 @@
+// Importing dependencies
 import { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient';
+import { openPDF } from '@lib/openPDF.js';
+
+// Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
 
 function MessagesDashboard() {
@@ -59,6 +63,7 @@ function MessagesDashboard() {
   const handleDownloadPDF = (pdfName) => {
     console.log('Ouverture de:', pdfName);
     // Open the PDF in a new tab
+    openPDF(pdfName, 10);
   };
 
   return (
