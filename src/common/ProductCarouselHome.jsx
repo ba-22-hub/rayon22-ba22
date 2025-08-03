@@ -28,7 +28,7 @@ function ProductCarousel({ data }) {
               <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
               <div className="p-4">
                 <h3 className="text-[#3435FF] text-lg font-semibold mb-2">{product.name}</h3>
-                <p className="text-gray-500 line-through">{product.price}€</p>
+                <p className="text-gray-500 line-through">{product.price || ''}€</p>
                 <p className="text-rayonorange text-xl font-bold">{product.salePrice}€</p>
               </div>
             </div>
