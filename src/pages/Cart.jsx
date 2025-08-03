@@ -103,12 +103,12 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const shippingCost = 1
-
+    
     function roundTwoDigits(nb) {
-        return Math.round(nb*100)/100
+        return Math.round(nb * 100) / 100
     }
 
-    function displayProductOnReceipt(product) {
+    function displayProductOnReceipt(product, idx) {
         const [nbProd, setNbProd] = useState(product.nbInCart)
 
         function DisplayButtons({ product }) {
@@ -156,21 +156,19 @@ function Cart() {
 
         if (nbProd > 0) {
             return (
-                <>
-                    <div className="grid grid-cols-5 text-[#3435FF]">
-                        <div className="col-span-1 col-start-1 content-center">
-                            <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
-                        </div>
-                        <div className="col-span-3 col-start-2 content-center">
-                            <p className="text-2xl font-semibold">{product.name}</p>
-                            <p className="text-s">{product.weight}g, {product.category}</p>
-                            <DisplayButtons product={product} />
-                        </div>
-                        <div className="col-span-1 col-start-5 content-center">
-                            <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
-                        </div>
+                <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
+                    <div className="col-span-1 col-start-1 content-center">
+                        <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
                     </div>
-                </>
+                    <div className="col-span-3 col-start-2 content-center">
+                        <p className="text-2xl font-semibold">{product.name}</p>
+                        <p className="text-s">{product.weight}g, {product.category}</p>
+                        <DisplayButtons product={product} />
+                    </div>
+                    <div className="col-span-1 col-start-5 content-center">
+                        <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
+                    </div>
+                </div>
             )
         }
     }
@@ -223,7 +221,7 @@ function Cart() {
             </div>
 
             <div>
-                <img className="absolute top-10 right-20 w-[30%]" src={blueRayonShape}></img>
+                <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                 <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
                 <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
                     {/* RECEIPT SECTION */}
@@ -231,7 +229,7 @@ function Cart() {
                     <div className="m-10">
                         <a className="text-[#3435FF] m-10"></a>
                         <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
-                            {productsInCart.map((product) => (displayProductOnReceipt(product)))}
+                            {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                         </div>
                     </div>
 
