@@ -51,15 +51,14 @@ function Contact() {
 	async function handleSubmit(e) {
 		e.preventDefault();
 
-		const name = formData.file ? `${user.id}_${Date.now()}_${formData.file.name}` : null;
+		const name = formData.file ? `${Date.now()}_${formData.file.name}` : null;
 
 		let uploadSuccess = true;
 
 		// First step : Upload the PDF file if it exists
 		if (formData.file) {
-			const {success, error} = uploadPDF(formData.file, name, "messages")
-			alert("Le fichier " + file.name + "a bien été envoyé")
-			setFile(null)
+			const {success, error} = await uploadPDF(formData.file, name, "messages")
+			
 			if (!success) {
 				console.error("❌ Upload échoué :", error);
 				alert("Erreur lors de l'upload du fichier PDF.");
@@ -67,6 +66,7 @@ function Contact() {
 			}
 		}
 
+		console.log(uploadSuccess)
 		if (!uploadSuccess) return;
 
 		// Second step : Insert the message into the database
