@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
@@ -35,6 +35,9 @@ function Account() {
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
     const { user, logout, loading } = useAuthor()
+
+    const fileInputRef = useRef(null);
+
 
     // options for the radio buttons when the edit mod is enable
     const genderOptions = ["Homme", "Femme", "Autre"]
@@ -131,10 +134,45 @@ function Account() {
         console.log(incomingFile.name)
     }
 
-    function handleFileSubmit() {
-        uploadPDF(file, `${user.id}_${Date.now()}_${file.name}`, "requests")
-        alert("Le fichier " + file.name + "a bien été envoyé")
+    async function handleFileSubmit() {
+        // 1) upload the file 
+        const uploadSuccess = true
+        const name = `${Date.now()}_${file.name}`
+        const { success, error } = await uploadPDF(file, name, "requests")
+        if (!success) {
+            console.error("❌ Upload échoué :", error);
+            alert("Erreur lors de l'upload du fichier PDF.");
+            uploadSuccess = false;
+        }
+
+        // 2) if the file has been uploaded, add the request in the db 
+        if (!uploadSuccess) return;
+
+        const newRequest = {
+            user_id: user.id,
+            pdf_name: name,
+        };
+
+        const { error: insertError } = await supabase
+            .from('Requests')
+            .insert([newRequest]);
+
+        if (insertError) {
+            console.error("❌ Erreur lors de l'insertion :", insertError.message);
+            alert("Erreur lors de l'envoi de la requête.");
+            return;
+        }
+
+        console.log("✅ Requetes inséré avec succès !", newRequest);
+
+        // manually emptying the file field
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
         setFile(null)
+
+        alert("La requête à bien été prise en compte ! ")
+
     }
 
     function handleDeconnection() {
@@ -187,7 +225,7 @@ function Account() {
 
     return (
         <>
-            {loading || ! clientEdit ? (
+            {loading || !clientEdit ? (
                 <p>Chargement des données... </p>
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
@@ -235,6 +273,7 @@ function Account() {
                                 onChange={handleFileSelection}
                                 accept=".pdf"
                                 name="fileSelector"
+                                ref={fileInputRef}
                             ></input>
                             <button
                                 className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"

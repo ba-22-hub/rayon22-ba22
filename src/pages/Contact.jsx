@@ -2,8 +2,6 @@
 import { useState, useRef } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
-import { getSignedPDFUrl } from '@lib/getPDF.js';
-import { listPDF } from '@lib/listPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 
 // Importing common components
@@ -66,12 +64,11 @@ function Contact() {
 			}
 		}
 
-		console.log(uploadSuccess)
 		if (!uploadSuccess) return;
 
 		// Second step : Insert the message into the database
 		const newMessage = {
-			user_id: user.id, // Replace with actual user ID
+			user_id: user.id,
 			message: formData.message,
 			pdf_name: name,
 		};
