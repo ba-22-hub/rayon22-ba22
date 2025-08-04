@@ -2,12 +2,12 @@ import { supabase } from '@lib/supabaseClient.js';
 
 
 // durée de base : 10*60s = 10min 
-async function openPDF(fileName, expiresIn = 10) {
+async function openPDF(fileName ,expiresIn = 10, folder = null) {
     console.log("tentative d'ouverture du fichier : ", fileName)
 
     const { data, error } = await supabase.storage
         .from('documents')
-        .createSignedUrl(fileName, expiresIn * 60)
+        .createSignedUrl(folder ? `${folder}/${fileName}` : fileName, expiresIn * 60)
 
     if (error) {
         console.error("Une erreur est survenue lors de la génération de l'URL : ", error)

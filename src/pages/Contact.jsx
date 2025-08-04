@@ -2,8 +2,6 @@
 import { useState, useRef } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
-import { getSignedPDFUrl } from '@lib/getPDF.js';
-import { listPDF } from '@lib/listPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 
 // Importing common components

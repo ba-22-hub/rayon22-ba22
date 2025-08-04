@@ -88,7 +88,7 @@ function MessagesDashboard() {
   const handleDownloadPDF = (pdfName) => {
     console.log('Ouverture de:', pdfName);
     // Open the PDF in a new tab
-    openPDF(pdfName, 10);
+    openPDF(pdfName, 10, "messages");
   };
 
   return (
