@@ -132,15 +132,9 @@ function Account() {
     }
 
     function handleFileSubmit() {
-        const formData = new FormData()
-        formData.append('file', file)
-        // fetch('url', {
-        //     method : 'POST', 
-        //     body : formData
-        // })
-        console.log("Fichier uploadé : ", formData)
-        uploadPDF(file)
+        uploadPDF(file, `${user.id}_${Date.now()}_${file.name}`, "requests")
         alert("Le fichier " + file.name + "a bien été envoyé")
+        setFile(null)
     }
 
     function handleDeconnection() {
