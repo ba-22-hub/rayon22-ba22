@@ -24,6 +24,7 @@ function RequestsDashboard() {
         created_at,
         pdf_name,
         User: user_id (
+          id, 
           firstName,
           lastName,
           email
@@ -62,9 +63,33 @@ function RequestsDashboard() {
     };
 
     // Function to handle approval and deletion of the request
-    const handleApprove = async (id) => {
-        console.log(`Approbation de la demande ${id}`);
-        handleDelete(id);
+    const handleApprove = async (id, user_id) => {
+        console.log(`Approbation de la demande ${id} de : ${user_id}`);
+        // updated user informations
+        try {
+            // Date + 1 year
+            const endDate = new Date();
+            endDate.setFullYear(endDate.getFullYear() + 1);
+
+            // update
+            const { data, error } = await supabase
+                .from('User')
+                .update({
+                    has_right: true,
+                    end_right: endDate.toISOString() // format compatible PostgreSQL
+                })
+                .eq('id', user_id)
+                .select();
+
+            if (error) {
+                console.error("Erreur lors de la mise à jour des droits :", error.message);
+            } else {
+                handleDelete(id);
+            }
+        } catch (err) {
+            console.error("Erreur inattendue :", err.message);
+        }
+
     }
 
     // Function to handle decline and deletion of the request
@@ -102,7 +127,7 @@ function RequestsDashboard() {
 
                             <div className="mt-3 flex space-x-2">
                                 <button
-                                    onClick={() => handleApprove(req.id)}
+                                    onClick={() => handleApprove(req.id, req.User.id)}
                                     className="bg-green hover:bg-green text-white px-4 py-2 rounded"
                                 >
                                     Accepter

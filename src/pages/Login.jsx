@@ -86,6 +86,7 @@ function Login() {
 					quotient: parsedData.step2.quotient,
 					wageType: parsedData.step2.wageType,
 					otherWage: parsedData.step2.otherWage,
+					has_right : false, 
 				};
 
 				const { error: insertError } = await supabase

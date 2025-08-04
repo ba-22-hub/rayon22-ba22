@@ -34,6 +34,7 @@ function Account() {
     const [clientEdit, setClientEdit] = useState(null)
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
+    const [activeRequests, setActiveRequest] = useState(false)
     const { user, logout, loading } = useAuthor()
 
     const fileInputRef = useRef(null);
@@ -70,7 +71,27 @@ function Account() {
                 console.error("Erreur inattendue:", error.message);
             }
         }
+        const checkRequest = async () => {
+            try {
+                console.log("Checking requests ...")
+                const { data, error : dberror } = await supabase
+                    .from('Requests')
+                    .select('id') // optimisation
+                    .eq('user_id', user.id)
+                    .limit(1); // no need to reseach several requests
+
+                if (dberror && dberror.code !== 'PGRST116') {
+                    console.error("Erreur lors de la vérification des requêtes :", dberror.message);
+                    return;
+                }
+                console.log("request found : ", data)
+                setActiveRequest(data.length > 0) 
+            } catch (error) {
+                console.error("Erreur inattendue:", error.message);
+            }
+        }
         fetchUserData()
+            .then(()=> checkRequest()) 
     }, [user])
 
 
@@ -166,11 +187,11 @@ function Account() {
         console.log("✅ Requetes inséré avec succès !", newRequest);
 
         // manually emptying the file field
-		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
-		}
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
         setFile(null)
-
+        setActiveRequest(false)
         alert("La requête à bien été prise en compte ! ")
 
     }
@@ -260,12 +281,15 @@ function Account() {
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
+                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right?(`${client.end_right}`) : ("Compte invalide")}</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                        { activeRequests ? (
+                            <p>Une requête est en cours de traitement...</p>
+                        ): (
                         <div className="flex flex-row">
                             <input
                                 className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
@@ -279,7 +303,7 @@ function Account() {
                                 className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
                                 onClick={handleFileSubmit}
                             >Valider 🗸</button>
-                        </div>
+                        </div>)}
                     </div>
                     {!editing ? (
                         <button
