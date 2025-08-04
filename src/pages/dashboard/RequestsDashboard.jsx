@@ -58,7 +58,7 @@ function RequestsDashboard() {
     // Functioon to open the PDF file in a new tab
     const handleDownloadPDF = (pdfName) => {
         console.log('Ouverture de:', pdfName);
-        openPDF(pdfName, 10);
+        openPDF(pdfName, 10, "requests");
     };
 
     // Function to handle approval and deletion of the request
