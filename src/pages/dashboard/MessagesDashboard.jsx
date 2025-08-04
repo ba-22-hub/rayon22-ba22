@@ -31,7 +31,6 @@ function MessagesDashboard() {
         email
       )
     `)
-      .eq('replied', false)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -68,7 +67,7 @@ function MessagesDashboard() {
   } catch (error) {
     console.error('Erreur d’envoi :', error);
   }
-  // handleDelete(id); // Delete the message after sending the reply
+  handleDelete(id); // Delete the message after sending the reply
   };
 
   const handleDelete = async (id) => {
