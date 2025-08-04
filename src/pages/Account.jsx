@@ -281,7 +281,7 @@ function Account() {
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
+                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right?(`${client.end_right}`) : ("Compte invalide")}</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                     </div>
