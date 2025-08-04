@@ -270,7 +270,7 @@ function Account() {
                             {renderField("Adresse", "address")}
                             {renderField("Précisions", "addAddress")}
                             {renderField("Ville", "city")}
-                            {renderField("Code postal", "phone")}
+                            {renderField("Code postal", "postalCode")}
                         </div>
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
