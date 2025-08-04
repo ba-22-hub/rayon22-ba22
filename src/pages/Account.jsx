@@ -191,7 +191,7 @@ function Account() {
             fileInputRef.current.value = '';
         }
         setFile(null)
-
+        setActiveRequest(false)
         alert("La requête à bien été prise en compte ! ")
 
     }
