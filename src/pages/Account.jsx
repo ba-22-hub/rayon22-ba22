@@ -131,10 +131,37 @@ function Account() {
         console.log(incomingFile.name)
     }
 
-    function handleFileSubmit() {
-        uploadPDF(file, `${user.id}_${Date.now()}_${file.name}`, "requests")
-        alert("Le fichier " + file.name + "a bien été envoyé")
-        setFile(null)
+    async function handleFileSubmit() {
+        // 1) upload the file 
+        const uploadSuccess = true
+        const name = `${Date.now()}_${file.name}`
+        const {success, error} = await uploadPDF(file, name, "requests")
+        if (!success) {
+				console.error("❌ Upload échoué :", error);
+				alert("Erreur lors de l'upload du fichier PDF.");
+				uploadSuccess = false;
+			}
+
+        // 2) if the file has been uploaded, add the request in the db 
+        if (!uploadSuccess) return;
+        
+                const newRequest = {
+                    user_id: user.id, 
+                    pdf_name: name,
+                };
+        
+                const { error: insertError } = await supabase
+                    .from('Requests')
+                    .insert([newRequest]);
+        
+                if (insertError) {
+                    console.error("❌ Erreur lors de l'insertion :", insertError.message);
+                    alert("Erreur lors de l'envoi de la requête.");
+                    return;
+                }
+        
+                console.log("✅ Requetes inséré avec succès !", newRequest);
+        
     }
 
     function handleDeconnection() {

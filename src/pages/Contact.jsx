@@ -64,12 +64,11 @@ function Contact() {
 			}
 		}
 
-		console.log(uploadSuccess)
 		if (!uploadSuccess) return;
 
 		// Second step : Insert the message into the database
 		const newMessage = {
-			user_id: user.id, // Replace with actual user ID
+			user_id: user.id,
 			message: formData.message,
 			pdf_name: name,
 		};
