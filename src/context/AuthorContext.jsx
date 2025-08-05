@@ -11,6 +11,19 @@ user : current session,
     /=> user.id is needed to interact with the db 
 setUser : to change the session
 logout : to end the session
+loading : true if al the informations aren't loaded
+hasRight : if the user has the right to order
+isAdmin : if the user is Admin
+
+
+/!\ if the page needs 'has_right' or 'isAdmin' it needs to improve the "useEffect" of the page : 
+    useEffect(() => {
+        if (loading) return ; // the page needs all the informations to start
+
+        {rest of the useEffect}
+
+        }, [.... , loading]) // useEffect trigger again when all is loaded
+
 */
 
 
