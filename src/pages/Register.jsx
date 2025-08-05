@@ -84,7 +84,7 @@ function Register() {
             return;
         }
 
-        // Saving locally the user info too use it after the mail verification
+        // Saving locally the user info to use it after the mail verification
         localStorage.setItem("pendingUserData", JSON.stringify(formData));
 
         changepage(4); // go to the confirmation step
