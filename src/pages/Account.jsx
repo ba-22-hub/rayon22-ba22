@@ -28,9 +28,6 @@ function Account() {
     useEffect(() => {
         console.log("useeffect account÷ ", loading, hasRights, isAdmin)
         if (loading) return;      // ⛔ on sort tant que ça charge
-        if (!user) return;        // ⛔ pas encore connecté
-        if (hasRights === null) return; // ⛔ info pas encore reçue
-        if (isAdmin === null) return;   // ⛔ info pas encore reçue
         const fetchUserData = async () => {
             try {
                 // retrieving user's data
@@ -75,7 +72,7 @@ function Account() {
         console.log("rights ? : ", hasRights, "   admin ? : ", isAdmin)
         fetchUserData()
             .then(()=> checkRequest()) 
-    }, [loading, user, isAdmin, hasRights])
+    }, [loading])
 
 
 

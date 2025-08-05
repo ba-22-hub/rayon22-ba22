@@ -26,23 +26,40 @@ function AuthorProvider({ children }) {
 
     // check if a session is already open
     useEffect(() => {
-        const fetchSession = async () => {
-            const { data } = await supabase.auth.getSession();
-            const currentUser = data.session?.user ?? null;
-            setUser(currentUser);
+        async function initAuth() {
+            try {
+                const { data: sessionData } = await supabase.auth.getSession();
+                const currentUser = await sessionData.session?.user ?? null;
+                setUser(currentUser);
 
-            if (currentUser) {
-                await Promise.all([
-                    checkAdmin(currentUser.id),
-                    checkRights(currentUser.id)
+                if (!currentUser) {
+                    // Pas connecté
+                    setHasRights(false);
+                    setIsAdmin(false);
+                    setLoading(false);
+                    return;
+                }
+
+                // Lancer les deux requêtes en parallèle
+                const [rightsRes, adminRes] = await Promise.all([
+                    supabase.from("User").select("has_right").eq("id", currentUser.id).single(),
+                    supabase.from("Admins").select("id").eq("id", currentUser.id).single(),
                 ]);
+
+                // Gestion des droits
+                setHasRights(rightsRes.data?.has_right ?? false);
+
+                // Gestion de l'admin
+                setIsAdmin(!!adminRes.data);
+
+            } catch (err) {
+                console.error("Erreur init auth :", err);
+            } finally {
+                setLoading(false);
             }
+        }
 
-            setLoading(false);
-        };
-
-        fetchSession();
-
+        initAuth();
         const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
             setUser(session?.user ?? null);
         });
@@ -62,6 +79,7 @@ function AuthorProvider({ children }) {
 
 
     async function checkRights(uid) {
+        const rights = null 
         try {
             const { data, error } = await supabase
                 .from('User')
@@ -72,9 +90,11 @@ function AuthorProvider({ children }) {
             if (error) {
                 console.error("Erreur lors de la récupération du droit utilisateur :", error.message);
             }
-            setHasRights(data?.has_right)
+            rights = data
         } catch (err) {
             console.error("Erreur inattendue :", err.message);
+        } finally {
+            return rights?.has_right
         }
     }
 
