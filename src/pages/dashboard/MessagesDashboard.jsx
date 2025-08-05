@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
-import { sendReply } from '@lib/sendReply.js';
+import sendReply from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';

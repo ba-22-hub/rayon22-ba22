@@ -1,24 +1,23 @@
 // Importing dependencies
 import sendMail from '@lib/sendMail.js';
 
-const templateID = 'template_t2ldyj5';
+const templateID = 'template_k4m4rco';
 
-function sendReply({ email, name, reply }) {
+function sendNotification({ email, name }) {
     const templateParams = {
         email: email,
-        ame: name,
-        message: reply
+        name: name,
     };
 
     return sendMail(templateID, templateParams)
         .then(response => {
-            console.log('Reply sent successfully:', response);
+            console.log('Notification sent successfully:', response);
             return response;
         })
         .catch(error => {
-            console.error('Error sending reply:', error);
+            console.error('Error sending notification:', error);
             throw error;
         });
 }
 
-export default sendReply;
+export default sendNotification;

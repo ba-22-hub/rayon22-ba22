@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { deleteUser } from '@lib/deleteUser';
 import { patchUser } from '@lib/patchUser';
+import sendNotification from '@lib/sendNotification.js';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -16,13 +17,55 @@ const UserTable = () => {
   const [editedUser, setEditedUser] = useState({});
   const [update, setUpdate] = useState(true)
 
+  let isNotifying = false;
+
   useEffect(() => {
+
+    const notifyUsers = async () => {
+      if (isNotifying) return;
+      isNotifying = true;
+
+      const { data, error } = await supabase
+        .from('User')
+        .select('id, email, firstName')
+        .eq('should_notify', true)
+        .eq('notified', false);
+
+      if (error) {
+        console.error('Erreur lors de la récupération des utilisateurs à notifier:', error);
+        return;
+      }
+
+      for (const user of data) {
+        try {
+          await sendNotification({
+            email: user.email,
+            name: user.firstName,
+          });
+
+          const { error: updateError } = await supabase
+            .from('User')
+            .update({ should_notify: false, notified: true })
+            .eq('id', user.id);
+
+          if (updateError) {
+            console.error(`Erreur lors de la mise à jour de l'utilisateur ${user.id}:`, updateError);
+          } else {
+            console.log(`Notification envoyée à ${user.email}`);
+          }
+        } catch (err) {
+          console.error(`Erreur lors de l'envoi de la notification à ${user.email}:`, err);
+        }
+      }
+    };
+    notifyUsers();
+
     const fetchUsers = async () => {
       const { data, error } = await supabase.from('User').select('*');
       if (error) console.error('Erreur de chargement des utilisateurs :', error);
-      else 
+      else
         setUsers(data);
-        console.log(data)
+      console.log(data)
     };
     fetchUsers()
   }, [update]);
@@ -51,8 +94,8 @@ const UserTable = () => {
   const handleValidate = () => {
     console.log('User modifié :', editedUser);
     patchUser(editMode, editedUser)
-      .then(()=>setUpdate(!update))
-      .then(()=>setEditMode(null))
+      .then(() => setUpdate(!update))
+      .then(() => setEditMode(null))
 
   };
 
@@ -62,7 +105,7 @@ const UserTable = () => {
       .then(() => console.log("Supression effectuée !"))
       .then(() => setUpdate(!update))
       .catch((e) => console.error("Une erreur est survenue : ", e))
-    };
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
