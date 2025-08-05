@@ -13,7 +13,7 @@ function Account() {
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
     const [activeRequests, setActiveRequest] = useState(false)
-    const { user, logout, loading, hasRights, isAdmin } = useAuthor()
+    const { user, logout} = useAuthor()
 
     const fileInputRef = useRef(null);
 
@@ -26,8 +26,7 @@ function Account() {
     let navigate = useNavigate()
 
     useEffect(() => {
-        console.log("useeffect account÷ ", loading, hasRights, isAdmin)
-        if (loading) return;      // ⛔ on sort tant que ça charge
+        if (!user) return ; // to avoid error in the console
         const fetchUserData = async () => {
             try {
                 // retrieving user's data
@@ -69,10 +68,9 @@ function Account() {
                 console.error("Erreur inattendue:", error.message);
             }
         }
-        console.log("rights ? : ", hasRights, "   admin ? : ", isAdmin)
         fetchUserData()
             .then(()=> checkRequest()) 
-    }, [loading])
+    }, [user])
 
 
 
@@ -226,7 +224,7 @@ function Account() {
 
     return (
         <>
-            {loading || !clientEdit ? (
+            { !clientEdit ? (
                 <p>Chargement des données... </p>
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
