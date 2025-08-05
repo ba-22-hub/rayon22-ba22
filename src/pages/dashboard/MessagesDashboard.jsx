@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
-import emailjs from '@emailjs/browser';
+import { sendReply } from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
@@ -57,11 +57,11 @@ function MessagesDashboard() {
   if (!email) return console.error("Aucun email trouvé.");
 
   try {
-    const result = await emailjs.send('service_ebvylqd', 'template_t2ldyj5', {
+    const result = sendReply({
       email: email,
       name: `${firstName} ${lastName}`,
-      message: reply,
-    }, '_QJu22XnilS4i04rg');
+      reply: reply,
+    });
 
     console.log('Email envoyé !', result.text);
   } catch (error) {
