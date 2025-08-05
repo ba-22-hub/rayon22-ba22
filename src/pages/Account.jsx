@@ -7,35 +7,13 @@ import { uploadPDF } from '@lib/sendPDF.js'
 
 
 function Account() {
-    /**
-     * Format attendu pour le client : 
-     * birthday: "0023-09-23"
-     * email: "no@martin.bzh"
-     * firstName: "Nolwenn"
-     * gender: "female"
-     * lastName: "Martin"​​
-     * phone: "0943439843"
-     * acceptTerms: true
-     * addAddress: ""
-     * address: "25 rue de la lune "
-     * city: "Brest"
-     * otherWage: ""
-     * postalCode: "29000"
-     * quotient: "un certain nombre"
-     * readInfo: true
-     * situation: "jobless"​
-     * wageType: undefined
-    */
-
-
-
 
     const [editing, setEditing] = useState(false)
     const [clientEdit, setClientEdit] = useState(null)
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
     const [activeRequests, setActiveRequest] = useState(false)
-    const { user, logout, loading } = useAuthor()
+    const { user, logout, loading, hasRights, isAdmin } = useAuthor()
 
     const fileInputRef = useRef(null);
 
@@ -48,11 +26,15 @@ function Account() {
     let navigate = useNavigate()
 
     useEffect(() => {
+        console.log("useeffect account÷ ", loading, hasRights, isAdmin)
+        if (loading) return;      // ⛔ on sort tant que ça charge
+        if (!user) return;        // ⛔ pas encore connecté
+        if (hasRights === null) return; // ⛔ info pas encore reçue
+        if (isAdmin === null) return;   // ⛔ info pas encore reçue
         const fetchUserData = async () => {
             try {
                 // retrieving user's data
                 const uid = user.id
-                console.log(user)
                 const { data: userdata, error: dberror } = await supabase
                     .from('User')
                     .select('*')
@@ -90,9 +72,10 @@ function Account() {
                 console.error("Erreur inattendue:", error.message);
             }
         }
+        console.log("rights ? : ", hasRights, "   admin ? : ", isAdmin)
         fetchUserData()
             .then(()=> checkRequest()) 
-    }, [user])
+    }, [loading, user, isAdmin, hasRights])
 
 
 

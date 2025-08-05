@@ -11,7 +11,7 @@ user : current session,
     /=> user.id is needed to interact with the db 
 setUser : to change the session
 logout : to end the session
-*/ 
+*/
 
 
 
@@ -19,45 +19,93 @@ const AuthorContext = createContext()
 
 function AuthorProvider({ children }) {
 
+    const [hasRights, setHasRights] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(null)
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     // check if a session is already open
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            setUser(data.session?.user ?? null) // if exists return data.sessions.user, else user = null
-            setLoading(false)
-        })
-        
+        const fetchSession = async () => {
+            const { data } = await supabase.auth.getSession();
+            const currentUser = data.session?.user ?? null;
+            setUser(currentUser);
 
-        // listen author changes 
+            if (currentUser) {
+                await Promise.all([
+                    checkAdmin(currentUser.id),
+                    checkRights(currentUser.id)
+                ]);
+            }
+
+            setLoading(false);
+        };
+
+        fetchSession();
+
         const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-            setUser(session?.user ?? null)
-        })
+            setUser(session?.user ?? null);
+        });
 
-        // when the user close the app 
         return () => {
-            listener.subscription.unsubscribe()
-        }
-        
-    }, [])
+            listener.subscription.unsubscribe();
+        };
+    }, []);
 
-    // logout function 
+    // Fonctions
     const logout = async () => {
-        // closing supabase session
-        await supabase.auth.signOut()
-        setUser(null)
+        await supabase.auth.signOut();
+        setUser(null);
+        setIsAdmin(null);
+        setHasRights(null);
+    };
+
+
+    async function checkRights(uid) {
+        try {
+            const { data, error } = await supabase
+                .from('User')
+                .select('has_right')
+                .eq('id', uid)
+                .single(); // retourne un seul objet au lieu d'un tableau
+
+            if (error) {
+                console.error("Erreur lors de la récupération du droit utilisateur :", error.message);
+            }
+            setHasRights(data?.has_right)
+        } catch (err) {
+            console.error("Erreur inattendue :", err.message);
+        }
+    }
+
+    async function checkAdmin(uid) {
+        try {
+            const { data, error } = await supabase
+                .from('Admins')
+                .select('id')
+                .eq('id', uid)
+                .single(); // retourne un seul objet au lieu d'un tableau
+
+            if (error) {
+                console.error("Erreur lors de la récupération du droit utilisateur :", error.message);
+            }
+
+            setIsAdmin(data ? true : false) // true / false (default : false)
+        } catch (err) {
+            console.error("Erreur inattendue :", err.message);
+        }
     }
 
 
 
     return (
-        <AuthorContext.Provider value={{ user, setUser, logout, loading }}>
+        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin }}>
             {children}
         </AuthorContext.Provider>
     );
 
 }
+
 
 const useAuthor = () => useContext(AuthorContext)
 
