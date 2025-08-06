@@ -45,17 +45,19 @@ function AdminNavbar() {
 }
 
 function AdminApp() {
-  const { isAdmin } = useAuthor()
+  const { isAdmin, loading} = useAuthor()
+  if (loading) return (<p>Chargement... </p>)
   return (
     <div className="min-h-screen bg-gray-100">
       <Router>
         <Routes>
           <Route path="/admin" element={<AdminLogin />} />
           {/* Routes protégées */}
-          <Route
-            path="/admin/*"
-            element={
-              isAdmin ? (
+         {/* Routes protégées */}
+          {isAdmin && (
+            <Route
+              path="/admin/*"
+              element={
                 <>
                   <AdminNavbar />
                   <div className="p-4">
@@ -64,16 +66,18 @@ function AdminApp() {
                       <Route path="products" element={<ProductTable />} />
                       <Route path="messages" element={<MessagesDashboard />} />
                       <Route path="requests" element={<RequestsDashboard />} />
-                      {/* Page 404 visible uniquement par les admins */}
                       <Route path="*" element={<p>404 - Page inconnue</p>} />
                     </Routes>
                   </div>
                 </>
-              ) : (
-                <Navigate to="/admin" replace />
-              )
-            }
-          />
+              }
+            />
+          )}
+
+          {/* Si non-admin et tente d'accéder à une page protégée */}
+          {!isAdmin && (
+            <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
+          )}
         </Routes>
       </Router>
     </div>
