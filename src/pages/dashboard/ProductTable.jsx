@@ -190,33 +190,33 @@ function ProductTable() {
       <FunctionButton
         className="bg-rayonorange  w-[1/2] content-center ml-30 mb-4 text-white px-10 py-1 rounded"
         buttonText={expanded ? 'Annuler' : 'Ajouter un produit'}
-        fun={expanded ? () => setExpanded(false) : () => setExpanded(true)}
+        fun={expanded ? (() => setExpanded(false)) : (() => setExpanded(true))}
       />
       {expanded && (
         <div>
           <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables à l'ajout d'un produit dans la base de données.</p>
           <div className="grid grid-cols-2 gap-4 text-sm mb-4">
             {[
-              ['name', 'Nom', true],
-              ['price', 'Prix en magasin (€)', true],
-              ['salePrice', 'Prix rayon22 (€)', true],
-              ['category', 'Catégorie', false],
-              ['weight', 'Poids (g)', true],
-              ['image_name', 'Poids (g)', true],
-            ].map(([field, label, nullable]) => (
+              ['name', 'Nom', false, "text"],
+              ['price', 'Prix en magasin (€)', false, "number"],
+              ['salePrice', 'Prix rayon22 (€)', false, "number"],
+              ['category', 'Catégorie', true, "text"],
+              ['weight', 'Poids (g)', false, "number"],
+              ['image_name', 'Poids (g)', false, "text"],
+            ].map(([field, label, nullable, type]) => (
               field === 'image_name' ? (
                 <BrowseImage newProduct={true}></BrowseImage>
               ) : (
                 <div key={field}>
                   <FormInput
                     labelClassName="ml-[8%]"
-                    type="text"
+                    type={type}
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
                     inputText={label}
                     name={field}
                     value={formData[field] ?? ""}
                     onChange={handleChangeInForm}
-                    isStarred={nullable ? true : false} />
+                    isStarred={nullable ? false : true} />
                 </div>
               )
             ))}
@@ -292,11 +292,6 @@ function ProductTable() {
                     </td>
                     <td className="p-2">
                       <BrowseImageChange newProduct={false} product={p}></BrowseImageChange>
-                      {/*                       <FunctionButton
-                        className="bg-gray px-2 py-1 rounded"
-                        buttonText="Browse"
-                        fun={browseImage}
-                      /> */}
                     </td>
                     <td className="p-2 space-x-2">
                       <FunctionButton
@@ -319,7 +314,6 @@ function ProductTable() {
                     <td className="p-2">{p["weight"]}</td>
                     <td className="p-2">{p.category}</td>
                     <td className="p-2">
-                      <BrowseImageChange product={p}></BrowseImageChange>
                     </td>
                     <td className="p-2 space-x-2">
                       <FunctionButton
