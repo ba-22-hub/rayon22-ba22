@@ -8,9 +8,9 @@ import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 
-
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
+import Loading from '@common/Loading.jsx';
 
 function MessagesDashboard() {
   const [messages, setMessages] = useState([]);
@@ -20,7 +20,7 @@ function MessagesDashboard() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (loading) return ; // wait for the author informations to be fetch
+    if (loading) return <Loading/>; // wait for the author informations to be fetch
 		if (!isAdmin){
 			navigate('/admin')
 			return;	
