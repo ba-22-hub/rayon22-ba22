@@ -16,6 +16,9 @@ import ProductTable from "./pages/dashboard/ProductTable.jsx";
 import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
 
+// Importing common components
+import PageButton from "./common/PageButton.jsx";
+
 function AdminNavbar() {
   const { logout } = useAuthor();
   const navigate = useNavigate();
@@ -33,12 +36,18 @@ function AdminNavbar() {
         <Link to="/admin/messages" className="hover:underline">Messages</Link>
         <Link to="/admin/requests" className="hover:underline">Demandes</Link>
       </div>
-      <button
-        onClick={handleLogout}
-        className="bg-red hover:bg-red-600 px-4 py-2 rounded-full font-bold"
-      >
-        ⏼
-      </button>
+      <div className="flex items-center space-x-4">
+        <PageButton 
+              buttonText='Rayon' 
+              page='/' 
+              className='w-[60px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-bold hover:bg-orange-600 transition' />
+        <button
+          onClick={handleLogout}
+          className="bg-red hover:bg-red-600 px-4 py-2 rounded-full font-bold"
+        >
+          ⏼
+        </button>
+      </div>
     </nav>
   );
 }
