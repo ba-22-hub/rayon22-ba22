@@ -91,14 +91,13 @@ function AuthorProvider({ children }) {
     };
 
 
-    const checkIsAdmin = async () => {
-        if (!user) return false;
+    const checkIsAdmin = async (userId) => {
 
         try {
             const { data, error } = await supabase
                 .from("Admins")
                 .select("id")
-                .eq("id", user.id)
+                .eq("id", userId)
                 .single();
 
             if (error || !data) {

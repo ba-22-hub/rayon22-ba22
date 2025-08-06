@@ -19,7 +19,7 @@ function AdminLogin() {
     });
 
     const navigate = useNavigate()
-    const {checkIsAdmin} = useAuthor()
+    const { checkIsAdmin } = useAuthor()
 
     function handleChange(e) {
         setFormData({
@@ -46,17 +46,21 @@ function AdminLogin() {
         console.log("User ID:", userId);
 
         // 2. Check if the user is an admin
-        const adminAnswer = await checkIsAdmin(userId)
+        const [adminAnswer] = await Promise.all([
+            checkIsAdmin(userId)
+        ]);
 
-        if(adminAnswer){
+        if (adminAnswer) {
             console.log('Success: admin logged in');
             navigate('/admin/users')
-            return ; 
+            return;
         } else {
             alert("Ce compte n'est pas administrateur")
-            return ; 
+            return;
         }
-        
+
+
+
 
 
     }
