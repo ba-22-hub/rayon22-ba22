@@ -4,16 +4,26 @@ import emailjs from '@emailjs/browser';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
-
+import { useAuthor } from '../../context/AuthorContext';
+import { useNavigate } from 'react-router-dom';
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
 
 function RequestsDashboard() {
     const [requests, setRequests] = useState([]);
 
+    const { isAdmin, loading } = useAuthor()
+    const navigate = useNavigate()
+
     useEffect(() => {
+        console.log(loading, isAdmin)
+        if (loading) return ; // wait for the author informations to be fetch
+		if (!isAdmin){
+			navigate('/admin')
+			return;	
+		}
         fetchRequests();
-    }, []);
+    }, [loading]);
 
     // Function to fetch requests from the database
     const fetchRequests = async () => {

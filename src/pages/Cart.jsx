@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {useAuthor} from '../context/AuthorContext.jsx'
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
@@ -103,6 +105,30 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const shippingCost = 1
+
+    let navigate = useNavigate()
+    const {user, loading, hasRights} = useAuthor()
+
+    useEffect(() => {
+        // star author routine 
+        if (loading) return ; // no needs to exec the useEffect if the rights aren't known
+
+        if (!user){ // user not login 
+            alert("Vous devez être connectés et avoir les droits pour passer commande")
+            navigate('/login')
+        }else if (!hasRights){ // user hasn't rights
+            alert("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
+            navigate('/account') // send the user to the previous page
+        }
+        // end author routine 
+
+        // rest of the useEffect 
+
+
+    }, [loading])
+
+
+
     
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
