@@ -4,6 +4,8 @@ import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
 
+import Loading from "../common/Loading.jsx";
+
 
 
 function Account() {
@@ -225,7 +227,7 @@ function Account() {
     return (
         <>
             { !clientEdit ? (
-                <p>Chargement des données... </p>
+                <Loading />
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
                     <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
