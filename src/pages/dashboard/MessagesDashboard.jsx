@@ -1,9 +1,13 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
+import { useAuthor } from '../../context/AuthorContext';
+import { useNavigate } from 'react-router-dom';
+
 import sendReply from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
+
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -12,9 +16,17 @@ function MessagesDashboard() {
   const [messages, setMessages] = useState([]);
   const [replyStates, setReplyStates] = useState({});
 
+  const { isAdmin, loading } = useAuthor()
+  const navigate = useNavigate()
+
   useEffect(() => {
+    if (loading) return ; // wait for the author informations to be fetch
+		if (!isAdmin){
+			navigate('/admin')
+			return;	
+		}
     fetchMessages();
-  }, []);
+  }, [loading]);
 
   const fetchMessages = async () => {
     const { data, error } = await supabase
@@ -54,20 +66,20 @@ function MessagesDashboard() {
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
     console.log('Email de l’utilisateur:', email);
 
-  if (!email) return console.error("Aucun email trouvé.");
+    if (!email) return console.error("Aucun email trouvé.");
 
-  try {
-    const result = sendReply({
-      email: email,
-      name: `${firstName} ${lastName}`,
-      reply: reply,
-    });
+    try {
+      const result = sendReply({
+        email: email,
+        name: `${firstName} ${lastName}`,
+        reply: reply,
+      });
 
-    console.log('Email envoyé !', result.text);
-  } catch (error) {
-    console.error('Erreur d’envoi :', error);
-  }
-  handleDelete(id); // Delete the message after sending the reply
+      console.log('Email envoyé !', result.text);
+    } catch (error) {
+      console.error('Erreur d’envoi :', error);
+    }
+    handleDelete(id); // Delete the message after sending the reply
   };
 
   const handleDelete = async (id) => {
