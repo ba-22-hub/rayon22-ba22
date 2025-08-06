@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@lib/supabaseClient";
+import { useAuthor } from '../../context/AuthorContext';
+import { useNavigate } from 'react-router-dom';
 import FunctionButton from "@common/FunctionButton.jsx";
+
+
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -8,14 +12,22 @@ function ProductTable() {
   const [editingProductId, setEditingProductId] = useState(null);
   const [editValues, setEditValues] = useState({});
 
+  const { isAdmin, loading } = useAuthor()
+  const navigate = useNavigate()
+
   useEffect(() => {
+    if (loading) return ; // wait for the author informations to be fetch
+		if (!isAdmin){
+			navigate('/admin')
+			return;	
+		}
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("Products").select("*");
       if (error) console.error("Erreur chargement produits :", error);
       else setProducts(data);
     };
     fetchProducts();
-  }, []);
+  }, [loading]);
 
   const handleEdit = (product) => {
     setEditingProductId(product.id);
@@ -119,7 +131,7 @@ function ProductTable() {
                       <FunctionButton
                         className="bg-gray px-2 py-1 rounded"
                         buttonText="Browse"
-                        fun={() => {}}
+                        fun={() => { }}
                       />
                     </td>
                     <td className="p-2 space-x-2">
@@ -146,7 +158,7 @@ function ProductTable() {
                       <FunctionButton
                         className="bg-gray px-2 py-1 rounded"
                         buttonText="Browse"
-                        fun={() => {}}
+                        fun={() => { }}
                       />
                     </td>
                     <td className="p-2 space-x-2">
