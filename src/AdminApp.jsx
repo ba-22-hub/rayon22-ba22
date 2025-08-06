@@ -1,3 +1,4 @@
+// Importing dependencies
 import {
   Routes,
   Route,
@@ -8,6 +9,7 @@ import {
 } from "react-router-dom";
 import { useAuthor } from "./context/AuthorContext.jsx";
 
+// Importing pages
 import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
 import UserTable from "./pages/dashboard/UserTable.jsx";
 import ProductTable from "./pages/dashboard/ProductTable.jsx";
@@ -41,6 +43,7 @@ function AdminNavbar() {
   );
 }
 
+// We need to use this layout to have a single Route in the component
 function AdminLayout() {
   return (
     <>
