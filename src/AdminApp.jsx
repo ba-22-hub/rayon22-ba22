@@ -4,7 +4,8 @@ import {
   Route,
   Link,
   Outlet,
-  useNavigate
+  useNavigate, 
+  Navigate
 } from "react-router-dom";
 import { useAuthor } from "./context/AuthorContext.jsx";
 
@@ -15,9 +16,9 @@ import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
 
 function AdminNavbar() {
-  const {logout} = useAuthor()
+  const { logout } = useAuthor()
   const navigate = useNavigate()
-  function handleLogout(){
+  function handleLogout() {
     logout()
     navigate('/admin')
   }
@@ -44,26 +45,33 @@ function AdminNavbar() {
 }
 
 function AdminApp() {
+  const { isAdmin } = useAuthor()
   return (
     <div className="min-h-screen bg-gray-100">
       <Router>
         <Routes>
           <Route path="/admin" element={<AdminLogin />} />
+          {/* Routes protégées */}
           <Route
             path="/admin/*"
             element={
-              <>
-                <AdminNavbar />
-                <div className="p-4">
-                  <Routes>
-                    <Route path="users" element={<UserTable />} />
-                    <Route path="products" element={<ProductTable />} />
-                    <Route path="messages" element={<MessagesDashboard />} />
-                    <Route path="requests" element={<RequestsDashboard />} />
-                    <Route path="*" element={<div>Admin - Page non trouvée</div>} />
-                  </Routes>
-                </div>
-              </>
+              isAdmin ? (
+                <>
+                  <AdminNavbar />
+                  <div className="p-4">
+                    <Routes>
+                      <Route path="users" element={<UserTable />} />
+                      <Route path="products" element={<ProductTable />} />
+                      <Route path="messages" element={<MessagesDashboard />} />
+                      <Route path="requests" element={<RequestsDashboard />} />
+                      {/* Page 404 visible uniquement par les admins */}
+                      <Route path="*" element={<p>404 - Page inconnue</p>} />
+                    </Routes>
+                  </div>
+                </>
+              ) : (
+                <Navigate to="/admin" replace />
+              )
             }
           />
         </Routes>
