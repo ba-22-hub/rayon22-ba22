@@ -1,6 +1,7 @@
 // Importing dependencies
 import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FormInput from "@common/FormInput.jsx";
@@ -16,6 +17,8 @@ function AdminLogin() {
         password: ''
     });
 
+    const navigate = useNavigate()
+
     function handleChange(e) {
         setFormData({
             ...formData,
@@ -25,7 +28,6 @@ function AdminLogin() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log(formData);
 
         // 1. Auth Supabase
         const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -49,11 +51,13 @@ function AdminLogin() {
             .single();
 
         if (adminError || !adminData) {
-            console.log('Access denied: not an admin');
+            alert("Accès refusé : le compte n'est pas administrateur")
             return;
         }
 
         console.log('Success: admin logged in');
+        navigate('/admin/users')
+
     }
 
     return (

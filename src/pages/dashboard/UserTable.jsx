@@ -7,7 +7,6 @@ import sendNotification from '@lib/sendNotification.js';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
-import { UNSAFE_createClientRoutesWithHMRRevalidationOptOut } from 'react-router-dom';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
