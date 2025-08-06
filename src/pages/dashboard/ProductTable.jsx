@@ -1,5 +1,5 @@
 // Importing dependencies
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 
 // Importing common components
@@ -10,10 +10,11 @@ function ProductTable() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
-  const [editMode, setEditMode] = useState(null);
   const [editedValues, setEditedValues] = useState({});
   const [expanded, setExpanded] = useState(false);
-  const [newProductRow, setNewProductRow] = useState(<div></div>)
+  // For image upload
+  const [image, setImage] = useState("");
+  const inputFile = useRef(null);
 
   // useState init to store the form data in a JSON format
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ function ProductTable() {
     salePrice: '',
     category: '',
     weight: '',
+    image_name: '',
   });
 
   useEffect(() => {
@@ -53,11 +55,10 @@ function ProductTable() {
       ...prevData,
       [name]: value
     }));
-    // setEditedValues({ ...editedValues, [e.target.name]: e.target.value });
-    console.log(formData)
   }
 
   const handleValidate = async () => {
+    console.log("editedValues" + editedValues)
     const { error } = await supabase
       .from("Products")
       .update(editedValues)
@@ -98,8 +99,83 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
+      image_name: '',
     })
   }
+
+  const BrowseImage = (newProduct, product) => {
+    const handleFileUpload = e => {
+      const { files } = e.target;
+      if (files && files.length) {
+        {
+          newProduct ? (
+            setFormData(prevData => ({
+              ...prevData,
+              image_name: files[0].name
+            }))
+          ) : (
+            () => handleEdit(product),
+            setEditedValues(prevData => ({
+              ...prevData,
+              image_name: files[0].name
+            })),
+            () => handleChangeInProd(product)
+          )
+        }
+        setImage(files[0]);
+      }
+    };
+
+    const onButtonClick = () => {
+      inputFile.current.click();
+    };
+
+    return (
+      <div>
+        <input
+          style={{ display: "none" }}
+          ref={inputFile}
+          onChange={handleFileUpload}
+          type="file"
+        />
+        <div className="bg-rayonorange px-2 py-1 rounded button text-white" onClick={onButtonClick}>
+          Browse
+        </div>
+      </div>
+    );
+  };
+
+    const BrowseImageChange = (product) => {
+    const handleFileUpload = e => {
+      const { files } = e.target;
+      if (files && files.length) {
+        () => handleEdit(product),
+          setEditedValues(prevData => ({
+            ...prevData,
+            image_name: files[0].name
+          }))
+      }
+      setImage(files[0]);
+    };
+
+    const onButtonClick = () => {
+      inputFile.current.click();
+    };
+
+    return (
+      <div>
+        <input
+          style={{ display: "none" }}
+          ref={inputFile}
+          onChange={handleFileUpload}
+          type="file"
+        />
+        <div className="bg-rayonorange px-2 py-1 rounded button text-white" onClick={onButtonClick}>
+          Browse
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="p-4">
@@ -126,18 +202,23 @@ function ProductTable() {
               ['salePrice', 'Prix rayon22 (€)', true],
               ['category', 'Catégorie', false],
               ['weight', 'Poids (g)', true],
+              ['image_name', 'Poids (g)', true],
             ].map(([field, label, nullable]) => (
-              <div key={field}>
-                <FormInput
-                  labelClassName="ml-[8%]"
-                  type="text"
-                  className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
-                  inputText={label}
-                  name={field}
-                  value={formData[field] ?? ""}
-                  onChange={handleChangeInForm}
-                  isStarred={nullable ? true : false} />
-              </div>
+              field === 'image_name' ? (
+                <BrowseImage newProduct={true}></BrowseImage>
+              ) : (
+                <div key={field}>
+                  <FormInput
+                    labelClassName="ml-[8%]"
+                    type="text"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    inputText={label}
+                    name={field}
+                    value={formData[field] ?? ""}
+                    onChange={handleChangeInForm}
+                    isStarred={nullable ? true : false} />
+                </div>
+              )
             ))}
             <button
               type="submit"
@@ -148,7 +229,6 @@ function ProductTable() {
 
         </div>
       )}
-      <div>{newProductRow}</div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
           <thead>
@@ -211,11 +291,12 @@ function ProductTable() {
                       />
                     </td>
                     <td className="p-2">
-                      <FunctionButton
+                      <BrowseImageChange newProduct={false} product={p}></BrowseImageChange>
+                      {/*                       <FunctionButton
                         className="bg-gray px-2 py-1 rounded"
                         buttonText="Browse"
-                        fun={() => { }}
-                      />
+                        fun={browseImage}
+                      /> */}
                     </td>
                     <td className="p-2 space-x-2">
                       <FunctionButton
@@ -238,11 +319,7 @@ function ProductTable() {
                     <td className="p-2">{p["weight"]}</td>
                     <td className="p-2">{p.category}</td>
                     <td className="p-2">
-                      <FunctionButton
-                        className="bg-gray px-2 py-1 rounded"
-                        buttonText="Browse"
-                        fun={() => { }}
-                      />
+                      <BrowseImageChange product={p}></BrowseImageChange>
                     </td>
                     <td className="p-2 space-x-2">
                       <FunctionButton
