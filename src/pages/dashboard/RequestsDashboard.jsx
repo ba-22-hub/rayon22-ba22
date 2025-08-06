@@ -16,6 +16,7 @@ function RequestsDashboard() {
     const navigate = useNavigate()
 
     useEffect(() => {
+        console.log(loading, isAdmin)
         if (loading) return ; // wait for the author informations to be fetch
 		if (!isAdmin){
 			navigate('/admin')

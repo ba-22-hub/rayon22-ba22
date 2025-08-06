@@ -91,48 +91,34 @@ function AuthorProvider({ children }) {
     };
 
 
-    async function checkRights(uid) {
-        const rights = null 
+    const checkIsAdmin = async () => {
+        if (!user) return false;
+
         try {
             const { data, error } = await supabase
-                .from('User')
-                .select('has_right')
-                .eq('id', uid)
-                .single(); // retourne un seul objet au lieu d'un tableau
+                .from("Admins")
+                .select("id")
+                .eq("id", user.id)
+                .single();
 
-            if (error) {
-                console.error("Erreur lors de la récupération du droit utilisateur :", error.message);
-            }
-            rights = data
-        } catch (err) {
-            console.error("Erreur inattendue :", err.message);
-        } finally {
-            return rights?.has_right
-        }
-    }
-
-    async function checkAdmin(uid) {
-        try {
-            const { data, error } = await supabase
-                .from('Admins')
-                .select('id')
-                .eq('id', uid)
-                .single(); // retourne un seul objet au lieu d'un tableau
-
-            if (error) {
-                console.error("Erreur lors de la récupération du droit utilisateur :", error.message);
+            if (error || !data) {
+                setIsAdmin(false);
+                return false;
             }
 
-            setIsAdmin(data ? true : false) // true / false (default : false)
+            setIsAdmin(true);
+            return true;
         } catch (err) {
-            console.error("Erreur inattendue :", err.message);
+            console.error("Erreur lors du check admin :", err.message);
+            setIsAdmin(false);
+            return false;
         }
-    }
+    };
 
 
 
     return (
-        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin }}>
+        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin, checkIsAdmin }}>
             {children}
         </AuthorContext.Provider>
     );
