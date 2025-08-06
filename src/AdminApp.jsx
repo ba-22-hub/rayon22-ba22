@@ -35,7 +35,7 @@ function AdminNavbar() {
       {/* Bouton de déconnexion */}
       <button
         onClick={handleLogout}
-        className="bg-red hover:bg-red-600 px-4 py-2 rounded-2xl font-bold"
+        className="bg-red hover:bg-red-600 px-4 py-2 rounded-full font-bold"
       >
         ⏼
       </button>
