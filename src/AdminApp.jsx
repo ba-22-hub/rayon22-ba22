@@ -18,6 +18,7 @@ import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
 
 // Importing common components
 import PageButton from "./common/PageButton.jsx";
+import Loading from "./common/Loading.jsx";
 
 function AdminNavbar() {
   const { logout } = useAuthor();
@@ -66,7 +67,7 @@ function AdminLayout() {
 
 function AdminApp() {
   const { isAdmin, loading } = useAuthor();
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <Loading/>;
 
   return (
     <div className="min-h-screen bg-gray-100">
