@@ -1,38 +1,27 @@
-import { app, BrowserWindow } from 'electron'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { app, BrowserWindow } from 'electron';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// ES Modules => reconstituer __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-let mainWindow
-
-function createWindow() {
-    mainWindow = new BrowserWindow({
+const createWindow = () => {
+    const win = new BrowserWindow({
         width: 1200,
         height: 800,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'), // adapte ce chemin si besoin
             contextIsolation: true,
-            nodeIntegration: false
+            nodeIntegration: false,
+            preload: path.join(__dirname, 'preload.js')
         }
-    })
+    });
 
-    if (import.meta.env?.DEV) {
-        mainWindow.loadURL('http://localhost:5173')
-    } else {
-        mainWindow.loadFile(path.join(__dirname, 'dist/index.html'))
-    }
-}
+    win.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
+};
 
-app.whenReady().then(() => {
-    createWindow()
+app.whenReady().then(createWindow);
 
-    app.on('activate', function () {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
-    })
-})
-
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
-})
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+});

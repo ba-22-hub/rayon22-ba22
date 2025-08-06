@@ -1,6 +1,6 @@
 // Importing dependencies
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   Link,
