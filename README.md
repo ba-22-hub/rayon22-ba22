@@ -174,7 +174,7 @@ Un fichier `.env` vous sera transmis contenant l’ensemble des clés API et ide
 
 ### 👥 Équipe
 
-Ce projet a été réalisé par trois étudiants de l'[ENSSAT Lannion](https://enssat.fr/) : 
+Ce projet a été réalisé par trois étudiants de l'[ENSSAT Lannion](https://enssat.fr/) intervenants pour [JES](https://junior-enssat-services.fr/) : 
 - **BAZILE Gwenaël** - Développeur
 - **CHAABI Samy** - Développeur / Chef de projet
 - **JOURDIN Clem** - Développeur
