@@ -61,21 +61,28 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 - L’utilisateur remplit le formulaire d’inscription.
 
-<!-- add the 3 images of the register page -->
+<img width="1920" height="1853" alt="image" src="https://github.com/user-attachments/assets/6b2b202b-f60d-496f-9108-6205bd31cd34" />
+<img width="1920" height="2010" alt="image" src="https://github.com/user-attachments/assets/0a0544fd-442b-40bb-abad-54f19ad0eebe" />
+<img width="1920" height="1759" alt="image" src="https://github.com/user-attachments/assets/9e804515-9b7b-479c-a13a-e69f8abc253f" />  
 
 - Un email de confirmation sera envoyé à l'adresse mail renseignée pour valider la création du compte
-
-<!-- add the mail page image -->
+  
+<img width="1920" height="1560" alt="image" src="https://github.com/user-attachments/assets/b6b6d1b5-6367-4368-9bd4-de076e77d987" />  
 
 - Une fois le compte créé, il a accès à une page pour joindre un justificatif (lettre ou bourse).
-
-<!-- add the account page image -->
+  
+<img width="1920" height="2019" alt="image" src="https://github.com/user-attachments/assets/9e6f3bf7-2f02-49ee-a0cb-5019afde0749" />  
 
 - La banque alimentaire reçoit la demande, la traite, puis valide ou refuse.
-
-<!-- add the user dashboard image -->
+  
+<img width="1920" height="933" alt="image" src="https://github.com/user-attachments/assets/70634aff-c24d-4c35-be8c-ff7d2f91f9f5" />  
 
 - Si accepté, l’utilisateur reçoit un email de confirmation et peut se connecter pour accéder au catalogue.
+
+- Les administrateurs peuvent gérer les utilisateurs à tout moment à l'aide du tableau de bord
+  
+<img width="1920" height="933" alt="image" src="https://github.com/user-attachments/assets/531db659-b1bd-46e0-9e7e-eb04c5ec8527" />  
+
 
 ### 🧾 Gestion des produits
 
