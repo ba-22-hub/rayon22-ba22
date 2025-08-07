@@ -59,6 +59,8 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ### 🧾 Gestion des produits
 
+À venir... (phase 2)
+
 ## 🧑‍💻 Guide de programmation
 
 ### ⚙️ Technologies utilisées
