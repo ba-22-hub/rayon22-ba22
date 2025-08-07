@@ -57,9 +57,29 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ### 👥 Gestion des utilisateurs
 
+**👤 Création de compte**
+
+- L’utilisateur remplit le formulaire d’inscription.
+
+<!-- add the 3 images of the register page -->
+
+- Un email de confirmation sera envoyé à l'adresse mail renseignée pour valider la création du compte
+
+<!-- add the mail page image -->
+
+- Une fois le compte créé, il a accès à une page pour joindre un justificatif (lettre ou bourse).
+
+<!-- add the account page image -->
+
+- La banque alimentaire reçoit la demande, la traite, puis valide ou refuse.
+
+<!-- add the user dashboard image -->
+
+- Si accepté, l’utilisateur reçoit un email de confirmation et peut se connecter pour accéder au catalogue.
+
 ### 🧾 Gestion des produits
 
-À venir... (phase 2)
+*À venir... (phase 2)*
 
 ## 🧑‍💻 Guide de programmation
 
