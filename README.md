@@ -57,8 +57,6 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ### 👥 Gestion des utilisateurs
 
-**👤 Création de compte**
-
 - L’utilisateur remplit le formulaire d’inscription.
 
 <img width="1920" height="1853" alt="image" src="https://github.com/user-attachments/assets/6b2b202b-f60d-496f-9108-6205bd31cd34" />
@@ -82,6 +80,14 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 - Les administrateurs peuvent gérer les utilisateurs à tout moment à l'aide du tableau de bord
   
 <img width="1920" height="933" alt="image" src="https://github.com/user-attachments/assets/531db659-b1bd-46e0-9e7e-eb04c5ec8527" />  
+
+- Les clients connectés ont la possibilité de contacter les administrateurs directement depuis l'interface de l'application.
+  
+<img width="1920" height="1705" alt="image" src="https://github.com/user-attachments/assets/3eca590b-015e-4eb4-8962-57d88edba064" />  
+  
+- Les administrateurs peuvent consulter ces messages depuis leur espace dédié, y répondre, et la réponse sera automatiquement envoyée par e-mail au client concerné.
+  
+<img width="1920" height="1065" alt="image" src="https://github.com/user-attachments/assets/b53e9d0c-8150-480d-95d5-3eac985d7e57" />
 
 
 ### 🧾 Gestion des produits
