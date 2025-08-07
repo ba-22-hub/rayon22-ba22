@@ -1,6 +1,7 @@
 // Importing dependencies
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
+import { uploadImage } from '@lib/uploadImage.js'
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -47,6 +48,11 @@ function ProductTable() {
 
   const handleChangeInProd = (e) => {
     setEditedValues({ ...editedValues, [e.target.name]: e.target.value });
+    if (e.target.name == "image_name") {
+      console.log("Setting image")
+      const { files } = e.target;
+      setImage(files[0])
+    }
   };
 
   // function to set the new formData value whenever the inputs are changed
@@ -60,6 +66,9 @@ function ProductTable() {
 
   const handleValidate = async () => {
     console.log("editedValues" + editedValues)
+    if (editedValues.image_name != "") {
+      uploadImage(image, image.name)
+    }
     const { error } = await supabase
       .from("Products")
       .update(editedValues)
@@ -71,6 +80,7 @@ function ProductTable() {
       );
       setEditingProductId(null);
     }
+    setImage("")
   };
 
   const filteredProducts = products.filter((p) =>
@@ -90,6 +100,10 @@ function ProductTable() {
       console.error("Erreur lors de la création Supabase:", error.message);
       return;
     }
+
+    // Uploading the image to the 'images' bucket
+    uploadImage(image, image.name)
+    setImage("")
 
     // Saving locally the user info to use it after the mail verification
     localStorage.setItem("pendingUserData", JSON.stringify(formData));
