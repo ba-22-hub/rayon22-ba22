@@ -272,7 +272,7 @@ function Account() {
                         ): (
                         <div className="flex flex-row">
                             <input
-                                className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
+                                className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
                                 type="file"
                                 onChange={handleFileSelection}
                                 accept=".pdf"
