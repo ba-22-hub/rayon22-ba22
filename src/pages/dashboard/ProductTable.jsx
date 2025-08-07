@@ -101,6 +101,8 @@ function ProductTable() {
       weight: '',
       image_name: '',
     })
+
+    setExpanded(false)
   }
 
   const BrowseImage = (newProduct, product) => {
@@ -187,48 +189,6 @@ function ProductTable() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <FunctionButton
-        className="bg-rayonorange  w-[1/2] content-center ml-30 mb-4 text-white px-10 py-1 rounded"
-        buttonText={expanded ? 'Annuler' : 'Ajouter un produit'}
-        fun={expanded ? (() => setExpanded(false)) : (() => setExpanded(true))}
-      />
-      {expanded && (
-        <div>
-          <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables à l'ajout d'un produit dans la base de données.</p>
-          <div className="grid grid-cols-2 gap-4 text-sm mb-4">
-            {[
-              ['name', 'Nom', false, "text"],
-              ['price', 'Prix en magasin (€)', false, "number"],
-              ['salePrice', 'Prix rayon22 (€)', false, "number"],
-              ['category', 'Catégorie', true, "text"],
-              ['weight', 'Poids (g)', false, "number"],
-              ['image_name', 'Poids (g)', false, "text"],
-            ].map(([field, label, nullable, type]) => (
-              field === 'image_name' ? (
-                <BrowseImage newProduct={true}></BrowseImage>
-              ) : (
-                <div key={field}>
-                  <FormInput
-                    labelClassName="ml-[8%]"
-                    type={type}
-                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
-                    inputText={label}
-                    name={field}
-                    value={formData[field] ?? ""}
-                    onChange={handleChangeInForm}
-                    isStarred={nullable ? false : true} />
-                </div>
-              )
-            ))}
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="px-4 py-2 bg-[#038709] text-white rounded"
-            >Valider</button>
-          </div>
-
-        </div>
-      )}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
           <thead>
@@ -334,6 +294,48 @@ function ProductTable() {
           </tbody>
         </table>
       </div>
+      <FunctionButton
+        className="bg-rayonorange  w-[1/2] content-center ml-30 my-4 text-white px-10 py-1 rounded"
+        buttonText={expanded ? 'Annuler' : 'Ajouter un produit'}
+        fun={expanded ? (() => setExpanded(false)) : (() => setExpanded(true))}
+      />
+      {expanded && (
+        <div>
+          <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables à l'ajout d'un produit dans la base de données.</p>
+          <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+            {[
+              ['name', 'Nom', false, "text"],
+              ['price', 'Prix en magasin (€)', false, "number"],
+              ['salePrice', 'Prix rayon22 (€)', false, "number"],
+              ['category', 'Catégorie', true, "text"],
+              ['weight', 'Poids (g)', false, "number"],
+              ['image_name', 'Poids (g)', false, "text"],
+            ].map(([field, label, nullable, type]) => (
+              field === 'image_name' ? (
+                <BrowseImage newProduct={true}></BrowseImage>
+              ) : (
+                <div key={field}>
+                  <FormInput
+                    labelClassName="ml-[8%]"
+                    type={type}
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    inputText={label}
+                    name={field}
+                    value={formData[field] ?? ""}
+                    onChange={handleChangeInForm}
+                    isStarred={nullable ? false : true} />
+                </div>
+              )
+            ))}
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-[#038709] text-white rounded"
+            >Valider</button>
+          </div>
+
+        </div>
+      )}
     </div>
   );
 }
