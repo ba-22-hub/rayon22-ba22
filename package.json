@@ -2,6 +2,8 @@
   "name": "rayon22",
   "private": true,
   "version": "1.0.0",
+  "description": "Application web de gestion des clients et des produits – Banque Alimentaire des Côtes d'Armor : Rayon22",
+  "author": "<JES/> team alpha : BAZILE Gwenaël, CHAABI Samy, JOURDIN Clem",
   "type": "module",
   "main": "electron/main.js",
   "scripts": {
@@ -42,6 +44,7 @@
   "build": {
     "appId": "com.rayon22.app",
     "productName": "Rayon22",
+    "icon": "src/assets/logos/roundLogo.ico",
     "files": [
       "dist",
       "electron",
