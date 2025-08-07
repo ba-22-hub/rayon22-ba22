@@ -15,7 +15,6 @@ import UserTable from "./pages/dashboard/UserTable.jsx";
 import ProductTable from "./pages/dashboard/ProductTable.jsx";
 import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
-import Loading from "./common/Loading.jsx";
 
 // Importing common components
 import PageButton from "./common/PageButton.jsx";

@@ -5,13 +5,12 @@ import { uploadPDF } from '@lib/sendPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 
-
 // Importing common components
 import FormTextArea from "../common/FormTextArea"
 import Loading from '../common/Loading';
+
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
-import Loading from '../common/Loading';
 
 /**
  * The Contact page.
@@ -41,12 +40,12 @@ function Contact() {
 	}, [loading]) // useEffect trigger again when all is loaded
 
 	// function to avoid double notification in the login routine
-    function notify(message) {
-        console.log(message, isNotified)
-        if (isNotified.current) return;  // no need to notify again
-        isNotified.current = true
-        alert(message)
-    }
+	function notify(message) {
+		console.log(message, isNotified)
+		if (isNotified.current) return;  // no need to notify again
+		isNotified.current = true
+		alert(message)
+	}
 
 	// ref to the file field content
 	const fileInputRef = useRef(null);
@@ -153,7 +152,7 @@ function Contact() {
 						<div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] h-[45%] mt-16">
 							<h2 className="text-[#2E2EFF] text-2xl font-bold mb-6">Formulaire de contact</h2>
 
-							<form onSubmit={handleSubmit}>
+							<Form onSubmit={handleSubmit}>
 
 								{/* Message */}
 								<FormTextArea
@@ -184,10 +183,10 @@ function Contact() {
 										Envoyer
 									</button>
 								</div>
+							</Form>
 						</div>
-					</form>
-				</div>
-			</div>)}
+					</div>
+				</>)}
 		</>
 	)
 }
