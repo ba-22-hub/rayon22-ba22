@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FormTextArea from "../common/FormTextArea"
-
+import Loading from '../common/Loading';
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
 
@@ -27,20 +27,23 @@ function Contact() {
 		file: null
 	});
 
+	const isNotified = useRef(false)
 
 	useEffect(() => {
 		if (loading) return; // the page needs all the informations to start
 		if (!user) {
-			alert("Vous devez vous connecter pour utiliser cette fonctionnalité !")
+			notify("Vous devez vous connecter pour utiliser cette fonctionnalité !")
 			navigate('/login')
-
 		}
-
-
-
 	}, [loading]) // useEffect trigger again when all is loaded
 
-
+	// function to avoid double notification in the login routine
+    function notify(message) {
+        console.log(message, isNotified)
+        if (isNotified.current) return;  // no need to notify again
+        isNotified.current = true
+        alert(message)
+    }
 
 	// ref to the file field content
 	const fileInputRef = useRef(null);

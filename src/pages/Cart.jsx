@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import {useAuthor} from '../context/AuthorContext.jsx'
+import { useState, useEffect, useRef } from 'react';
+import { useAuthor } from '../context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
 
 // Importing common components
@@ -105,19 +105,21 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const shippingCost = 1
+    const isNotified = useRef(false)
+
 
     let navigate = useNavigate()
-    const {user, loading, hasRights} = useAuthor()
+    const { user, loading, hasRights } = useAuthor()
 
     useEffect(() => {
         // star author routine 
-        if (loading) return ; // no needs to exec the useEffect if the rights aren't known
+        if (loading) return; // no needs to exec the useEffect if the rights aren't known
 
-        if (!user){ // user not login 
-            alert("Vous devez être connectés et avoir les droits pour passer commande")
+        if (!user) { // user not login 
             navigate('/login')
-        }else if (!hasRights){ // user hasn't rights
-            alert("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
+            notify("Vous devez être connectés et avoir les droits pour passer commande")
+        } else if (!hasRights) { // user hasn't rights
+            notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
             navigate('/account') // send the user to the previous page
         }
         // end author routine 
@@ -127,9 +129,15 @@ function Cart() {
 
     }, [loading])
 
+    // function to avoid double notification in the login routine
+    function notify(message) {
+        console.log(message, isNotified)
+        if (isNotified.current) return;  // no need to notify again
+        isNotified.current = true
+        alert(message)
+    }
 
 
-    
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
     }
