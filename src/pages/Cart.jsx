@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import FunctionButton from "../common/FunctionButton"
 import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "@common/PageButton.jsx";
+import Loading from '../common/Loading.jsx';
 
 // Importing assets
 import receipt from "../assets/Assets/ticket-caisse-ecriture.png"
@@ -248,6 +249,10 @@ function Cart() {
 
     return (
         <>
+        { !hasRights ? (
+            <Loading />
+        ):(
+            <>
             {/* TITLE */}
             <div className="ml-10 mb-6">
                 <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
@@ -273,7 +278,8 @@ function Cart() {
                     </div>
                 </div>
             </div>
-        </>
+        </>)}
+    </>
     )
 }
 

@@ -124,8 +124,8 @@ function Contact() {
 	}
 	return (
 		<>
-			{user ? (
-				<p>Chargement...</p>
+			{!user ? (
+				<Loading />
 			) : (
 				<>
 					<div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] h-52 text-white flex items-center justify-center">
