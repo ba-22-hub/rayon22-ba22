@@ -152,7 +152,7 @@ function Contact() {
 						<div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] h-[45%] mt-16">
 							<h2 className="text-[#2E2EFF] text-2xl font-bold mb-6">Formulaire de contact</h2>
 
-							<Form onSubmit={handleSubmit}>
+							<form onSubmit={handleSubmit}>
 
 								{/* Message */}
 								<FormTextArea
@@ -183,7 +183,7 @@ function Contact() {
 										Envoyer
 									</button>
 								</div>
-							</Form>
+							</form>
 						</div>
 					</div>
 				</>)}
