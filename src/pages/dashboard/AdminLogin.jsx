@@ -1,6 +1,8 @@
 // Importing dependencies
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
+import { useNavigate } from 'react-router-dom';
+import { useAuthor } from '../../context/AuthorContext';
 
 // Importing common components
 import FormInput from "@common/FormInput.jsx";
@@ -16,6 +18,9 @@ function AdminLogin() {
         password: ''
     });
 
+    const navigate = useNavigate()
+    const { checkIsAdmin } = useAuthor()
+
     function handleChange(e) {
         setFormData({
             ...formData,
@@ -25,7 +30,6 @@ function AdminLogin() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log(formData);
 
         // 1. Auth Supabase
         const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -42,18 +46,23 @@ function AdminLogin() {
         console.log("User ID:", userId);
 
         // 2. Check if the user is an admin
-        const { data: adminData, error: adminError } = await supabase
-            .from('Admins')
-            .select('id')
-            .eq('id', userId)
-            .single();
+        const [adminAnswer] = await Promise.all([
+            checkIsAdmin(userId)
+        ]);
 
-        if (adminError || !adminData) {
-            console.log('Access denied: not an admin');
+        if (adminAnswer) {
+            console.log('Success: admin logged in');
+            navigate('/admin/users')
+            return;
+        } else {
+            alert("Ce compte n'est pas administrateur")
             return;
         }
 
-        console.log('Success: admin logged in');
+
+
+
+
     }
 
     return (

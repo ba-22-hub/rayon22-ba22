@@ -33,7 +33,6 @@ function Login() {
 	// function to hadle the form submit
 	async function handleSubmit(e) {
 		e.preventDefault();
-		console.log(formData);
 
 		// Auth Supabase
 		const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -42,7 +41,6 @@ function Login() {
 		});
 
 		const { data: sessionData } = await supabase.auth.getSession();
-		console.log("Session:", sessionData?.session);
 
 
 		if (loginError) {
@@ -86,6 +84,7 @@ function Login() {
 					quotient: parsedData.step2.quotient,
 					wageType: parsedData.step2.wageType,
 					otherWage: parsedData.step2.otherWage,
+					has_right : false, 
 				};
 
 				const { error: insertError } = await supabase
@@ -174,6 +173,12 @@ function Login() {
 						page={'/register'}
 						className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
 					/>
+				</div>
+				<div className="flex justify-center">
+					<PageButton 
+						buttonText='Admin' 
+						page='/admin' 
+						className='w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition mt-4' />
 				</div>
 			</div>
 

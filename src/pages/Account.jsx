@@ -1,40 +1,24 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
 
+import Loading from "../common/Loading.jsx";
+
 
 
 function Account() {
-    /**
-     * Format attendu pour le client : 
-     * birthday: "0023-09-23"
-     * email: "no@martin.bzh"
-     * firstName: "Nolwenn"
-     * gender: "female"
-     * lastName: "Martin"​​
-     * phone: "0943439843"
-     * acceptTerms: true
-     * addAddress: ""
-     * address: "25 rue de la lune "
-     * city: "Brest"
-     * otherWage: ""
-     * postalCode: "29000"
-     * quotient: "un certain nombre"
-     * readInfo: true
-     * situation: "jobless"​
-     * wageType: undefined
-    */
-
-
-
 
     const [editing, setEditing] = useState(false)
     const [clientEdit, setClientEdit] = useState(null)
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
-    const { user, logout, loading } = useAuthor()
+    const [activeRequests, setActiveRequest] = useState(false)
+    const { user, logout, isAdmin, loading, checkIsAdmin } = useAuthor()
+
+    const fileInputRef = useRef(null);
+
 
     // options for the radio buttons when the edit mod is enable
     const genderOptions = ["Homme", "Femme", "Autre"]
@@ -44,11 +28,11 @@ function Account() {
     let navigate = useNavigate()
 
     useEffect(() => {
+        if (!user) return; // to avoid error in the console
         const fetchUserData = async () => {
             try {
                 // retrieving user's data
                 const uid = user.id
-                console.log(user)
                 const { data: userdata, error: dberror } = await supabase
                     .from('User')
                     .select('*')
@@ -67,8 +51,30 @@ function Account() {
                 console.error("Erreur inattendue:", error.message);
             }
         }
-        fetchUserData()
-    }, [user])
+        const checkRequest = async () => {
+            try {
+                console.log("Checking requests ...")
+                const { data, error: dberror } = await supabase
+                    .from('Requests')
+                    .select('id') // optimisation
+                    .eq('user_id', user.id)
+                    .limit(1); // no need to reseach several requests
+
+                if (dberror && dberror.code !== 'PGRST116') {
+                    console.error("Erreur lors de la vérification des requêtes :", dberror.message);
+                    return;
+                }
+                console.log("request found : ", data)
+                setActiveRequest(data.length > 0)
+            } catch (error) {
+                console.error("Erreur inattendue:", error.message);
+            }
+        }
+        console.log(loading, isAdmin)
+        checkIsAdmin(user.id) // needed otherwise the update of 'isAdmin' isn't fast enough
+            .then(fetchUserData())
+            .then(() => checkRequest())
+    }, [loading])
 
 
 
@@ -131,16 +137,45 @@ function Account() {
         console.log(incomingFile.name)
     }
 
-    function handleFileSubmit() {
-        const formData = new FormData()
-        formData.append('file', file)
-        // fetch('url', {
-        //     method : 'POST', 
-        //     body : formData
-        // })
-        console.log("Fichier uploadé : ", formData)
-        uploadPDF(file)
-        alert("Le fichier " + file.name + "a bien été envoyé")
+    async function handleFileSubmit() {
+        // 1) upload the file 
+        let uploadSuccess = true
+        const name = `${Date.now()}_${file.name}`
+        const { success, error } = await uploadPDF(file, name, "requests")
+        if (!success) {
+            console.error("❌ Upload échoué :", error);
+            alert("Erreur lors de l'upload du fichier PDF.");
+            uploadSuccess = false;
+        }
+
+        // 2) if the file has been uploaded, add the request in the db 
+        if (!uploadSuccess) return;
+
+        const newRequest = {
+            user_id: user.id,
+            pdf_name: name,
+        };
+
+        const { error: insertError } = await supabase
+            .from('Requests')
+            .insert([newRequest]);
+
+        if (insertError) {
+            console.error("❌ Erreur lors de l'insertion :", insertError.message);
+            alert("Erreur lors de l'envoi de la requête.");
+            return;
+        }
+
+        console.log("✅ Requetes inséré avec succès !", newRequest);
+
+        // manually emptying the file field
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+        setFile(null)
+        setActiveRequest(false)
+        alert("La requête à bien été prise en compte ! ")
+
     }
 
     function handleDeconnection() {
@@ -151,130 +186,166 @@ function Account() {
 
     // on factorise l'élément le plus volumineux 
     const renderField = (label, fieldName) => (
-        <div className="flex flex-row text-rayonblue align-center items-center">
-            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
-            {editing ? (
-                <input
-                    className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
-                    name={fieldName}
-                    value={clientEdit[fieldName]}
-                    onChange={handleChange}
-                />
-            ) : (
-                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-            )}
-        </div>
-    )
-
-    const renderRadio = (label, fieldName, options) => (
-        <div className="flex flex-row text-rayonblue mb-2">
-            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
-            {editing ? (
-                <div className="flex text-rayonorange">
-                    {options.map((option) => (
-                        <label key={option} className="flex items-center ml-4">
-                            <input
-                                className="mr-1"
-                                type="radio"
-                                name={fieldName}
-                                value={option}
-                                checked={clientEdit[fieldName] === option}
-                                onChange={handleChange}
-                            />
-                            {option}
-                        </label>
-                    ))}
-                </div>
-            ) : (
-                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-            )}
+        <div className="flex flex-row items-center text-rayonblue mb-2">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+            <div className="flex-1">
+                {editing ? (
+                    <input
+                        className="border border-rayonorange rounded-lg w-full text-rayonorange pl-2 h-[1.8rem]"
+                        name={fieldName}
+                        value={clientEdit[fieldName]}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    <p className="text-rayonblue">{clientEdit[fieldName]}</p>
+                )}
+            </div>
         </div>
     );
 
+
+    const renderRadio = (label, fieldName, options) => (
+        <div className="flex flex-row items-center text-rayonblue mb-2">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+            <div className="flex-1">
+                {editing ? (
+                    <div className="flex flex-wrap gap-4 text-rayonorange">
+                        {options.map((option) => (
+                            <label key={option} className="flex items-center">
+                                <input
+                                    className="mr-1"
+                                    type="radio"
+                                    name={fieldName}
+                                    value={option}
+                                    checked={clientEdit[fieldName] === option}
+                                    onChange={handleChange}
+                                />
+                                {option}
+                            </label>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-rayonblue">{clientEdit[fieldName]}</p>
+                )}
+            </div>
+        </div>
+    );
+
+
+
     return (
         <>
-            {loading || ! clientEdit ? (
-                <p>Chargement des données... </p>
+            {!clientEdit || loading ? (
+                <Loading />
             ) : (
-                <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
-                    <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
-                    <button
-                        onClick={handleDeconnection}
-                        className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
-                    >⏼ Déconnexion</button>
-                    <div className="flex flex-row">
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
-                            {renderField("Nom", "lastName")}
-                            {renderField("Prénom", "firstName")}
-                            {renderRadio("Genre", "gender", genderOptions)}
+                isAdmin ? (
+                    <>
+                        <div className="w-[66vw] mx-auto p-[4vw] bg-white rounded-2xl shadow-sm mb-[4vw] flex flex-col items-center text-center">
+                            <p className="text-rayonblue text-[4em]">Ce compte est administrateur</p>
+                            <br />
+                            <p>Il ne possède donc par conséquent pas de données personnelles</p>
 
-                        </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] ml-[2vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
-                            {renderField("E-mail", "email")}
-                            {renderField("Téléphone", "phone")}
-                            {renderField("Adresse", "address")}
-                            {renderField("Précisions", "addAddress")}
-                            {renderField("Ville", "city")}
-                            {renderField("Code postal", "phone")}
-                        </div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
-                        {renderRadio("Situation", "situation", situationOptions)}
-                        {renderField("Quotient familial (CAF)", "quotient")}
-                        {renderRadio("Type de salaire", "wageType", wageOptions)}
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{ }</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
-                        <div className="flex flex-row">
-                            <input
-                                className="bg-rayonorange w-[40vw] h-[2rem] rounded-2xl text-white text-center item-center p-[0.2rem] "
-                                type="file"
-                                onChange={handleFileSelection}
-                                accept=".pdf"
-                                name="fileSelector"
-                            ></input>
                             <button
-                                className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
-                                onClick={handleFileSubmit}
-                            >Valider 🗸</button>
+                                className="text-white bg-rayonorange w-[30vw] mb-3 mt-[10vh] h-[2rem]"
+                                onClick={() => navigate('/admin/users')}
+                            >
+                                Accéder à l'application administrateur
+                            </button>
+
+                            <button
+                                className="text-white bg-red w-[30vw] mb-3 mt-[2vh] h-[2rem]"
+                                onClick={handleDeconnection}
+                            >
+                                Se déconnecter
+                            </button>
                         </div>
-                    </div>
-                    {!editing ? (
+
+                    </>
+                ) : (
+                    <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
+                        <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
                         <button
-                            className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                            onClick={() => {
-                                setEditing(true)
-                                console.log("editmod enabled")
-                            }
-                            }
-                        >Modifier 🖉</button>
-                    ) : (
+                            onClick={handleDeconnection}
+                            className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
+                        >⏼ Déconnexion</button>
                         <div className="flex flex-row">
-                            <button
-                                className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                                onClick={handleCancel}
-                            >Annuler ✖</button>
-                            <button
-                                className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
-                                onClick={handleEdit}
-                            >Valider 🗸</button>
-                        </div>
-                    )
-                    }
+                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
+                                <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
+                                {renderField("Nom", "lastName")}
+                                {renderField("Prénom", "firstName")}
+                                {renderRadio("Genre", "gender", genderOptions)}
 
-                </div>
-            )}
+                            </div>
+                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[26vw] ml-[2vw] p-2">
+                                <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
+                                {renderField("E-mail", "email")}
+                                {renderField("Téléphone", "phone")}
+                                {renderField("Adresse", "address")}
+                                {renderField("Précisions", "addAddress")}
+                                {renderField("Ville", "city")}
+                                {renderField("Code postal", "postalCode")}
+                            </div>
+                        </div>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
+                            {renderRadio("Situation", "situation", situationOptions)}
+                            {renderField("Quotient familial (CAF)", "quotient")}
+                            {renderRadio("Type de salaire", "wageType", wageOptions)}
+                        </div>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p></div>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
+                        </div>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                            {activeRequests ? (
+                                <p>Une requête est en cours de traitement...</p>
+                            ) : (
+                                <div className="flex flex-row">
+                                    <input
+                                        className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
+                                        type="file"
+                                        onChange={handleFileSelection}
+                                        accept=".pdf"
+                                        name="fileSelector"
+                                        ref={fileInputRef}
+                                    ></input>
+                                    <button
+                                        className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
+                                        onClick={handleFileSubmit}
+                                    >Valider 🗸</button>
+                                </div>)}
+                        </div>
+                        {!editing ? (
+                            <button
+                                className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                                onClick={() => {
+                                    setEditing(true)
+                                    console.log("editmod enabled")
+                                }
+                                }
+                            >Modifier 🖉</button>
+                        ) : (
+                            <div className="flex flex-row">
+                                <button
+                                    className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                                    onClick={handleCancel}
+                                >Annuler ✖</button>
+                                <button
+                                    className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
+                                    onClick={handleEdit}
+                                >Valider 🗸</button>
+                            </div>
+                        )
+                        }
+
+                    </div>
+                ))}
         </>
     )
+
 }
 
 export default Account;

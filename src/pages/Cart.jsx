@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useAuthor } from '../context/AuthorContext.jsx'
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
 import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "@common/PageButton.jsx";
+import Loading from '../common/Loading.jsx';
 
 // Importing assets
 import receipt from "../assets/Assets/ticket-caisse-ecriture.png"
@@ -103,12 +106,44 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const shippingCost = 1
+    const isNotified = useRef(false)
 
-    function roundTwoDigits(nb) {
-        return Math.round(nb*100)/100
+
+    let navigate = useNavigate()
+    const { user, loading, hasRights } = useAuthor()
+
+    useEffect(() => {
+        // star author routine 
+        if (loading) return; // no needs to exec the useEffect if the rights aren't known
+
+        if (!user) { // user not login 
+            navigate('/login')
+            notify("Vous devez être connectés et avoir les droits pour passer commande")
+        } else if (!hasRights) { // user hasn't rights
+            notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
+            navigate('/account') // send the user to the previous page
+        }
+        // end author routine 
+
+        // rest of the useEffect 
+
+
+    }, [loading])
+
+    // function to avoid double notification in the login routine
+    function notify(message) {
+        console.log(message, isNotified)
+        if (isNotified.current) return;  // no need to notify again
+        isNotified.current = true
+        alert(message)
     }
 
-    function displayProductOnReceipt(product) {
+
+    function roundTwoDigits(nb) {
+        return Math.round(nb * 100) / 100
+    }
+
+    function displayProductOnReceipt(product, idx) {
         const [nbProd, setNbProd] = useState(product.nbInCart)
 
         function DisplayButtons({ product }) {
@@ -156,21 +191,19 @@ function Cart() {
 
         if (nbProd > 0) {
             return (
-                <>
-                    <div className="grid grid-cols-5 text-[#3435FF]">
-                        <div className="col-span-1 col-start-1 content-center">
-                            <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
-                        </div>
-                        <div className="col-span-3 col-start-2 content-center">
-                            <p className="text-2xl font-semibold">{product.name}</p>
-                            <p className="text-s">{product.weight}g, {product.category}</p>
-                            <DisplayButtons product={product} />
-                        </div>
-                        <div className="col-span-1 col-start-5 content-center">
-                            <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
-                        </div>
+                <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
+                    <div className="col-span-1 col-start-1 content-center">
+                        <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
                     </div>
-                </>
+                    <div className="col-span-3 col-start-2 content-center">
+                        <p className="text-2xl font-semibold">{product.name}</p>
+                        <p className="text-s">{product.weight}g, {product.category}</p>
+                        <DisplayButtons product={product} />
+                    </div>
+                    <div className="col-span-1 col-start-5 content-center">
+                        <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
+                    </div>
+                </div>
             )
         }
     }
@@ -216,6 +249,10 @@ function Cart() {
 
     return (
         <>
+        { !hasRights ? (
+            <Loading />
+        ):(
+            <>
             {/* TITLE */}
             <div className="ml-10 mb-6">
                 <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
@@ -223,7 +260,7 @@ function Cart() {
             </div>
 
             <div>
-                <img className="absolute top-10 right-20 w-[30%]" src={blueRayonShape}></img>
+                <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                 <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
                 <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
                     {/* RECEIPT SECTION */}
@@ -231,7 +268,7 @@ function Cart() {
                     <div className="m-10">
                         <a className="text-[#3435FF] m-10"></a>
                         <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
-                            {productsInCart.map((product) => (displayProductOnReceipt(product)))}
+                            {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                         </div>
                     </div>
 
@@ -241,7 +278,8 @@ function Cart() {
                     </div>
                 </div>
             </div>
-        </>
+        </>)}
+    </>
     )
 }
 

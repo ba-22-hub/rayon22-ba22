@@ -11,7 +11,20 @@ user : current session,
     /=> user.id is needed to interact with the db 
 setUser : to change the session
 logout : to end the session
-*/ 
+loading : true if al the informations aren't loaded
+hasRight : if the user has the right to order
+isAdmin : if the user is Admin
+
+
+/!\ if the page needs 'has_right' or 'isAdmin' it needs to improve the "useEffect" of the page : 
+    useEffect(() => {
+        if (loading) return ; // the page needs all the informations to start
+
+        {rest of the useEffect}
+
+        }, [.... , loading]) // useEffect trigger again when all is loaded
+
+*/
 
 
 
@@ -19,45 +32,98 @@ const AuthorContext = createContext()
 
 function AuthorProvider({ children }) {
 
+    const [hasRights, setHasRights] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(null)
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
     // check if a session is already open
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            setUser(data.session?.user ?? null) // if exists return data.sessions.user, else user = null
-            setLoading(false)
-        })
-        
+        async function initAuth() {
+            try {
+                const { data: sessionData } = await supabase.auth.getSession();
+                const currentUser = await sessionData.session?.user ?? null;
+                setUser(currentUser);
 
-        // listen author changes 
-        const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
-            setUser(session?.user ?? null)
-        })
+                if (!currentUser) {
+                    // Pas connecté
+                    setHasRights(false);
+                    setIsAdmin(false);
+                    setLoading(false);
+                    return;
+                }
 
-        // when the user close the app 
-        return () => {
-            listener.subscription.unsubscribe()
+                // Lancer les deux requêtes en parallèle
+                const [rightsRes, adminRes] = await Promise.all([
+                    supabase.from("User").select("has_right").eq("id", currentUser.id).single(),
+                    supabase.from("Admins").select("id").eq("id", currentUser.id).single(),
+                ]);
+
+                // Gestion des droits
+                setHasRights(rightsRes.data?.has_right ?? false);
+
+                // Gestion de l'admin
+                setIsAdmin(!!adminRes.data);
+
+            } catch (err) {
+                console.error("Erreur init auth :", err);
+            } finally {
+                setLoading(false);
+            }
         }
-        
-    }, [])
 
-    // logout function 
+        initAuth();
+        const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => {
+            listener.subscription.unsubscribe();
+        };
+    }, []);
+
+    // Fonctions
     const logout = async () => {
-        // closing supabase session
-        await supabase.auth.signOut()
-        setUser(null)
-    }
+        await supabase.auth.signOut();
+        setUser(null);
+        setIsAdmin(null);
+        setHasRights(null);
+    };
+
+
+    const checkIsAdmin = async (userId) => {
+
+        try {
+            const { data, error } = await supabase
+                .from("Admins")
+                .select("id")
+                .eq("id", userId)
+                .single();
+
+            if (error || !data) {
+                setIsAdmin(false);
+                return false;
+            }
+
+            setIsAdmin(true);
+            return true;
+        } catch (err) {
+            console.error("Erreur lors du check admin :", err.message);
+            setIsAdmin(false);
+            return false;
+        }
+    };
 
 
 
     return (
-        <AuthorContext.Provider value={{ user, setUser, logout, loading }}>
+        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin, checkIsAdmin }}>
             {children}
         </AuthorContext.Provider>
     );
 
 }
+
 
 const useAuthor = () => useContext(AuthorContext)
 

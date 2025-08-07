@@ -1,12 +1,14 @@
 import { supabase } from './supabaseClient.js';
 
-async function uploadPDF(file, fileName) {
+async function uploadPDF(file, fileName, folder) {
     console.log('Uploading file:', fileName, { upsert: false });
+
+    const fullPath = `${folder}/${fileName}`;
 
     // 1. Uploads the file to Supabase private bucket
     const { data: uploadData, error: uploadError } = await supabase.storage
         .from('documents') // bucket name
-        .upload(fileName, file, {
+        .upload(fullPath, file, {
             cacheControl: '3600',
             upsert: true
         });
@@ -16,7 +18,7 @@ async function uploadPDF(file, fileName) {
         return { success: false, error: uploadError };;
     }
 
-    console.log('✅ Upload terminé avec succès :', uploadData);
+    console.log('Upload terminé avec succès :', uploadData);
     return { success: true, data: uploadData };
 }
 

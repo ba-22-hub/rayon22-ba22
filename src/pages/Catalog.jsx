@@ -202,7 +202,7 @@ function Catalog() {
 
       {/* PASTA CAROUSEL */}
       <div className="flex items-start ...">
-        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pattes, riz, semoule...</p>
+        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pâtes, riz, semoule...</p>
         <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
       </div>
       <ProductCarousel data={dataProductCarousel} />
