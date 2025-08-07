@@ -9,7 +9,9 @@ import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
+
 import Loading from '@common/Loading.jsx';
+
 
 const UserTable = () => {
 	const [users, setUsers] = useState([]);
@@ -126,6 +128,10 @@ const UserTable = () => {
     }
 
 	return (
+		<>
+		{loading ? (
+			<Loading />
+		):(
 		<div className="p-6 max-w-7xl mx-auto">
 			<h1 className="text-2xl font-bold mb-4">Liste des Utilisateurs</h1>
 
@@ -278,7 +284,8 @@ const UserTable = () => {
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</div>)}
+	</>
 	);
 };
 

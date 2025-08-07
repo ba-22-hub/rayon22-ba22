@@ -68,7 +68,7 @@ function AdminLayout() {
 function AdminApp() {
   const { isAdmin, loading } = useAuthor();
   if (loading) return <Loading/>;
-
+  
   return (
     <div className="min-h-screen bg-gray-100">
       <Routes>
