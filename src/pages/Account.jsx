@@ -15,7 +15,7 @@ function Account() {
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
     const [activeRequests, setActiveRequest] = useState(false)
-    const { user, logout } = useAuthor()
+    const { user, logout, isAdmin, loading, checkIsAdmin } = useAuthor()
 
     const fileInputRef = useRef(null);
 
@@ -70,9 +70,11 @@ function Account() {
                 console.error("Erreur inattendue:", error.message);
             }
         }
-        fetchUserData()
+        console.log(loading, isAdmin)
+        checkIsAdmin(user.id) // needed otherwise the update of 'isAdmin' isn't fast enough
+            .then(fetchUserData())
             .then(() => checkRequest())
-    }, [user])
+    }, [loading])
 
 
 
@@ -233,92 +235,117 @@ function Account() {
 
     return (
         <>
-            {!clientEdit ? (
+            {!clientEdit || loading ? (
                 <Loading />
             ) : (
-                <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
-                    <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
-                    <button
-                        onClick={handleDeconnection}
-                        className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
-                    >⏼ Déconnexion</button>
-                    <div className="flex flex-row">
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
-                            {renderField("Nom", "lastName")}
-                            {renderField("Prénom", "firstName")}
-                            {renderRadio("Genre", "gender", genderOptions)}
+                isAdmin ? (
+                    <>
+                        <div className="w-[66vw] mx-auto p-[4vw] bg-white rounded-2xl shadow-sm mb-[4vw] flex flex-col items-center text-center">
+                            <p className="text-rayonblue text-[4em]">Ce compte est administrateur</p>
+                            <br />
+                            <p>Il ne possède donc par conséquent pas de données personnelles</p>
 
+                            <button
+                                className="text-white bg-rayonorange w-[30vw] mb-3 mt-[10vh] h-[2rem]"
+                                onClick={() => navigate('/admin/users')}
+                            >
+                                Accéder à l'application administrateur
+                            </button>
+
+                            <button
+                                className="text-white bg-red w-[30vw] mb-3 mt-[2vh] h-[2rem]"
+                                onClick={handleDeconnection}
+                            >
+                                Se déconnecter
+                            </button>
                         </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[26vw] ml-[2vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
-                            {renderField("E-mail", "email")}
-                            {renderField("Téléphone", "phone")}
-                            {renderField("Adresse", "address")}
-                            {renderField("Précisions", "addAddress")}
-                            {renderField("Ville", "city")}
-                            {renderField("Code postal", "postalCode")}
+
+                    </>
+                ) : (
+                    <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
+                        <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
+                        <button
+                            onClick={handleDeconnection}
+                            className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
+                        >⏼ Déconnexion</button>
+                        <div className="flex flex-row">
+                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
+                                <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
+                                {renderField("Nom", "lastName")}
+                                {renderField("Prénom", "firstName")}
+                                {renderRadio("Genre", "gender", genderOptions)}
+
+                            </div>
+                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[26vw] ml-[2vw] p-2">
+                                <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
+                                {renderField("E-mail", "email")}
+                                {renderField("Téléphone", "phone")}
+                                {renderField("Adresse", "address")}
+                                {renderField("Précisions", "addAddress")}
+                                {renderField("Ville", "city")}
+                                {renderField("Code postal", "postalCode")}
+                            </div>
                         </div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
-                        {renderRadio("Situation", "situation", situationOptions)}
-                        {renderField("Quotient familial (CAF)", "quotient")}
-                        {renderRadio("Type de salaire", "wageType", wageOptions)}
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
-                    </div>
-                    <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                        <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
-                        {activeRequests ? (
-                            <p>Une requête est en cours de traitement...</p>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
+                            {renderRadio("Situation", "situation", situationOptions)}
+                            {renderField("Quotient familial (CAF)", "quotient")}
+                            {renderRadio("Type de salaire", "wageType", wageOptions)}
+                        </div>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p></div>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
+                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
+                        </div>
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
+                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                            {activeRequests ? (
+                                <p>Une requête est en cours de traitement...</p>
+                            ) : (
+                                <div className="flex flex-row">
+                                    <input
+                                        className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
+                                        type="file"
+                                        onChange={handleFileSelection}
+                                        accept=".pdf"
+                                        name="fileSelector"
+                                        ref={fileInputRef}
+                                    ></input>
+                                    <button
+                                        className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
+                                        onClick={handleFileSubmit}
+                                    >Valider 🗸</button>
+                                </div>)}
+                        </div>
+                        {!editing ? (
+                            <button
+                                className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                                onClick={() => {
+                                    setEditing(true)
+                                    console.log("editmod enabled")
+                                }
+                                }
+                            >Modifier 🖉</button>
                         ) : (
                             <div className="flex flex-row">
-                                <input
-                                    className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
-                                    type="file"
-                                    onChange={handleFileSelection}
-                                    accept=".pdf"
-                                    name="fileSelector"
-                                    ref={fileInputRef}
-                                ></input>
                                 <button
-                                    className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
-                                    onClick={handleFileSubmit}
+                                    className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                                    onClick={handleCancel}
+                                >Annuler ✖</button>
+                                <button
+                                    className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
+                                    onClick={handleEdit}
                                 >Valider 🗸</button>
-                            </div>)}
-                    </div>
-                    {!editing ? (
-                        <button
-                            className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                            onClick={() => {
-                                setEditing(true)
-                                console.log("editmod enabled")
-                            }
-                            }
-                        >Modifier 🖉</button>
-                    ) : (
-                        <div className="flex flex-row">
-                            <button
-                                className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                                onClick={handleCancel}
-                            >Annuler ✖</button>
-                            <button
-                                className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
-                                onClick={handleEdit}
-                            >Valider 🗸</button>
-                        </div>
-                    )
-                    }
+                            </div>
+                        )
+                        }
 
-                </div>
-            )}
+                    </div>
+                ))}
         </>
     )
+
 }
 
 export default Account;
