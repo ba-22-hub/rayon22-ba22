@@ -250,7 +250,7 @@ function Account() {
                             {renderRadio("Genre", "gender", genderOptions)}
 
                         </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] ml-[2vw] p-2">
+                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[26vw] ml-[2vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
                             {renderField("E-mail", "email")}
                             {renderField("Téléphone", "phone")}
