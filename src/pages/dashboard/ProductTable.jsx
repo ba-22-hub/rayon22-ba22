@@ -1,11 +1,12 @@
+// Importing dependencies
 import { useEffect, useState } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+
+// Importing common components
 import FunctionButton from "@common/FunctionButton.jsx";
-import Loading from "../../common/Loading";
-
-
+import Loading from '@common/Loading.jsx';
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -22,6 +23,7 @@ function ProductTable() {
       navigate('/admin')
       return;
     }
+
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("Products").select("*");
       if (error) console.error("Erreur chargement produits :", error);

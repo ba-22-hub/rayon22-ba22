@@ -8,10 +8,10 @@ import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 
-
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
-import Loading from '../../common/Loading';
+
+import Loading from '@common/Loading.jsx';
 
 function MessagesDashboard() {
   const [messages, setMessages] = useState([]);
@@ -26,6 +26,7 @@ function MessagesDashboard() {
       navigate('/admin')
       return;
     }
+
     fetchMessages();
   }, [loading]);
 

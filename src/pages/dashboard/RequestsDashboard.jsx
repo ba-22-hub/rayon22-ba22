@@ -6,12 +6,17 @@ import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
-import Loading from '../../common/Loading';
+import Loading from '@common/Loading.jsx';
+
 
 function RequestsDashboard() {
     const [requests, setRequests] = useState([]);
+
+    // State to manage loading state to display the Loading component
+    const [isLoading, setIsLoading] = useState(true);
 
     const { isAdmin, loading } = useAuthor()
     const navigate = useNavigate()
@@ -48,6 +53,7 @@ function RequestsDashboard() {
         } else {
             setRequests(data);
         }
+        setIsLoading(false);
     };
 
     // Function to handle deletion of the request
@@ -107,6 +113,11 @@ function RequestsDashboard() {
     const handleDecline = async (id) => {
         console.log(`Refus de la demande ${id}`);
         handleDelete(id);
+    }
+
+    // Displaying the Loading component
+    if (isLoading || loading) {
+        return <Loading />;
     }
 
     return (

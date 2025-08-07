@@ -137,7 +137,7 @@ function Account() {
 
     async function handleFileSubmit() {
         // 1) upload the file 
-        const uploadSuccess = true
+        let uploadSuccess = true
         const name = `${Date.now()}_${file.name}`
         const { success, error } = await uploadPDF(file, name, "requests")
         if (!success) {

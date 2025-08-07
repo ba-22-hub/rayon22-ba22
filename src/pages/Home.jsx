@@ -90,7 +90,7 @@ function Home() {
                 {/* Instagram Section */}
                 <div className="w-1/2 h-52 border border-rayonblue box-border bg-white flex flex-col items-center justify-center">
                     <img src={instagram} alt="Instagram" className="w-20 h-20 mb-4" />
-                    <a href="https://www.instagram.com/banque.alimentaire22/" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/banque.alimentaire22/" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
                         Suivez-nous sur Instagram
                     </a>
                 </div>

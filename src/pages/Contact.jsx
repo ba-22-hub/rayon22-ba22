@@ -11,6 +11,7 @@ import FormTextArea from "../common/FormTextArea"
 import Loading from '../common/Loading';
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
+import Loading from '../common/Loading';
 
 /**
  * The Contact page.
@@ -34,6 +35,8 @@ function Contact() {
 		if (!user) {
 			notify("Vous devez vous connecter pour utiliser cette fonctionnalité !")
 			navigate('/login')
+			return;
+
 		}
 	}, [loading]) // useEffect trigger again when all is loaded
 
@@ -181,11 +184,10 @@ function Contact() {
 										Envoyer
 									</button>
 								</div>
-							</form>
 						</div>
-					</div>
-				</>
-			)}
+					</form>
+				</div>
+			</div>)}
 		</>
 	)
 }

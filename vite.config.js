@@ -11,4 +11,9 @@ export default defineConfig({
       '@common': path.resolve(__dirname, 'src/common'),
     },
   },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true
+  },
+  base: './'
 })

@@ -9,7 +9,9 @@ import { useNavigate } from 'react-router-dom';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
-import Loading from '../../common/Loading';
+
+import Loading from '@common/Loading.jsx';
+
 
 const UserTable = () => {
 	const [users, setUsers] = useState([]);
@@ -18,6 +20,9 @@ const UserTable = () => {
 	const [editMode, setEditMode] = useState(null);
 	const [editedUser, setEditedUser] = useState({});
 	const [update, setUpdate] = useState(true)
+	
+	// State to manage loading state to display the Loading component
+	const [isLoading, setIsLoading] = useState(true);
 
 	const { isAdmin, loading } = useAuthor()
 	const navigate = useNavigate()
@@ -74,6 +79,7 @@ const UserTable = () => {
 			if (error) console.error('Erreur de chargement des utilisateurs :', error);
 			else
 				setUsers(data);
+			setIsLoading(false);
 			console.log(data)
 		};
 		fetchUsers()
@@ -115,6 +121,11 @@ const UserTable = () => {
 			.then(() => setUpdate(!update))
 			.catch((e) => console.error("Une erreur est survenue : ", e))
 	};
+
+	// Displaying the Loading component
+    if (isLoading || loading) {
+        return <Loading />;
+    }
 
 	return (
 		<>

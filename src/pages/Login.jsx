@@ -174,6 +174,12 @@ function Login() {
 						className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
 					/>
 				</div>
+				<div className="flex justify-center">
+					<PageButton 
+						buttonText='Admin' 
+						page='/admin' 
+						className='w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition mt-4' />
+				</div>
 			</div>
 
 		</>
