@@ -15,7 +15,7 @@ function Account() {
     const [client, setClient] = useState(null)
     const [file, setFile] = useState(null)
     const [activeRequests, setActiveRequest] = useState(false)
-    const { user, logout} = useAuthor()
+    const { user, logout } = useAuthor()
 
     const fileInputRef = useRef(null);
 
@@ -28,7 +28,7 @@ function Account() {
     let navigate = useNavigate()
 
     useEffect(() => {
-        if (!user) return ; // to avoid error in the console
+        if (!user) return; // to avoid error in the console
         const fetchUserData = async () => {
             try {
                 // retrieving user's data
@@ -54,7 +54,7 @@ function Account() {
         const checkRequest = async () => {
             try {
                 console.log("Checking requests ...")
-                const { data, error : dberror } = await supabase
+                const { data, error: dberror } = await supabase
                     .from('Requests')
                     .select('id') // optimisation
                     .eq('user_id', user.id)
@@ -65,13 +65,13 @@ function Account() {
                     return;
                 }
                 console.log("request found : ", data)
-                setActiveRequest(data.length > 0) 
+                setActiveRequest(data.length > 0)
             } catch (error) {
                 console.error("Erreur inattendue:", error.message);
             }
         }
         fetchUserData()
-            .then(()=> checkRequest()) 
+            .then(() => checkRequest())
     }, [user])
 
 
@@ -184,49 +184,56 @@ function Account() {
 
     // on factorise l'élément le plus volumineux 
     const renderField = (label, fieldName) => (
-        <div className="flex flex-row text-rayonblue align-center items-center">
-            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} : </label>
-            {editing ? (
-                <input
-                    className="ml-3 border border-rayonorange rounded-lg w-[20vw] mt-1 mb-1 text-rayonorange pl-2 h-[1.5rem]"
-                    name={fieldName}
-                    value={clientEdit[fieldName]}
-                    onChange={handleChange}
-                />
-            ) : (
-                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-            )}
-        </div>
-    )
-
-    const renderRadio = (label, fieldName, options) => (
-        <div className="flex flex-row text-rayonblue mb-2">
-            <label className="font-semibold w-[7vw] mt-2 mb-2">{label} :</label>
-            {editing ? (
-                <div className="flex text-rayonorange">
-                    {options.map((option) => (
-                        <label key={option} className="flex items-center ml-4">
-                            <input
-                                className="mr-1"
-                                type="radio"
-                                name={fieldName}
-                                value={option}
-                                checked={clientEdit[fieldName] === option}
-                                onChange={handleChange}
-                            />
-                            {option}
-                        </label>
-                    ))}
-                </div>
-            ) : (
-                <p className="ml-3 mt-2 mb-2">{clientEdit[fieldName]}</p>
-            )}
+        <div className="flex flex-row items-center text-rayonblue mb-2">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+            <div className="flex-1">
+                {editing ? (
+                    <input
+                        className="border border-rayonorange rounded-lg w-full text-rayonorange pl-2 h-[1.8rem]"
+                        name={fieldName}
+                        value={clientEdit[fieldName]}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    <p className="text-rayonblue">{clientEdit[fieldName]}</p>
+                )}
+            </div>
         </div>
     );
 
+
+    const renderRadio = (label, fieldName, options) => (
+        <div className="flex flex-row items-center text-rayonblue mb-2">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+            <div className="flex-1">
+                {editing ? (
+                    <div className="flex flex-wrap gap-4 text-rayonorange">
+                        {options.map((option) => (
+                            <label key={option} className="flex items-center">
+                                <input
+                                    className="mr-1"
+                                    type="radio"
+                                    name={fieldName}
+                                    value={option}
+                                    checked={clientEdit[fieldName] === option}
+                                    onChange={handleChange}
+                                />
+                                {option}
+                            </label>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-rayonblue">{clientEdit[fieldName]}</p>
+                )}
+            </div>
+        </div>
+    );
+
+
+
     return (
         <>
-            { !clientEdit ? (
+            {!clientEdit ? (
                 <Loading />
             ) : (
                 <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
@@ -261,29 +268,29 @@ function Account() {
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right?(`${client.end_right}`) : ("Compte invalide")}</p></div>
+                        <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
                         <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
                     </div>
                     <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                         <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
-                        { activeRequests ? (
+                        {activeRequests ? (
                             <p>Une requête est en cours de traitement...</p>
-                        ): (
-                        <div className="flex flex-row">
-                            <input
-                                className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
-                                type="file"
-                                onChange={handleFileSelection}
-                                accept=".pdf"
-                                name="fileSelector"
-                                ref={fileInputRef}
-                            ></input>
-                            <button
-                                className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
-                                onClick={handleFileSubmit}
-                            >Valider 🗸</button>
-                        </div>)}
+                        ) : (
+                            <div className="flex flex-row">
+                                <input
+                                    className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
+                                    type="file"
+                                    onChange={handleFileSelection}
+                                    accept=".pdf"
+                                    name="fileSelector"
+                                    ref={fileInputRef}
+                                ></input>
+                                <button
+                                    className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
+                                    onClick={handleFileSubmit}
+                                >Valider 🗸</button>
+                            </div>)}
                     </div>
                     {!editing ? (
                         <button
