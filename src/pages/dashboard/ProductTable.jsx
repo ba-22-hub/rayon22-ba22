@@ -26,12 +26,13 @@ function ProductTable() {
     image_name: '',
   });
 
+  const fetchProducts = async () => {
+    const { data, error } = await supabase.from("Products").select("*");
+    if (error) console.error("Erreur chargement produits :", error);
+    else setProducts(data);
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data, error } = await supabase.from("Products").select("*");
-      if (error) console.error("Erreur chargement produits :", error);
-      else setProducts(data);
-    };
     const updateForm = async () => {
       setFormData(formData)
     }
@@ -103,6 +104,7 @@ function ProductTable() {
     })
 
     setExpanded(false)
+    fetchProducts()
   }
 
   const BrowseImage = (newProduct, product) => {
@@ -147,7 +149,7 @@ function ProductTable() {
     );
   };
 
-    const BrowseImageChange = (product) => {
+  const BrowseImageChange = (product) => {
     const handleFileUpload = e => {
       const { files } = e.target;
       if (files && files.length) {
