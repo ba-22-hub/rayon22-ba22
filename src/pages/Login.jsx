@@ -33,7 +33,6 @@ function Login() {
 	// function to hadle the form submit
 	async function handleSubmit(e) {
 		e.preventDefault();
-		console.log(formData);
 
 		// Auth Supabase
 		const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -42,7 +41,6 @@ function Login() {
 		});
 
 		const { data: sessionData } = await supabase.auth.getSession();
-		console.log("Session:", sessionData?.session);
 
 
 		if (loginError) {
