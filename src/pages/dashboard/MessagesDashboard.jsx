@@ -11,6 +11,7 @@ import { deletePDF } from '@lib/deletePDF';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
+import Loading from '../../common/Loading';
 
 function MessagesDashboard() {
   const [messages, setMessages] = useState([]);
@@ -20,11 +21,11 @@ function MessagesDashboard() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (loading) return ; // wait for the author informations to be fetch
-		if (!isAdmin){
-			navigate('/admin')
-			return;	
-		}
+    if (loading) return; // wait for the author informations to be fetch
+    if (!isAdmin) {
+      navigate('/admin')
+      return;
+    }
     fetchMessages();
   }, [loading]);
 
@@ -104,66 +105,71 @@ function MessagesDashboard() {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <h2 className="text-2xl font-bold">Messages des utilisateurs</h2>
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="p-4 space-y-4">
+          <h2 className="text-2xl font-bold">Messages des utilisateurs</h2>
 
-      {messages.map((msg) => (
-        <div key={msg.id} className="border rounded-lg p-4 shadow bg-white space-y-2">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500">
-                Reçu le {new Date(msg.created_at).toLocaleString()} par <strong>{msg.User.firstName} {(msg.User.lastName).toUpperCase()}</strong>
-              </p>
-              <p className="mt-2">{msg.message}</p>
-              {msg.pdf_name && (
-                <FunctionButton
-                  fun={() => handleDownloadPDF(msg.pdf_name)}
-                  buttonText={msg.pdf_name}
-                  className="mt-2 text-blue-600 underline bg-transparent p-0 shadow-none"
-                />
+          {messages.map((msg) => (
+            <div key={msg.id} className="border rounded-lg p-4 shadow bg-white space-y-2">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm text-gray-500">
+                    Reçu le {new Date(msg.created_at).toLocaleString()} par <strong>{msg.User.firstName} {(msg.User.lastName).toUpperCase()}</strong>
+                  </p>
+                  <p className="mt-2">{msg.message}</p>
+                  {msg.pdf_name && (
+                    <FunctionButton
+                      fun={() => handleDownloadPDF(msg.pdf_name)}
+                      buttonText={msg.pdf_name}
+                      className="mt-2 text-blue-600 underline bg-transparent p-0 shadow-none"
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <FunctionButton
+                    fun={() => handleReplyToggle(msg.id)}
+                    buttonText="Répondre"
+                    className="text-white bg-blue-600 px-3 py-1 rounded hover:bg-blue-700"
+                  />
+                  <FunctionButton
+                    fun={() => handleDelete(msg.id)}
+                    buttonText="Supprimer"
+                    className="text-white bg-red px-3 py-1 rounded hover:bg-red"
+                  />
+                </div>
+              </div>
+
+              {replyStates[msg.id] && (
+                <div className="mt-4">
+                  <textarea
+                    className="w-full p-2 border rounded"
+                    rows="4"
+                    placeholder="Écris ta réponse ici..."
+                    onChange={(e) =>
+                      setReplyStates((prev) => ({
+                        ...prev,
+                        [msg.id]: {
+                          ...prev[msg.id],
+                          content: e.target.value,
+                        },
+                      }))
+                    }
+                  ></textarea>
+                  <FunctionButton
+                    fun={() => handleReplySend(msg.id, replyStates[msg.id]?.content || '')}
+                    buttonText="Envoyer"
+                    className="mt-2 bg-green text-white px-3 py-1 rounded hover:bg-green"
+                  />
+                </div>
               )}
             </div>
-
-            <div className="flex flex-col gap-2">
-              <FunctionButton
-                fun={() => handleReplyToggle(msg.id)}
-                buttonText="Répondre"
-                className="text-white bg-blue-600 px-3 py-1 rounded hover:bg-blue-700"
-              />
-              <FunctionButton
-                fun={() => handleDelete(msg.id)}
-                buttonText="Supprimer"
-                className="text-white bg-red px-3 py-1 rounded hover:bg-red"
-              />
-            </div>
-          </div>
-
-          {replyStates[msg.id] && (
-            <div className="mt-4">
-              <textarea
-                className="w-full p-2 border rounded"
-                rows="4"
-                placeholder="Écris ta réponse ici..."
-                onChange={(e) =>
-                  setReplyStates((prev) => ({
-                    ...prev,
-                    [msg.id]: {
-                      ...prev[msg.id],
-                      content: e.target.value,
-                    },
-                  }))
-                }
-              ></textarea>
-              <FunctionButton
-                fun={() => handleReplySend(msg.id, replyStates[msg.id]?.content || '')}
-                buttonText="Envoyer"
-                className="mt-2 bg-green text-white px-3 py-1 rounded hover:bg-green"
-              />
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+          ))}
+        </div>)}
+    </>
   );
 }
 

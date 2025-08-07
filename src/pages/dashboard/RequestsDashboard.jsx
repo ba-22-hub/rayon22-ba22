@@ -8,6 +8,7 @@ import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
+import Loading from '../../common/Loading';
 
 function RequestsDashboard() {
     const [requests, setRequests] = useState([]);
@@ -17,11 +18,11 @@ function RequestsDashboard() {
 
     useEffect(() => {
         console.log(loading, isAdmin)
-        if (loading) return ; // wait for the author informations to be fetch
-		if (!isAdmin){
-			navigate('/admin')
-			return;	
-		}
+        if (loading) return; // wait for the author informations to be fetch
+        if (!isAdmin) {
+            navigate('/admin')
+            return;
+        }
         fetchRequests();
     }, [loading]);
 
@@ -109,52 +110,57 @@ function RequestsDashboard() {
     }
 
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">Demandes PDF</h2>
-            <div className="space-y-4">
-                {requests.length === 0 ? (
-                    <p className="text-gray-500">Aucune demande disponible.</p>
-                ) : (
-                    requests.map((req) => (
-                        <div key={req.id} className="bg-white border rounded-lg p-4 shadow-md">
+        <>
+            {loading ? (
+                <Loading />
+            ) : (
+                <div className="p-4">
+                    <h2 className="text-2xl font-bold mb-4">Demandes PDF</h2>
+                    <div className="space-y-4">
+                        {requests.length === 0 ? (
+                            <p className="text-gray-500">Aucune demande disponible.</p>
+                        ) : (
+                            requests.map((req) => (
+                                <div key={req.id} className="bg-white border rounded-lg p-4 shadow-md">
 
-                            <p><strong>Date de création :</strong> {new Date(req.created_at).toLocaleString()}</p>
+                                    <p><strong>Date de création :</strong> {new Date(req.created_at).toLocaleString()}</p>
 
-                            <p>
-                                <strong>Demandeur :</strong>{' '}
-                                {req.User
-                                    ? `${req.User.firstName} ${req.User.lastName} (${req.User.email})`
-                                    : 'Utilisateur inconnu'}
-                            </p>
+                                    <p>
+                                        <strong>Demandeur :</strong>{' '}
+                                        {req.User
+                                            ? `${req.User.firstName} ${req.User.lastName} (${req.User.email})`
+                                            : 'Utilisateur inconnu'}
+                                    </p>
 
-                            {req.pdf_name && (
-                                <FunctionButton
-                                    fun={() => handleDownloadPDF(req.pdf_name)}
-                                    buttonText={req.pdf_name}
-                                    className="mt-2 text-blue-600 underline bg-transparent p-0 shadow-none"
-                                />
-                            )}
+                                    {req.pdf_name && (
+                                        <FunctionButton
+                                            fun={() => handleDownloadPDF(req.pdf_name)}
+                                            buttonText={req.pdf_name}
+                                            className="mt-2 text-blue-600 underline bg-transparent p-0 shadow-none"
+                                        />
+                                    )}
 
-                            <div className="mt-3 flex space-x-2">
-                                <button
-                                    onClick={() => handleApprove(req.id, req.User.id)}
-                                    className="bg-green hover:bg-green text-white px-4 py-2 rounded"
-                                >
-                                    Accepter
-                                </button>
-                                <button
-                                    onClick={() => handleDecline(req.id)}
-                                    className="bg-red hover:bg-red text-white px-4 py-2 rounded"
-                                >
-                                    Décliner
-                                </button>
-                            </div>
+                                    <div className="mt-3 flex space-x-2">
+                                        <button
+                                            onClick={() => handleApprove(req.id, req.User.id)}
+                                            className="bg-green hover:bg-green text-white px-4 py-2 rounded"
+                                        >
+                                            Accepter
+                                        </button>
+                                        <button
+                                            onClick={() => handleDecline(req.id)}
+                                            className="bg-red hover:bg-red text-white px-4 py-2 rounded"
+                                        >
+                                            Décliner
+                                        </button>
+                                    </div>
 
-                        </div>
-                    ))
-                )}
-            </div>
-        </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>)}
+        </>
     );
 }
 

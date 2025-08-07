@@ -14,6 +14,7 @@ import UserTable from "./pages/dashboard/UserTable.jsx";
 import ProductTable from "./pages/dashboard/ProductTable.jsx";
 import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
 import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
+import Loading from "./common/Loading.jsx";
 
 function AdminNavbar() {
   const { logout } = useAuthor()
@@ -46,7 +47,7 @@ function AdminNavbar() {
 
 function AdminApp() {
   const { isAdmin, loading} = useAuthor()
-  if (loading) return (<p>Chargement... </p>)
+  if (loading) return (<Loading />)
   return (
     <div className="min-h-screen bg-gray-100">
       <Router>
