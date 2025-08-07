@@ -19,6 +19,7 @@ Cette plateforme vise à fluidifier la gestion administrative tout en amélioran
     - [Gestion des utilisateurs](#👥-gestion-des-utilisateurs)
     - [Gestion des produits](#🧾-gestion-des-produits)
 - [Guide de programmation](#🧑‍💻-guide-de-programmation)
+    - [Technologie utilisées](#⚙️-technologies-utilisées)
     - [Installation du projet](#🚀-installation-du-projet)
     - [Strucutre du projet](#📂-structure-du-projet)
 - [Informations complémentaires](#📌-informations-complémentaires)
@@ -40,7 +41,7 @@ Vous pouvez :
 
 - Lancer l'application en local
 
-Pour plus de détails, veuillez vous référer au [Guide de programmation](#guide-de-programmation).
+💡 Pour plus de détails, veuillez vous référer au [Guide de programmation](#guide-de-programmation).
 
 ### ▶️ 2. Utiliser l’exécutable Electron (mode simplifié)
 
@@ -60,9 +61,79 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ## 🧑‍💻 Guide de programmation
 
+### ⚙️ Technologies utilisées
+
+Le projet est serverless, reposant principalement sur un frontend React connecté à des services distants hébergés dans le cloud. Cela permet une architecture légère, facilement déployable et scalable.  
+
+**Composants principaux :**
+
+- **Frontend :** React.js
+    Interface utilisateur dynamique et réactive.
+
+- **Base de données :** Supabase (PostgreSQL)
+    Stockage des données clients et produits, avec accès sécurisé.
+
+- **Authentification :** JWT & bcrypt via Supabase Auth
+    Gestion des sessions utilisateurs et protection des données personnelles.
+
+- **Envoi d’emails :** EmailJS
+    Utilisé pour les notifications (validation de compte, rappels, etc.)
+
 ### 🚀 Installation du projet
 
+**1. Prérequis**    
+
+Avant de commencer, assurez-vous d’avoir les outils suivants installés sur votre machine :
+- [Node.js 22.12+](https://nodejs.org/en/download)
+- [Git](https://git-scm.com/downloads)
+
+**2. Cloner le dépôt**  
+
+Clonez le projet via SSH :
+```bash
+git clone git@github.com:dallatIkes/rayon22.git
+```
+💡 Vous pouvez également utiliser l’archive .zip fournie si vous ne souhaitez pas utiliser Git.
+
+**3. Installer les dépendances**  
+
+Installez les modules nécessaires au bon fonctionnement de l’application :
+```bash
+npm install
+```
+
+**4. Configuration des variables d’environnement**
+Un fichier `.env` vous sera transmis contenant l’ensemble des clés API et identifiants nécessaires au fonctionnement du projet.
+
+⚠️ **Ce fichier est confidentiel :** Ne le partagez jamais publiquement, ne le versionnez pas avec Git (`.env` est ignoré par défaut via `.gitignore`).
+
 ### 📂 Structure du projet
+
+```bash
+📁 rayon22/
+├── 📁 electron/                # Fichiers spécifiques à l'intégration Electron (version exécutable)
+├── 📁 node_modules/            # Dépendances installées automatiquement (non modifiable manuellement)
+├── 📁 src/                     # Dossier principal contenant tout le code source de l'application
+│   ├── AdminApp.jsx            # Point d'entrée pour l'application côté administrateur
+│   ├── App.jsx                 # Point d'entrée principal de l'application (bénéficiaire)
+│   ├── main.jsx                # Script d'initialisation React avec ReactDOM
+│   ├── Root.jsx                # Composant racine englobant la structure des routes ou layouts
+│   ├── 📁 assets/              # Ressources statiques (images, logos, icônes, etc.)
+│   ├── 📁 common/              # Composants réutilisables (boutons, champs de formulaire, alertes, etc.)
+│   ├── 📁 context/             # Contextes React (authentification, état global partagé, etc.)
+│   ├── 📁 lib/                 # Fonctions utilitaires, services API, helpers divers
+│   ├── 📁 pages/               # Pages principales de l'application (Accueil, Connexion, Profil, etc.)
+│   └── 📁 styles/              # Fichiers de style globaux ou modules CSS/Tailwind
+├── index.html                  # Fichier HTML principal injecté par Vite (root de l'app web)
+├── eslint.config.js            # Configuration ESLint pour le linting du code (qualité, conventions)
+├── tailwind.config.js          # Configuration de Tailwind CSS (thèmes, couleurs, breakpoints, etc.)
+├── postcss.config.cjs          # Configuration PostCSS (utilisé par Tailwind pour générer les styles)
+├── vite.config.js              # Configuration Vite (outil de bundling et serveur de dev)
+├── package.json                # Déclaration des dépendances, scripts, et métadonnées du projet
+├── package-lock.json           # Verrouillage des versions exactes des dépendances (auto-généré)
+└── README.md                   # Documentation du projet (présentation, installation, usage, etc.)
+
+```
 
 ## 📌 Informations complémentaires
 
