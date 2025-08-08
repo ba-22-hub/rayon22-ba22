@@ -347,7 +347,7 @@ function ProductTable() {
                   ['image_name', 'Poids (g)', false, "text"],
                 ].map(([field, label, nullable, type]) => (
                   field === 'image_name' ? (
-                    <BrowseImage newProduct={true}></BrowseImage>
+                    <BrowseImage key={field} newProduct={true}></BrowseImage>
                   ) : (
                     <div key={field}>
                       <FormInput
