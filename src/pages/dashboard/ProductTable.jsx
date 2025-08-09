@@ -286,7 +286,7 @@ function ProductTable() {
                             ))}
                         </td>
                         <td className="p-2">
-                          <BrowseImageChange newProduct={false} product={p}></BrowseImageChange>
+                          <BrowseImageChange product={p}></BrowseImageChange>
                         </td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
