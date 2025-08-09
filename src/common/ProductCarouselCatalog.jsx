@@ -1,12 +1,16 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
 
 
 import Slider from "react-slick";
+import { supabase } from "../lib/supabaseClient";
+
+// Importing assets
+import roundLogo from "../assets/logos/roundLogo.png"
 
 {/* TODO: Add here the real showcase products (the showcase isn't linked tho the database) */ }
 
@@ -77,6 +81,34 @@ function ProductCarousel({ data }) {
       }
     }
 
+    function DisplayImage({ product }) {
+      const [imageUrl, setImageUrl] = useState(null);
+
+      useEffect(() => {
+        async function fetchImage() {
+          const { data, error } = await supabase
+            .storage
+            .from("images")
+            .download(product.image_name);
+
+          if (error) {
+            console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
+            return
+          }
+
+          const url = URL.createObjectURL(data);
+          setImageUrl(url);
+
+        }
+
+        fetchImage();
+      }, [product.image_name]);
+
+      return <>
+        <img src={imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain"/>
+      </>
+    }
+
     return <>
       <div className="bg-white shadow-md rounded-xl overflow-hidden w-60 ml-0.1">
         <div className="p-4">
@@ -88,7 +120,7 @@ function ProductCarousel({ data }) {
 
           <div className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}€</div>
         </div>
-        <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
+        <DisplayImage product={product}></DisplayImage>
         <div className="p-4">
           <p className="text-[#3435FF] text-lg font-semibold">{product.name}</p>
           <p className="text-[#3435FF] text-xs">{product.weight}g, {product.category || ''}</p>

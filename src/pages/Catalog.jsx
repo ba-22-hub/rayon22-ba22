@@ -205,28 +205,28 @@ function Catalog() {
         <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pâtes, riz, semoule...</p>
         <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
       </div>
-      <ProductCarousel data={dataProductCarousel} />
+      {/* <ProductCarousel data={dataProductCarousel} /> */}
 
       {/* VEGETABLE CAROUSEL */}
       <div className="flex items-start ...">
         <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de légumes</p>
         <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
       </div>
-      <ProductCarousel data={dataProductCarousel} />
+      {/* <ProductCarousel data={dataProductCarousel} /> */}
 
       {/* FISH CAROUSEL */}
       <div className="flex items-start ...">
         <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de poisson</p>
         <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
       </div>
-      <ProductCarousel data={dataProductCarousel} />
+      {/* <ProductCarousel data={dataProductCarousel} /> */}
 
       {/* HYGIENE CAROUSEL */}
       <div className="flex items-start ...">
         <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Produit d'hygiène</p>
         <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
       </div>
-      <ProductCarousel data={dataProductCarousel} />
+      {/* <ProductCarousel data={dataProductCarousel} /> */}
     </>
   )
 }
