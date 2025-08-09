@@ -2,15 +2,16 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
-
-// Importing common components
-import FormInput from "@common/FormInput"
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 
 // Importing common components
+import FormInput from "@common/FormInput"
 import FunctionButton from "@common/FunctionButton.jsx";
 import Loading from '@common/Loading.jsx';
+
+// Importing assets
+import roundLogo from "../../assets/logos/roundLogo.png"
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -210,6 +211,34 @@ function ProductTable() {
     );
   };
 
+  function DisplayImage({ product }) {
+    const [imageUrl, setImageUrl] = useState(null);
+
+    useEffect(() => {
+      async function fetchImage() {
+        const { data, error } = await supabase
+          .storage
+          .from("images")
+          .download(product.image_name);
+
+        if (error) {
+          console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
+          return
+        }
+
+        const url = URL.createObjectURL(data);
+        setImageUrl(url);
+
+      }
+
+      fetchImage();
+    }, [product.image_name]);
+
+    return <>
+      <img src={imageUrl || roundLogo} alt={product.name} className="w-[50%] h-20 object-contain" />
+    </>
+  }
+
   return (
     <>
       {loading ? (
@@ -308,8 +337,7 @@ function ProductTable() {
                         <td className="p-2">{p["salePrice"]}</td>
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
-                        <td className="p-2">
-                        </td>
+                        <td><DisplayImage product={p}></DisplayImage></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
                             className="bg-blue-600 text-white px-2 py-1 rounded"
