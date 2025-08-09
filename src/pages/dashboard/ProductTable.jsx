@@ -81,7 +81,7 @@ function ProductTable() {
 
   const handleValidate = async () => {
     console.log("editedValues" + editedValues)
-    if (editedValues.image_name != "") {
+    if (image != "") {
       uploadImage(image, image.name)
     }
     const { error } = await supabase
@@ -278,12 +278,12 @@ function ProductTable() {
                           />
                         </td>
                         <td className="p-2">
-                          <input
-                            name="category"
-                            value={editedValues["category"]}
-                            onChange={handleChangeInProd}
-                            className="border p-1 rounded w-full"
-                          />
+                          {
+                            ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"].map((category) => (
+                              <div key={category}>
+                                <input type="radio" name="category" value={category} onChange={handleChangeInProd} required /> <a className="ml-1 mr-5">{category}</a>
+                              </div>
+                            ))}
                         </td>
                         <td className="p-2">
                           <BrowseImageChange newProduct={false} product={p}></BrowseImageChange>
@@ -373,15 +373,10 @@ function ProductTable() {
                 </div>
                 <div className="ml-[8%]">
                   <p className="text-rayonblue mb-1">Catégorie <a className="text-red">*</a></p>
-                  {/*<a className="text-red"> *</a>*/}
-                  {/** Mapping categories */}
                   {
                     ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"].map((category) => (
-
                       <label key={category}>
-                        
                         <input type="radio" name="category" value={category} onChange={handleChangeInForm} required /> <a className="text-rayonblue ml-1 mr-5">{category}</a>
-
                       </label>
                     ))}
                 </div>
@@ -397,25 +392,6 @@ function ProductTable() {
                     isStarred={true} />
                 </div>
                 <BrowseImage newProduct={true}></BrowseImage>
-                {/* {[
-                  ['image_name', 'Poids (g)', false, "text"],
-                ].map(([field, label, nullable, type]) => (
-                  field === 'image_name' ? (
-                    <BrowseImage key={field} newProduct={true}></BrowseImage>
-                  ) : (
-                    <div key={field}>
-                      <FormInput
-                        labelClassName="ml-[8%]"
-                        type={type}
-                        className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
-                        inputText={label}
-                        name={field}
-                        value={formData[field] ?? ""}
-                        onChange={handleChangeInForm}
-                        isStarred={nullable ? false : true} />
-                    </div>
-                  )
-                ))} */}
               </div>
               <button
                 type="submit"
