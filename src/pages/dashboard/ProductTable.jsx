@@ -171,7 +171,7 @@ function ProductTable() {
           onChange={handleFileUpload}
           type="file"
         />
-        <div className="bg-rayonorange px-2 py-1 rounded button text-white" onClick={onButtonClick}>
+        <div className="bg-rayonorange px-2 py-1 rounded button text-white text-center mx-[8%]" onClick={onButtonClick}>
           Browse
         </div>
       </div>
@@ -337,13 +337,67 @@ function ProductTable() {
           {expanded && (
             <div>
               <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables à l'ajout d'un produit dans la base de données.</p>
-              <div className="grid grid-cols-2 gap-4 text-sm mb-4">
-                {[
-                  ['name', 'Nom', false, "text"],
-                  ['price', 'Prix en magasin (€)', false, "number"],
-                  ['salePrice', 'Prix rayon22 (€)', false, "number"],
-                  ['category', 'Catégorie', true, "text"],
-                  ['weight', 'Poids (g)', false, "number"],
+              <div className="grid grid-cols-2 gap-4 text-sm mb-4 items-center">
+                <div>
+                  <FormInput
+                    name="name"
+                    type="text"
+                    value={formData["name"] ?? ""}
+                    inputText="Nom"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <div>
+                  <FormInput
+                    name="price"
+                    type="number"
+                    value={formData["price"] ?? ""}
+                    inputText="Prix en magasin (€)"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <div>
+                  <FormInput
+                    name="salePrice"
+                    type="number"
+                    value={formData["salePrice"] ?? ""}
+                    inputText="Prix rayon22 (€)"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <div className="ml-[8%]">
+                  <p className="text-rayonblue mb-1">Catégorie <a className="text-red">*</a></p>
+                  {/*<a className="text-red"> *</a>*/}
+                  {/** Mapping categories */}
+                  {
+                    ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"].map((category) => (
+
+                      <label key={category}>
+                        
+                        <input type="radio" name="category" value={category} onChange={handleChangeInForm} required /> <a className="text-rayonblue ml-1 mr-5">{category}</a>
+
+                      </label>
+                    ))}
+                </div>
+                <div>
+                  <FormInput
+                    name="weight"
+                    type="number"
+                    value={formData["weight"] ?? ""}
+                    inputText="Poids (g)"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <BrowseImage newProduct={true}></BrowseImage>
+                {/* {[
                   ['image_name', 'Poids (g)', false, "text"],
                 ].map(([field, label, nullable, type]) => (
                   field === 'image_name' ? (
@@ -361,13 +415,13 @@ function ProductTable() {
                         isStarred={nullable ? false : true} />
                     </div>
                   )
-                ))}
-                <button
-                  type="submit"
-                  onClick={handleSubmit}
-                  className="px-4 py-2 bg-[#038709] text-white rounded"
-                >Valider</button>
+                ))} */}
               </div>
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="px-4 py-2 bg-[#038709] text-white rounded mx-[20%]"
+              >Valider</button>
 
             </div>
           )}
