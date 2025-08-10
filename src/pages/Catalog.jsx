@@ -182,12 +182,39 @@ const SearchBar = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-        <ProductCarousel data={filteredProducts}></ProductCarousel>
+      <ProductCarousel data={filteredProducts}></ProductCarousel>
     </div>
   );
 }
 
 function Catalog() {
+  const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]
+  const [productsByCategory, setProductsByCategory] = useState({})
+
+  useEffect(() => {
+    const fetchProductsFromCategory = async (category) => {
+      const { data, error } = await supabase
+        .from("Products")
+        .select("*")
+        .eq('category', category);
+      if (error) console.error("Erreur chargement produits :", error);
+      else {
+        setProductsByCategory(prevData => ({
+          ...prevData,
+          [category]: data
+        }));
+      }
+    };
+    const fetchProductsByCategories = async () => {
+      {
+        categoriesList.map((category) => (
+          fetchProductsFromCategory(category)
+        ))
+      }
+    }
+    fetchProductsByCategories()
+  }, []);
+
   return (
     <>
       <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight ml-10 mb-6">Nos produits</h1>
@@ -200,33 +227,17 @@ function Catalog() {
         </p>
       </div>
 
-      {/* PASTA CAROUSEL */}
-      <div className="flex items-start ...">
-        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Pâtes, riz, semoule...</p>
-        <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
+      <div>
+        {categoriesList.map((category) => (
+          <div key={category}>
+            <div className="flex items-start ...">
+              <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category}</p>
+              <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
+            </div>
+            <ProductCarousel data={productsByCategory[category] || []} />
+          </div>
+        ))}
       </div>
-      {/* <ProductCarousel data={dataProductCarousel} /> */}
-
-      {/* VEGETABLE CAROUSEL */}
-      <div className="flex items-start ...">
-        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de légumes</p>
-        <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
-      </div>
-      {/* <ProductCarousel data={dataProductCarousel} /> */}
-
-      {/* FISH CAROUSEL */}
-      <div className="flex items-start ...">
-        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Conserves de poisson</p>
-        <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
-      </div>
-      {/* <ProductCarousel data={dataProductCarousel} /> */}
-
-      {/* HYGIENE CAROUSEL */}
-      <div className="flex items-start ...">
-        <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">Produit d'hygiène</p>
-        <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
-      </div>
-      {/* <ProductCarousel data={dataProductCarousel} /> */}
     </>
   )
 }

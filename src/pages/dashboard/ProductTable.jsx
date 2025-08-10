@@ -14,6 +14,8 @@ import Loading from '@common/Loading.jsx';
 import roundLogo from "../../assets/logos/roundLogo.png"
 
 function ProductTable() {
+  const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]
+
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
@@ -43,10 +45,6 @@ function ProductTable() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const updateForm = async () => {
-      setFormData(formData)
-    }
-
     if (loading) return; // wait for the author informations to be fetch
     if (!isAdmin) {
       navigate('/admin')
@@ -54,7 +52,6 @@ function ProductTable() {
     }
 
     fetchProducts();
-    updateForm();
   }, [loading]);
 
   const handleEdit = (product) => {
@@ -308,7 +305,7 @@ function ProductTable() {
                         </td>
                         <td className="p-2">
                           {
-                            ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"].map((category) => (
+                            categoriesList.map((category) => (
                               <div key={category}>
                                 <input type="radio" name="category" value={category} onChange={handleChangeInProd} required /> <a className="ml-1 mr-5">{category}</a>
                               </div>
@@ -402,7 +399,7 @@ function ProductTable() {
                 <div className="ml-[8%]">
                   <p className="text-rayonblue mb-1">Catégorie <a className="text-red">*</a></p>
                   {
-                    ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"].map((category) => (
+                    categoriesList.map((category) => (
                       <label key={category}>
                         <input type="radio" name="category" value={category} onChange={handleChangeInForm} required /> <a className="text-rayonblue ml-1 mr-5">{category}</a>
                       </label>
