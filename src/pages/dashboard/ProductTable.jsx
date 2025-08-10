@@ -68,6 +68,16 @@ function ProductTable() {
     }
   };
 
+  const removeProd = async (product) => {
+    console.log("Suppression :", product.id)
+    const response = await supabase
+      .from("products")
+      .delete()
+      .eq('id', product.id)
+    console.log("response :" + response)
+    fetchProducts()
+  }
+
   // function to set the new formData value whenever the inputs are changed
   function handleChangeInForm(e) {
     const { name, value } = e.target;
@@ -344,7 +354,7 @@ function ProductTable() {
                           <FunctionButton
                             className="bg-red text-white px-2 py-1 rounded"
                             buttonText="Supprimer"
-                            fun={() => console.log("Suppression :", p.id)}
+                            fun={() => removeProd(p)}
                           />
                         </td>
                       </>
