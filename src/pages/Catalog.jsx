@@ -215,6 +215,10 @@ function Catalog() {
     fetchProductsByCategories()
   }, []);
 
+  const capitalizeString = ( str ) => {
+    return str.charAt(0).toUpperCase() + str(slice(1));
+  }
+
   return (
     <>
       <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight ml-10 mb-6">Nos produits</h1>
@@ -228,15 +232,23 @@ function Catalog() {
       </div>
 
       <div>
-        {categoriesList.map((category) => (
-          <div key={category}>
-            <div className="flex items-start ...">
-              <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category}</p>
-              <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
-            </div>
-            <ProductCarousel data={productsByCategory[category] || []} />
-          </div>
-        ))}
+        {categoriesList.map((category) => {
+          const products = productsByCategory[category] || [];
+          if (products.length > 0) {
+            return <>
+              <div key={category}>
+                <div className="flex items-start ...">
+                  <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0,1).toUpperCase() + category.slice(1, category.length)}</p>
+                  <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
+                </div>
+                <ProductCarousel data={products} />
+              </div>
+            </>
+          }
+          else {
+            return null
+          }
+        })}
       </div>
     </>
   )
