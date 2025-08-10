@@ -157,7 +157,7 @@ const SearchBar = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase.from('Products').select('*');
+      const { data, error } = await supabase.from('products').select('*');
       if (error) console.error('Erreur de chargement des produits :', error);
       else
         setProducts(data);
@@ -194,7 +194,7 @@ function Catalog() {
   useEffect(() => {
     const fetchProductsFromCategory = async (category) => {
       const { data, error } = await supabase
-        .from("Products")
+        .from("products")
         .select("*")
         .eq('category', category);
       if (error) console.error("Erreur chargement produits :", error);
@@ -214,10 +214,6 @@ function Catalog() {
     }
     fetchProductsByCategories()
   }, []);
-
-  const capitalizeString = ( str ) => {
-    return str.charAt(0).toUpperCase() + str(slice(1));
-  }
 
   return (
     <>

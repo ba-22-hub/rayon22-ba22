@@ -36,7 +36,7 @@ function ProductTable() {
   });
 
   const fetchProducts = async () => {
-    const { data, error } = await supabase.from("Products").select("*");
+    const { data, error } = await supabase.from("products").select("*");
     if (error) console.error("Erreur chargement produits :", error);
     else setProducts(data);
   };
@@ -83,7 +83,7 @@ function ProductTable() {
       uploadImage(image, image.name)
     }
     const { error } = await supabase
-      .from("Products")
+      .from("products")
       .update(editedValues)
       .eq("id", editingProductId);
     if (error) console.error("Erreur update :", error);
@@ -106,7 +106,7 @@ function ProductTable() {
 
     // Adding a new row to the 'Products' database
     const { error } = await supabase
-      .from('Products')
+      .from('products')
       .insert(formData)
 
     if (error) {
