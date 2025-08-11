@@ -147,7 +147,10 @@ function ProductTable() {
     }
 
     // Uploading the image to the 'images' bucket
-    uploadImage(image, image.name)
+    if (image != "") {
+      console.log("ici " + image)
+      uploadImage(image, image.name)
+    }
     setImage("")
 
     // Saving locally the user info to use it after the mail verification
@@ -163,7 +166,6 @@ function ProductTable() {
     })
 
     setExpanded(false);
-    setMissingFieldsInForm([]);
     fetchProducts();
   }
 
@@ -210,22 +212,23 @@ function ProductTable() {
   };
 
   const BrowseImageChange = (product) => {
-    const handleFileUpload = e => {
+    const handleFileUpload = async (e) => {
       async function fetchOldImageName() {
         const { data, error } = await supabase
           .from("products")
           .select("*")
           .eq('id', editingProductId)
-          .single();
+          .maybeSingle();
 
-        if (error) {
+        if (error && Object.keys(error.message).length > 0) {
           console.error("Erreur lors du téléchargement du nom de de l'image : ", error.message);
-          return
+          return;
         }
 
+        console.log("data : " + data)
         setOldImageName(data.image_name);
       }
-      fetchOldImageName()
+      await fetchOldImageName();    // waiting for old image name to be fetched before uploading new image
 
       const { files } = e.target;
       if (files && files.length) {
@@ -267,7 +270,7 @@ function ProductTable() {
           .from("images")
           .download(product.image_name);
 
-        if (error) {
+        if (error && Object.keys(error.message).length > 0) {
           console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
           return
         }
@@ -277,7 +280,9 @@ function ProductTable() {
 
       }
 
-      fetchImage();
+      if (product.image_name != "") {
+        fetchImage();
+      }
     }, [product.image_name]);
 
     return <>
