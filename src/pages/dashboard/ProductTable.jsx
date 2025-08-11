@@ -21,9 +21,11 @@ function ProductTable() {
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedValues, setEditedValues] = useState({});
   const [expanded, setExpanded] = useState(false);
+  const [errorEmptyFieldInForm, setErrorEmptyFieldInForm] = useState("");
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
+
 
   // useState init to store the form data in a JSON format
   const [formData, setFormData] = useState({
@@ -317,7 +319,14 @@ function ProductTable() {
                           {
                             categoriesList.map((category) => (
                               <div key={category}>
-                                <input type="radio" name="category" value={category} onChange={handleChangeInProd} required /> <a className="ml-1 mr-5">{category}</a>
+                                <input 
+                                  type="radio" 
+                                  name="category" 
+                                  value={category} 
+                                  onChange={handleChangeInProd}
+                                  defaultChecked={category == editedValues["category"]}
+                                  required /> 
+                                  <a className="ml-1 mr-5">{category}</a>
                               </div>
                             ))}
                         </td>
