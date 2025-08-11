@@ -72,6 +72,14 @@ function ProductTable() {
 
   const removeProd = async (product) => {
     console.log("Suppression :", product.id)
+    // Removing image from bucket
+    const { error } = await supabase
+      .storage
+      .from('images')
+      .remove([product.image_name])
+    if (error) console.error("Erreur suppression image :", error);
+
+    // Removing product row from 'products' table
     const response = await supabase
       .from("products")
       .delete()
@@ -322,7 +330,7 @@ function ProductTable() {
                                 <input 
                                   type="radio" 
                                   name="category" 
-                                  value={category} 
+                                  value={category}
                                   onChange={handleChangeInProd}
                                   defaultChecked={category == editedValues["category"]}
                                   required /> 
