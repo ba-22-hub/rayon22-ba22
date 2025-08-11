@@ -162,8 +162,9 @@ function ProductTable() {
       image_name: '',
     })
 
-    setExpanded(false)
-    fetchProducts()
+    setExpanded(false);
+    setMissingFieldsInForm([]);
+    fetchProducts();
   }
 
   const BrowseImage = (newProduct, product) => {
@@ -225,7 +226,7 @@ function ProductTable() {
         setOldImageName(data.image_name);
       }
       fetchOldImageName()
-      
+
       const { files } = e.target;
       if (files && files.length) {
         () => handleEdit(product),
@@ -415,7 +416,7 @@ function ProductTable() {
             fun={expanded ? (() => setExpanded(false)) : (() => setExpanded(true))}
           />
           {expanded && (
-            <div>
+            <form onSubmit={handleSubmit}>
               <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables à l'ajout d'un produit dans la base de données.</p>
               <div className="grid grid-cols-2 gap-4 text-sm mb-4 items-center">
                 <div>
@@ -471,15 +472,16 @@ function ProductTable() {
                     onChange={handleChangeInForm}
                     isStarred={true} />
                 </div>
-                <BrowseImage newProduct={true}></BrowseImage>
+                <div>
+                  <BrowseImage newProduct={true}></BrowseImage>
+                </div>
               </div>
               <button
                 type="submit"
-                onClick={handleSubmit}
-                className="px-4 py-2 bg-[#038709] text-white rounded mx-[20%]"
-              >Valider</button>
-
-            </div>
+                className="px-4 py-2 bg-[#038709] text-white rounded mx-[20%]">
+                Valider
+              </button>
+            </form>
           )}
         </div>)}
     </>
