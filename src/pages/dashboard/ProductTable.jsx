@@ -21,7 +21,7 @@ function ProductTable() {
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedValues, setEditedValues] = useState({});
   const [expanded, setExpanded] = useState(false);
-  const [errorEmptyFieldInForm, setErrorEmptyFieldInForm] = useState("");
+  const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -98,10 +98,21 @@ function ProductTable() {
   }
 
   const handleValidate = async () => {
-    console.log("editedValues" + editedValues)
+    console.log("editedValues : " + editedValues)
+    if (oldImageName != "") {
+      // Removing old image from bucket
+      const { error } = await supabase
+        .storage
+        .from('images')
+        .remove([oldImageName])
+      if (error) console.error("Erreur suppression ancienne image :", error);
+    }
+
     if (image != "") {
+      // Uploading new image to bucket
       uploadImage(image, image.name)
     }
+
     const { error } = await supabase
       .from("products")
       .update(editedValues)
@@ -114,6 +125,7 @@ function ProductTable() {
       setEditingProductId(null);
     }
     setImage("")
+    setOldImageName("")
   };
 
   const filteredProducts = products.filter((p) =>
@@ -198,6 +210,22 @@ function ProductTable() {
 
   const BrowseImageChange = (product) => {
     const handleFileUpload = e => {
+      async function fetchOldImageName() {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq('id', editingProductId)
+          .single();
+
+        if (error) {
+          console.error("Erreur lors du téléchargement du nom de de l'image : ", error.message);
+          return
+        }
+
+        setOldImageName(data.image_name);
+      }
+      fetchOldImageName()
+      
       const { files } = e.target;
       if (files && files.length) {
         () => handleEdit(product),
@@ -327,14 +355,14 @@ function ProductTable() {
                           {
                             categoriesList.map((category) => (
                               <div key={category}>
-                                <input 
-                                  type="radio" 
-                                  name="category" 
+                                <input
+                                  type="radio"
+                                  name="category"
                                   value={category}
                                   onChange={handleChangeInProd}
                                   defaultChecked={category == editedValues["category"]}
-                                  required /> 
-                                  <a className="ml-1 mr-5">{category}</a>
+                                  required />
+                                <a className="ml-1 mr-5">{category}</a>
                               </div>
                             ))}
                         </td>

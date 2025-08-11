@@ -3,11 +3,10 @@ import { supabase } from './supabaseClient.js';
 async function uploadImage(image, imageName) {
     console.log('Uploading image:', imageName, { upsert: false });
 
-    // 1. Uploads the image to Supabase public bucket
+    // Uploads the image to Supabase public bucket
     const { data: uploadData, error: uploadError } = await supabase.storage
         .from('images')
         .upload(imageName, image, {
-            // cacheControl: '3600',
             upsert: true
         });
 
