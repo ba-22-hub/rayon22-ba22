@@ -1,14 +1,12 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from 'react';
-import { useAuthor } from '../context/AuthorContext.jsx'
+import { useCart } from "../context/CartContext.jsx";
+import Slider from "react-slick";
+import { supabase } from "../lib/supabaseClient";
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
-
-
-import Slider from "react-slick";
-import { supabase } from "../lib/supabaseClient";
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
@@ -39,7 +37,7 @@ function SamplePrevArrow(props) {
 }
 
 function ProductCarousel({ data }) {
-  const { user } = useAuthor()
+  const { cart, setCart } = useCart()
 
   const settings = {
     infinite: false,

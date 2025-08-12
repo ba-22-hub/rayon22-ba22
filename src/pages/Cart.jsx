@@ -249,37 +249,37 @@ function Cart() {
 
     return (
         <>
-        { !hasRights ? (
-            <Loading />
-        ):(
-            <>
-            {/* TITLE */}
-            <div className="ml-10 mb-6">
-                <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
-                <img src={orangeLine}></img>
-            </div>
+            {!hasRights ? (
+                <Loading />
+            ) : (
+                <>
+                    {/* TITLE */}
+                    <div className="ml-10 mb-6">
+                        <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
+                        <img src={orangeLine}></img>
+                    </div>
 
-            <div>
-                <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
-                <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
-                <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                    {/* RECEIPT SECTION */}
-                    {/* PRODUCTS IN CART */}
-                    <div className="m-10">
-                        <a className="text-[#3435FF] m-10"></a>
-                        <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
-                            {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
+                    <div>
+                        <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
+                        <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
+                        <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
+                            {/* RECEIPT SECTION */}
+                            {/* PRODUCTS IN CART */}
+                            <div className="m-10">
+                                <a className="text-[#3435FF] m-10"></a>
+                                <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
+                                    {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
+                                </div>
+                            </div>
+
+                            {/* INFO ON CART */}
+                            <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
+                                {displayInfoOnCart(productsInCart)}
+                            </div>
                         </div>
                     </div>
-
-                    {/* INFO ON CART */}
-                    <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
-                        {displayInfoOnCart(productsInCart)}
-                    </div>
-                </div>
-            </div>
-        </>)}
-    </>
+                </>)}
+        </>
     )
 }
 

@@ -13,12 +13,15 @@ import './styles/index.css'
 
 // Importing the main app component
 import Root from './Root.jsx'
+import { CartProvider } from './context/CartContext.jsx'
 
 // Creating the root element in the HTML
 createRoot(document.getElementById('root')).render(
   <StrictMode> {/* Lets you find common bugs in your components early during development */}
     <AuthorProvider>
-      <Root />
+      <CartProvider>
+        <Root />
+      </CartProvider>
     </AuthorProvider>
   </StrictMode>,
 )
