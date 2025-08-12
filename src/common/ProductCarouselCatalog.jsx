@@ -57,21 +57,47 @@ function ProductCarousel({ data }) {
       const [nbProd, setNbProd] = useState(0)
 
       const AddToCart = () => {
-        setNbProd(nbProd + 1)
-        product.nbInCart = nbProd
-      }
-
-      const RemoveFromCart = () => {
-        if (nbProd > 0) {
-          setNbProd(nbProd - 1)
-          product.nbInCart = nbProd
+        if (Object.keys(cart).includes(product.id)) {
+          // Product already in cart
+          setCart(prevData => ({
+            ...prevData,
+            [product.id]: prevData[product.id] + 1
+          }))
+        }
+        else {
+          // New product added to cart
+          setCart(prevData => ({
+            ...prevData,
+            [product.id]: 1
+          }))
         }
       }
 
-      if (nbProd > 0) {
+      console.log(cart)
+
+      const RemoveFromCart = () => {
+        if (Object.keys(cart).includes(product.id)) {   // Should always be true when function called
+          if (cart[product.id] <= 1) {
+            // Removing last item of this product from cart : product removed from cart
+            setCart(prevData => {
+              const newCart = { ...prevData };
+              delete newCart[product.id];
+              return newCart;
+            });
+          }
+          else {
+            setCart(prevData => ({
+              ...prevData,
+              [product.id]: prevData[product.id] - 1
+            }))
+          }
+        }
+      }
+
+      if (Object.keys(cart).includes(product.id) && cart[product.id] > 0) {
         return <div className="flex jusitfy-end">
           <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
-          <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+          <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{cart[product.id] || ""}</p>
           <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
         </div>
       }

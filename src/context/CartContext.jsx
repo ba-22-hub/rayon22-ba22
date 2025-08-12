@@ -7,7 +7,7 @@ HOW TO USE THE CONTEXT ??
 2. declare what you need at the begining of the component
     => const {cart, setCart, client } = useCart()
 
-cart : current cart : [{id: <id product 1>, number: <nb of items from product 1 in cart>}, ...],
+cart : current cart : {id1: nb1, id2: nb2, ...},
 setCart : to update the cart
 client : session associated to cart
 */
@@ -18,7 +18,7 @@ const CartContext = createContext()
 function CartProvider({ children }) {
     const { user } = useAuthor()
 
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState({})
     const [client, setClient] = useState(user)
     
 
