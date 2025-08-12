@@ -55,20 +55,33 @@ function ProductCarousel({ data }) {
   };
 
   function DisplayProduct({ product }) {
+    const [nbProd, setNbProd] = useState(0)
+
+    async function fetchRowFromCart( product ) {
+      const { data, error } = await supabase
+        .from('cart')
+        .select("number")
+        .eq("user_id", user.id)
+        .eq("product_id", product.id)
+        .maybeSingle();
+
+      console.log(data)
+      if (error) {
+        console.log("Erreur lors du téléchargement des données : " + error)
+      } else if (data) {
+        setNbProd(data.number)
+      }
+    }
+    fetchRowFromCart(product);
+
+
     function DisplayButtons({ product }) {
-      const [nbProd, setNbProd] = useState(product.nbInCart)
-
-      const AddToCart = async () => {
-        setNbProd(nbProd + 1)
-        console.log("adding")
-
+        const AddToCart = async () => {
         await supabase.rpc('increment_cart_item', {
           user_id_input: user.id,
           product_id_input: product.id
         });
-
-        // setNbProd(nbProd + 1)
-        // product.nbInCart = nbProd
+        fetchRowFromCart(product)
       }
 
       const RemoveFromCart = () => {
