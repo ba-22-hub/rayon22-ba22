@@ -65,11 +65,12 @@ function ProductCarousel({ data }) {
         .eq("product_id", product.id)
         .maybeSingle();
 
-      console.log(data)
       if (error) {
         console.log("Erreur lors du téléchargement des données : " + error)
       } else if (data) {
         setNbProd(data.number)
+      } else {
+        setNbProd(0)
       }
     }
     fetchRowFromCart(product);
@@ -84,11 +85,12 @@ function ProductCarousel({ data }) {
         fetchRowFromCart(product)
       }
 
-      const RemoveFromCart = () => {
-        if (nbProd > 0) {
-          setNbProd(nbProd - 1)
-          product.nbInCart = nbProd
-        }
+      const RemoveFromCart = async () => {
+        await supabase.rpc('decrement_cart_item', {
+          user_id_input: user.id,
+          product_id_input: product.id
+        });
+        fetchRowFromCart(product)
       }
 
       if (nbProd > 0) {
