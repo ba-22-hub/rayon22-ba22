@@ -1,6 +1,7 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from 'react';
+import { useAuthor } from '../context/AuthorContext.jsx'
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
@@ -38,6 +39,8 @@ function SamplePrevArrow(props) {
 }
 
 function ProductCarousel({ data }) {
+  const { user } = useAuthor()
+
   const settings = {
     infinite: false,
     speed: 500,
@@ -55,9 +58,17 @@ function ProductCarousel({ data }) {
     function DisplayButtons({ product }) {
       const [nbProd, setNbProd] = useState(product.nbInCart)
 
-      const AddToCart = () => {
+      const AddToCart = async () => {
         setNbProd(nbProd + 1)
-        product.nbInCart = nbProd
+        console.log("adding")
+
+        await supabase.rpc('increment_cart_item', {
+          user_id_input: user.id,
+          product_id_input: product.id
+        });
+
+        // setNbProd(nbProd + 1)
+        // product.nbInCart = nbProd
       }
 
       const RemoveFromCart = () => {
@@ -123,11 +134,11 @@ function ProductCarousel({ data }) {
         <div className="relative text-center">
           <DisplayImage product={product}></DisplayImage>
           {product.stock <= stockIncertainLimit && (
-          <div className="w-full absolute top-0 left-0 text-center mt-0">
-            <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
-              STOCK INCERTAIN
-            </p>
-          </div>
+            <div className="w-full absolute top-0 left-0 text-center mt-0">
+              <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
+                STOCK INCERTAIN
+              </p>
+            </div>
           )}
         </div>
         <div className="p-4">
