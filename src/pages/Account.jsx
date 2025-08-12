@@ -292,12 +292,47 @@ function Account() {
                             {renderField("Quotient familial (CAF)", "quotient")}
                             {renderRadio("Type de salaire", "wageType", wageOptions)}
                         </div>
+
+                        {/* rights */}
                         <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Date de validité du compte : </label><p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p></div>
-                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Limite de commande mensuelle : </label><p className="ml-3">{ }</p></div>
-                            <div className="flex flex-row text-rayonblue"><label className="font-semibold">Reste à commander : </label><p className="ml-3">{ }</p></div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Date de validité du compte :</label>
+                                <p className="ml-3">{client.has_right ? (`${client.end_right}`) : ("Compte invalide")}</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Poids maximum mensuel :</label>
+                                <p className="ml-3">{client.weight_limit} kg</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Poids restant ce mois-ci :</label>
+                                <p className="ml-3">{client.weight_limit - client.current_weight} kg</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Budget maximum mensuel :</label>
+                                <p className="ml-3">{client.price_limit.toFixed(2)} €</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Budget restant ce mois-ci :</label>
+                                <p className="ml-3">{(client.price_limit - client.current_price).toFixed(2)} €</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Nombre de commandes maximum :</label>
+                                <p className="ml-3">{client.order_limit}</p>
+                            </div>
+
+                            <div className="flex flex-row text-rayonblue">
+                                <label className="font-semibold min-w-[220px]">Commandes restantes ce mois-ci :</label>
+                                <p className="ml-3">{client.order_limit - client.current_order}</p>
+                            </div>
                         </div>
+
                         <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
                             {activeRequests ? (
