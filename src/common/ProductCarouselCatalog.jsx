@@ -12,6 +12,8 @@ import { supabase } from "../lib/supabaseClient";
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
 
+const stockIncertainLimit = 3   // Limit (included) under which the 'Stock Incertain' label is displayed
+
 {/* CAROUSEL ARROWS */ }
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -120,7 +122,7 @@ function ProductCarousel({ data }) {
         </div>
         <div className="relative text-center">
           <DisplayImage product={product}></DisplayImage>
-          {product.stock <= 3 && (
+          {product.stock <= stockIncertainLimit && (
           <div className="w-full absolute top-0 left-0 text-center mt-0">
             <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
               STOCK INCERTAIN
