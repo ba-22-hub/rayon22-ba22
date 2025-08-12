@@ -12,7 +12,7 @@ import { supabase } from "../lib/supabaseClient";
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
 
-{/* TODO: Add here the real showcase products (the showcase isn't linked tho the database) */ }
+const stockIncertainLimit = 3   // Limit (included) under which the 'Stock Incertain' label is displayed
 
 {/* CAROUSEL ARROWS */ }
 function SampleNextArrow(props) {
@@ -105,7 +105,7 @@ function ProductCarousel({ data }) {
       }, [product.image_name]);
 
       return <>
-        <img src={imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain"/>
+        <img src={imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
       </>
     }
 
@@ -120,7 +120,16 @@ function ProductCarousel({ data }) {
 
           <div className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}€</div>
         </div>
-        <DisplayImage product={product}></DisplayImage>
+        <div className="relative text-center">
+          <DisplayImage product={product}></DisplayImage>
+          {product.stock <= stockIncertainLimit && (
+          <div className="w-full absolute top-0 left-0 text-center mt-0">
+            <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
+              STOCK INCERTAIN
+            </p>
+          </div>
+          )}
+        </div>
         <div className="p-4">
           <p className="text-[#3435FF] text-lg font-semibold">{product.name}</p>
           <p className="text-[#3435FF] text-xs">{product.weight}g, {product.category || ''}</p>
