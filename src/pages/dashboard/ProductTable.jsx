@@ -110,7 +110,7 @@ function ProductTable() {
 
     if (image != "") {
       // Uploading new image to bucket
-      uploadImage(image, image.name)
+      await uploadImage(image, image.name)
     }
 
     const { error } = await supabase
@@ -148,7 +148,6 @@ function ProductTable() {
 
     // Uploading the image to the 'images' bucket
     if (image != "") {
-      console.log("ici " + image)
       uploadImage(image, image.name)
     }
     setImage("")
