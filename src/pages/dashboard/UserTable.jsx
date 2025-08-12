@@ -158,6 +158,7 @@ const UserTable = () => {
 						{filteredUsers.map(user => (
 							<React.Fragment key={user.id}>
 								<tr>
+									{/* firstName */}
 									<td className="px-6 py-4">
 										{editMode === user.id ? (
 											<input
@@ -170,6 +171,8 @@ const UserTable = () => {
 											user.firstName
 										)}
 									</td>
+
+									{/* lastName */}
 									<td className="px-6 py-4">
 										{editMode === user.id ? (
 											<input
@@ -182,6 +185,8 @@ const UserTable = () => {
 											user.lastName
 										)}
 									</td>
+
+									{/* email */}
 									<td className="px-6 py-4">
 										{editMode === user.id ? (
 											<input
@@ -194,6 +199,8 @@ const UserTable = () => {
 											user.email
 										)}
 									</td>
+
+									{/* phone */}
 									<td className="px-6 py-4">
 										{editMode === user.id ? (
 											<input
@@ -206,6 +213,8 @@ const UserTable = () => {
 											user.phone
 										)}
 									</td>
+
+									{/* Fold / unfold buttons */}
 									<td className="px-6 py-4">
 										<FunctionButton
 											buttonText={expanded === user.id ? 'Fermer' : 'Déplier'}
@@ -246,6 +255,61 @@ const UserTable = () => {
 														)}
 													</div>
 												))}
+
+												{/* weight limit */}
+												<div>
+													<strong>Limite de poids :</strong>{' '}
+													{editMode === user.id ? (
+														<input
+															name="weight_limit"
+															type="number"
+															value={editedUser.weight_limit ?? ''}
+															onChange={handleChange}
+															className="border px-2 py-1 rounded w-full mt-1"
+														/>
+													) : (
+														<span className="ml-1">
+															{user.current_weight} / {user.weight_limit}
+														</span>
+													)}
+												</div>
+
+												{/* price limit */}
+												<div>
+													<strong>Limite de prix :</strong>{' '}
+													{editMode === user.id ? (
+														<input
+															name="price_limit"
+															type="number"
+															step="0.01"
+															value={editedUser.price_limit ?? ''}
+															onChange={handleChange}
+															className="border px-2 py-1 rounded w-full mt-1"
+														/>
+													) : (
+														<span className="ml-1">
+															{user.current_price} / {user.price_limit}
+														</span>
+													)}
+												</div>
+
+												{/* order limit */}
+												<div>
+													<strong>Limite de commandes :</strong>{' '}
+													{editMode === user.id ? (
+														<input
+															name="order_limit"
+															type="number"
+															value={editedUser.order_limit ?? ''}
+															onChange={handleChange}
+															className="border px-2 py-1 rounded w-full mt-1"
+														/>
+													) : (
+														<span className="ml-1">
+															{user.current_order} / {user.order_limit}
+														</span>
+													)}
+												</div>
 											</div>
 
 											<div className="flex gap-4">
