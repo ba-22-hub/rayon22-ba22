@@ -313,6 +313,7 @@ function ProductTable() {
                   <th className="p-2">Prix rayon22 (euro)</th>
                   <th className="p-2">Poids (gramme)</th>
                   <th className="p-2">Catégorie</th>
+                  <th className="p-2">Stock</th>
                   <th className="p-2">Image</th>
                   <th className="p-2">Actions</th>
                 </tr>
@@ -373,6 +374,15 @@ function ProductTable() {
                             ))}
                         </td>
                         <td className="p-2">
+                          <input
+                            name="stock"
+                            value={editedValues["stock"]}
+                            onChange={handleChangeInProd}
+                            type="number"
+                            className="border p-1 rounded w-full"
+                          />
+                        </td>
+                        <td className="p-2">
                           <BrowseImageChange product={p}></BrowseImageChange>
                         </td>
                         <td className="p-2 space-x-2">
@@ -395,6 +405,7 @@ function ProductTable() {
                         <td className="p-2">{p["salePrice"]}</td>
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
+                        <td className="p-2">{p.stock}</td>
                         <td><DisplayImage product={p}></DisplayImage></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
@@ -465,6 +476,17 @@ function ProductTable() {
                         <input type="radio" name="category" value={category} onChange={handleChangeInForm} required /> <a className="text-rayonblue ml-1 mr-5">{category}</a>
                       </label>
                     ))}
+                </div>
+                <div>
+                  <FormInput
+                    name="stock"
+                    type="number"
+                    value={formData["stock"] ?? ""}
+                    inputText="Stock"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
                 </div>
                 <div>
                   <FormInput
