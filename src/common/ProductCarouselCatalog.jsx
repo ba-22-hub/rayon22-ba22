@@ -38,8 +38,8 @@ function SamplePrevArrow(props) {
 }
 
 function ProductCarousel({ data }) {
+  const { user, loading } = useAuthor()
   const { cart, setCart } = useCart()
-  const { user } = useAuthor()
 
   const settings = {
     infinite: false,

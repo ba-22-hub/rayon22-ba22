@@ -31,10 +31,10 @@ function Cart() {
     const shippingCost = 1
     const isNotified = useRef(false)
 
-    const { cart, setCart, client } = useCart()
+    const { user, loading, hasRights } = useAuthor()
+    const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
-    const { user, loading, hasRights } = useAuthor()
 
     useEffect(() => {
         // star author routine 
