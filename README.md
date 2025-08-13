@@ -147,6 +147,14 @@ Pour démarrer l’application en environnement de développement sur votre mach
 ```bash
 npm run dev
 ```
+Une fois la commande lancée, le serveur de développement sera disponible à l’adresse indiquée dans le terminal (généralement `http://localhost:5173` ou similaire).
+
+**6. (Optionnel) – Générer le binaire**
+Pour compiler l’application et générer un exécutable (`.exe` pour Windows ou `.AppImage` pour Linux), exécutez la commande suivante :
+```bash
+npm run build
+```
+Les fichiers générés seront disponibles dans le dossier de sortie configuré par le projet (généralement `dist/`).
 
 ### 📂 Structure du projet
 
