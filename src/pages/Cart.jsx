@@ -151,6 +151,8 @@ function Cart() {
                         console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
                     } else {
                         console.log("✅ Panier validé")
+                        setCart({});
+                        localStorage.removeItem(user.id)
                     }
                 }
             } else {
@@ -334,14 +336,14 @@ function Cart() {
                             {/* PRODUCTS IN CART */}
                             <div className="m-10">
                                 <a className="text-[#3435FF] m-10"></a>
-                                <div className="overflow-y-auto h-[70%] text-[#3435FF] m-5">
+                                <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
                                     {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                                 </div>
                             </div>
 
                             {/* INFO ON CART */}
-                            <div className="text-xl ml-10 mr-28">
-                                {displayInfoOnCart()}
+                            <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
+                                {displayInfoOnCart(productsInCart)}
                             </div>
                         </div>
                     </div>
