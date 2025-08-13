@@ -33,8 +33,6 @@ function Cart() {
 
     const { cart, setCart, client } = useCart()
 
-    console.log(cart)
-
     let navigate = useNavigate()
     const { user, loading, hasRights } = useAuthor()
 
@@ -69,8 +67,6 @@ function Cart() {
         return Math.round(nb * 100) / 100
     }
 
-    console.log("cart : " + cart)
-
     useEffect(() => {
         const fetchDataProductsInCart = async () => {
             const { data, error } = await supabase
@@ -80,7 +76,6 @@ function Cart() {
             if (error) console.error('Erreur de chargement des produits :', error);
             else
                 setProductsInCart(data);
-            console.log(data)
         };
         fetchDataProductsInCart();
     }, [cart]);
@@ -101,46 +96,67 @@ function Cart() {
     }
 
     async function handleValidate() {
-        // async function fetchLimits() {
-        //     const { dataLimit, errorLimit } = await supabase
-        //         .from("User")
-        //         .select("weight_limit", "current_weight", "price_limit", "current_price", "order_limit", "current_order")
-        //         .eq('id', user);
-        //     if (errorLimit) console.error("Erreur chargement limites :", errorLimit);
-        //     else {
-        //         return dataLimit;
-        //     }
-        // }
+        const { data, error } = await supabase
+            .from("User")
+            .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
+            .eq('id', user.id)
+        if (error) console.error("Erreur chargement limites :", error);
+        else {
+            console.log(data[0])
+            const limits = data[0]
 
-        // const isRespectedLimit = (limit, currentAmount, newAmount) => {
-        //     return (currentAmount + newAmount) <= limit
-        // }
+            const isRespectedLimit = (limit, currentAmount, newAmount) => {
+                return (currentAmount + newAmount) <= limit
+            }
 
-        // const limits = await fetchLimits();
+            const cartToValidate = ({
+                client_id: user.id,
+                content: cart,
+                price: productsPriceTotal,
+                delivered: false,
+            })
 
-        const cartToValidate = ({
-            client_id: user.id,
-            content: cart,
-            price: productsPriceTotal,
-            delivered: false,
-        })
+            // Checking whether cartToValidate respects user's limits
+            let areRespectedLimits = true
+            if (!isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+                console.error("Condition de poids non respectée : " + limits.current_weight / 1000 + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit / 1000 + "kg.")
+                areRespectedLimits = false
+            }
+            if (!isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
+                console.error("Condition de prix non respectée : " + limits.current_price + "€ déjà dépensés ce mois-ci. Votre limite mensuelle est de " + limits.price_limit + "€.")
+                areRespectedLimits = false
+            }
+            if (!isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
+                console.error("Condition de nombre de produits non respectée : " + limits.current_order + " produits déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.order_limit + " produits.")
+                areRespectedLimits = false
+            }
 
-        // // Checking whether cartToValidate respects user's limits
-        // const areRespectedLimits = {}
-        // if (!isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
-        //     console.error("Condition de poids non respectée : " + limits.current_weight/1000 + "kg déjà achetés ce mois-ci")
-        // }
+            if (areRespectedLimits) {
+                // Adding a new row to the 'cart' database
+                const { error } = await supabase
+                    .from('cart')
+                    .insert(cartToValidate)
 
-        // Adding a new row to the 'cart' database
-        const { error } = await supabase
-            .from('cart')
-            .insert(cartToValidate)
+                if (error) {
+                    console.error("Erreur lors de l'insertion du panier dans la base de données : ", error.message);
+                    return;
+                } else {
+                    // Updating user's monthly totals
+                    const { error } = await supabase
+                        .from('User')
+                        .update({ current_weight: limits.current_weight + productsWeightTotal, current_price: limits.current_price + productsPriceTotal, current_order: limits.current_order + productsNumberTotal })
+                        .eq('id', user.id)
 
-        if (error) {
-            console.error("Erreur lors de la création Supabase:", error.message);
-            return;
+                    if (error) {
+                        console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
+                    } else {
+                        console.log("✅ Panier validé")
+                    }
+                }
+            } else {
+                console.error("La validation du panier n'a pas pu être effectuée. Les limites liées à votre compte ne sont pas respectées.")
+            }
         }
-
     }
 
     function DisplayImage({ product }) {
