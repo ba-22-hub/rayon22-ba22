@@ -100,6 +100,49 @@ function Cart() {
         }
     }
 
+    async function handleValidate() {
+        // async function fetchLimits() {
+        //     const { dataLimit, errorLimit } = await supabase
+        //         .from("User")
+        //         .select("weight_limit", "current_weight", "price_limit", "current_price", "order_limit", "current_order")
+        //         .eq('id', user);
+        //     if (errorLimit) console.error("Erreur chargement limites :", errorLimit);
+        //     else {
+        //         return dataLimit;
+        //     }
+        // }
+
+        // const isRespectedLimit = (limit, currentAmount, newAmount) => {
+        //     return (currentAmount + newAmount) <= limit
+        // }
+
+        // const limits = await fetchLimits();
+
+        const cartToValidate = ({
+            client_id: user.id,
+            content: cart,
+            price: productsPriceTotal,
+            delivered: false,
+        })
+
+        // // Checking whether cartToValidate respects user's limits
+        // const areRespectedLimits = {}
+        // if (!isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+        //     console.error("Condition de poids non respectée : " + limits.current_weight/1000 + "kg déjà achetés ce mois-ci")
+        // }
+
+        // Adding a new row to the 'cart' database
+        const { error } = await supabase
+            .from('cart')
+            .insert(cartToValidate)
+
+        if (error) {
+            console.error("Erreur lors de la création Supabase:", error.message);
+            return;
+        }
+
+    }
+
     function DisplayImage({ product }) {
         const [imageUrl, setImageUrl] = useState(null);
 
@@ -215,7 +258,7 @@ function Cart() {
         return (
             <>
                 <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
-                <div className="grid grid-flow-col grid-rows-6 gris-cols-3 gap-4 text-[#3435FF] mx-10">
+                <div className="grid grid-flow-col grid-rows-7 gris-cols-3 gap-4 text-[#3435FF] mx-10">
                     <div className="col-span-2 col-start-1 row-start-1 content-right">
                         Total produits
                     </div>
@@ -234,17 +277,23 @@ function Cart() {
                     <div className="col-span-1 col-start-3 row-start-3 content-right">
                         {shippingCost}€
                     </div>
-                    <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-4 content-right">
+                    <div className="col-span-2 col-start-1 row-start-4 content-right">
+                        Nombre de produits
+                    </div>
+                    <div className="col-span-1 col-start-3 row-start-4 content-right">
+                        {productsNumberTotal}
+                    </div>
+                    <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-5 content-right">
                         <div className="relative">
                             <img src={orangeCircle}></img>
                             <div className="absolute top-4 left-7">Total</div>
                         </div>
                     </div>
-                    <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-4 content-right">
+                    <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-5 content-right">
                         {productsPriceTotal + shippingCost}€
                     </div>
                 </div>
-                <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-2xl font-semibold shadow hover:bg-[#ff9800]"} />
+                <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-2xl font-semibold shadow hover:bg-[#ff9800]"} fun={handleValidate} />
             </>
         )
     }

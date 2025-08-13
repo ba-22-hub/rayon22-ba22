@@ -136,7 +136,7 @@ function ProductTable() {
 
     console.log("Form submitted with data:", formData, "Need API call to send this data");
 
-    // Adding a new row to the 'Products' database
+    // Adding a new row to the 'products' database
     const { error } = await supabase
       .from('products')
       .insert(formData)
