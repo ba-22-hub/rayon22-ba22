@@ -117,16 +117,17 @@ function Cart() {
             })
 
             // Checking whether cartToValidate respects user's limits
+            // If one limit is null, then it is seen as no limit
             let areRespectedLimits = true
-            if (!isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+            if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
                 console.error("Condition de poids non respectée : " + limits.current_weight / 1000 + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit / 1000 + "kg.")
                 areRespectedLimits = false
             }
-            if (!isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
+            if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
                 console.error("Condition de prix non respectée : " + limits.current_price + "€ déjà dépensés ce mois-ci. Votre limite mensuelle est de " + limits.price_limit + "€.")
                 areRespectedLimits = false
             }
-            if (!isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
+            if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
                 console.error("Condition de nombre de produits non respectée : " + limits.current_order + " produits déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.order_limit + " produits.")
                 areRespectedLimits = false
             }
