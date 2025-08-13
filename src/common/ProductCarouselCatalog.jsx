@@ -54,7 +54,6 @@ function ProductCarousel({ data }) {
 
   function DisplayProduct({ product }) {
     function DisplayButtons({ product }) {
-      const [nbProd, setNbProd] = useState(0)
 
       const AddToCart = () => {
         if (Object.keys(cart).includes(product.id)) {
@@ -72,8 +71,6 @@ function ProductCarousel({ data }) {
           }))
         }
       }
-
-      console.log(cart)
 
       const RemoveFromCart = () => {
         if (Object.keys(cart).includes(product.id)) {   // Should always be true when function called

@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuthor } from '../context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
+import { useCart } from "../context/CartContext.jsx";
+import { supabase } from "../lib/supabaseClient";
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
-import LoremIpsum from "../common/LoremIpsum"
 import PageButton from "@common/PageButton.jsx";
 import Loading from '../common/Loading.jsx';
 
@@ -14,100 +15,25 @@ import orangeLine from "../assets/Assets/Trait orange.png"
 import orangeShape from "../assets/Assets/Coup crayon orange.svg"
 import blueRayonShape from "../assets/Assets/Rayons traits bleus.svg"
 import orangeCircle from "../assets/Assets/Cercle orange crayon.png"
-import pasta from "../assets/Photos/Tortis.png"
-import rice from "../assets/Photos/Riz.png"
-import lentil from "../assets/Photos/Lentilles.png"
-import bean from "../assets/Photos/Haricot.png"
-import tuna from "../assets/Photos/Thon.png"
-import sponges from "../assets/Photos/Eponges.png"
+import roundLogo from "../assets/logos/roundLogo.png"
 
 /**
  * The Cart page.
  * @returns {React.ReactElement} Cart component.
  */
 
-const productsInCart = [
-    {
-        name: "Pâte torti",
-        image: pasta,
-        price: 0.50,
-        salePrice: 0.05,
-        weight: 500,
-        category: "féculent",
-        nbInCart: 2,
-    },
-    {
-        name: "Haricot vert extra-fin",
-        image: bean,
-        price: 1,
-        salePrice: 0.30,
-        weight: 450,
-        category: "conserves",
-        nbInCart: 3,
-    },
-    {
-        name: "Thon",
-        image: tuna,
-        price: 1.50,
-        salePrice: 0.15,
-        weight: 200,
-        category: "conserves",
-        nbInCart: 1,
-    },
-    {
-        name: "Riz 10 minutes",
-        image: rice,
-        price: 0.50,
-        salePrice: 0.10,
-        weight: 450,
-        category: "féculent",
-        nbInCart: 2,
-    },
-    {
-        name: "Pâte torti",
-        image: pasta,
-        price: 0.50,
-        salePrice: 0.05,
-        weight: 500,
-        category: "féculent",
-        nbInCart: 2,
-    },
-    {
-        name: "Haricot vert extra-fin",
-        image: bean,
-        price: 1,
-        salePrice: 0.30,
-        weight: 450,
-        category: "conserves",
-        nbInCart: 3,
-    },
-    {
-        name: "Thon",
-        image: tuna,
-        price: 1.50,
-        salePrice: 0.15,
-        weight: 200,
-        category: "conserves",
-        nbInCart: 1,
-    },
-    {
-        name: "Riz 10 minutes",
-        image: rice,
-        price: 0.50,
-        salePrice: 0.10,
-        weight: 450,
-        category: "féculent",
-        nbInCart: 2,
-    },
-];
-
 
 function Cart() {
-    const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
-    const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
+    const [productsInCart, setProductsInCart] = useState([])
+    const [productsPriceTotal, setProductsPriceTotal] = useState(0)
+    const [productsWeightTotal, setProductsWeightTotal] = useState(0)
+    const [productsNumberTotal, setProductsNumberTotal] = useState(0)
     const shippingCost = 1
     const isNotified = useRef(false)
 
+    const { cart, setCart, client } = useCart()
+
+    console.log(cart)
 
     let navigate = useNavigate()
     const { user, loading, hasRights } = useAuthor()
@@ -143,31 +69,102 @@ function Cart() {
         return Math.round(nb * 100) / 100
     }
 
+    console.log("cart : " + cart)
+
+    useEffect(() => {
+        const fetchDataProductsInCart = async () => {
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .in("id", Object.keys(cart));
+            if (error) console.error('Erreur de chargement des produits :', error);
+            else
+                setProductsInCart(data);
+            console.log(data)
+        };
+        fetchDataProductsInCart();
+        console.log("productsInCart : " + productsInCart)
+        // updateTotals();
+    }, []);
+
+    const updateTotals = () => {
+        if (Object.keys(cart).length > 0) {
+            setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
+            setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
+            setProductsNumberTotal(Object.values(cart).reduce((acc, number) => acc + number, 0))
+        }
+    }
+
+    function DisplayImage({ product }) {
+        const [imageUrl, setImageUrl] = useState(null);
+
+        useEffect(() => {
+            async function fetchImage() {
+                const { data, error } = await supabase
+                    .storage
+                    .from("images")
+                    .download(product.image_name);
+
+                if (error) {
+                    console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
+                    return
+                }
+
+                const url = URL.createObjectURL(data);
+                setImageUrl(url);
+
+            }
+
+            fetchImage();
+        }, [product.image_name]);
+
+        return <>
+            <img src={imageUrl || roundLogo} alt={product.name} className="flex-left w-[60%] object-contain" />
+        </>
+    }
+
     function displayProductOnReceipt(product, idx) {
-        const [nbProd, setNbProd] = useState(product.nbInCart)
 
         function DisplayButtons({ product }) {
             const AddToCart = () => {
-                setNbProd(nbProd + 1)
-                setProductsPriceTotal(roundTwoDigits(productsPriceTotal + product.salePrice))
-                setProductsWeightTotal(roundTwoDigits(productsWeightTotal + product.weight))
-                product.nbInCart = nbProd
+                if (Object.keys(cart).includes(product.id)) {
+                    // Product already in cart
+                    setCart(prevData => ({
+                        ...prevData,
+                        [product.id]: prevData[product.id] + 1
+                    }))
+                }
+                else {
+                    // New product added to cart
+                    setCart(prevData => ({
+                        ...prevData,
+                        [product.id]: 1
+                    }))
+                }
+                // updateTotals()
             }
 
             const RemoveFromCart = () => {
-                setProductsPriceTotal(roundTwoDigits(productsPriceTotal - product.salePrice))
-                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.weight))
-                if (nbProd > 0) {
-                    setNbProd(nbProd - 1)
-                    product.nbInCart = nbProd
+                if (Object.keys(cart).includes(product.id)) {   // Should always be true when function called
+                    if (cart[product.id] <= 1) {
+                        // Removing last item of this product from cart : product removed from cart
+                        setCart(prevData => {
+                            const newCart = { ...prevData };
+                            delete newCart[product.id];
+                            return newCart;
+                        });
+                    }
+                    else {
+                        setCart(prevData => ({
+                            ...prevData,
+                            [product.id]: prevData[product.id] - 1
+                        }))
+                    }
                 }
-                if (nbProd == 0) {
-                    {/* Product removed from the list */ }
-                    setNbProdInCart(nbProdInCart - 1)
-                }
+                // updateTotals()
             }
 
-            if (nbProd == 1) {
+            if (cart[product.id] == 1) {
                 return <div className="flex jusitfy-end">
                     {/* TRASH CAN BUTTON */}
                     <button type="button" className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-1 py-0.5 mb-2" onClick={RemoveFromCart}>
@@ -175,25 +172,25 @@ function Cart() {
                             <path fill="currentColor" d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0Zm-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2h7.5Zm2.5 6.5a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0v-10Zm5-1a1 1 0 0 0-1 1v10a1 1 0 1 0 2 0v-10a1 1 0 0 0-1-1Z" />
                         </svg>
                     </button>
-                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{cart[product.id]}</p>
                     <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
                 </div>
             }
-            else if (nbProd > 1) {
+            else if (cart[product.id] > 1) {
                 return <div className="flex jusitfy-end">
                     {/* REGULAR MINUS BUTTON */}
                     <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
-                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
+                    <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{cart[product.id]}</p>
                     <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
                 </div>
             }
         }
 
-        if (nbProd > 0) {
+        if (Object.keys(cart).includes(product.id)) {
             return (
                 <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
-                        <img src={product.image} alt={product.name} className="flex-left w-[60%] object-contain" />
+                        <DisplayImage product={product}></DisplayImage>
                     </div>
                     <div className="col-span-3 col-start-2 content-center">
                         <p className="text-2xl font-semibold">{product.name}</p>
@@ -262,8 +259,8 @@ function Cart() {
                     <div>
                         <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                         <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
-                        <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                            {/* RECEIPT SECTION */}
+                        {/* RECEIPT SECTION */}
+                        <div className="bg-no-repeat bg-contain m-auto w-[60%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
                             {/* PRODUCTS IN CART */}
                             <div className="m-10">
                                 <a className="text-[#3435FF] m-10"></a>
