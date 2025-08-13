@@ -37,9 +37,9 @@ function Register() {
             otherWage: '',
             readInfo: false,
             acceptTerms: false
-        }, 
-        'step3' : {
-            "password" : ''
+        },
+        'step3': {
+            "password": ''
         }
     });
     const [step, setStep] = useState(1);
@@ -56,7 +56,7 @@ function Register() {
 
     // Fonction pour mettre à jour les données d'une étape
     const updateStepData = (step, data) => {
-        
+
         setFormData(prev => ({
             ...prev,
             [step]: data
@@ -67,15 +67,15 @@ function Register() {
     async function handleSubmit(e) {
 
         console.log("Form submitted with data:", formData, "Need API call to send this data");
-        
+
         const email = formData.step1.email;
-        const password = formData.step3.password ; 
+        const password = formData.step3.password;
 
         const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
             options: {
-                emailRedirectTo: "http://localhost:5173/login" // TODO : change this URL to the production one
+                emailRedirectTo: "http://localhost:5173/#/login" // TODO : change this URL to the production one
             }
         });
 
@@ -101,18 +101,18 @@ function Register() {
                     onDataChange={(data) => updateStepData('step1', data)}
                     onNext={() => changepage(step + 1)}
                 />)}
-                {step == 2 && (<RegisterStep2 
+                {step == 2 && (<RegisterStep2
                     data={formData.step2}
                     onDataChange={(data) => updateStepData('step2', data)}
                     onNext={() => changepage(step + 1)}
                     onPrevious={() => changepage(step - 1)}
                 />)}
-                {step == 3 && (<RegisterStep3 
+                {step == 3 && (<RegisterStep3
                     onDataChange={(data) => updateStepData('step3', data)}
                     onNext={() => handleSubmit()}
                 />)}
                 {step == 4 && (<RegisterStep4 mail={formData.step1.email} />)}
-                
+
 
             </div>
 
