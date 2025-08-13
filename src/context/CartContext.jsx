@@ -18,7 +18,11 @@ const CartContext = createContext()
 function CartProvider({ children }) {
     const { user } = useAuthor()
 
-    const [client, setClient] = useState(user)
+    console.log(user)
+
+    const [client, setClient] = useState({user})
+
+    console.log(client)
 
     if (user === client) {
         // Current cart belongs to user
