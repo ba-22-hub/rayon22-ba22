@@ -142,6 +142,12 @@ Un fichier `.env` vous sera transmis contenant l’ensemble des clés API et ide
 
 ⚠️ **Ce fichier est confidentiel :** Ne le partagez jamais publiquement, ne le versionnez pas avec Git (`.env` est ignoré par défaut via `.gitignore`).
 
+**5. Lancer le projet en local**
+Pour démarrer l’application en environnement de développement sur votre machine, exécutez la commande suivante :
+```bash
+npm run dev
+```
+
 ### 📂 Structure du projet
 
 ```bash
