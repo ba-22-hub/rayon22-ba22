@@ -83,12 +83,17 @@ function Cart() {
             console.log(data)
         };
         fetchDataProductsInCart();
-        console.log("productsInCart : " + productsInCart)
-        // updateTotals();
-    }, []);
+    }, [cart]);
+
+    useEffect(() => {
+        if (productsInCart.length > 0) {
+            updateTotals();
+        }
+    }, [productsInCart]);
+
 
     const updateTotals = () => {
-        if (Object.keys(cart).length > 0) {
+        if (productsInCart.length > 0) {
             setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
             setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
             setProductsNumberTotal(Object.values(cart).reduce((acc, number) => acc + number, 0))
@@ -141,7 +146,7 @@ function Cart() {
                         [product.id]: 1
                     }))
                 }
-                // updateTotals()
+                updateTotals()
             }
 
             const RemoveFromCart = () => {
@@ -161,7 +166,7 @@ function Cart() {
                         }))
                     }
                 }
-                // updateTotals()
+                updateTotals()
             }
 
             if (cart[product.id] == 1) {
@@ -205,7 +210,7 @@ function Cart() {
         }
     }
 
-    function displayInfoOnCart(products) {
+    function displayInfoOnCart() {
 
         return (
             <>
@@ -259,19 +264,19 @@ function Cart() {
                     <div>
                         <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                         <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
-                        {/* RECEIPT SECTION */}
-                        <div className="bg-no-repeat bg-contain m-auto w-[60%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
+                        <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
+                            {/* RECEIPT SECTION */}
                             {/* PRODUCTS IN CART */}
                             <div className="m-10">
                                 <a className="text-[#3435FF] m-10"></a>
-                                <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
+                                <div className="overflow-y-auto h-[70%] text-[#3435FF] m-5">
                                     {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                                 </div>
                             </div>
 
                             {/* INFO ON CART */}
-                            <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
-                                {displayInfoOnCart(productsInCart)}
+                            <div className="text-xl ml-10 mr-28">
+                                {displayInfoOnCart()}
                             </div>
                         </div>
                     </div>
