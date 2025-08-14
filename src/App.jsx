@@ -82,9 +82,11 @@ function App() {
 
             {/* Right side - Inscription button and Avatar */}
             <div className="flex items-center space-x-4">
-              <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
+              {!user && (
+                <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
                 S'inscrire
               </Link>
+            )}
               <Link to={`${user ? '/account' : '/login'}`} className="flex-shrink-0">
                 <div className="bg-[#FF8200] p-1 rounded-lg h-10 w-10 flex items-center justify-center">
                   <img src={avatar} alt="User avatar" className="h-8 w-8 rounded-full" />
