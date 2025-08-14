@@ -81,9 +81,7 @@ function Cart() {
     }, [cart]);
 
     useEffect(() => {
-        if (productsInCart.length > 0) {
-            updateTotals();
-        }
+        updateTotals();
     }, [productsInCart]);
 
 
@@ -92,11 +90,15 @@ function Cart() {
             setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
             setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
             setProductsNumberTotal(Object.values(cart).reduce((acc, number) => acc + number, 0))
+        } else {
+            setProductsPriceTotal(0)
+            setProductsWeightTotal(0)
+            setProductsNumberTotal(0)
         }
     }
 
     async function handleValidate() {
-        if (cart.length > 0) {
+        if (!(Object.keys(cart).length === 0)) {
             console.log(cart)
             const { data, error } = await supabase
                 .from("User")
@@ -104,7 +106,6 @@ function Cart() {
                 .eq('id', user.id)
             if (error) console.error("Erreur chargement limites :", error);
             else {
-                console.log(data[0])
                 const limits = data[0]
 
                 const isRespectedLimit = (limit, currentAmount, newAmount) => {
@@ -144,6 +145,12 @@ function Cart() {
                         console.error("Erreur lors de l'insertion du panier dans la base de données : ", error.message);
                         return;
                     } else {
+                        console.log("✅ Panier validé")
+                        setCart({});
+                        localStorage.removeItem(user.id)
+                        setProductsInCart([])
+                        updateTotals()
+                        
                         // Updating user's monthly totals
                         const { error } = await supabase
                             .from('User')
@@ -152,10 +159,6 @@ function Cart() {
 
                         if (error) {
                             console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
-                        } else {
-                            console.log("✅ Panier validé")
-                            setCart({});
-                            localStorage.removeItem(user.id)
                         }
                     }
                 } else {
