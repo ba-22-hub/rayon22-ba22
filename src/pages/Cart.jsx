@@ -26,7 +26,7 @@ import roundLogo from "../assets/logos/roundLogo.png"
 function Cart() {
     const [productsInCart, setProductsInCart] = useState([])
     const [productsPriceTotal, setProductsPriceTotal] = useState(0)
-    const [productsWeightTotal, setProductsWeightTotal] = useState(0)
+    const [productsWeightTotal, setProductsWeightTotal] = useState(0)   // in kg
     const [productsNumberTotal, setProductsNumberTotal] = useState(0)
     const shippingCost = 1
     const isNotified = useRef(false)
@@ -106,7 +106,7 @@ function Cart() {
     const updateTotals = () => {
         if (productsInCart.length > 0) {
             setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
-            setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
+            setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight/1000) * parseFloat(cart[product.id]))).reduce((weightTotal, weight) => weightTotal + weight)))     // product.weight is in grams and productsWeightTotal is in kg
             setProductsNumberTotal(Object.values(cart).reduce((acc, number) => acc + number, 0))
         } else {
             setProductsPriceTotal(0)
@@ -152,7 +152,7 @@ function Cart() {
                 // If one limit is null, then it is seen as no limit
                 let areRespectedLimits = true
                 if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
-                    console.error("Condition de poids non respectée : " + limits.current_weight / 1000 + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit / 1000 + "kg.")
+                    console.error("Condition de poids non respectée : " + limits.current_weight + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit + "kg.")
                     areRespectedLimits = false
                 }
                 if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
@@ -314,7 +314,7 @@ function Cart() {
                         Poids total du colis
                     </div>
                     <div className="col-span-1 col-start-3 row-start-2 content-right">
-                        {productsWeightTotal / 1000}kg
+                        {productsWeightTotal}kg
                     </div>
                     <div className="col-span-2 col-start-1 row-start-3 content-right">
                         Frais de transport

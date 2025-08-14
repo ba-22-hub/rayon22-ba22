@@ -305,10 +305,10 @@ function Account() {
                                 
 
                                 <label className="font-semibold">Poids maximum mensuel :</label>
-                                <p className="text-right">{client.weight_limit === null ? "Pas de limite" : `${(client.weight_limit/1000).toFixed(2)} kg`}</p>
+                                <p className="text-right">{client.weight_limit === null ? "Pas de limite" : `${client.weight_limit.toFixed(2)} kg`}</p>
 
                                 <label className="font-semibold">{client.weight_limit === null ? "Poids déjà acheté ce mois-ci :" : "Poids restant ce mois-ci :"}</label>
-                                <p className="text-right">{client.weight_limit === null ? `${(client.current_weight/1000).toFixed(2)} kg` : `${((client.weight_limit - client.current_weight)/1000).toFixed(2)} kg`}</p>
+                                <p className="text-right">{client.weight_limit === null ? `${client.current_weight.toFixed(2)} kg` : `${(client.weight_limit - client.current_weight).toFixed(2)} kg`}</p>
 
                                 <label className="font-semibold">Budget maximum mensuel :</label>
                                 <p className="text-right">{client.price_limit === null ? "Pas de limite" : `${client.price_limit.toFixed(2)} €`}</p>
