@@ -110,30 +110,30 @@ function ProductCarousel({ data }) {
     }
 
     function DisplayImage({ product }) {
-      const [imageUrl, setImageUrl] = useState(null);
+      // const [imageUrl, setImageUrl] = useState(null);
 
-      useEffect(() => {
-        async function fetchImage() {
-          const { data, error } = await supabase
-            .storage
-            .from("images")
-            .download(product.image_name);
+      // useEffect(() => {
+      //   async function fetchImage() {
+      //     const { data, error } = await supabase
+      //       .storage
+      //       .from("images")
+      //       .download(product.image_name);
 
-          if (error) {
-            console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-            return
-          }
+      //     if (error) {
+      //       console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
+      //       return
+      //     }
 
-          const url = URL.createObjectURL(data);
-          setImageUrl(url);
+      //     const url = URL.createObjectURL(data);
+      //     setImageUrl(url);
 
-        }
+      //   }
 
-        fetchImage();
-      }, [product.image_name]);
+      //   fetchImage();
+      // }, [product.image_name]);
 
       return <>
-        <img src={imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
+        <img src={product.imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
       </>
     }
 
