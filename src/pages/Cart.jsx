@@ -123,7 +123,7 @@ function Cart() {
 
                 // Checking whether cart is compatible with products' stocks
                 let areAvailableProducts = true
-                productsInCart.map((product, idx) => {
+                productsInCart.map((product) => {
                     if (cart[product.id] > product.stock) {
                         console.error("Stock de " + product.name + " insuffisant.")
                         areAvailableProducts = false
@@ -173,6 +173,20 @@ function Cart() {
                         if (error) {
                             console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
                         }
+
+                        // Updating products stocks
+                        productsInCart.map(async (product, idx) => {
+                            if (cart[product.id] <= product.stock) {    // Should always be true
+                                const { error } = await supabase
+                                    .from('products')
+                                    .update({ stock: product.stock - cart[product.id] })
+                                    .eq('id', product.id)
+
+                                if (error) {
+                                    console.error("Erreur lors de la mise à jour du stock de " + product.name + " : " + error.message)
+                                }
+                            }
+                        })
                     }
                 } else {
                     let errorMessage = "La validation du panier n'a pas pu être effectuée." + (!areAvailableProducts ? " Certains produits sont en stocks insuffisants." : "") + (!areRespectedLimits ? " Les limites liées à votre compte ne sont pas respectées." : "")
