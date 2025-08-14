@@ -109,34 +109,6 @@ function ProductCarousel({ data }) {
       }
     }
 
-    function DisplayImage({ product }) {
-      // const [imageUrl, setImageUrl] = useState(null);
-
-      // useEffect(() => {
-      //   async function fetchImage() {
-      //     const { data, error } = await supabase
-      //       .storage
-      //       .from("images")
-      //       .download(product.image_name);
-
-      //     if (error) {
-      //       console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-      //       return
-      //     }
-
-      //     const url = URL.createObjectURL(data);
-      //     setImageUrl(url);
-
-      //   }
-
-      //   fetchImage();
-      // }, [product.image_name]);
-
-      return <>
-        <img src={product.imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
-      </>
-    }
-
     return <>
       <div className="bg-white shadow-md rounded-xl overflow-hidden w-60 ml-0.1">
         <div className="p-4">
@@ -149,7 +121,7 @@ function ProductCarousel({ data }) {
           <div className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}€</div>
         </div>
         <div className="relative text-center">
-          <DisplayImage product={product}></DisplayImage>
+          <img src={product.imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
           {product.stock <= stockIncertainLimit && (
             <div className="w-full absolute top-0 left-0 text-center mt-0">
               <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">

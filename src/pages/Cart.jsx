@@ -73,9 +73,27 @@ function Cart() {
                 .from('products')
                 .select('*')
                 .in("id", Object.keys(cart));
-            if (error) console.error('Erreur de chargement des produits :', error);
-            else
-                setProductsInCart(data);
+            if (error) {
+                console.error('Erreur de chargement des produits :', error)
+            } else {
+                const productsWithImages = await Promise.all(
+                    data.map(async product => {
+                        const { data: imgData, error: imgError } = await supabase
+                            .storage
+                            .from("images")
+                            .download(product.image_name);
+
+                        if (imgError) {
+                            console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+                        } else {
+                            product.imageUrl = URL.createObjectURL(imgData);
+                        }
+                        return product;
+                    })
+                );
+
+                setProductsInCart(productsWithImages);
+            }
         };
         fetchDataProductsInCart();
     }, [cart]);
@@ -198,34 +216,6 @@ function Cart() {
         }
     }
 
-    function DisplayImage({ product }) {
-        const [imageUrl, setImageUrl] = useState(null);
-
-        useEffect(() => {
-            async function fetchImage() {
-                const { data, error } = await supabase
-                    .storage
-                    .from("images")
-                    .download(product.image_name);
-
-                if (error) {
-                    console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-                    return
-                }
-
-                const url = URL.createObjectURL(data);
-                setImageUrl(url);
-
-            }
-
-            fetchImage();
-        }, [product.image_name]);
-
-        return <>
-            <img src={imageUrl || roundLogo} alt={product.name} className="flex-left w-[60%] object-contain" />
-        </>
-    }
-
     function displayProductOnReceipt(product, idx) {
 
         function DisplayButtons({ product }) {
@@ -293,7 +283,7 @@ function Cart() {
             return (
                 <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
-                        <DisplayImage product={product}></DisplayImage>
+                        <img src={product.imageUrl || roundLogo} alt={product.name} className="flex-left w-[60%] object-contain" />
                     </div>
                     <div className="col-span-3 col-start-2 content-center">
                         <p className="text-2xl font-semibold">{product.name}</p>
