@@ -302,24 +302,25 @@ function Account() {
                                 <p className="text-right">
                                     {client.has_right ? client.end_right : "Compte invalide"}
                                 </p>
+                                
 
                                 <label className="font-semibold">Poids maximum mensuel :</label>
-                                <p className="text-right">{client.weight_limit} kg</p>
+                                <p className="text-right">{client.weight_limit === null ? "Pas de limite" : `${(client.weight_limit/1000).toFixed(2)} kg`}</p>
 
-                                <label className="font-semibold">Poids restant ce mois-ci :</label>
-                                <p className="text-right">{client.weight_limit - client.current_weight} kg</p>
+                                <label className="font-semibold">{client.weight_limit === null ? "Poids déjà acheté ce mois-ci :" : "Poids restant ce mois-ci :"}</label>
+                                <p className="text-right">{client.weight_limit === null ? `${(client.current_weight/1000).toFixed(2)} kg` : `${((client.weight_limit - client.current_weight)/1000).toFixed(2)} kg`}</p>
 
                                 <label className="font-semibold">Budget maximum mensuel :</label>
-                                <p className="text-right">{client.price_limit.toFixed(2)} €</p>
+                                <p className="text-right">{client.price_limit === null ? "Pas de limite" : `${client.price_limit.toFixed(2)} €`}</p>
 
-                                <label className="font-semibold">Budget restant ce mois-ci :</label>
-                                <p className="text-right">{(client.price_limit - client.current_price).toFixed(2)} €</p>
+                                <label className="font-semibold">{client.price_limit === null ? "Budget déjà dépensé ce mois-ci :" : "Budget restant ce mois-ci :"}</label>
+                                <p className="text-right">{client.price_limit === null ? `${client.current_price.toFixed(2)} €` : `${(client.price_limit - client.current_price).toFixed(2)} €`}</p>
 
                                 <label className="font-semibold">Nombre de commandes maximum :</label>
-                                <p className="text-right">{client.order_limit}</p>
+                                <p className="text-right">{client.order_limit === null ? "Pas de limite" : `${client.order_limit}`}</p>
 
-                                <label className="font-semibold">Commandes restantes ce mois-ci :</label>
-                                <p className="text-right">{client.order_limit - client.current_order}</p>
+                                <label className="font-semibold">{client.order_limit === null ? "Nombre de commandes déjà effectuées ce mois-ci :" : "Commandes restantes ce mois-ci :"}</label>
+                                <p className="text-right">{client.order_limit === null ? `${client.current_order}` : `${client.order_limit - client.current_order}`}</p>
                             </div>
                         </div>
 
