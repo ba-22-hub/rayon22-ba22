@@ -193,7 +193,7 @@ function Cart() {
                         }
 
                         // Updating products stocks
-                        productsInCart.map(async (product, idx) => {
+                        productsInCart.map(async (product) => {
                             if (cart[product.id] <= product.stock) {    // Should always be true
                                 const { error } = await supabase
                                     .from('products')
@@ -283,7 +283,7 @@ function Cart() {
             return (
                 <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
-                        <img src={product.imageUrl || roundLogo} alt={product.name} className="flex-left w-[60%] object-contain" />
+                        <img src={product.imageUrl || roundLogo} alt={product.name} className="ml-2 flex-left w-[60%] object-contain" />
                     </div>
                     <div className="col-span-3 col-start-2 content-center">
                         <p className="text-2xl font-semibold">{product.name}</p>
@@ -291,7 +291,7 @@ function Cart() {
                         <DisplayButtons product={product} />
                     </div>
                     <div className="col-span-1 col-start-5 content-center">
-                        <p className="text-3xl font-semibold text-right">{product.salePrice}€</p>
+                        <p className="text-3xl font-semibold text-right mr-2">{product.salePrice}€</p>
                     </div>
                 </div>
             )
@@ -338,7 +338,14 @@ function Cart() {
                         {productsPriceTotal + shippingCost}€
                     </div>
                 </div>
-                <FunctionButton buttonText={'Valider ma commande'} className={"mx-10 w-full mt-5 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-2xl font-semibold shadow hover:bg-[#ff9800]"} fun={handleValidate} />
+                <FunctionButton
+                    buttonText={'Valider ma commande'}
+                    className={`mx-4 sm:mx-10 w-full mt-4 sm:mt-5 px-4 sm:px-8 py-2 sm:py-3 rounded-lg font-mono text-lg sm:text-xl md:text-2xl font-semibold shadow ${Object.keys(cart).length === 0
+                        ? 'bg-[#878787] text-white'
+                        : 'bg-[#FF8200] text-white hover:bg-[#ff9800]'
+                        }`}
+                    fun={handleValidate}
+                />
             </>
         )
     }
@@ -358,12 +365,13 @@ function Cart() {
                     <div>
                         <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                         <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
-                        <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                            {/* RECEIPT SECTION */}
+
+                        <div className="relative bg-no-repeat bg-cover mx-auto" style={{ backgroundImage: `url(${receipt})`, aspectRatio: '1/2', width: '700px'}}>
+
                             {/* PRODUCTS IN CART */}
                             <div className="m-10">
                                 <a className="text-[#3435FF] m-10"></a>
-                                <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
+                                <div className="overflow-y-auto h-[700px] text-[#3435FF] m-5">
                                     {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                                 </div>
                             </div>
@@ -373,6 +381,8 @@ function Cart() {
                                 {displayInfoOnCart(productsInCart)}
                             </div>
                         </div>
+
+
                     </div>
                 </>)}
         </>
