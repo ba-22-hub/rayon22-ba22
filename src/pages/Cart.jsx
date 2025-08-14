@@ -117,7 +117,6 @@ function Cart() {
 
     async function handleValidate() {
         if (!(Object.keys(cart).length === 0)) {
-            console.log(cart)
             const { data, error } = await supabase
                 .from("User")
                 .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
@@ -193,18 +192,20 @@ function Cart() {
                         }
 
                         // Updating products stocks
-                        productsInCart.map(async (product) => {
-                            if (cart[product.id] <= product.stock) {    // Should always be true
-                                const { error } = await supabase
-                                    .from('products')
-                                    .update({ stock: product.stock - cart[product.id] })
-                                    .eq('id', product.id)
+                        await Promise.all(
+                            productsInCart.map(async (product) => {
+                                if (cart[product.id] <= product.stock) {    // Should always be true
+                                    const { error } = await supabase
+                                        .from('products')
+                                        .update({ stock: (product.stock - cart[product.id]) })
+                                        .eq('id', product.id)
 
-                                if (error) {
-                                    console.error("Erreur lors de la mise à jour du stock de " + product.name + " : " + error.message)
+                                    if (error) {
+                                        console.error("Erreur lors de la mise à jour du stock de " + product.name + " : " + error.message)
+                                    }
                                 }
-                            }
-                        })
+                            })
+                        )
                     }
                 } else {
                     let errorMessage = "La validation du panier n'a pas pu être effectuée." + (!areAvailableProducts ? " Certains produits sont en stocks insuffisants." : "") + (!areRespectedLimits ? " Les limites liées à votre compte ne sont pas respectées." : "")
@@ -366,7 +367,7 @@ function Cart() {
                         <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
                         <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
 
-                        <div className="relative bg-no-repeat bg-cover mx-auto" style={{ backgroundImage: `url(${receipt})`, aspectRatio: '1/2', width: '700px'}}>
+                        <div className="relative bg-no-repeat bg-cover mx-auto" style={{ backgroundImage: `url(${receipt})`, aspectRatio: '1/2', width: '700px' }}>
 
                             {/* PRODUCTS IN CART */}
                             <div className="m-10">
