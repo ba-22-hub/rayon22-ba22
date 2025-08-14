@@ -96,69 +96,74 @@ function Cart() {
     }
 
     async function handleValidate() {
-        const { data, error } = await supabase
-            .from("User")
-            .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
-            .eq('id', user.id)
-        if (error) console.error("Erreur chargement limites :", error);
-        else {
-            console.log(data[0])
-            const limits = data[0]
+        if (cart.length > 0) {
+            console.log(cart)
+            const { data, error } = await supabase
+                .from("User")
+                .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
+                .eq('id', user.id)
+            if (error) console.error("Erreur chargement limites :", error);
+            else {
+                console.log(data[0])
+                const limits = data[0]
 
-            const isRespectedLimit = (limit, currentAmount, newAmount) => {
-                return (currentAmount + newAmount) <= limit
-            }
+                const isRespectedLimit = (limit, currentAmount, newAmount) => {
+                    return (currentAmount + newAmount) <= limit
+                }
 
-            const cartToValidate = ({
-                client_id: user.id,
-                content: cart,
-                price: productsPriceTotal,
-                delivered: false,
-            })
+                const cartToValidate = ({
+                    client_id: user.id,
+                    content: cart,
+                    price: productsPriceTotal,
+                    delivered: false,
+                })
 
-            // Checking whether cartToValidate respects user's limits
-            // If one limit is null, then it is seen as no limit
-            let areRespectedLimits = true
-            if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
-                console.error("Condition de poids non respectée : " + limits.current_weight / 1000 + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit / 1000 + "kg.")
-                areRespectedLimits = false
-            }
-            if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
-                console.error("Condition de prix non respectée : " + limits.current_price + "€ déjà dépensés ce mois-ci. Votre limite mensuelle est de " + limits.price_limit + "€.")
-                areRespectedLimits = false
-            }
-            if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
-                console.error("Condition de nombre de produits non respectée : " + limits.current_order + " produits déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.order_limit + " produits.")
-                areRespectedLimits = false
-            }
+                // Checking whether cartToValidate respects user's limits
+                // If one limit is null, then it is seen as no limit
+                let areRespectedLimits = true
+                if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+                    console.error("Condition de poids non respectée : " + limits.current_weight / 1000 + "kg déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.weight_limit / 1000 + "kg.")
+                    areRespectedLimits = false
+                }
+                if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
+                    console.error("Condition de prix non respectée : " + limits.current_price + "€ déjà dépensés ce mois-ci. Votre limite mensuelle est de " + limits.price_limit + "€.")
+                    areRespectedLimits = false
+                }
+                if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
+                    console.error("Condition de nombre de produits non respectée : " + limits.current_order + " produits déjà achetés ce mois-ci. Votre limite mensuelle est de " + limits.order_limit + " produits.")
+                    areRespectedLimits = false
+                }
 
-            if (areRespectedLimits) {
-                // Adding a new row to the 'cart' database
-                const { error } = await supabase
-                    .from('cart')
-                    .insert(cartToValidate)
-
-                if (error) {
-                    console.error("Erreur lors de l'insertion du panier dans la base de données : ", error.message);
-                    return;
-                } else {
-                    // Updating user's monthly totals
+                if (areRespectedLimits) {
+                    // Adding a new row to the 'cart' database
                     const { error } = await supabase
-                        .from('User')
-                        .update({ current_weight: limits.current_weight + productsWeightTotal, current_price: limits.current_price + productsPriceTotal, current_order: limits.current_order + productsNumberTotal })
-                        .eq('id', user.id)
+                        .from('cart')
+                        .insert(cartToValidate)
 
                     if (error) {
-                        console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
+                        console.error("Erreur lors de l'insertion du panier dans la base de données : ", error.message);
+                        return;
                     } else {
-                        console.log("✅ Panier validé")
-                        setCart({});
-                        localStorage.removeItem(user.id)
+                        // Updating user's monthly totals
+                        const { error } = await supabase
+                            .from('User')
+                            .update({ current_weight: limits.current_weight + productsWeightTotal, current_price: limits.current_price + productsPriceTotal, current_order: limits.current_order + productsNumberTotal })
+                            .eq('id', user.id)
+
+                        if (error) {
+                            console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
+                        } else {
+                            console.log("✅ Panier validé")
+                            setCart({});
+                            localStorage.removeItem(user.id)
+                        }
                     }
+                } else {
+                    console.error("La validation du panier n'a pas pu être effectuée. Les limites liées à votre compte ne sont pas respectées.")
                 }
-            } else {
-                console.error("La validation du panier n'a pas pu être effectuée. Les limites liées à votre compte ne sont pas respectées.")
             }
+        } else {
+            console.error("Le panier est vide.")
         }
     }
 

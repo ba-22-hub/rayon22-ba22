@@ -9,7 +9,6 @@ HOW TO USE THE CONTEXT ??
 
 cart : current cart : {id1: nb1, id2: nb2, ...},
 setCart : to update the cart
-client : session associated to cart
 */
 
 
