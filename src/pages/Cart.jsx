@@ -119,6 +119,17 @@ function Cart() {
                     delivered: false,
                 })
 
+                let isValidCart = true
+
+                // Checking whether cart is compatible with products' stocks
+                let areAvailableProducts = true
+                productsInCart.map((product, idx) => {
+                    if (cart[product.id] > product.stock) {
+                        console.error("Stock de " + product.name + " insuffisant.")
+                        areAvailableProducts = false
+                    }
+                })
+
                 // Checking whether cartToValidate respects user's limits
                 // If one limit is null, then it is seen as no limit
                 let areRespectedLimits = true
@@ -135,7 +146,9 @@ function Cart() {
                     areRespectedLimits = false
                 }
 
-                if (areRespectedLimits) {
+                isValidCart = areAvailableProducts && areRespectedLimits
+
+                if (isValidCart) {
                     // Adding a new row to the 'cart' database
                     const { error } = await supabase
                         .from('cart')
@@ -150,7 +163,7 @@ function Cart() {
                         localStorage.removeItem(user.id)
                         setProductsInCart([])
                         updateTotals()
-                        
+
                         // Updating user's monthly totals
                         const { error } = await supabase
                             .from('User')
@@ -162,7 +175,8 @@ function Cart() {
                         }
                     }
                 } else {
-                    console.error("La validation du panier n'a pas pu être effectuée. Les limites liées à votre compte ne sont pas respectées.")
+                    let errorMessage = "La validation du panier n'a pas pu être effectuée." + (!areAvailableProducts ? " Certains produits sont en stocks insuffisants." : "") + (!areRespectedLimits ? " Les limites liées à votre compte ne sont pas respectées." : "")
+                    console.error(errorMessage)
                 }
             }
         } else {
