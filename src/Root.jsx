@@ -1,6 +1,6 @@
 // Importing dependencies
 import {
-  HashRouter as Router, // HashRouter for the electron built app
+  BrowserRouter as Router, // HashRouter for the electron built app
   Routes,
   Route
 } from "react-router-dom";
