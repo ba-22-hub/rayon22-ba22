@@ -1,5 +1,6 @@
 // Importing dependencies
 import emailjs from '@emailjs/browser';
+import { Store } from 'react-notifications-component';
 
 const serviceID = 'service_ebvylqd'
 const publicKey = '_QJu22XnilS4i04rg'

@@ -1,5 +1,6 @@
 // Importing dependencies
 import sendMail from '@lib/sendMail.js';
+import { Store } from 'react-notifications-component';
 
 const templateID = 'template_k4m4rco';
 

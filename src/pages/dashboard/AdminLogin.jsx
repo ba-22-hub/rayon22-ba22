@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuthor } from '../../context/AuthorContext';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FormInput from "@common/FormInput.jsx";
@@ -38,12 +39,41 @@ function AdminLogin() {
         });
 
         if (loginError) {
-            console.error("Erreur login:", loginError.message);
+            console.error("Erreur login:", loginError);
+            Store.addNotification({
+                title: "Erreur lors de la connexion",
+                message: loginError.message,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             return;
         }
 
         const userId = loginData.user.id;
-        console.log("User ID:", userId);
+        Store.addNotification({
+            title: "ID de l'utilisateur :",
+            message: userId,
+            type: "info",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+                duration: 5000,
+                onScreen: true,
+                pauseOnHover: true,
+                showIcon: true
+            }
+        });
 
         // 2. Check if the user is an admin
         const [adminAnswer] = await Promise.all([
@@ -51,7 +81,20 @@ function AdminLogin() {
         ]);
 
         if (adminAnswer) {
-            console.log('Success: admin logged in');
+            Store.addNotification({
+                title: "Connexion admin effectuée avec succès",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             navigate('/admin/users')
             return;
         } else {

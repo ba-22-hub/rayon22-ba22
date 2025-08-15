@@ -1,4 +1,5 @@
 import { supabase } from "@lib/supabaseClient";
+import { Store } from 'react-notifications-component';
 
 async function patchUser(userId, newUser) {
     try {

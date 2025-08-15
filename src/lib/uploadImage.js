@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { Store } from 'react-notifications-component';
 
 async function uploadImage(image, imageName) {
     // Uploads the image to Supabase public bucket

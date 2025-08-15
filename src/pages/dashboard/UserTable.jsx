@@ -6,6 +6,7 @@ import { patchUser } from '@lib/patchUser';
 import sendNotification from '@lib/sendNotification.js';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -20,7 +21,7 @@ const UserTable = () => {
 	const [editMode, setEditMode] = useState(null);
 	const [editedUser, setEditedUser] = useState({});
 	const [update, setUpdate] = useState(true)
-	
+
 	// State to manage loading state to display the Loading component
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -30,10 +31,10 @@ const UserTable = () => {
 	let isNotifying = false;
 
 	useEffect(() => {
-		if (loading) return ; // wait for the author informations to be fetch
-		if (!isAdmin){
+		if (loading) return; // wait for the author informations to be fetch
+		if (!isAdmin) {
 			navigate('/admin')
-			return;	
+			return;
 		}
 		const notifyUsers = async () => {
 			if (isNotifying) return;
@@ -47,6 +48,21 @@ const UserTable = () => {
 
 			if (error) {
 				console.error('Erreur lors de la récupération des utilisateurs à notifier:', error);
+				Store.addNotification({
+					title: "Erreur lors de la récupération des utilisateurs à notifier",
+					message: error.message,
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
 				return;
 			}
 
@@ -64,11 +80,54 @@ const UserTable = () => {
 
 					if (updateError) {
 						console.error(`Erreur lors de la mise à jour de l'utilisateur ${user.id}:`, updateError);
+						Store.addNotification({
+							title: "Erreur lors de la mise à jour de l'utilisateur " + user.id,
+							message: update.message,
+							type: "danger",
+							insert: "top",
+							container: "top-right",
+							animationIn: ["animate__animated", "animate__fadeIn"],
+							animationOut: ["animate__animated", "animate__fadeOut"],
+							dismiss: {
+								duration: 5000,
+								onScreen: true,
+								pauseOnHover: true,
+								showIcon: true
+							}
+						});
 					} else {
-						console.log(`Notification envoyée à ${user.email}`);
+						Store.addNotification({
+							title: "Notification envoyée à " + user.email,
+							type: "success",
+							insert: "top",
+							container: "top-right",
+							animationIn: ["animate__animated", "animate__fadeIn"],
+							animationOut: ["animate__animated", "animate__fadeOut"],
+							dismiss: {
+								duration: 5000,
+								onScreen: true,
+								pauseOnHover: true,
+								showIcon: true
+							}
+						});
 					}
 				} catch (err) {
 					console.error(`Erreur lors de l'envoi de la notification à ${user.email}:`, err);
+					Store.addNotification({
+						title: "Erreur inattendue lors de l'envoi de la notification à " + user.email,
+						message: err.message,
+						type: "danger",
+						insert: "top",
+						container: "top-right",
+						animationIn: ["animate__animated", "animate__fadeIn"],
+						animationOut: ["animate__animated", "animate__fadeOut"],
+						dismiss: {
+							duration: 5000,
+							onScreen: true,
+							pauseOnHover: true,
+							showIcon: true
+						}
+					});
 				}
 			}
 		};
@@ -76,11 +135,27 @@ const UserTable = () => {
 
 		const fetchUsers = async () => {
 			const { data, error } = await supabase.from('User').select('*');
-			if (error) console.error('Erreur de chargement des utilisateurs :', error);
+			if (error) {
+				console.error('Erreur de chargement des utilisateurs :', error)
+				Store.addNotification({
+					title: "Erreur de chargement des utilisateurs",
+					message: error.message,
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
+			}
 			else
 				setUsers(data);
 			setIsLoading(false);
-			console.log(data)
 		};
 		fetchUsers()
 	}, [update, loading]);
@@ -107,7 +182,6 @@ const UserTable = () => {
 	};
 
 	const handleValidate = () => {
-		console.log('User modifié :', editedUser);
 		patchUser(editMode, editedUser)
 			.then(() => setUpdate(!update))
 			.then(() => setEditMode(null))
@@ -117,239 +191,271 @@ const UserTable = () => {
 	const handleDelete = (id) => {
 		console.log('Suppression utilisateur :', id);
 		deleteUser(id)
-			.then(() => console.log("Supression effectuée !"))
+			.then(() =>
+				Store.addNotification({
+					title: "Suppression effectuée avec succès",
+					type: "success",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				})
+			)
 			.then(() => setUpdate(!update))
-			.catch((e) => console.error("Une erreur est survenue : ", e))
+			.catch((e) =>
+				console.error("Erreur inattendue : ", e),
+				Store.addNotification({
+					title: "Erreur inattendue",
+					message: e.message,
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				})
+			)
 	};
 
 	// Displaying the Loading component
-    if (isLoading || loading) {
-        return <Loading />;
-    }
+	if (isLoading || loading) {
+		return <Loading />;
+	}
 
 	return (
 		<>
-		{loading ? (
-			<Loading />
-		):(
-		<div className="p-6 max-w-7xl mx-auto">
-			<h1 className="text-2xl font-bold mb-4">Liste des Utilisateurs</h1>
+			{loading ? (
+				<Loading />
+			) : (
+				<div className="p-6 max-w-7xl mx-auto">
+					<h1 className="text-2xl font-bold mb-4">Liste des Utilisateurs</h1>
 
-			<input
-				type="text"
-				placeholder="Rechercher par nom, email, téléphone..."
-				className="mb-6 px-4 py-2 border border-gray-300 rounded w-full"
-				value={search}
-				onChange={(e) => setSearch(e.target.value)}
-			/>
+					<input
+						type="text"
+						placeholder="Rechercher par nom, email, téléphone..."
+						className="mb-6 px-4 py-2 border border-gray-300 rounded w-full"
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
 
-			<div className="overflow-x-auto bg-white shadow rounded">
-				<table className="min-w-full divide-y divide-gray-200">
-					<thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
-						<tr>
-							<th className="px-6 py-3">Prénom</th>
-							<th className="px-6 py-3">Nom</th>
-							<th className="px-6 py-3">Email</th>
-							<th className="px-6 py-3">Téléphone</th>
-							<th className="px-6 py-3">Action</th>
-						</tr>
-					</thead>
-					<tbody className="divide-y divide-gray-200 text-sm">
-						{filteredUsers.map(user => (
-							<React.Fragment key={user.id}>
+					<div className="overflow-x-auto bg-white shadow rounded">
+						<table className="min-w-full divide-y divide-gray-200">
+							<thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
 								<tr>
-									{/* firstName */}
-									<td className="px-6 py-4">
-										{editMode === user.id ? (
-											<input
-												name="firstName"
-												value={editedUser.firstName || ''}
-												onChange={handleChange}
-												className="border px-2 py-1 rounded w-full"
-											/>
-										) : (
-											user.firstName
-										)}
-									</td>
-
-									{/* lastName */}
-									<td className="px-6 py-4">
-										{editMode === user.id ? (
-											<input
-												name="lastName"
-												value={editedUser.lastName || ''}
-												onChange={handleChange}
-												className="border px-2 py-1 rounded w-full"
-											/>
-										) : (
-											user.lastName
-										)}
-									</td>
-
-									{/* email */}
-									<td className="px-6 py-4">
-										{editMode === user.id ? (
-											<input
-												name="email"
-												value={editedUser.email || ''}
-												onChange={handleChange}
-												className="border px-2 py-1 rounded w-full"
-											/>
-										) : (
-											user.email
-										)}
-									</td>
-
-									{/* phone */}
-									<td className="px-6 py-4">
-										{editMode === user.id ? (
-											<input
-												name="phone"
-												value={editedUser.phone || ''}
-												onChange={handleChange}
-												className="border px-2 py-1 rounded w-full"
-											/>
-										) : (
-											user.phone
-										)}
-									</td>
-
-									{/* Fold / unfold buttons */}
-									<td className="px-6 py-4">
-										<FunctionButton
-											buttonText={expanded === user.id ? 'Fermer' : 'Déplier'}
-											fun={() => toggleExpand(user.id)}
-											className="text-blue-600 hover:underline mr-4 bg-transparent p-0 shadow-none"
-										/>
-									</td>
+									<th className="px-6 py-3">Prénom</th>
+									<th className="px-6 py-3">Nom</th>
+									<th className="px-6 py-3">Email</th>
+									<th className="px-6 py-3">Téléphone</th>
+									<th className="px-6 py-3">Action</th>
 								</tr>
-								{expanded === user.id && (
-									<tr className="bg-gray-50">
-										<td colSpan="5" className="px-6 py-4">
-											<div className="grid grid-cols-2 gap-4 text-sm mb-4">
-												{[
-													['gender', 'Sexe'],
-													['birthday', 'Date de naissance'],
-													['address', 'Adresse'],
-													['addAddress', 'Complément d’adresse'],
-													['city', 'Ville'],
-													['postalCode', 'Code postal'],
-													['situation', 'Situation'],
-													['quotient', 'Quotient'],
-													['wageType', 'Type de revenu'],
-													['otherWage', 'Autres revenus'],
-												].map(([field, label]) => (
-													<div key={field}>
-														<strong>{label}:</strong>{' '}
-														{editMode === user.id ? (
-															<input
-																name={field}
-																value={editedUser[field] || ''}
-																onChange={handleChange}
-																className="border px-2 py-1 rounded w-full mt-1"
-															/>
-														) : (
-															<span className="ml-1">
-																{user[field] || '—'}
-															</span>
-														)}
-													</div>
-												))}
-
-												{/* weight limit */}
-												<div>
-													<strong>Limite de poids :</strong>{' '}
-													{editMode === user.id ? (
-														<input
-															name="weight_limit"
-															type="number"
-															value={editedUser.weight_limit ?? ''}
-															onChange={handleChange}
-															className="border px-2 py-1 rounded w-full mt-1"
-														/>
-													) : (
-														<span className="ml-1">
-															{user.current_weight} / {user.weight_limit}
-														</span>
-													)}
-												</div>
-
-												{/* price limit */}
-												<div>
-													<strong>Limite de prix :</strong>{' '}
-													{editMode === user.id ? (
-														<input
-															name="price_limit"
-															type="number"
-															step="0.01"
-															value={editedUser.price_limit ?? ''}
-															onChange={handleChange}
-															className="border px-2 py-1 rounded w-full mt-1"
-														/>
-													) : (
-														<span className="ml-1">
-															{user.current_price} / {user.price_limit}
-														</span>
-													)}
-												</div>
-
-												{/* order limit */}
-												<div>
-													<strong>Limite de commandes :</strong>{' '}
-													{editMode === user.id ? (
-														<input
-															name="order_limit"
-															type="number"
-															value={editedUser.order_limit ?? ''}
-															onChange={handleChange}
-															className="border px-2 py-1 rounded w-full mt-1"
-														/>
-													) : (
-														<span className="ml-1">
-															{user.current_order} / {user.order_limit}
-														</span>
-													)}
-												</div>
-											</div>
-
-											<div className="flex gap-4">
+							</thead>
+							<tbody className="divide-y divide-gray-200 text-sm">
+								{filteredUsers.map(user => (
+									<React.Fragment key={user.id}>
+										<tr>
+											{/* firstName */}
+											<td className="px-6 py-4">
 												{editMode === user.id ? (
-													<FunctionButton
-														buttonText="Valider"
-														fun={handleValidate}
-														className="px-4 py-2 bg-green text-white rounded"
+													<input
+														name="firstName"
+														value={editedUser.firstName || ''}
+														onChange={handleChange}
+														className="border px-2 py-1 rounded w-full"
 													/>
 												) : (
-													<FunctionButton
-														buttonText="Modifier"
-														fun={() => handleEdit(user)}
-														className="px-4 py-2 bg-blue-600 text-white rounded"
-													/>
+													user.firstName
 												)}
+											</td>
 
+											{/* lastName */}
+											<td className="px-6 py-4">
+												{editMode === user.id ? (
+													<input
+														name="lastName"
+														value={editedUser.lastName || ''}
+														onChange={handleChange}
+														className="border px-2 py-1 rounded w-full"
+													/>
+												) : (
+													user.lastName
+												)}
+											</td>
+
+											{/* email */}
+											<td className="px-6 py-4">
+												{editMode === user.id ? (
+													<input
+														name="email"
+														value={editedUser.email || ''}
+														onChange={handleChange}
+														className="border px-2 py-1 rounded w-full"
+													/>
+												) : (
+													user.email
+												)}
+											</td>
+
+											{/* phone */}
+											<td className="px-6 py-4">
+												{editMode === user.id ? (
+													<input
+														name="phone"
+														value={editedUser.phone || ''}
+														onChange={handleChange}
+														className="border px-2 py-1 rounded w-full"
+													/>
+												) : (
+													user.phone
+												)}
+											</td>
+
+											{/* Fold / unfold buttons */}
+											<td className="px-6 py-4">
 												<FunctionButton
-													buttonText="Supprimer"
-													fun={() => handleDelete(user.id)}
-													className="px-4 py-2 bg-red text-white rounded"
+													buttonText={expanded === user.id ? 'Fermer' : 'Déplier'}
+													fun={() => toggleExpand(user.id)}
+													className="text-blue-600 hover:underline mr-4 bg-transparent p-0 shadow-none"
 												/>
-											</div>
+											</td>
+										</tr>
+										{expanded === user.id && (
+											<tr className="bg-gray-50">
+												<td colSpan="5" className="px-6 py-4">
+													<div className="grid grid-cols-2 gap-4 text-sm mb-4">
+														{[
+															['gender', 'Sexe'],
+															['birthday', 'Date de naissance'],
+															['address', 'Adresse'],
+															['addAddress', 'Complément d’adresse'],
+															['city', 'Ville'],
+															['postalCode', 'Code postal'],
+															['situation', 'Situation'],
+															['quotient', 'Quotient'],
+															['wageType', 'Type de revenu'],
+															['otherWage', 'Autres revenus'],
+														].map(([field, label]) => (
+															<div key={field}>
+																<strong>{label}:</strong>{' '}
+																{editMode === user.id ? (
+																	<input
+																		name={field}
+																		value={editedUser[field] || ''}
+																		onChange={handleChange}
+																		className="border px-2 py-1 rounded w-full mt-1"
+																	/>
+																) : (
+																	<span className="ml-1">
+																		{user[field] || '—'}
+																	</span>
+																)}
+															</div>
+														))}
+
+														{/* weight limit */}
+														<div>
+															<strong>Limite de poids :</strong>{' '}
+															{editMode === user.id ? (
+																<input
+																	name="weight_limit"
+																	type="number"
+																	value={editedUser.weight_limit ?? ''}
+																	onChange={handleChange}
+																	className="border px-2 py-1 rounded w-full mt-1"
+																/>
+															) : (
+																<span className="ml-1">
+																	{user.current_weight} / {user.weight_limit}
+																</span>
+															)}
+														</div>
+
+														{/* price limit */}
+														<div>
+															<strong>Limite de prix :</strong>{' '}
+															{editMode === user.id ? (
+																<input
+																	name="price_limit"
+																	type="number"
+																	step="0.01"
+																	value={editedUser.price_limit ?? ''}
+																	onChange={handleChange}
+																	className="border px-2 py-1 rounded w-full mt-1"
+																/>
+															) : (
+																<span className="ml-1">
+																	{user.current_price} / {user.price_limit}
+																</span>
+															)}
+														</div>
+
+														{/* order limit */}
+														<div>
+															<strong>Limite de commandes :</strong>{' '}
+															{editMode === user.id ? (
+																<input
+																	name="order_limit"
+																	type="number"
+																	value={editedUser.order_limit ?? ''}
+																	onChange={handleChange}
+																	className="border px-2 py-1 rounded w-full mt-1"
+																/>
+															) : (
+																<span className="ml-1">
+																	{user.current_order} / {user.order_limit}
+																</span>
+															)}
+														</div>
+													</div>
+
+													<div className="flex gap-4">
+														{editMode === user.id ? (
+															<FunctionButton
+																buttonText="Valider"
+																fun={handleValidate}
+																className="px-4 py-2 bg-green text-white rounded"
+															/>
+														) : (
+															<FunctionButton
+																buttonText="Modifier"
+																fun={() => handleEdit(user)}
+																className="px-4 py-2 bg-blue-600 text-white rounded"
+															/>
+														)}
+
+														<FunctionButton
+															buttonText="Supprimer"
+															fun={() => handleDelete(user.id)}
+															className="px-4 py-2 bg-red text-white rounded"
+														/>
+													</div>
+												</td>
+											</tr>
+										)}
+									</React.Fragment>
+								))}
+								{filteredUsers.length === 0 && (
+									<tr>
+										<td colSpan="5" className="px-6 py-4 text-center text-gray">
+											Aucun utilisateur trouvé.
 										</td>
 									</tr>
 								)}
-							</React.Fragment>
-						))}
-						{filteredUsers.length === 0 && (
-							<tr>
-								<td colSpan="5" className="px-6 py-4 text-center text-gray">
-									Aucun utilisateur trouvé.
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-			</div>
-		</div>)}
-	</>
+							</tbody>
+						</table>
+					</div>
+				</div>)}
+		</>
 	);
 };
 
