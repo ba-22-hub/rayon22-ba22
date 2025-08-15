@@ -23,12 +23,32 @@ const SearchBar = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { data, error } = await supabase.from('products').select('*');
-      if (error) console.error('Erreur de chargement des produits :', error);
-      else
-        setProducts(data);
-      console.log(data)
+      const { data, error } = await supabase
+        .from('products')
+        .select('*');
+      if (error) {
+        console.error('Erreur de chargement des produits :', error)
+      } else {
+        const productsWithImages = await Promise.all(
+          data.map(async product => {
+            const { data: imgData, error: imgError } = await supabase
+              .storage
+              .from("images")
+              .download(product.image_name);
+
+            if (imgError) {
+              console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+            } else {
+              product.imageUrl = URL.createObjectURL(imgData);
+            }
+            return product;
+          })
+        );
+
+        setProducts(productsWithImages);
+      }
     };
+
     fetchProducts()
   }, [update]);
 
@@ -65,12 +85,29 @@ function Catalog() {
         .eq('category', category);
       if (error) console.error("Erreur chargement produits :", error);
       else {
+        const productsWithImages = await Promise.all(
+          data.map(async product => {
+            const { data: imgData, error: imgError } = await supabase
+              .storage
+              .from("images")
+              .download(product.image_name);
+
+            if (imgError) {
+              console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+            } else {
+              product.imageUrl = URL.createObjectURL(imgData);
+            }
+            return product;
+          })
+        );
+
         setProductsByCategory(prevData => ({
           ...prevData,
-          [category]: data
+          [category]: productsWithImages
         }));
       }
     };
+
     const fetchProductsByCategories = async () => {
       {
         categoriesList.map((category) => (
@@ -98,12 +135,11 @@ function Catalog() {
           const products = productsByCategory[category] || [];
           if (products.length > 0) {
             return <div key={category}>
-                <div className="flex items-start ...">
-                  <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0,1).toUpperCase() + category.slice(1, category.length)}</p>
-                  <FunctionButton className="mt-12 ml-5 bg-[#FF8200] text-white px-8 rounded-full font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all" buttonText="Voir +" />
-                </div>
-                <ProductCarousel data={products} />
+              <div className="flex items-start ...">
+                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0, 1).toUpperCase() + category.slice(1, category.length)}</p>
               </div>
+              <ProductCarousel data={products} />
+            </div>
           }
           else {
             return null
