@@ -14,11 +14,40 @@ async function uploadPDF(file, fileName, folder) {
         });
 
     if (uploadError) {
-        console.error('Erreur lors de l’upload :', uploadError.message);
+        console.error('Erreur lors de l’upload :', uploadError);
+        Store.addNotification({
+            title: "Erreur lors de l'envoi de l'upload du fichier " + fileName,
+            message: uploadError.message,
+            type: "danger",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+                duration: 5000,
+                onScreen: true,
+                pauseOnHover: true,
+                showIcon: true
+            }
+        });
         return { success: false, error: uploadError };;
     }
 
-    console.log('Upload terminé avec succès :', uploadData);
+    Store.addNotification({
+        title: "Upload terminé avec succès",
+        message: uploadData,
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+        }
+    });
     return { success: true, data: uploadData };
 }
 

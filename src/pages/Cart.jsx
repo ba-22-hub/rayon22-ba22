@@ -103,7 +103,7 @@ function Cart() {
                             Store.addNotification({
                                 title: "Erreur de chargement de l'image : " + product.image_name,
                                 message: imgError.message,
-                                type: "danger",
+                                type: "warning",
                                 insert: "top",
                                 container: "top-right",
                                 animationIn: ["animate__animated", "animate__fadeIn"],
@@ -317,21 +317,7 @@ function Cart() {
                             .eq('id', user.id)
 
                         if (error) {
-                            Store.addNotification({
-                                title: "Échec de validation du panier",
-                                message: "Erreur lors de la mise à jour des totaux mensuels : " + error.message,
-                                type: "warning",
-                                insert: "top",
-                                container: "top-right",
-                                animationIn: ["animate__animated", "animate__fadeIn"],
-                                animationOut: ["animate__animated", "animate__fadeOut"],
-                                dismiss: {
-                                    duration: 5000,
-                                    onScreen: true,
-                                    pauseOnHover: true,
-                                    showIcon: true
-                                }
-                            });
+                            console.error("Erreur lors de la mise à jour des totaux mensuels : " + error.message)
                         }
 
                         // Updating products stocks
@@ -344,21 +330,7 @@ function Cart() {
                                         .eq('id', product.id)
 
                                     if (error) {
-                                        Store.addNotification({
-                                            title: "Échec de validation du panier",
-                                            message: "Erreur lors de la mise à jour du stock de " + product.name + " : " + error.message,
-                                            type: "warning",
-                                            insert: "top",
-                                            container: "top-right",
-                                            animationIn: ["animate__animated", "animate__fadeIn"],
-                                            animationOut: ["animate__animated", "animate__fadeOut"],
-                                            dismiss: {
-                                                duration: 5000,
-                                                onScreen: true,
-                                                pauseOnHover: true,
-                                                showIcon: true
-                                            }
-                                        });
+                                        console.error("Erreur lors de la mise à jour du stock de " + product.name + " : " + error.message)
                                     }
                                 }
                             })
