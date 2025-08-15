@@ -1,15 +1,10 @@
 // Importing dependencies
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
-import { deleteUser } from '@lib/deleteUser';
-import { patchUser } from '@lib/patchUser';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import ProductCarousel from "../common/ProductCarouselCatalog"
-import FunctionButton from "../common/FunctionButton"
-
-// Importing assets
-import roundLogo from "../assets/logos/roundLogo.png"
 
 /**
  * The Catalog page.
@@ -27,7 +22,21 @@ const SearchBar = () => {
         .from('products')
         .select('*');
       if (error) {
-        console.error('Erreur de chargement des produits :', error)
+        Store.addNotification({
+          title: "Erreur lors du téléchargement des produits",
+          message: error.message,
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+          }
+        });
       } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
@@ -37,7 +46,21 @@ const SearchBar = () => {
               .download(product.image_name);
 
             if (imgError) {
-              console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+              Store.addNotification({
+                title: "Erreur lors du téléchargement de l'image " + product.image_name,
+                message: imgError.message,
+                type: "warning",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                  duration: 5000,
+                  onScreen: true,
+                  pauseOnHover: true,
+                  showIcon: true
+                }
+              });
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }
@@ -83,8 +106,23 @@ function Catalog() {
         .from("products")
         .select("*")
         .eq('category', category);
-      if (error) console.error("Erreur chargement produits :", error);
-      else {
+      if (error) {
+        Store.addNotification({
+          title: "Erreur lors du téléchargement des produits",
+          message: error.message,
+          type: "danger",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+          }
+        });
+      } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
             const { data: imgData, error: imgError } = await supabase
@@ -93,7 +131,21 @@ function Catalog() {
               .download(product.image_name);
 
             if (imgError) {
-              console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+              Store.addNotification({
+                title: "Erreur lors du téléchargement de l'image " + product.image_name,
+                message: imgError.message,
+                type: "warning",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                  duration: 5000,
+                  onScreen: true,
+                  pauseOnHover: true,
+                  showIcon: true
+                }
+              });
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }

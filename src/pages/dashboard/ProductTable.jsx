@@ -265,7 +265,7 @@ function ProductTable() {
 
     // Uploading the image to the 'images' bucket
     if (image != "") {
-      uploadImage(image, image.name)
+      await uploadImage(image, image.name)
     }
     setImage("")
 

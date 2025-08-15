@@ -1,4 +1,3 @@
-// Importing common components
 // Importing assets
 import birdLogo from "../assets/logos/birdLogo.png";
 import womanShelf from "../assets/Photos/womanShelf.jpg";
