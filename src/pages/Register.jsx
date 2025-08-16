@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 import { useAuthor } from "../context/AuthorContext.jsx"
 
@@ -84,21 +84,7 @@ function Register() {
         });
 
         if (error) {
-            Store.addNotification({
-                title: "Échec de la soumission du formulaire",
-                message: insertError.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Échec de la soumission du formulaire", insertError.message, "danger")
             return;
         }
 

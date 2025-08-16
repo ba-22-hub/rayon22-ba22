@@ -4,7 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -26,6 +26,7 @@ function ProductTable() {
   const [editedValues, setEditedValues] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
+  const [productImages, setProductImages] = useState({})
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -45,24 +46,28 @@ function ProductTable() {
     const { data, error } = await supabase.from("products").select("*");
     if (error) {
       console.error("Erreur chargement produits :", error)
-      Store.addNotification({
-        title: "Erreur lors du chargment des produits",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors du chargment des produits", error.message, "danger")
     }
     else {
       setProducts(data)
+      //setProductImages(data.map(p => { return ({ [p.id]: "" }) }))
+      data.forEach(async product => {
+        const { data: imgData, error: imgError } = await supabase
+          .storage
+          .from("images")
+          .download(product.image_name);
+
+        if (imgError) {
+          displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+        } else {
+          const url = URL.createObjectURL(imgData);
+          setProductImages(prev => ({
+            ...prev,
+            [product.id]: url
+          }));;
+        }
+        return product;
+      })
     }
   };
 
@@ -100,21 +105,7 @@ function ProductTable() {
       .remove([product.image_name])
     if (error) {
       console.error("Erreur suppression image :", error)
-      Store.addNotification({
-        title: "Erreur lors de la suppression de l'image " + product.image_name,
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la suppression de l'image " + product.image_name, error.message, "danger")
     }
 
     // Removing product row from 'products' table
@@ -124,37 +115,9 @@ function ProductTable() {
       .eq('id', product.id)
     if (errorDelete) {
       console.error("Erreur lors de la suppression du produit " + product.name + errorDelete)
-      Store.addNotification({
-        title: "Erreur lors de la suppression du produit " + product.name,
-        message: errorDelete.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la suppression du produit " + product.name, errorDelete.message, "danger")
     } else {
-      Store.addNotification({
-        title: product.name + " supprimé avec succès",
-        message: response,
-        type: "success",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Produit " + product.name + " supprimé avec succès", response, "success")
     }
     fetchProducts()
   }
@@ -169,7 +132,6 @@ function ProductTable() {
   }
 
   const handleValidate = async () => {
-    console.log("editedValues : " + editedValues)
     if (oldImageName != "") {
       // Removing old image from bucket
       const { error } = await supabase
@@ -178,27 +140,18 @@ function ProductTable() {
         .remove([oldImageName])
       if (error) {
         console.error("Erreur suppression ancienne image :", error)
-        Store.addNotification({
-          title: "Erreur lors de la suppression de l'ancienne image " + oldImageName + " de la base de données",
-          message: error.message,
-          type: "danger",
-          insert: "top",
-          container: "top-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-            pauseOnHover: true,
-            showIcon: true
-          }
-        });
+        displayNotification("Erreur lors de la suppression de l'ancienne image " + oldImageName + " de la base de données", error.message, "danger")
       }
     }
 
     if (image != "") {
       // Uploading new image to bucket
       await uploadImage(image, image.name)
+      const url = URL.createObjectURL(image);
+      setProductImages(prev => ({
+        ...prev,
+        [editingProductId]: url
+      }));;
     }
 
     const { error } = await supabase
@@ -207,21 +160,7 @@ function ProductTable() {
       .eq("id", editingProductId);
     if (error) {
       console.error("Erreur update :", error)
-      Store.addNotification({
-        title: "Erreur lors de la mise à jour du produit",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la mise à jour du produit", error.message, "danger")
     } else {
       setProducts((prev) =>
         prev.map((p) => (p.id === editingProductId ? editedValues : p))
@@ -237,6 +176,7 @@ function ProductTable() {
   );
 
   async function handleSubmit(e) {
+    e.preventDefault();
 
     // Adding a new row to the 'products' database
     const { error } = await supabase
@@ -245,26 +185,12 @@ function ProductTable() {
 
     if (error) {
       console.error("Erreur lors de l'ajout du nouveau produit", error.message);
-      Store.addNotification({
-        title: "Erreur lors de l'ajout du nouveau produit",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de l'ajout du nouveau produit", error.message, "danger")
       return;
     }
 
     // Uploading the image to the 'images' bucket
-    if (image != "") {
+    if (image.name != "") {
       await uploadImage(image, image.name)
     }
     setImage("")
@@ -338,21 +264,7 @@ function ProductTable() {
 
         if (error && Object.keys(error.message).length > 0) {
           console.error("Erreur lors du téléchargement du nom de de l'image : ", error.message);
-          Store.addNotification({
-            title: "Erreur lors du téléchargement du nom de de l'image",
-            message: error.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-              pauseOnHover: true,
-              showIcon: true
-            }
-          });
+          displayNotification("Erreur lors du téléchargement du nom de de l'image", error.message, "danger")
           return;
         }
 
@@ -389,51 +301,6 @@ function ProductTable() {
       </div>
     );
   };
-
-  function DisplayImage({ product }) {
-    const [imageUrl, setImageUrl] = useState(null);
-
-    useEffect(() => {
-      async function fetchImage() {
-        const { data, error } = await supabase
-          .storage
-          .from("images")
-          .download(product.image_name);
-
-        if (error && Object.keys(error.message).length > 0) {
-          console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-          Store.addNotification({
-            title: "Erreur lors du téléchargement de l'image " + product.image_name,
-            message: error.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-              pauseOnHover: true,
-              showIcon: true
-            }
-          });
-          return
-        }
-
-        const url = URL.createObjectURL(data);
-        setImageUrl(url);
-
-      }
-
-      if (product.image_name != "") {
-        fetchImage();
-      }
-    }, [product.image_name]);
-
-    return <>
-      <img src={imageUrl || roundLogo} alt={product.name} className="w-[50%] h-20 object-contain" />
-    </>
-  }
 
   return (
     <>
@@ -551,7 +418,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
-                        <td><DisplayImage product={p}></DisplayImage></td>
+                        <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
                             className="bg-blue-600 text-white px-2 py-1 rounded"

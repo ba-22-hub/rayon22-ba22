@@ -6,7 +6,7 @@ import { patchUser } from '@lib/patchUser';
 import sendNotification from '@lib/sendNotification.js';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -48,21 +48,7 @@ const UserTable = () => {
 
 			if (error) {
 				console.error('Erreur lors de la récupération des utilisateurs à notifier:', error);
-				Store.addNotification({
-					title: "Erreur lors de la récupération des utilisateurs à notifier",
-					message: error.message,
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Erreur lors de la récupération des utilisateurs à notifier", error.message, "danger")
 				return;
 			}
 
@@ -80,54 +66,13 @@ const UserTable = () => {
 
 					if (updateError) {
 						console.error(`Erreur lors de la mise à jour de l'utilisateur ${user.id}:`, updateError);
-						Store.addNotification({
-							title: "Erreur lors de la mise à jour de l'utilisateur " + user.id,
-							message: update.message,
-							type: "danger",
-							insert: "top",
-							container: "top-right",
-							animationIn: ["animate__animated", "animate__fadeIn"],
-							animationOut: ["animate__animated", "animate__fadeOut"],
-							dismiss: {
-								duration: 5000,
-								onScreen: true,
-								pauseOnHover: true,
-								showIcon: true
-							}
-						});
+						displayNotification("Erreur lors de la mise à jour de l'utilisateur " + user.id, update.message, "danger")
 					} else {
-						Store.addNotification({
-							title: "Notification envoyée à " + user.email,
-							type: "success",
-							insert: "top",
-							container: "top-right",
-							animationIn: ["animate__animated", "animate__fadeIn"],
-							animationOut: ["animate__animated", "animate__fadeOut"],
-							dismiss: {
-								duration: 5000,
-								onScreen: true,
-								pauseOnHover: true,
-								showIcon: true
-							}
-						});
+						displayNotification("Notification envoyée à " + user.email, "", "success")
 					}
 				} catch (err) {
 					console.error(`Erreur lors de l'envoi de la notification à ${user.email}:`, err);
-					Store.addNotification({
-						title: "Erreur inattendue lors de l'envoi de la notification à " + user.email,
-						message: err.message,
-						type: "danger",
-						insert: "top",
-						container: "top-right",
-						animationIn: ["animate__animated", "animate__fadeIn"],
-						animationOut: ["animate__animated", "animate__fadeOut"],
-						dismiss: {
-							duration: 5000,
-							onScreen: true,
-							pauseOnHover: true,
-							showIcon: true
-						}
-					});
+					displayNotification("Erreur inattendue lors de l'envoi de la notification à " + user.email, err.message, "danger")
 				}
 			}
 		};
@@ -137,21 +82,7 @@ const UserTable = () => {
 			const { data, error } = await supabase.from('User').select('*');
 			if (error) {
 				console.error('Erreur de chargement des utilisateurs :', error)
-				Store.addNotification({
-					title: "Erreur de chargement des utilisateurs",
-					message: error.message,
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Erreur de chargement des utilisateurs", error.message, "danger")
 			}
 			else
 				setUsers(data);
@@ -192,39 +123,12 @@ const UserTable = () => {
 		console.log('Suppression utilisateur :', id);
 		deleteUser(id)
 			.then(() =>
-				Store.addNotification({
-					title: "Suppression effectuée avec succès",
-					type: "success",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				})
+				displayNotification("Suppression effectuée avec succès", "", "success")
 			)
 			.then(() => setUpdate(!update))
 			.catch((e) =>
 				console.error("Erreur inattendue : ", e),
-				Store.addNotification({
-					title: "Erreur inattendue",
-					message: e.message,
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				})
+				displayNotification("Erreur inattendue", e.message, "danger")
 			)
 	};
 
