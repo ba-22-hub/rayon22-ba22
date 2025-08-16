@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { Store } from "react-notifications-component";
 
 // Importing common components
 import Loading from "@common/Loading.jsx";
