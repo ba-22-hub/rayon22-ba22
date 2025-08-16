@@ -6,11 +6,15 @@ import {
   useNavigate,
   Outlet,
 } from "react-router-dom";
+import React from 'react';
+import { ReactNotifications } from 'react-notifications-component'
+
 
 import { useAuthor } from "./context/AuthorContext.jsx";
 
 // Importing the style
 import './styles/navbar.css'
+import 'react-notifications-component/dist/theme.css'
 
 
 // Importing assets
@@ -45,6 +49,7 @@ function App() {
   const { user } = useAuthor()
   return (
     <div className="min-h-screen bg-[#FEF7F1]">
+      <ReactNotifications />
 
       {/* Horizontal navigation bar to choose the page of the website we want to visit */}
       <nav className="bg-white shadow-lg border-b border-gray-200 mb-8 mt-8">

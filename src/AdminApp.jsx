@@ -8,6 +8,7 @@ import {
   Navigate
 } from "react-router-dom";
 import { useAuthor } from "./context/AuthorContext.jsx";
+import { ReactNotifications } from 'react-notifications-component'
 
 // Importing pages
 import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
@@ -71,6 +72,7 @@ function AdminApp() {
   
   return (
     <div className="min-h-screen bg-gray-100">
+      <ReactNotifications />
       <Routes>
         <Route path="/" element={<AdminLogin />} />
         {isAdmin && (

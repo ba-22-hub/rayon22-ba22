@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from '../context/AuthorContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FormInput from "../common/FormInput";
@@ -44,7 +45,39 @@ function Login() {
 
 
 		if (loginError) {
-			console.error("Erreur login:", loginError.message);
+			if (loginError.message == "Invalid login credentials") {
+				Store.addNotification({
+					title: "Échec de connexion",
+					message: "Adresse e-mail ou mot de passe incorrect",
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
+			} else {
+				Store.addNotification({
+					title: "Échec de la connexion",
+					message: loginError.message,
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
+			}
 			return;
 		}
 
@@ -59,7 +92,21 @@ function Login() {
 
 		if (fetchError && fetchError.code !== 'PGRST116') {
 			// other error
-			console.error("Erreur lors de la vérification du user:", fetchError.message);
+			Store.addNotification({
+				title: "Erreur lors de la vérification de votre compte",
+				message: fetchError.message,
+				type: "danger",
+				insert: "top",
+				container: "top-right",
+				animationIn: ["animate__animated", "animate__fadeIn"],
+				animationOut: ["animate__animated", "animate__fadeOut"],
+				dismiss: {
+					duration: 5000,
+					onScreen: true,
+					pauseOnHover: true,
+					showIcon: true
+				}
+			});
 			return;
 		}
 
@@ -84,7 +131,7 @@ function Login() {
 					quotient: parsedData.step2.quotient,
 					wageType: parsedData.step2.wageType,
 					otherWage: parsedData.step2.otherWage,
-					has_right : false, 
+					has_right: false,
 				};
 
 				const { error: insertError } = await supabase
@@ -92,18 +139,56 @@ function Login() {
 					.insert([newUser]);
 
 				if (insertError) {
-					console.error("Erreur lors de l'insertion :", insertError.message);
+					Store.addNotification({
+						title: "Erreur lors de la création du compte",
+						message: insertError.message,
+						type: "danger",
+						insert: "top",
+						container: "top-right",
+						animationIn: ["animate__animated", "animate__fadeIn"],
+						animationOut: ["animate__animated", "animate__fadeOut"],
+						dismiss: {
+							duration: 5000,
+							onScreen: true,
+							pauseOnHover: true,
+							showIcon: true
+						}
+					});
 					return;
 				}
 
 				localStorage.removeItem("pendingUserData");
-				console.log("Utilisateur inséré avec succès !\n", newUser);
+				Store.addNotification({
+					title: "Compte créé avec succès",
+					type: "success",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
 			}
 		}
 
-
-		
-		console.log("Connexion réussie ! ", existingUser);
+		Store.addNotification({
+			title: "Connexion réussie",
+			type: "success",
+			insert: "top",
+			container: "top-right",
+			animationIn: ["animate__animated", "animate__fadeIn"],
+			animationOut: ["animate__animated", "animate__fadeOut"],
+			dismiss: {
+				duration: 5000,
+				onScreen: true,
+				pauseOnHover: true,
+				showIcon: true
+			}
+		});
 
 		// resets the inputs and formData to blank
 		setFormData({
@@ -114,7 +199,7 @@ function Login() {
 		// update session
 		setUser(loginData.user)
 		navigate('/account')
-		
+
 	}
 
 	return (
@@ -175,9 +260,9 @@ function Login() {
 					/>
 				</div>
 				<div className="flex justify-center">
-					<PageButton 
-						buttonText='Admin' 
-						page='/admin' 
+					<PageButton
+						buttonText='Admin'
+						page='/admin'
 						className='w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition mt-4' />
 				</div>
 			</div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { Store } from 'react-notifications-component';
 
 import sendReply from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
@@ -49,6 +50,21 @@ function MessagesDashboard() {
 
     if (error) {
       console.error('Erreur de chargement des messages:', error);
+      Store.addNotification({
+        title: "Erreur de chargement des messages",
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
     } else {
       setMessages(data);
     }
@@ -62,13 +78,57 @@ function MessagesDashboard() {
   };
 
   const handleReplySend = async (id, reply) => {
-    console.log(`Réponse au message ${id} :`, reply);
+    Store.addNotification({
+      title: "Réponse au message " + id + " :",
+      message: reply,
+      type: "info",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 0,
+        onScreen: true,
+        pauseOnHover: true,
+        showIcon: true
+      }
+    });
     const email = messages.find(msg => msg.id === id)?.User.email;
     const firstName = messages.find(msg => msg.id === id)?.User.firstName;
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
-    console.log('Email de l’utilisateur:', email);
+    Store.addNotification({
+      title: "E-mail de l'utilisateur :",
+      message: email,
+      type: "info",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 0,
+        onScreen: true,
+        pauseOnHover: true,
+        showIcon: true
+      }
+    });
 
-    if (!email) return console.error("Aucun email trouvé.");
+    if (!email) {
+      Store.addNotification({
+        title: "Aucun e-mail trouvé",
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
+      return console.error("Aucun email trouvé.");
+    }
 
     try {
       const result = sendReply({
@@ -77,16 +137,43 @@ function MessagesDashboard() {
         reply: reply,
       });
 
-      console.log('Email envoyé !', result.text);
+      Store.addNotification({
+        title: "E-mail envoyé avec succès",
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
     } catch (error) {
       console.error('Erreur d’envoi :', error);
+      Store.addNotification({
+        title: "Erreur d'envoi de l'e-mail",
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
     }
     handleDelete(id); // Delete the message after sending the reply
   };
 
   const handleDelete = async (id) => {
     const fileName = messages.find(msg => msg.id === id)?.pdf_name;
-    console.log('Suppression du message avec ID:', id, 'et fichier:', fileName);
     deletePDF(fileName)
     const { data, error } = await supabase
       .from('Messages')
@@ -94,13 +181,57 @@ function MessagesDashboard() {
       .eq('id', id);
     if (error) {
       console.error('Erreur de suppression:', error);
+      Store.addNotification({
+        title: "Erreur de suppression",
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
     } else {
+      Store.addNotification({
+        title: "Suppression effectuée avec succès",
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true,
+          pauseOnHover: true,
+          showIcon: true
+        }
+      });
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
     }
   };
 
   const handleDownloadPDF = (pdfName) => {
-    console.log('Ouverture de:', pdfName);
+    Store.addNotification({
+      title: "Ouverture de :",
+      message: pdfName,
+      message: "ID du message : " + id + " et fichier : " + fileName,
+      type: "info",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+        pauseOnHover: true,
+        showIcon: true
+      }
+    });
     // Open the PDF in a new tab
     openPDF(pdfName, 10, "messages");
   };

@@ -1,9 +1,8 @@
 import { supabase, supabaseAdmin } from "@lib/supabaseClient";
+import { Store } from 'react-notifications-component';
 
 async function deleteUser(userId) {
   try {
-    console.log("Suppression de l'utilisateur avec ID :", userId);
-
     // delete from the SQL User Table
     const { data, error } = await supabase
       .from('User')        //table user
@@ -11,7 +10,21 @@ async function deleteUser(userId) {
       .eq('id', userId);   // filter by id 
 
     if (error) {
-      console.error("Erreur lors de la suppression :", error.message);
+      Store.addNotification({
+        title: "Erreur lors de la suppression de l'utilisateur avec ID : " + userId,
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+        }
+    });
       return null;
     }
 
@@ -25,11 +38,40 @@ async function deleteUser(userId) {
       throw new Error("Erreur suppression auth.users : " + authError.message);
     }
 
-    console.log("Utilisateur supprimé :", data);
+    Store.addNotification({
+        title: "Utilisateur supprimé",
+        message: "ID : " + userId,
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+        }
+    });
     return data;
 
   } catch (err) {
-    console.error("Erreur inattendue :", err.message);
+    Store.addNotification({
+        title: "Erreur inattendue",
+        message: err.message,
+        type: "danger",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover: true,
+            showIcon: true
+        }
+    });
+    console.error("Erreur inattendue :", err);
     return null;
   }
 }

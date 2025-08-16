@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from "../context/CartContext.jsx";
 import { supabase } from "@lib/supabaseClient";
 import { stripePromise } from '@lib/stripeClient.js'
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FunctionButton from "@common/FunctionButton"
@@ -17,6 +18,9 @@ import orangeShape from "../assets/Assets/Coup crayon orange.svg"
 import blueRayonShape from "../assets/Assets/Rayons traits bleus.svg"
 import orangeCircle from "../assets/Assets/Cercle orange crayon.png"
 import roundLogo from "../assets/logos/roundLogo.png"
+
+// Importing styles
+import 'react-notifications-component/dist/theme.css'
 
 /**
  * The Cart page.
@@ -44,14 +48,12 @@ function Cart() {
         if (!user) { // user not login 
             navigate('/login')
             notify("Vous devez être connectés et avoir les droits pour passer commande")
-        } else if (!hasRights) { // user hasn't rights
+        }
+        else if (!hasRights) { // user doesn't have rights
             notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
             navigate('/account') // send the user to the previous page
         }
         // end author routine 
-
-        // rest of the useEffect 
-
 
     }, [loading])
 
@@ -75,7 +77,21 @@ function Cart() {
                 .select('*')
                 .in("id", Object.keys(cart));
             if (error) {
-                console.error('Erreur de chargement des produits :', error)
+                Store.addNotification({
+                    title: "Erreur de chargement des produits",
+                    message: error.message,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true,
+                        showIcon: true
+                    }
+                });
             } else {
                 const productsWithImages = await Promise.all(
                     data.map(async product => {
@@ -85,7 +101,21 @@ function Cart() {
                             .download(product.image_name);
 
                         if (imgError) {
-                            console.log("Erreur lors du téléchargment de l'image " + product.image_name + " : " + imgError)
+                            Store.addNotification({
+                                title: "Erreur de chargement de l'image : " + product.image_name,
+                                message: imgError.message,
+                                type: "warning",
+                                insert: "top",
+                                container: "top-right",
+                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                dismiss: {
+                                    duration: 5000,
+                                    onScreen: true,
+                                    pauseOnHover: true,
+                                    showIcon: true
+                                }
+                            });
                         } else {
                             product.imageUrl = URL.createObjectURL(imgData);
                         }
@@ -118,7 +148,21 @@ function Cart() {
 
     async function handleValidate() {
         if (Object.keys(cart).length === 0) {
-            console.error("Le panier est vide.");
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Le panier est vide",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             return;
         }
 
@@ -130,7 +174,21 @@ function Cart() {
             .single();
 
         if (userError) {
-            console.error("Erreur chargement limites :", userError);
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Erreur lors du chargement des limites liées à votre compte : " + error.message,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             return;
         }
 
@@ -148,20 +206,80 @@ function Cart() {
 
         const productsNumberTotal = Object.values(cart).reduce((a, b) => a + b, 0);
 
-        const areRespectedLimits =
-            isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal) &&
-            isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal) &&
-            isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal);
-
-        if (!areRespectedLimits) {
-            console.error("Votre panier dépasse vos limites mensuelles.");
-            return;
+        let areRespectedLimits = true
+        if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 0,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
+            areRespectedLimits = false
+        }
+        if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 0,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
+            areRespectedLimits = false
+        }
+        if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 0,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
+            areRespectedLimits = false
         }
 
         // Vérifier stock
         const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
         if (!areAvailableProducts) {
-            console.error("Certains produits sont en stock insuffisant.");
+            Store.addNotification({
+                title: "Échec de validation du panier",
+                message: "Stock de " + product.name + " insuffisant",
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 7000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             return;
         }
 

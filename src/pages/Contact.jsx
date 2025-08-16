@@ -4,6 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FormTextArea from "../common/FormTextArea"
@@ -81,8 +82,22 @@ function Contact() {
 			const { success, error } = await uploadPDF(formData.file, name, "messages")
 
 			if (!success) {
-				console.error("❌ Upload échoué :", error);
-				alert("Erreur lors de l'upload du fichier PDF.");
+				Store.addNotification({
+					title: "Échec de l'upload du fichier PDF",
+					message: error.message,
+					type: "danger",
+					insert: "top",
+					container: "top-right",
+					animationIn: ["animate__animated", "animate__fadeIn"],
+					animationOut: ["animate__animated", "animate__fadeOut"],
+					dismiss: {
+						duration: 5000,
+						onScreen: true,
+						pauseOnHover: true,
+						showIcon: true
+					}
+				});
+				//alert("Erreur lors de l'upload du fichier PDF.");
 				uploadSuccess = false;
 			}
 		}
@@ -101,12 +116,39 @@ function Contact() {
 			.insert([newMessage]);
 
 		if (insertError) {
-			console.error("❌ Erreur lors de l'insertion :", insertError.message);
-			alert("Erreur lors de l'envoi du message.");
+			Store.addNotification({
+				title: "Erreur lors de l'envoi du message",
+				message: insertError.message,
+				type: "danger",
+				insert: "top",
+				container: "top-right",
+				animationIn: ["animate__animated", "animate__fadeIn"],
+				animationOut: ["animate__animated", "animate__fadeOut"],
+				dismiss: {
+					duration: 5000,
+					onScreen: true,
+					pauseOnHover: true,
+					showIcon: true
+				}
+			});
+			//alert("Erreur lors de l'envoi du message.");
 			return;
 		}
 
-		console.log("✅ Message inséré avec succès !", newMessage);
+		Store.addNotification({
+			title: "Message envoyé avec succès",
+			type: "success",
+			insert: "top",
+			container: "top-right",
+			animationIn: ["animate__animated", "animate__fadeIn"],
+			animationOut: ["animate__animated", "animate__fadeOut"],
+			dismiss: {
+				duration: 5000,
+				onScreen: true,
+				pauseOnHover: true,
+				showIcon: true
+			}
+		});
 
 		// Third step: Reset the form
 
@@ -170,7 +212,24 @@ function Contact() {
 									type='file'
 									accept='.pdf'
 									name='file'
-									onChange={(e) => { console.log("Fichier sélectionné :", e.target.files[0]); handleFileChange(e); }}
+									onChange={(e) => {
+										Store.addNotification({
+											title: "Fichier sélectionné :",
+											message: e.target.files[0],
+											type: "info",
+											insert: "top",
+											container: "top-right",
+											animationIn: ["animate__animated", "animate__fadeIn"],
+											animationOut: ["animate__animated", "animate__fadeOut"],
+											dismiss: {
+												duration: 5000,
+												onScreen: true,
+												pauseOnHover: true,
+												showIcon: true
+											}
+										});
+										handleFileChange(e);
+									}}
 									ref={fileInputRef}
 									className="mb-6 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
 								/>

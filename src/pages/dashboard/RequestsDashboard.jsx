@@ -6,6 +6,7 @@ import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { Store } from 'react-notifications-component';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -50,6 +51,21 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de chargement des demandes:', error);
+            Store.addNotification({
+                title: "Erreur de chargment des demandes",
+                message: error.message,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
         } else {
             setRequests(data);
         }
@@ -59,7 +75,6 @@ function RequestsDashboard() {
     // Function to handle deletion of the request
     const handleDelete = async (id) => {
         const fileName = requests.find(req => req.id === id)?.pdf_name;
-        console.log(`Suppression de la demande ${id} avec le fichier ${fileName}`);
         deletePDF(fileName);
         const { error } = await supabase
             .from('Requests')
@@ -68,20 +83,47 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de suppression:', error);
+            Store.addNotification({
+                title: "Erreur de suppression de la demande " + id + " avec le fichier " + fileName,
+                message: error.message,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
         } else {
+            Store.addNotification({
+                title: "Suppression de la demande " + id + " avec le fichier " + fileName + " effectuée avec succès",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
             setRequests((prev) => prev.filter((req) => req.id !== id));
         }
     };
 
     // Functioon to open the PDF file in a new tab
     const handleDownloadPDF = (pdfName) => {
-        console.log('Ouverture de:', pdfName);
         openPDF(pdfName, 10, "requests");
     };
 
     // Function to handle approval and deletion of the request
     const handleApprove = async (id, user_id) => {
-        console.log(`Approbation de la demande ${id} de : ${user_id}`);
         // updated user informations
         try {
             // Date + 1 year
@@ -99,19 +141,62 @@ function RequestsDashboard() {
                 .select();
 
             if (error) {
-                console.error("Erreur lors de la mise à jour des droits :", error.message);
+                console.error("Erreur lors de la mise à jour des droits :", error);
+                Store.addNotification({
+                    title: "Erreur lors de la mise à jour des droits",
+                    message: error.message,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true,
+                        showIcon: true
+                    }
+                });
             } else {
+                Store.addNotification({
+                    title: "Droits mis à jour avec succès",
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true,
+                        pauseOnHover: true,
+                        showIcon: true
+                    }
+                });
                 handleDelete(id);
             }
         } catch (err) {
-            console.error("Erreur inattendue :", err.message);
+            console.error("Erreur inattendue :", err);
+            Store.addNotification({
+                title: "Erreur inattendue",
+                message: err.message,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true
+                }
+            });
         }
 
     }
 
     // Function to handle decline and deletion of the request
     const handleDecline = async (id) => {
-        console.log(`Refus de la demande ${id}`);
         handleDelete(id);
     }
 
