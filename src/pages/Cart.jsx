@@ -206,7 +206,6 @@ function Cart() {
 
         const productsNumberTotal = Object.values(cart).reduce((a, b) => a + b, 0);
 
-        let areRespectedLimits = true
         if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
             Store.addNotification({
                 title: "Échec de validation du panier",
@@ -223,7 +222,7 @@ function Cart() {
                     showIcon: true
                 }
             });
-            areRespectedLimits = false
+            return;
         }
         if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
             Store.addNotification({
@@ -241,7 +240,7 @@ function Cart() {
                     showIcon: true
                 }
             });
-            areRespectedLimits = false
+            return;
         }
         if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
             Store.addNotification({
@@ -259,7 +258,7 @@ function Cart() {
                     showIcon: true
                 }
             });
-            areRespectedLimits = false
+            return;
         }
 
         // Vérifier stock
