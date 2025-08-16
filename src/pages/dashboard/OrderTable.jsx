@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useAuthor } from "../../context/AuthorContext";
 import { useNavigate } from "react-router-dom";
-import { Store } from "react-notifications-component";
+import { displayNotification } from '@lib/displayNotification.js';
 import { supabase } from "@lib/supabaseClient";
 
 // Importing common components
@@ -51,16 +51,7 @@ function OrderTable() {
 
         if (error) {
             console.error("Erreur chargement commandes:", error);
-            Store.addNotification({
-                title: "Erreur de chargement",
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: { duration: 5000, onScreen: true, pauseOnHover: true, showIcon: true },
-            });
+            displayNotification("Erreur de chargement", error.message, "danger")
         } else {
             setOrders(data);
         }
@@ -72,27 +63,9 @@ function OrderTable() {
 
         if (error) {
             console.error("Erreur livraison:", error);
-            Store.addNotification({
-                title: "Erreur confirmation",
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: { duration: 5000, onScreen: true, pauseOnHover: true, showIcon: true },
-            });
+            displayNotification("Erreur de confirmation", error.message, "danger")
         } else {
-            Store.addNotification({
-                title: "Livraison confirmée",
-                message: `Commande ${id.slice(0, 8)} marquée comme livrée ✅`,
-                type: "success",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: { duration: 5000, onScreen: true, pauseOnHover: true, showIcon: true },
-            });
+            displayNotification("Livraison confirmée", `Commande ${id.slice(0, 8)} marquée comme livrée ✅`, "success")
             fetchOrders();
         }
     };

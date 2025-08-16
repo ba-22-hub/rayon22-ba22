@@ -6,7 +6,7 @@ import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -51,21 +51,7 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de chargement des demandes:', error);
-            Store.addNotification({
-                title: "Erreur de chargment des demandes",
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur de chargment des demandes", error.message, "danger")
         } else {
             setRequests(data);
         }
@@ -83,36 +69,9 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de suppression:', error);
-            Store.addNotification({
-                title: "Erreur de suppression de la demande " + id + " avec le fichier " + fileName,
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur de suppression de la demande " + id + " avec le fichier " + fileName, error.message, "danger")
         } else {
-            Store.addNotification({
-                title: "Suppression de la demande " + id + " avec le fichier " + fileName + " effectuée avec succès",
-                type: "success",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Suppression de la demande " + id + " avec le fichier " + fileName + " effectuée avec succès", "", "success")
             setRequests((prev) => prev.filter((req) => req.id !== id));
         }
     };
@@ -142,55 +101,14 @@ function RequestsDashboard() {
 
             if (error) {
                 console.error("Erreur lors de la mise à jour des droits :", error);
-                Store.addNotification({
-                    title: "Erreur lors de la mise à jour des droits",
-                    message: error.message,
-                    type: "danger",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Erreur lors de la mise à jour des droits", error.message, "danger")
             } else {
-                Store.addNotification({
-                    title: "Droits mis à jour avec succès",
-                    type: "success",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Droits mis à jour avec succès", "", "success")
                 handleDelete(id);
             }
         } catch (err) {
             console.error("Erreur inattendue :", err);
-            Store.addNotification({
-                title: "Erreur inattendue",
-                message: err.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur inattendue", err.message, "danger")
         }
 
     }

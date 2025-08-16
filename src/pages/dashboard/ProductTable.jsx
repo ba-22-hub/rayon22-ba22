@@ -4,7 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -46,21 +46,7 @@ function ProductTable() {
     const { data, error } = await supabase.from("products").select("*");
     if (error) {
       console.error("Erreur chargement produits :", error)
-      Store.addNotification({
-        title: "Erreur lors du chargment des produits",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors du chargment des produits", error.message, "danger")
     }
     else {
       setProducts(data)
@@ -72,21 +58,7 @@ function ProductTable() {
           .download(product.image_name);
 
         if (imgError) {
-          Store.addNotification({
-            title: "Erreur lors du téléchargement de l'image " + product.image_name,
-            message: imgError.message,
-            type: "warning",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-              pauseOnHover: true,
-              showIcon: true
-            }
-          });
+          displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
         } else {
           const url = URL.createObjectURL(imgData);
           setProductImages(prev => ({
@@ -133,21 +105,7 @@ function ProductTable() {
       .remove([product.image_name])
     if (error) {
       console.error("Erreur suppression image :", error)
-      Store.addNotification({
-        title: "Erreur lors de la suppression de l'image " + product.image_name,
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la suppression de l'image " + product.image_name, error.message, "danger")
     }
 
     // Removing product row from 'products' table
@@ -157,37 +115,9 @@ function ProductTable() {
       .eq('id', product.id)
     if (errorDelete) {
       console.error("Erreur lors de la suppression du produit " + product.name + errorDelete)
-      Store.addNotification({
-        title: "Erreur lors de la suppression du produit " + product.name,
-        message: errorDelete.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la suppression du produit " + product.name, errorDelete.message, "danger")
     } else {
-      Store.addNotification({
-        title: product.name + " supprimé avec succès",
-        message: response,
-        type: "success",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Produit " + product.name + " supprimé avec succès", response, "success")
     }
     fetchProducts()
   }
@@ -210,21 +140,7 @@ function ProductTable() {
         .remove([oldImageName])
       if (error) {
         console.error("Erreur suppression ancienne image :", error)
-        Store.addNotification({
-          title: "Erreur lors de la suppression de l'ancienne image " + oldImageName + " de la base de données",
-          message: error.message,
-          type: "danger",
-          insert: "top",
-          container: "top-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-            pauseOnHover: true,
-            showIcon: true
-          }
-        });
+        displayNotification("Erreur lors de la suppression de l'ancienne image " + oldImageName + " de la base de données", error.message, "danger")
       }
     }
 
@@ -244,21 +160,7 @@ function ProductTable() {
       .eq("id", editingProductId);
     if (error) {
       console.error("Erreur update :", error)
-      Store.addNotification({
-        title: "Erreur lors de la mise à jour du produit",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de la mise à jour du produit", error.message, "danger")
     } else {
       setProducts((prev) =>
         prev.map((p) => (p.id === editingProductId ? editedValues : p))
@@ -283,21 +185,7 @@ function ProductTable() {
 
     if (error) {
       console.error("Erreur lors de l'ajout du nouveau produit", error.message);
-      Store.addNotification({
-        title: "Erreur lors de l'ajout du nouveau produit",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur lors de l'ajout du nouveau produit", error.message, "danger")
       return;
     }
 
@@ -376,21 +264,7 @@ function ProductTable() {
 
         if (error && Object.keys(error.message).length > 0) {
           console.error("Erreur lors du téléchargement du nom de de l'image : ", error.message);
-          Store.addNotification({
-            title: "Erreur lors du téléchargement du nom de de l'image",
-            message: error.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-              pauseOnHover: true,
-              showIcon: true
-            }
-          });
+          displayNotification("Erreur lors du téléchargement du nom de de l'image", error.message, "danger")
           return;
         }
 

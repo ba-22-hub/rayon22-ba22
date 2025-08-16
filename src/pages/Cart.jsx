@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from "../context/CartContext.jsx";
 import { supabase } from "@lib/supabaseClient";
 import { stripePromise } from '@lib/stripeClient.js'
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FunctionButton from "@common/FunctionButton"
@@ -77,21 +77,7 @@ function Cart() {
                 .select('*')
                 .in("id", Object.keys(cart));
             if (error) {
-                Store.addNotification({
-                    title: "Erreur de chargement des produits",
-                    message: error.message,
-                    type: "danger",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Erreur de chargement des produits", error.message, "danger")
             } else {
                 const productsWithImages = await Promise.all(
                     data.map(async product => {
@@ -101,21 +87,7 @@ function Cart() {
                             .download(product.image_name);
 
                         if (imgError) {
-                            Store.addNotification({
-                                title: "Erreur de chargement de l'image : " + product.image_name,
-                                message: imgError.message,
-                                type: "warning",
-                                insert: "top",
-                                container: "top-right",
-                                animationIn: ["animate__animated", "animate__fadeIn"],
-                                animationOut: ["animate__animated", "animate__fadeOut"],
-                                dismiss: {
-                                    duration: 5000,
-                                    onScreen: true,
-                                    pauseOnHover: true,
-                                    showIcon: true
-                                }
-                            });
+                            displayNotification("Erreur de chargement de l'image : " + product.image_name, imgError.message, "warning")
                         } else {
                             product.imageUrl = URL.createObjectURL(imgData);
                         }
@@ -148,21 +120,7 @@ function Cart() {
 
     async function handleValidate() {
         if (Object.keys(cart).length === 0) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Le panier est vide",
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
         }
 
@@ -174,21 +132,7 @@ function Cart() {
             .single();
 
         if (userError) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Erreur lors du chargement des limites liées à votre compte : " + error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Échec de validation du panier", "Erreur lors du chargement des limites liées à votre compte : " + error.message, "danger")
             return;
         }
 
@@ -207,78 +151,37 @@ function Cart() {
         const productsNumberTotal = Object.values(cart).reduce((a, b) => a + b, 0);
 
         if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 0,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification(
+                "Échec de validation du panier",
+                "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
+                "danger",
+                duration = 0
+            )
             return;
         }
         if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 0,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification(
+                "Échec de validation du panier",
+                "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
+                "danger",
+                duration = 0
+            )
             return;
         }
         if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 0,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification(
+                "Échec de validation du panier",
+                "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
+                "danger",
+                duration = 0
+            )
             return;
         }
 
         // Vérifier stock
         const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
         if (!areAvailableProducts) {
-            Store.addNotification({
-                title: "Échec de validation du panier",
-                message: "Stock de " + product.name + " insuffisant",
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 7000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Échec de validation du panier", "Stock de " + product.name + " insuffisant", "danger", duration = 7000)
             return;
         }
 

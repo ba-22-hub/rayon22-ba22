@@ -4,7 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormTextArea from "../common/FormTextArea"
@@ -82,21 +82,7 @@ function Contact() {
 			const { success, error } = await uploadPDF(formData.file, name, "messages")
 
 			if (!success) {
-				Store.addNotification({
-					title: "Échec de l'upload du fichier PDF",
-					message: error.message,
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Échec de l'upload du fichier PDF", error.message, "danger")
 				//alert("Erreur lors de l'upload du fichier PDF.");
 				uploadSuccess = false;
 			}
@@ -116,39 +102,12 @@ function Contact() {
 			.insert([newMessage]);
 
 		if (insertError) {
-			Store.addNotification({
-				title: "Erreur lors de l'envoi du message",
-				message: insertError.message,
-				type: "danger",
-				insert: "top",
-				container: "top-right",
-				animationIn: ["animate__animated", "animate__fadeIn"],
-				animationOut: ["animate__animated", "animate__fadeOut"],
-				dismiss: {
-					duration: 5000,
-					onScreen: true,
-					pauseOnHover: true,
-					showIcon: true
-				}
-			});
+			displayNotification("Erreur lors de l'envoi du message", insertError.message, "danger")
 			//alert("Erreur lors de l'envoi du message.");
 			return;
 		}
 
-		Store.addNotification({
-			title: "Message envoyé avec succès",
-			type: "success",
-			insert: "top",
-			container: "top-right",
-			animationIn: ["animate__animated", "animate__fadeIn"],
-			animationOut: ["animate__animated", "animate__fadeOut"],
-			dismiss: {
-				duration: 5000,
-				onScreen: true,
-				pauseOnHover: true,
-				showIcon: true
-			}
-		});
+		displayNotification("Message envoyé avec succès", "", "success")
 
 		// Third step: Reset the form
 
@@ -213,21 +172,7 @@ function Contact() {
 									accept='.pdf'
 									name='file'
 									onChange={(e) => {
-										Store.addNotification({
-											title: "Fichier sélectionné :",
-											message: e.target.files[0],
-											type: "info",
-											insert: "top",
-											container: "top-right",
-											animationIn: ["animate__animated", "animate__fadeIn"],
-											animationOut: ["animate__animated", "animate__fadeOut"],
-											dismiss: {
-												duration: 5000,
-												onScreen: true,
-												pauseOnHover: true,
-												showIcon: true
-											}
-										});
+										displayNotification("Fichier sélectionné :", e.target.files[0], "info")
 										handleFileChange(e);
 									}}
 									ref={fileInputRef}
