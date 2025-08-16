@@ -122,6 +122,15 @@ function Cart() {
         if (Object.keys(cart).length === 0) {
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
+        } else {
+            const productsPriceTotal = productsInCart
+                .map(p => parseFloat(p.salePrice) * cart[p.id])
+                .reduce((a, b) => a + b, 0);
+                
+            if (productsPriceTotal < 0.5) {
+                displayNotification("Échec de validation du panier", "Le total produits doit être d'au moins 0.5€ pour pouvoir procéder au payement en ligne", "danger")
+                return;
+            }
         }
 
         // Vérifications limites utilisateur
