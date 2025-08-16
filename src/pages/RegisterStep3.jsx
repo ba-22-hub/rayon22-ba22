@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState } from 'react';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "../common/FormInput";
@@ -57,40 +57,14 @@ function RegisterStep3({ onNext, onDataChange }) {
 		// checking if the 2 password are identical 
 		if (formData.password != formData.passwordConfirm) {
 			//alert("Les mots de passe renseignés sont différents")
-			Store.addNotification({
-				title: "Les mots de passe renseignés sont différents",
-				type: "danger",
-				insert: "top",
-				container: "top-right",
-				animationIn: ["animate__animated", "animate__fadeIn"],
-				animationOut: ["animate__animated", "animate__fadeOut"],
-				dismiss: {
-					duration: 5000,
-					onScreen: true,
-					pauseOnHover: true,
-					showIcon: true
-				}
-			});
+			displayNotification("Les mots de passe renseignés sont différents", "", "danger")
 		} else if (criteriaPassword.minLength && criteriaPassword.hasLowercase && criteriaPassword.hasUppercase && criteriaPassword.hasNumber) {
 			// checking if the password respect the instructions
 			onNext({ "password": formData.password })
 		} else {
 			// if not, alert the client
 			//alert("Le mot de passe ne respecte pas les consignes")
-			Store.addNotification({
-				title: "Le mot de passe ne respecte pas les consignes",
-				type: "danger",
-				insert: "top",
-				container: "top-right",
-				animationIn: ["animate__animated", "animate__fadeIn"],
-				animationOut: ["animate__animated", "animate__fadeOut"],
-				dismiss: {
-					duration: 5000,
-					onScreen: true,
-					pauseOnHover: true,
-					showIcon: true
-				}
-			});
+			displayNotification("Le mot de passe ne respecte pas les consignes", "", "danger")
 		}
 	}
 

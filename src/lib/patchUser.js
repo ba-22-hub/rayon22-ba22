@@ -1,5 +1,5 @@
 import { supabase } from "@lib/supabaseClient";
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js'
 
 async function patchUser(userId, newUser) {
     try {
@@ -11,77 +11,21 @@ async function patchUser(userId, newUser) {
 
         if (error) {
             console.error("Erreur lors de la mise à jour de l'utilisateur " + userId + " :", error);
-            Store.addNotification({
-                title: "Erreur lors de la mise à jour de l'utilisateur " + userId,
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur lors de la mise à jour de l'utilisateur " + userId, error.message, "danger")
             return null;
         }
 
         if (!data || data.length === 0) {
             console.warn("Aucun utilisateur trouvé avec cet ID :", userId);
-            Store.addNotification({
-                title: "Aucun utilisateur trouvé avec l'ID :",
-                message: userId,
-                type: "warning",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Aucun utilisateur trouvé avec l'ID :", userId, "warning")
             return null;
         }
 
-        Store.addNotification({
-            title: "Utilisateur mis à jour",
-            message: data[0],
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-                pauseOnHover: true,
-                showIcon: true
-            }
-        });
+        displayNotification("Utilisateur mis à jour", data[0], "success")
         return data[0];
     } catch (err) {
         console.error("Erreur inattendue :", err);
-        Store.addNotification({
-            title: "Erreur inattendue",
-            message: err.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-                pauseOnHover: true,
-                showIcon: true
-            }
-        });
+        displayNotification("Erreur inattendue", err.message, "danger")
         return null;
     }
 }

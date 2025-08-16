@@ -1,7 +1,7 @@
 // Importing dependencies
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import ProductCarousel from "../common/ProductCarouselCatalog"
@@ -22,21 +22,7 @@ const SearchBar = () => {
         .from('products')
         .select('*');
       if (error) {
-        Store.addNotification({
-          title: "Erreur lors du téléchargement des produits",
-          message: error.message,
-          type: "danger",
-          insert: "top",
-          container: "top-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-            pauseOnHover: true,
-            showIcon: true
-          }
-        });
+                    displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
       } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
@@ -46,21 +32,7 @@ const SearchBar = () => {
               .download(product.image_name);
 
             if (imgError) {
-              Store.addNotification({
-                title: "Erreur lors du téléchargement de l'image " + product.image_name,
-                message: imgError.message,
-                type: "warning",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                  pauseOnHover: true,
-                  showIcon: true
-                }
-              });
+                    displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }
@@ -107,21 +79,7 @@ function Catalog() {
         .select("*")
         .eq('category', category);
       if (error) {
-        Store.addNotification({
-          title: "Erreur lors du téléchargement des produits",
-          message: error.message,
-          type: "danger",
-          insert: "top",
-          container: "top-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-            pauseOnHover: true,
-            showIcon: true
-          }
-        });
+                    displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
       } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
@@ -131,21 +89,7 @@ function Catalog() {
               .download(product.image_name);
 
             if (imgError) {
-              Store.addNotification({
-                title: "Erreur lors du téléchargement de l'image " + product.image_name,
-                message: imgError.message,
-                type: "warning",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                  duration: 5000,
-                  onScreen: true,
-                  pauseOnHover: true,
-                  showIcon: true
-                }
-              });
+                    displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }

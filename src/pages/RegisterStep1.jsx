@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState, useEffect } from 'react';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "../common/FormInput"
@@ -43,20 +43,7 @@ function RegisterStep1({ data, onDataChange, onNext }) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        Store.addNotification({
-            title: "Formulaire soumis avec succès",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-                pauseOnHover: true,
-                showIcon: true
-            }
-        });
+        displayNotification("Formulaire soumis avec succès", "", "success")
         onNext();
 
     }

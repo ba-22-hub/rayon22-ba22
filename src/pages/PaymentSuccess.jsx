@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import Loading from "@common/Loading.jsx";
@@ -41,20 +42,7 @@ function PaymentSuccess() {
 
             if (data?.payment_status === "paid" && data?.cartToValidate) {
                 console.log("✅ Paiement validé, insertion dans la base...");
-                Store.addNotification({
-                    title: "Paiement validé",
-                    type: "success",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Paiement validé", "", "success")
 
                 const { error: insertError } = await supabase
                     .from("cart")

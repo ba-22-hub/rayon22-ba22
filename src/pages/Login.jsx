@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from '../context/AuthorContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "../common/FormInput";
@@ -46,37 +46,9 @@ function Login() {
 
 		if (loginError) {
 			if (loginError.message == "Invalid login credentials") {
-				Store.addNotification({
-					title: "Échec de connexion",
-					message: "Adresse e-mail ou mot de passe incorrect",
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Échec de connexion", "Adresse e-mail ou mot de passe incorrect", "danger")
 			} else {
-				Store.addNotification({
-					title: "Échec de la connexion",
-					message: loginError.message,
-					type: "danger",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Échec de la connexion", loginError.message, "danger")
 			}
 			return;
 		}
@@ -92,21 +64,7 @@ function Login() {
 
 		if (fetchError && fetchError.code !== 'PGRST116') {
 			// other error
-			Store.addNotification({
-				title: "Erreur lors de la vérification de votre compte",
-				message: fetchError.message,
-				type: "danger",
-				insert: "top",
-				container: "top-right",
-				animationIn: ["animate__animated", "animate__fadeIn"],
-				animationOut: ["animate__animated", "animate__fadeOut"],
-				dismiss: {
-					duration: 5000,
-					onScreen: true,
-					pauseOnHover: true,
-					showIcon: true
-				}
-			});
+			displayNotification("Erreur lors de la vérification de votre compte", fetchError.message, "danger")
 			return;
 		}
 
@@ -139,56 +97,16 @@ function Login() {
 					.insert([newUser]);
 
 				if (insertError) {
-					Store.addNotification({
-						title: "Erreur lors de la création du compte",
-						message: insertError.message,
-						type: "danger",
-						insert: "top",
-						container: "top-right",
-						animationIn: ["animate__animated", "animate__fadeIn"],
-						animationOut: ["animate__animated", "animate__fadeOut"],
-						dismiss: {
-							duration: 5000,
-							onScreen: true,
-							pauseOnHover: true,
-							showIcon: true
-						}
-					});
+					displayNotification("Erreur lors de la création du compte", insertError.message, "danger")
 					return;
 				}
 
 				localStorage.removeItem("pendingUserData");
-				Store.addNotification({
-					title: "Compte créé avec succès",
-					type: "success",
-					insert: "top",
-					container: "top-right",
-					animationIn: ["animate__animated", "animate__fadeIn"],
-					animationOut: ["animate__animated", "animate__fadeOut"],
-					dismiss: {
-						duration: 5000,
-						onScreen: true,
-						pauseOnHover: true,
-						showIcon: true
-					}
-				});
+				displayNotification("Compte créé avec succès", "", "success")
 			}
 		}
 
-		Store.addNotification({
-			title: "Connexion réussie",
-			type: "success",
-			insert: "top",
-			container: "top-right",
-			animationIn: ["animate__animated", "animate__fadeIn"],
-			animationOut: ["animate__animated", "animate__fadeOut"],
-			dismiss: {
-				duration: 5000,
-				onScreen: true,
-				pauseOnHover: true,
-				showIcon: true
-			}
-		});
+		displayNotification("Connexion réussie", "", "success")
 
 		// resets the inputs and formData to blank
 		setFormData({

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 import Loading from "../common/Loading.jsx";
 
@@ -41,42 +41,14 @@ function Account() {
                     .single();
 
                 if (dberror && dberror.code !== 'PGRST116') {
-                    Store.addNotification({
-                        title: "Erreur lors de la vérification de l'utilisateur",
-                        message: dberror.message,
-                        type: "danger",
-                        insert: "top",
-                        container: "top-right",
-                        animationIn: ["animate__animated", "animate__fadeIn"],
-                        animationOut: ["animate__animated", "animate__fadeOut"],
-                        dismiss: {
-                            duration: 5000,
-                            onScreen: true,
-                            pauseOnHover: true,
-                            showIcon: true
-                        }
-                    });
+                    displayNotification("Erreur lors de la vérification de l'utilisateur", dberror.message, "danger")
                     return;
                 }
 
                 setClientEdit(userdata);
                 setClient(userdata);
             } catch (error) {
-                Store.addNotification({
-                    title: "Erreur inattendue",
-                    message: error.message,
-                    type: "danger",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Erreur inattendue", error.message, "danger")
             }
         }
         const checkRequest = async () => {
@@ -88,40 +60,12 @@ function Account() {
                     .limit(1); // no need to reseach several requests
 
                 if (dberror && dberror.code !== 'PGRST116') {
-                    Store.addNotification({
-                        title: "Erreur lors de la vérification des requêtes",
-                        message: dberror.message,
-                        type: "danger",
-                        insert: "top",
-                        container: "top-right",
-                        animationIn: ["animate__animated", "animate__fadeIn"],
-                        animationOut: ["animate__animated", "animate__fadeOut"],
-                        dismiss: {
-                            duration: 5000,
-                            onScreen: true,
-                            pauseOnHover: true,
-                            showIcon: true
-                        }
-                    });
+                    displayNotification("Erreur lors de la vérification des requêtes", dberror.message, "danger")
                     return;
                 }
                 setActiveRequest(data.length > 0)
             } catch (error) {
-                Store.addNotification({
-                    title: "Erreur inattendue",
-                    message: error.message,
-                    type: "danger",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true,
-                        pauseOnHover: true,
-                        showIcon: true
-                    }
-                });
+                displayNotification("Erreur inattendue", error.message, "danger")
             }
         }
         checkIsAdmin(user.id) // needed otherwise the update of 'isAdmin' isn't fast enough
@@ -173,56 +117,16 @@ function Account() {
 
             setEditing(false)
             // alert("Les informations ont été modifiées avec succès")
-            Store.addNotification({
-                title: "Informations mises à jour avec succès",
-                type: "success",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Informations mises à jour avec succès", "", "success")
         } catch (err) {
             //alert("Erreur lors de l'ajout dans la base de donnée")
-            Store.addNotification({
-                title: "Erreur lors de la mise à jour des informations",
-                message: err.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur lors de la mise à jour des informations", err.message, "danger")
         }
     }
 
     function handleFileSelection(e) {
         const incomingFile = e.target.files[0]
-        Store.addNotification({
-            title: "Le fichier " + incomingFile.name + " a été déposé",
-            type: "info",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-                pauseOnHover: true,
-                showIcon: true
-            }
-        });
+        displayNotification("Le fichier " + incomingFile.name + " a été déposé", "", "info")
         setFile(incomingFile)
     }
 
@@ -232,21 +136,7 @@ function Account() {
         const name = `${Date.now()}_${file.name}`
         const { success, error } = await uploadPDF(file, name, "requests")
         if (!success) {
-            Store.addNotification({
-                title: "Échec de l'upload du fichier PDF",
-                message: error.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Échec de l'upload du fichier PDF", error.message, "danger")
             // alert("Erreur lors de l'upload du fichier PDF.");
             uploadSuccess = false;
         }
@@ -264,39 +154,12 @@ function Account() {
             .insert([newRequest]);
 
         if (insertError) {
-            Store.addNotification({
-                title: "Erreur lors de l'envoi de la requête",
-                message: insertError.message,
-                type: "danger",
-                insert: "top",
-                container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true,
-                    pauseOnHover: true,
-                    showIcon: true
-                }
-            });
+            displayNotification("Erreur lors de l'envoi de la requête", insertError.message, "danger")
             // alert("Erreur lors de l'envoi de la requête.");
             return;
         }
 
-        Store.addNotification({
-            title: "Requête envoyée avec succès",
-            type: "success",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-                duration: 5000,
-                onScreen: true,
-                pauseOnHover: true,
-                showIcon: true
-            }
-        });
+        displayNotification("Requête envoyée avec succès", "", "success")
 
         // manually emptying the file field
         if (fileInputRef.current) {

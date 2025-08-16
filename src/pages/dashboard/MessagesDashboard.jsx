@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { Store } from 'react-notifications-component';
+import { displayNotification } from '@lib/displayNotification.js';
 
 import sendReply from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
@@ -50,21 +50,7 @@ function MessagesDashboard() {
 
     if (error) {
       console.error('Erreur de chargement des messages:', error);
-      Store.addNotification({
-        title: "Erreur de chargement des messages",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur de chargement des messages", error.message, "danger")
     } else {
       setMessages(data);
     }
@@ -78,55 +64,14 @@ function MessagesDashboard() {
   };
 
   const handleReplySend = async (id, reply) => {
-    Store.addNotification({
-      title: "Réponse au message " + id + " :",
-      message: reply,
-      type: "info",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 0,
-        onScreen: true,
-        pauseOnHover: true,
-        showIcon: true
-      }
-    });
+    displayNotification("Réponse au message " + id + " :", reply, "info", duration=0)
     const email = messages.find(msg => msg.id === id)?.User.email;
     const firstName = messages.find(msg => msg.id === id)?.User.firstName;
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
-    Store.addNotification({
-      title: "E-mail de l'utilisateur :",
-      message: email,
-      type: "info",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 0,
-        onScreen: true,
-        pauseOnHover: true,
-        showIcon: true
-      }
-    });
+    displayNotification("E-mail de l'utilisateur :", email, "info", duration=0)
 
     if (!email) {
-      Store.addNotification({
-        title: "Aucun e-mail trouvé",
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Aucun e-mail trouvé", "", "danger")
       return console.error("Aucun email trouvé.");
     }
 
@@ -137,37 +82,10 @@ function MessagesDashboard() {
         reply: reply,
       });
 
-      Store.addNotification({
-        title: "E-mail envoyé avec succès",
-        type: "success",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("E-mail envoyé avec succès", "", "success")
     } catch (error) {
       console.error('Erreur d’envoi :', error);
-      Store.addNotification({
-        title: "Erreur d'envoi de l'e-mail",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur d'envoi de l'e-mail", error.message, "danger")
     }
     handleDelete(id); // Delete the message after sending the reply
   };
@@ -181,57 +99,15 @@ function MessagesDashboard() {
       .eq('id', id);
     if (error) {
       console.error('Erreur de suppression:', error);
-      Store.addNotification({
-        title: "Erreur de suppression",
-        message: error.message,
-        type: "danger",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Erreur de suppression", error.message, "danger")
     } else {
-      Store.addNotification({
-        title: "Suppression effectuée avec succès",
-        type: "success",
-        insert: "top",
-        container: "top-right",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 5000,
-          onScreen: true,
-          pauseOnHover: true,
-          showIcon: true
-        }
-      });
+      displayNotification("Suppression effectuée avec succès", "", "success" )
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
     }
   };
 
   const handleDownloadPDF = (pdfName) => {
-    Store.addNotification({
-      title: "Ouverture de :",
-      message: pdfName,
-      message: "ID du message : " + id + " et fichier : " + fileName,
-      type: "info",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animate__animated", "animate__fadeIn"],
-      animationOut: ["animate__animated", "animate__fadeOut"],
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-        pauseOnHover: true,
-        showIcon: true
-      }
-    });
+    displayNotification("Ouverture de " + pdfName, "ID du message : " + id + " et fichier : " + fileName, "info")
     // Open the PDF in a new tab
     openPDF(pdfName, 10, "messages");
   };
