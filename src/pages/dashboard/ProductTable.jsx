@@ -26,6 +26,7 @@ function ProductTable() {
   const [editedValues, setEditedValues] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
+  const [productImages, setProductImages] = useState({})
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -63,6 +64,40 @@ function ProductTable() {
     }
     else {
       setProducts(data)
+      //setProductImages(data.map(p => { return ({ [p.id]: "" }) }))
+      data.forEach(async product => {
+        console.log("dans le map")
+        const { data: imgData, error: imgError } = await supabase
+          .storage
+          .from("images")
+          .download(product.image_name);
+
+        if (imgError) {
+          Store.addNotification({
+            title: "Erreur lors du téléchargement de l'image " + product.image_name,
+            message: imgError.message,
+            type: "warning",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 5000,
+              onScreen: true,
+              pauseOnHover: true,
+              showIcon: true
+            }
+          });
+        } else {
+          const url = URL.createObjectURL(imgData);
+          setProductImages(prev => ({
+            ...prev,
+            [product.id]: url
+          }));;
+        }
+        console.log(productImages)
+        return product;
+      })
     }
   };
 
@@ -199,6 +234,11 @@ function ProductTable() {
     if (image != "") {
       // Uploading new image to bucket
       await uploadImage(image, image.name)
+      const url = URL.createObjectURL(image);
+      setProductImages(prev => ({
+        ...prev,
+        [editingProductId]: url
+      }));;
     }
 
     const { error } = await supabase
@@ -551,7 +591,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
-                        <td><DisplayImage product={p}></DisplayImage></td>
+                        <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
                             className="bg-blue-600 text-white px-2 py-1 rounded"
