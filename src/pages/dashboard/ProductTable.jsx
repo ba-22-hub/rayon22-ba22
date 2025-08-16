@@ -66,7 +66,6 @@ function ProductTable() {
       setProducts(data)
       //setProductImages(data.map(p => { return ({ [p.id]: "" }) }))
       data.forEach(async product => {
-        console.log("dans le map")
         const { data: imgData, error: imgError } = await supabase
           .storage
           .from("images")
@@ -95,7 +94,6 @@ function ProductTable() {
             [product.id]: url
           }));;
         }
-        console.log(productImages)
         return product;
       })
     }
@@ -204,7 +202,6 @@ function ProductTable() {
   }
 
   const handleValidate = async () => {
-    console.log("editedValues : " + editedValues)
     if (oldImageName != "") {
       // Removing old image from bucket
       const { error } = await supabase
@@ -277,6 +274,7 @@ function ProductTable() {
   );
 
   async function handleSubmit(e) {
+    e.preventDefault();
 
     // Adding a new row to the 'products' database
     const { error } = await supabase
@@ -304,7 +302,7 @@ function ProductTable() {
     }
 
     // Uploading the image to the 'images' bucket
-    if (image != "") {
+    if (image.name != "") {
       await uploadImage(image, image.name)
     }
     setImage("")
@@ -429,51 +427,6 @@ function ProductTable() {
       </div>
     );
   };
-
-  function DisplayImage({ product }) {
-    const [imageUrl, setImageUrl] = useState(null);
-
-    useEffect(() => {
-      async function fetchImage() {
-        const { data, error } = await supabase
-          .storage
-          .from("images")
-          .download(product.image_name);
-
-        if (error && Object.keys(error.message).length > 0) {
-          console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-          Store.addNotification({
-            title: "Erreur lors du téléchargement de l'image " + product.image_name,
-            message: error.message,
-            type: "danger",
-            insert: "top",
-            container: "top-right",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 5000,
-              onScreen: true,
-              pauseOnHover: true,
-              showIcon: true
-            }
-          });
-          return
-        }
-
-        const url = URL.createObjectURL(data);
-        setImageUrl(url);
-
-      }
-
-      if (product.image_name != "") {
-        fetchImage();
-      }
-    }, [product.image_name]);
-
-    return <>
-      <img src={imageUrl || roundLogo} alt={product.name} className="w-[50%] h-20 object-contain" />
-    </>
-  }
 
   return (
     <>
