@@ -12,8 +12,6 @@ import FunctionButton from "../common/FunctionButton"
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
 
-const stockIncertainLimit = 3   // Limit (included) under which the 'Stock Incertain' label is displayed
-
 {/* CAROUSEL ARROWS */ }
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -40,6 +38,20 @@ function SamplePrevArrow(props) {
 function ProductCarousel({ data }) {
   const { user, loading } = useAuthor()
   const { cart, setCart } = useCart()
+
+  const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
+
+  const fetchStockIncertainThreshold = async () => {
+    const { data, error } = await supabase
+      .from('constants')
+      .select('value')
+      .eq("name", "stockIncertainThreshold")
+      .maybeSingle();
+    if (!error) {
+      setStockIncertainThreshold(data.value)
+    }
+  };
+  fetchStockIncertainThreshold();
 
   const settings = {
     infinite: false,
@@ -122,7 +134,7 @@ function ProductCarousel({ data }) {
         </div>
         <div className="relative text-center">
           <img src={product.imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
-          {product.stock <= stockIncertainLimit && (
+          {product.stock <= stockIncertainThreshold && (
             <div className="w-full absolute top-0 left-0 text-center mt-0">
               <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
                 STOCK INCERTAIN

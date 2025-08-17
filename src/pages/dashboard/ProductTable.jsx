@@ -24,9 +24,11 @@ function ProductTable() {
   const [search, setSearch] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedValues, setEditedValues] = useState({});
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);    // new product form expanded or not
+  const [expandedSettings, setExpandedSettings] = useState(false);
   const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
-  const [productImages, setProductImages] = useState({})
+  const [productImages, setProductImages] = useState({});
+  const [stockIncertainThreshold, setStockIncertainThreshold] = useState(null);     // threshold for 'Stock Incertain' label
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -50,7 +52,6 @@ function ProductTable() {
     }
     else {
       setProducts(data)
-      //setProductImages(data.map(p => { return ({ [p.id]: "" }) }))
       data.forEach(async product => {
         const { data: imgData, error: imgError } = await supabase
           .storage
@@ -184,7 +185,7 @@ function ProductTable() {
       .insert(formData)
 
     if (error) {
-      console.error("Erreur lors de l'ajout du nouveau produit", error.message);
+      console.error("Erreur lors de l'ajout du nouveau produit", error);
       displayNotification("Erreur lors de l'ajout du nouveau produit", error.message, "danger")
       return;
     }
@@ -301,6 +302,47 @@ function ProductTable() {
       </div>
     );
   };
+
+  async function fetchCurrentStockIncertainThreshold() {
+    setExpandedSettings(true)
+    const { data, error } = await supabase
+      .from('constants')
+      .select('value')
+      .eq("name", "stockIncertainThreshold")
+      .maybeSingle();
+    if (!error) {
+      setStockIncertainThreshold(data.value)
+    } else {
+      console.error("Erreur lors du téléchargement de l'ancienne valeur seuil ", error)
+      displayNotification("Erreur lors du téléchargement de l'ancienne valeur seuil", error.message, "danger")
+    }
+  }
+
+  function handleChangeStockIncertainThreshold(e) {
+    const { value } = e.target;
+    setStockIncertainThreshold(value)
+  }
+
+  async function handleSubmitSettings(e) {
+    e.preventDefault();
+
+    const { error } = await supabase
+      .from("constants")
+      .update({value: stockIncertainThreshold})
+      .eq("name", "stockIncertainThreshold");
+
+    if (error) {
+      let message = error.message
+      if (error.code === "22P02") {
+        message = "Le seuil doit être un entier"
+      }
+      console.error("Erreur lors de la mise à jour du seuil", error);
+      displayNotification("Erreur lors de la mise à jour du seuil", message, "danger")
+      return;
+    }
+
+    setExpandedSettings(false);
+  }
 
   return (
     <>
@@ -513,6 +555,32 @@ function ProductTable() {
                 </div>
                 <div>
                   <BrowseImage newProduct={true}></BrowseImage>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#038709] text-white rounded mx-[20%]">
+                Valider
+              </button>
+            </form>
+          )}
+          <FunctionButton
+            className="bg-rayonorange  w-[1/2] content-center ml-30 my-4 text-white px-10 py-1 rounded"
+            buttonText={expandedSettings ? 'Annuler' : 'Modifier les paramètres'}
+            fun={expandedSettings ? (() => setExpandedSettings(false)) : (() => fetchCurrentStockIncertainThreshold())}
+          />
+          {expandedSettings && (
+            <form onSubmit={handleSubmitSettings}>
+              <div className="grid grid-cols-2 gap-4 text-sm mb-4 items-center">
+                <div>
+                  <FormInput
+                    name="threshold"
+                    type="number"
+                    value={stockIncertainThreshold ?? ""}
+                    inputText="Seuil en deçà duquel le label 'Stock Incertain' apparaît dans le catalogue utilisateur"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeStockIncertainThreshold} />
                 </div>
               </div>
               <button

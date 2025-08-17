@@ -33,7 +33,7 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(0)
     const [productsWeightTotal, setProductsWeightTotal] = useState(0)
     const [productsNumberTotal, setProductsNumberTotal] = useState(0)
-    const shippingCost = 1
+    const [shippingCost, setShippingCost] = useState(1)
     const isNotified = useRef(false)
 
     const { user, loading, hasRights } = useAuthor()
@@ -64,7 +64,6 @@ function Cart() {
         isNotified.current = true
         alert(message)
     }
-
 
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
@@ -98,6 +97,19 @@ function Cart() {
                 setProductsInCart(productsWithImages);
             }
         };
+
+        const fetchShippingCost = async () => {
+            const { data, error } = await supabase
+                .from('constants')
+                .select('value')
+                .eq("name", "shippingCost")
+                .maybeSingle();
+            if (!error) {
+                setShippingCost(data.value)
+            }
+        };
+
+        fetchShippingCost();
         fetchDataProductsInCart();
     }, [cart]);
 
@@ -126,7 +138,7 @@ function Cart() {
             const productsPriceTotal = productsInCart
                 .map(p => parseFloat(p.salePrice) * cart[p.id])
                 .reduce((a, b) => a + b, 0);
-                
+
             if (productsPriceTotal < 0.5) {
                 displayNotification("Échec de validation du panier", "Le total produits doit être d'au moins 0.5€ pour pouvoir procéder au payement en ligne", "danger")
                 return;
