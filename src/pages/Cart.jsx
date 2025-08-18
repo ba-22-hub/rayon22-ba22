@@ -9,7 +9,7 @@ import { displayNotification } from '@lib/displayNotification.js';
 // Importing common components
 import FunctionButton from "@common/FunctionButton"
 import PageButton from "@common/PageButton.jsx";
-import Loading from '@common/Loading.jsx';
+import Loading from "@common/Loading.jsx";
 
 // Importing assets
 import receipt from "@assets/Assets/ticket-caisse-ecriture.png"
@@ -35,15 +35,16 @@ function Cart() {
     const [productsNumberTotal, setProductsNumberTotal] = useState(0)
     const [shippingCost, setShippingCost] = useState(1)
     const isNotified = useRef(false)
+    const [loading, setLoading] = useState(true);
 
-    const { user, loading, hasRights } = useAuthor()
+    const { user, loading: authorLoading, hasRights } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
 
     useEffect(() => {
         // star author routine 
-        if (loading) return; // no needs to exec the useEffect if the rights aren't known
+        if (authorLoading) return; // no needs to exec the useEffect if the rights aren't known
 
         if (!user) { // user not login 
             navigate('/login')
@@ -55,7 +56,7 @@ function Cart() {
         }
         // end author routine 
 
-    }, [loading])
+    }, [authorLoading])
 
     // function to avoid double notification in the login routine
     function notify(message) {
@@ -71,6 +72,7 @@ function Cart() {
 
     useEffect(() => {
         const fetchDataProductsInCart = async () => {
+            setLoading(true);
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
@@ -96,6 +98,7 @@ function Cart() {
 
                 setProductsInCart(productsWithImages);
             }
+            setLoading(false);
         };
 
         const fetchShippingCost = async () => {
@@ -375,7 +378,7 @@ function Cart() {
 
     return (
         <>
-            {!hasRights ? (
+            {loading || authorLoading ? (
                 <Loading />
             ) : (
                 <>
