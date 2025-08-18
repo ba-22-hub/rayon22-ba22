@@ -105,7 +105,6 @@ const productsInCart = [
 function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
     const [productsWeightTotal, setProductsWeightTotal] = useState(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(product.nbInCart))).reduce((priceTotal, price) => priceTotal + price)))
-    const [nbProd, setNbProd] = useState(null)
     const shippingCost = 1
     const isNotified = useRef(false)
 
@@ -145,28 +144,27 @@ function Cart() {
     }
 
     function displayProductOnReceipt(product, idx) {
-        let nbProd = product.nbInCart
+        const [nbProd, setNbProd] = useState(product.nbInCart)
 
         function DisplayButtons({ product }) {
-
             const AddToCart = () => {
-                nbProd = nbProd + 1
-                product.nbInCart = nbProd
+                setNbProd(nbProd + 1)
                 setProductsPriceTotal(roundTwoDigits(productsPriceTotal + product.salePrice))
                 setProductsWeightTotal(roundTwoDigits(productsWeightTotal + product.weight))
+                product.nbInCart = nbProd
             }
 
             const RemoveFromCart = () => {
+                setProductsPriceTotal(roundTwoDigits(productsPriceTotal - product.salePrice))
+                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.weight))
                 if (nbProd > 0) {
-                    nbProd = nbProd - 1
+                    setNbProd(nbProd - 1)
                     product.nbInCart = nbProd
                 }
                 if (nbProd == 0) {
                     {/* Product removed from the list */ }
                     setNbProdInCart(nbProdInCart - 1)
                 }
-                setProductsPriceTotal(roundTwoDigits(productsPriceTotal - product.salePrice))
-                setProductsWeightTotal(roundTwoDigits(productsWeightTotal - product.weight))
             }
 
             if (nbProd == 1) {
@@ -211,6 +209,7 @@ function Cart() {
     }
 
     function displayInfoOnCart(products) {
+
         return (
             <>
                 <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
@@ -250,37 +249,37 @@ function Cart() {
 
     return (
         <>
-            {!hasRights ? (
-                <Loading />
-            ) : (
-                <>
-                    {/* TITLE */}
-                    <div className="ml-10 mb-6">
-                        <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
-                        <img src={orangeLine}></img>
-                    </div>
+        { !hasRights ? (
+            <Loading />
+        ):(
+            <>
+            {/* TITLE */}
+            <div className="ml-10 mb-6">
+                <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
+                <img src={orangeLine}></img>
+            </div>
 
-                    <div>
-                        <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
-                        <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
-                        <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
-                            {/* RECEIPT SECTION */}
-                            {/* PRODUCTS IN CART */}
-                            <div className="m-10">
-                                <a className="text-[#3435FF] m-10"></a>
-                                <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
-                                    {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
-                                </div>
-                            </div>
-
-                            {/* INFO ON CART */}
-                            <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
-                                {displayInfoOnCart(productsInCart)}
-                            </div>
+            <div>
+                <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
+                <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
+                <div className="bg-no-repeat bg-contain m-auto w-[40%] relative text-[#2E2EFF] aspect-[1/2] align-center" style={{ backgroundImage: `url(${receipt})` }}>
+                    {/* RECEIPT SECTION */}
+                    {/* PRODUCTS IN CART */}
+                    <div className="m-10">
+                        <a className="text-[#3435FF] m-10"></a>
+                        <div className="overflow-y-auto h-[550px] text-[#3435FF] m-5">
+                            {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                         </div>
                     </div>
-                </>)}
-        </>
+
+                    {/* INFO ON CART */}
+                    <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
+                        {displayInfoOnCart(productsInCart)}
+                    </div>
+                </div>
+            </div>
+        </>)}
+    </>
     )
 }
 
