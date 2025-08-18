@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import FormInput from "../common/FormInput";
+import FormInput from "@common/FormInput";
 
 // Importing assets
-import illustration from "../assets/logos/password.png"
+import illustration from "@assets/logos/password.png"
 
 /**
  * The Login page.

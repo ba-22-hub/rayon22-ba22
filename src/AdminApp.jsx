@@ -7,20 +7,20 @@ import {
   useNavigate,
   Navigate
 } from "react-router-dom";
-import { useAuthor } from "./context/AuthorContext.jsx";
+import { useAuthor } from "@context/AuthorContext.jsx";
 import { ReactNotifications } from 'react-notifications-component'
 
 // Importing pages
-import AdminLogin from "./pages/dashboard/AdminLogin.jsx";
-import UserTable from "./pages/dashboard/UserTable.jsx";
-import ProductTable from "./pages/dashboard/ProductTable.jsx";
-import MessagesDashboard from "./pages/dashboard/MessagesDashboard.jsx";
-import RequestsDashboard from "./pages/dashboard/RequestsDashboard.jsx";
-import OrderTable from "./pages/dashboard/OrderTable.jsx";
+import AdminLogin from "@pages/dashboard/AdminLogin.jsx";
+import UserTable from "@pages/dashboard/UserTable.jsx";
+import ProductTable from "@pages/dashboard/ProductTable.jsx";
+import MessagesDashboard from "@pages/dashboard/MessagesDashboard.jsx";
+import RequestsDashboard from "@pages/dashboard/RequestsDashboard.jsx";
+import OrderTable from "@pages/dashboard/OrderTable.jsx";
 
 // Importing common components
-import PageButton from "./common/PageButton.jsx";
-import Loading from "./common/Loading.jsx";
+import PageButton from "@common/PageButton.jsx";
+import Loading from "@common/Loading.jsx";
 
 function AdminNavbar() {
   const { logout } = useAuthor();

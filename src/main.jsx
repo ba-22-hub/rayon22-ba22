@@ -6,14 +6,14 @@ import { useLocation } from 'react-router-dom'
 import { BrowserRouter } from 'react-router-dom'
 
 
-import { AuthorProvider } from './context/AuthorContext'
+import { AuthorProvider } from '@context/AuthorContext.jsx'
 
 // Importing styles
 import './styles/index.css'
 
 // Importing the main app component
 import Root from './Root.jsx'
-import { CartProvider } from './context/CartContext.jsx'
+import { CartProvider } from '@context/CartContext.jsx'
 
 // Creating the root element in the HTML
 createRoot(document.getElementById('root')).render(

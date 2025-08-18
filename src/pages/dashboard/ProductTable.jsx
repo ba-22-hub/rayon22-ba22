@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
-import { useAuthor } from '../../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 
@@ -12,7 +12,7 @@ import FunctionButton from "@common/FunctionButton.jsx";
 import Loading from '@common/Loading.jsx';
 
 // Importing assets
-import roundLogo from "../../assets/logos/roundLogo.png"
+import roundLogo from "@assets/logos/roundLogo.png"
 
 // Importing styles
 import 'react-notifications-component/dist/theme.css'
@@ -328,7 +328,7 @@ function ProductTable() {
 
     const { error } = await supabase
       .from("constants")
-      .update({value: stockIncertainThreshold})
+      .update({ value: stockIncertainThreshold })
       .eq("name", "stockIncertainThreshold");
 
     if (error) {

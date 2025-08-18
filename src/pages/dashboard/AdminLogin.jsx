@@ -2,7 +2,7 @@
 import { useContext, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
-import { useAuthor } from '../../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components

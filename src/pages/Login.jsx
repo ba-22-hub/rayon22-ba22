@@ -1,13 +1,13 @@
 // Importing dependencies
 import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
-import { useAuthor } from '../context/AuthorContext.jsx';
+import { useAuthor } from '@context/AuthorContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import FormInput from "../common/FormInput";
-import PageButton from "../common/PageButton";
+import FormInput from "@common/FormInput";
+import PageButton from "@common/PageButton";
 
 /**
  * The Login page.

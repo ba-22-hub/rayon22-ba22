@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useEffect, useState } from "react";
-import { useAuthor } from "../../context/AuthorContext";
+import { useAuthor } from "@context/AuthorContext";
 import { useNavigate } from "react-router-dom";
 import { displayNotification } from '@lib/displayNotification.js';
 import { supabase } from "@lib/supabaseClient";

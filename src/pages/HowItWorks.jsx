@@ -1,12 +1,12 @@
 // Importing common components
-import PageButton from "../common/PageButton"
-import ShapeNumber from "../common/ShapeNumber"
+import PageButton from "@common/PageButton"
+import ShapeNumber from "@common/ShapeNumber"
 
 // Importing assets
-import mosaique from "../assets/Photos/mosaique.png"
-import bigRoundLogo from "../assets/logos/bigRoundLogo.png"
-import holdingApple from "../assets/Photos/holdingApple.jpg"
-import beams from "../assets/Assets/Rayons-traits bleus.png"
+import mosaique from "@assets/Photos/mosaique.png"
+import bigRoundLogo from "@assets/logos/bigRoundLogo.png"
+import holdingApple from "@assets/Photos/holdingApple.jpg"
+import beams from "@assets/Assets/Rayons-traits bleus.png"
 
 /**
  * The How It Works page.
@@ -33,7 +33,7 @@ function HowItWorks() {
                         <strong>L'inscription est indispensable</strong> car l'accès à l'épicerie en ligne est sous conditions de ressources.
                     </p>
                     <div className="mt-12 mb-9">
-                        <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="bg-rayonorange w-80 h-10"/>
+                        <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="bg-rayonorange w-80 h-10" />
                     </div>
                 </div>
                 <img src={mosaique} className="w-[555px] h-[469px] mr-32 mt-20" alt="Mosaique" />
@@ -42,13 +42,13 @@ function HowItWorks() {
             {/* Info livraison section */}
             <div className="py-16 bg-white">
                 <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Infos livraison</h2>
-                
+
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center px-8">
                     {/* Image */}
                     <div className="flex-1 flex justify-center mb-8 md:mb-0 md:justify-start md:pl-16">
                         <img src={holdingApple} className="w-[400px] h-[320px] object-cover rounded-lg transform -rotate-[5.83deg]" alt="Holding Apple" />
                     </div>
-                    
+
                     {/* Content */}
                     <div className="flex-1 pl-0 md:pl-12 space-y-6">
                         {/* Step 01 */}
@@ -63,7 +63,7 @@ function HowItWorks() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         {/* Step 02 */}
                         <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
@@ -76,7 +76,7 @@ function HowItWorks() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         {/* Step 03 */}
                         <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
@@ -89,7 +89,7 @@ function HowItWorks() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         {/* Step 04 */}
                         <div className="flex items-center">
                             <div className="mr-4 flex-shrink-0">
@@ -143,7 +143,7 @@ function HowItWorks() {
                             </a>
                         </div>
                     </div>
-                    
+
                     {/* Right logo */}
                     <div className="flex-1 flex justify-center lg:justify-end mt-12 lg:mt-0">
                         <img src={bigRoundLogo} className="w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] object-contain" alt="RAYON 22 en ligne logo" />

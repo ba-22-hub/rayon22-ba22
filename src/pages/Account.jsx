@@ -1,14 +1,17 @@
+// Importing dependencies
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
-import { useAuthor } from "../context/AuthorContext.jsx";
+import { useAuthor } from "@context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
 import { displayNotification } from '@lib/displayNotification.js';
 
-import Loading from "../common/Loading.jsx";
+// Importing common components
+import Loading from "@common/Loading.jsx";
 
-
-
+/** * The Account page.
+ * @returns {React.ReactElement} Account component.
+ */
 function Account() {
 
     const [editing, setEditing] = useState(false)

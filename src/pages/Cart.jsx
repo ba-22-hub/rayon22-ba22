@@ -1,9 +1,9 @@
+// Importing dependencies
 import { useState, useEffect, useRef } from 'react';
-import { useAuthor } from '../context/AuthorContext.jsx'
+import { useAuthor } from '@context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
-import { useCart } from "../context/CartContext.jsx";
+import { useCart } from "@context/CartContext.jsx";
 import { supabase } from "@lib/supabaseClient";
-import { stripePromise } from '@lib/stripeClient.js'
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
@@ -12,12 +12,12 @@ import PageButton from "@common/PageButton.jsx";
 import Loading from '@common/Loading.jsx';
 
 // Importing assets
-import receipt from "../assets/Assets/ticket-caisse-ecriture.png"
-import orangeLine from "../assets/Assets/Trait orange.png"
-import orangeShape from "../assets/Assets/Coup crayon orange.svg"
-import blueRayonShape from "../assets/Assets/Rayons traits bleus.svg"
-import orangeCircle from "../assets/Assets/Cercle orange crayon.png"
-import roundLogo from "../assets/logos/roundLogo.png"
+import receipt from "@assets/Assets/ticket-caisse-ecriture.png"
+import orangeLine from "@assets/Assets/Trait orange.png"
+import orangeShape from "@assets/Assets/Coup crayon orange.svg"
+import blueRayonShape from "@assets/Assets/Rayons traits bleus.svg"
+import orangeCircle from "@assets/Assets/Cercle orange crayon.png"
+import roundLogo from "@assets/logos/roundLogo.png"
 
 // Importing styles
 import 'react-notifications-component/dist/theme.css'

@@ -1,5 +1,5 @@
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
+import LoremIpsum from "@common/LoremIpsum"
 
 /**
  * The Sponsor page.

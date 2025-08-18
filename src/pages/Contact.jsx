@@ -2,16 +2,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
-import { useAuthor } from '../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import FormTextArea from "../common/FormTextArea"
-import Loading from '../common/Loading';
+import FormTextArea from "@common/FormTextArea"
+import Loading from '@common/Loading';
 
 // Importing assets
-import roundLogo from "../assets/logos/roundLogo.png"
+import roundLogo from "@assets/logos/roundLogo.png"
 
 /**
  * The Contact page.
