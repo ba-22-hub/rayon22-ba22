@@ -90,6 +90,11 @@ function Cart() {
     }
 
     useEffect(() => {
+        if(cart===null) {
+            setLoading(true)
+            return;
+        }
+
         const fetchDataProductsInCart = async () => {
             setLoading(true);
             const { data, error } = await supabase

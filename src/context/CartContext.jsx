@@ -15,23 +15,27 @@ setCart : to update the cart
 const CartContext = createContext()
 
 function CartProvider({ children }) {
-    const { user } = useAuthor()
-    
-    const [cart, setCart] = useState(() => {
-        if (user?.id) {
-            const saved = localStorage.getItem(user.id);
-            return saved ? JSON.parse(saved) : {};
-        }
-        return {}; // No user connected : empty cart
-    });
+    const { user, loading } = useAuthor()
+    const [cart, setCart] = useState(null)
 
+    // Retrieving old cart
     useEffect(() => {
-        if (user?.id) {
-            localStorage.setItem(user.id, JSON.stringify(cart));
-        } else {
-            setCart({});
+        if (!loading) {
+            if (user?.id) {
+                const saved = localStorage.getItem(user.id)
+                setCart(saved ? JSON.parse(saved) : {})
+            } else {
+                setCart({})
+            }
         }
-    }, [user]);
+    }, [user, loading])
+
+    // Updating cart
+    useEffect(() => {
+        if (user?.id && cart !== null) {
+            localStorage.setItem(user.id, JSON.stringify(cart))
+        }
+    }, [cart, user])
 
     return (
         <CartContext.Provider value={{ cart, setCart }}>
