@@ -203,9 +203,14 @@ function Cart() {
         }
 
         // Check stock
-        const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
-        if (!areAvailableProducts) {
-            displayNotification("Échec de validation du panier", "Stock de " + product.name + " insuffisant", "danger", duration = 7000)
+        const outOfStockProduct = productsInCart.find(p => cart[p.id] > p.stock);
+        if (outOfStockProduct) {
+            displayNotification(
+                "Échec de validation du panier",
+                "Stock de " + outOfStockProduct.name + " insuffisant",
+                "danger",
+                7000
+            );
             return;
         }
 
