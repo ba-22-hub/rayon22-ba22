@@ -1,9 +1,6 @@
 // Importing dependencies
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import ReactDOM from 'react-dom/client'
-import { useLocation } from 'react-router-dom'
-import { BrowserRouter } from 'react-router-dom'
 
 
 import { AuthorProvider } from '@context/AuthorContext.jsx'
