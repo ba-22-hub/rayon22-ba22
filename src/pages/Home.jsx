@@ -17,12 +17,6 @@ import avatar from "@assets/Assets/avatar.png"
 import file from "@assets/Assets/file.png"
 import cart from "@assets/Assets/cart.png"
 import phoneApp from "@assets/Photos/phoneApp.png"
-import pasta from "@assets/Photos/Tortis.png"
-import rice from "@assets/Photos/Riz.png"
-import lentil from "@assets/Photos/Lentilles.png"
-import bean from "@assets/Photos/Haricot.png"
-import tuna from "@assets/Photos/Thon.png"
-import sponges from "@assets/Photos/Eponges.png"
 
 {/* Data product carousel */ }
 
