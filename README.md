@@ -92,7 +92,45 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ### 🧾 Gestion des produits
 
-*À venir... (phase 2)*
+### 🧾 Gestion des produits
+
+- L’utilisateur a accès à un **catalogue** listant les différents produits disponibles (alimentaires, hygiène, etc.) avec leurs caractéristiques (nom, prix, poids…).
+
+<img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/bd16a389-75e2-4813-9799-b6f659988539" />
+
+- Une **barre de recherche** permet de filtrer rapidement les produits.
+
+<img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/e4b2b9bc-6d42-4fed-8306-ced9c21fb2c3" />
+
+- Lorsque le stock d’un produit passe en dessous du seuil (par défaut 3), une étiquette `Stock incertain` s’affiche.
+
+<img width="318" height="424" alt="image" src="https://github.com/user-attachments/assets/344d3095-5fa2-47c8-8838-dde318c3cdd7" />
+
+- L’utilisateur peut ajouter des produits à son **panier virtuel**.
+
+<img width="1920" height="2293" alt="image" src="https://github.com/user-attachments/assets/578cfe4b-5daf-4f1b-a27b-1497da41204b" />
+
+- Le panier prend en compte les contraintes définies (quantité, poids maximum, rapport prix commande/livraison).  
+  Si aucune limite n’est définie, elles sont considérées comme illimitées.
+
+<img width="405" height="149" alt="image" src="https://github.com/user-attachments/assets/693acb4b-4f52-4631-9940-b65ce6eb5102" />
+<img width="405" height="149" alt="image" src="https://github.com/user-attachments/assets/51168486-192f-4311-9969-c8600fddf940" />
+<img width="405" height="149" alt="image" src="https://github.com/user-attachments/assets/68abe483-4c85-43f4-8292-ea0bd8841e94" />
+<img width="405" height="149" alt="image" src="https://github.com/user-attachments/assets/14b1ae0f-06f5-4bf8-bbea-a800db8d6219" />
+
+- Avant la validation du panier, une **notification** avertit si un produit n’est plus disponible.
+
+<img width="1920" alt="notification-stock" src="https://github.com/user-attachments/assets/xxxxx" />
+
+- Le paiement peut ensuite être effectué via **Stripe**, en carte bancaire ou solutions alternatives (cartes prépayées, etc.).
+
+<img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/c81031d6-98ef-47eb-b2bc-43a695b7aa1a" />
+
+- Les produits et leur disponibilité sont gérés dans une **base de données SQL** gérable par les administrateurs.
+
+<img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/63ec5b74-8896-4a79-acb6-d7576466a52c" />
+<img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/db6ad22c-03d9-476f-bf17-622e396478de" />
+
 
 ## 🧑‍💻 Guide de programmation
 
