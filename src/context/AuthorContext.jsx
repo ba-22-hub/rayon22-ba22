@@ -92,7 +92,6 @@ function AuthorProvider({ children }) {
 
 
     const checkIsAdmin = async (userId) => {
-
         try {
             const { data, error } = await supabase
                 .from("Admins")
@@ -114,10 +113,30 @@ function AuthorProvider({ children }) {
         }
     };
 
+    async function checkHasRights(userId){
+        try {
+            const { data, error } = await supabase
+                .from("User")
+                .select("has_right")
+                .eq("id", userId)
+                .single();
+
+            if (error || !data) {
+                setHasRights(false);
+                return false;
+            }
+            setHasRights(data.has_right);
+            return true;
+        } catch (err) {
+            console.error("Erreur lors du check des droits :", err.message);
+            setHasRights(false);
+            return false;
+        }
+    };
 
 
     return (
-        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin, checkIsAdmin }}>
+        <AuthorContext.Provider value={{ user, setUser, logout, loading, hasRights, isAdmin, checkIsAdmin, checkHasRights }}>
             {children}
         </AuthorContext.Provider>
     );

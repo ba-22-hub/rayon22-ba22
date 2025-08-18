@@ -37,7 +37,7 @@ function Cart() {
     const isNotified = useRef(false)
     const [loading, setLoading] = useState(true);
 
-    const { user, loading: authorLoading, hasRights } = useAuthor()
+    const { user, loading: authorLoading, checkHasRights } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
@@ -49,10 +49,15 @@ function Cart() {
         if (!user) { // user not login 
             navigate('/login')
             notify("Vous devez être connectés et avoir les droits pour passer commande")
-        }
-        else if (!hasRights) { // user doesn't have rights
-            notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
-            navigate('/account') // send the user to the previous page
+        } else {
+            checkHasRights(user.id) // user doesn't have rights
+                .then((rights) => {
+                    if(!rights){
+                        notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
+                        navigate('/account') 
+                    }
+                })
+            
         }
         // end author routine 
 
