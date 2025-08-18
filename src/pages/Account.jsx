@@ -242,7 +242,7 @@ function Account() {
                             <p>Il ne possède donc par conséquent pas de données personnelles</p>
 
                             <button
-                                className="text-white bg-rayonorange w-full md:w-1/3 mb-3 mt-10 h-10"
+                                className="text-white bg-rayonorange w-full md:w-1/3 mb-3 mt-10 h-14"
                                 onClick={() => navigate('/admin/users')}
                             >
                                 Accéder à l'application administrateur

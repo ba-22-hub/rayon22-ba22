@@ -52,7 +52,7 @@ function Cart() {
         } else {
             checkHasRights(user.id) // user doesn't have rights
                 .then((rights) => {
-                    if (!rights) {
+                    if  (!rights)  {
                         notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
                         navigate('/account')
                     }
