@@ -172,7 +172,7 @@ function Contact() {
 									accept='.pdf'
 									name='file'
 									onChange={(e) => {
-										displayNotification("Fichier sélectionné :", e.target.files[0], "info")
+										displayNotification("Fichier sélectionné :", e.target.files[0].name, "info")
 										handleFileChange(e);
 									}}
 									ref={fileInputRef}
