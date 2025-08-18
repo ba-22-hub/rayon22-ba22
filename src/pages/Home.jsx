@@ -25,49 +25,12 @@ import tuna from "@assets/Photos/Thon.png"
 import sponges from "@assets/Photos/Eponges.png"
 
 {/* Data product carousel */ }
-const dataProductCarousel = [
-    {
-        name: "Pâte torti",
-        image: pasta,
-        price: "0.50",
-        salePrice: "0.05",
-    },
-    {
-        name: "Riz 10 minutes",
-        image: rice,
-        price: "0.50",
-        salePrice: "0.10",
-    },
-    {
-        name: "Lentilles cuisinées",
-        image: lentil,
-        price: "0.50",
-        salePrice: "0.05",
-    },
-    {
-        name: "Haricot vert extra-fin",
-        image: bean,
-        price: "1",
-        salePrice: "0.10",
-    },
-    {
-        name: "Thon",
-        image: tuna,
-        price: "1.50",
-        salePrice: "0.15",
-    },
-    {
-        name: "3 gratte éponge",
-        image: sponges,
-        price: "1.50",
-        salePrice: "0.15",
-    },
-];
 
 /**
  * The Home page.
  * @returns {React.ReactElement} Home component.
  */
+
 function Home() {
     const [products, setProducts] = useState([])
 
