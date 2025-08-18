@@ -148,7 +148,7 @@ function Cart() {
             }
         }
 
-        // Vérifications limites utilisateur
+        // User's limits check
         const { data: userData, error: userError } = await supabase
             .from("User")
             .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
@@ -202,7 +202,7 @@ function Cart() {
             return;
         }
 
-        // Vérifier stock
+        // Check stock
         const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
         if (!areAvailableProducts) {
             displayNotification("Échec de validation du panier", "Stock de " + product.name + " insuffisant", "danger", duration = 7000)
