@@ -52,16 +52,30 @@ function Cart() {
         } else {
             checkHasRights(user.id) // user doesn't have rights
                 .then((rights) => {
-                    if(!rights){
+                    if (!rights) {
                         notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
-                        navigate('/account') 
+                        navigate('/account')
                     }
                 })
-            
+
         }
         // end author routine 
 
     }, [authorLoading])
+
+    const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
+
+    const fetchStockIncertainThreshold = async () => {
+        const { data, error } = await supabase
+            .from('constants')
+            .select('value')
+            .eq("name", "stockIncertainThreshold")
+            .maybeSingle();
+        if (!error) {
+            setStockIncertainThreshold(data.value)
+        }
+    };
+    fetchStockIncertainThreshold();
 
     // function to avoid double notification in the login routine
     function notify(message) {
@@ -184,7 +198,7 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
@@ -193,7 +207,7 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
@@ -202,21 +216,47 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
 
         // Check stock
-        const outOfStockProduct = productsInCart.find(p => cart[p.id] > p.stock);
-        if (outOfStockProduct) {
-            displayNotification(
-                "Échec de validation du panier",
-                "Stock de " + outOfStockProduct.name + " insuffisant",
-                "danger",
-                7000
-            );
-            return;
+        const outOfStockProducts = productsInCart.filter(p => cart[p.id] > p.stock);
+        if (outOfStockProducts.length > 0) {
+            const productNames = outOfStockProducts.map(p => p.name).join(", ");
+            if (outOfStockProducts.length > 1) {
+                displayNotification(
+                    "Échec de validation du panier",
+                    "Stocks de " + productNames + " insuffisants",
+                    "danger",
+                    7000
+                );
+                return;
+            } else {
+                const productNames = outOfStockProducts.map(p => p.name).join(", ");
+                displayNotification(
+                    "Échec de validation du panier",
+                    "Stock de " + productNames + " insuffisant",
+                    "danger",
+                    7000
+                );
+                return;
+            }
+        }
+
+        const lowStockProduct = productsInCart.filter(p => p.stock < stockIncertainThreshold);
+        if (lowStockProduct.length > 0) {
+            const productNames = lowStockProduct.map(p => p.name).join(", ");
+            if (lowStockProduct.length > 1) {
+                if (!confirm("Stocks de " + productNames + " incertains. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
+                return;
+            }
+            } else {
+                if (!confirm("Stock de " + productNames + " incertain. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
+                return;
+            }
+            }
         }
 
         try {
