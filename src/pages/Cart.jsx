@@ -37,7 +37,7 @@ function Cart() {
     const isNotified = useRef(false)
     const [loading, setLoading] = useState(true);
 
-    const { user, loading: authorLoading } = useAuthor()
+    const { user, loading: authorLoading, checkHasRights } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
