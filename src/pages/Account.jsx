@@ -236,44 +236,48 @@ function Account() {
             ) : (
                 isAdmin ? (
                     <>
-                        <div className="w-[66vw] mx-auto p-[4vw] bg-white rounded-2xl shadow-sm mb-[4vw] flex flex-col items-center text-center">
-                            <p className="text-rayonblue text-[4em]">Ce compte est administrateur</p>
+                        <div className="w-full max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16 flex flex-col items-center text-center">
+                            <p className="text-rayonblue text-4xl md:text-5xl">Ce compte est administrateur</p>
                             <br />
                             <p>Il ne possède donc par conséquent pas de données personnelles</p>
 
                             <button
-                                className="text-white bg-rayonorange w-[30vw] mb-3 mt-[10vh] h-[2rem]"
+                                className="text-white bg-rayonorange w-full md:w-1/3 mb-3 mt-10 h-10"
                                 onClick={() => navigate('/admin/users')}
                             >
                                 Accéder à l'application administrateur
                             </button>
 
                             <button
-                                className="text-white bg-red w-[30vw] mb-3 mt-[2vh] h-[2rem]"
+                                className="text-white bg-red w-full md:w-1/3 mb-3 mt-2 h-10"
                                 onClick={handleDeconnection}
                             >
                                 Se déconnecter
                             </button>
                         </div>
-
                     </>
                 ) : (
-                    <div className="w-[66vw] ml-[17vw] p-[8vw] bg-white rounded-2xl shadow-sm mb-[4vw]">
-                        <h1 className="text-center text-rayonblue text-[4.3em] leading-tight font-bold">Bienvenue sur votre Espace Utilisateur</h1>
+                    <div className="w-full max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16">
+                        <h1 className="text-center text-rayonblue text-3xl md:text-5xl leading-tight font-bold">
+                            Bienvenue sur votre Espace Utilisateur
+                        </h1>
                         <button
                             onClick={handleDeconnection}
-                            className="text-white bg-red rounded-lg w-[10vw] ml-[40vw]"
-                        >⏼ Déconnexion</button>
-                        <div className="flex flex-row">
-                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[24vw] p-2">
-                                <h2 className="text-rayonblue text-[1.5em] font-semibold">État civil</h2>
+                            className="text-white bg-red rounded-lg w-full md:w-40 mt-4 ml-auto block"
+                        >
+                            ⏼ Déconnexion
+                        </button>
+
+                        <div className="flex flex-col md:flex-row gap-4 mt-6">
+                            <div className="border border-rayonblue rounded-lg p-4 flex-1 min-w-0">
+                                <h2 className="text-rayonblue text-xl font-semibold mb-4">État civil</h2>
                                 {renderField("Nom", "lastName")}
                                 {renderField("Prénom", "firstName")}
                                 {renderRadio("Genre", "gender", genderOptions)}
-
                             </div>
-                            <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[26vw] ml-[2vw] p-2">
-                                <h2 className="text-rayonblue text-[1.5em] font-semibold">Contact</h2>
+
+                            <div className="border border-rayonblue rounded-lg p-4 flex-1 min-w-0">
+                                <h2 className="text-rayonblue text-xl font-semibold mb-4">Contact</h2>
                                 {renderField("E-mail", "email")}
                                 {renderField("Téléphone", "phone")}
                                 {renderField("Adresse", "address")}
@@ -282,23 +286,21 @@ function Account() {
                                 {renderField("Code postal", "postalCode")}
                             </div>
                         </div>
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Déclarations</h2>
+
+                        <div className="border border-rayonblue rounded-lg p-4 mt-6 w-full max-w-full">
+                            <h2 className="text-rayonblue text-xl font-semibold mb-4">Déclarations</h2>
                             {renderRadio("Situation", "situation", situationOptions)}
                             {renderField("Quotient familial (CAF)", "quotient")}
                             {renderRadio("Type de salaire", "wageType", wageOptions)}
                         </div>
 
                         {/* rights */}
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Vos droits</h2>
-
-                            <div className="grid grid-cols-[300px_120px] gap-x-3 text-rayonblue">
+                        <div className="border border-rayonblue rounded-lg p-4 mt-6 w-full max-w-full overflow-x-auto">
+                            <h2 className="text-rayonblue text-xl font-semibold mb-4">Vos droits</h2>
+                            <div className="grid grid-cols-[minmax(0,300px)_minmax(0,120px)] gap-x-3 text-rayonblue">
+                                {/* contenu inchangé */}
                                 <label className="font-semibold">Date de validité du compte :</label>
-                                <p className="text-right">
-                                    {client.has_right ? client.end_right : "Compte invalide"}
-                                </p>
-
+                                <p className="text-right">{client.has_right ? client.end_right : "Compte invalide"}</p>
 
                                 <label className="font-semibold">Poids maximum mensuel :</label>
                                 <p className="text-right">{client.weight_limit === null ? "Pas de limite" : `${(client.weight_limit.toFixed(2) / 1000)} kg`}</p>
@@ -320,20 +322,16 @@ function Account() {
                             </div>
                         </div>
 
-
-
-
-
-                        <div className="border border-rayonblue rounded-lg mt-[1.5em] w-[50vw] p-2">
-                            <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
+                        <div className="border border-rayonblue rounded-lg p-4 mt-6 w-full max-w-full">
+                            <h2 className="text-rayonblue text-xl font-semibold mb-4">Renouveler votre éligibilité</h2>
                             {activeRequests ? (
                                 <p>Une requête est en cours de traitement...</p>
                             ) : isSubmitting ? (
                                 <Loading />
                             ) : (
-                                <div className="flex flex-row">
+                                <div className="flex flex-col md:flex-row gap-2">
                                     <input
-                                        className="bg-rayonorange block w-[40vw] text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-[0.2rem] file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
+                                        className="bg-rayonorange block w-full md:w-2/3 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 rounded-2xl text-white text-center item-center p-1 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
                                         type="file"
                                         onChange={handleFileSelection}
                                         accept=".pdf"
@@ -341,37 +339,44 @@ function Account() {
                                         ref={fileInputRef}
                                     ></input>
                                     <button
-                                        className="text-rayonorange text-center bg-white w-[10vw] h-[2rem] ml-4 border border-rayonorange"
+                                        className="text-rayonorange text-center bg-white w-full md:w-1/4 h-10 border border-rayonorange"
                                         onClick={handleFileSubmit}
-                                    >Valider 🗸</button>
-                                </div>)}
+                                    >
+                                        Valider 🗸
+                                    </button>
+                                </div>
+                            )}
                         </div>
+
                         {!editing ? (
                             <button
-                                className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
-                                onClick={() => {
-                                    setEditing(true)
-                                }
-                                }
-                            >Modifier 🖉</button>
+                                className="text-white text-center bg-rayonorange w-full md:w-1/3 mb-3 mt-10 h-10"
+                                onClick={() => setEditing(true)}
+                            >
+                                Modifier 🖉
+                            </button>
                         ) : (
-                            <div className="flex flex-row">
+                            <div className="flex flex-col md:flex-row gap-2">
                                 <button
-                                    className="text-white text-center bg-rayonorange w-[14vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
+                                    className="text-white text-center bg-rayonorange w-full md:w-1/3 mb-3 mt-10 h-10"
                                     onClick={handleCancel}
-                                >Annuler ✖</button>
+                                >
+                                    Annuler ✖
+                                </button>
                                 <button
-                                    className="text-rayonorange text-center bg-white w-[14vw] ml-[2vw] mb-3 mt-[10vh] h-[2rem] border border-rayonorange"
+                                    className="text-rayonorange text-center bg-white w-full md:w-1/3 mb-3 mt-10 h-10 border border-rayonorange"
                                     onClick={handleEdit}
-                                >Valider 🗸</button>
+                                >
+                                    Valider 🗸
+                                </button>
                             </div>
-                        )
-                        }
-
+                        )}
                     </div>
-                ))}
+                )
+            )}
         </>
     )
+
 
 }
 
