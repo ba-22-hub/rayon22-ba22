@@ -1,5 +1,5 @@
 // Importing dependencies
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 
 // Importing common components
@@ -33,34 +33,37 @@ import sponges from "@assets/Photos/Eponges.png"
 
 function Home() {
     const [products, setProducts] = useState([])
+    const [update, setUpdate] = useState(true);
 
-    const fetchProducts = async () => {
-        const { data, error } = await supabase
-            .from("products")
-            .select("*")
-        if (error) {
-            displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
-        } else {
-            const productsWithImages = await Promise.all(
-                data.map(async product => {
-                    const { data: imgData, error: imgError } = await supabase
-                        .storage
-                        .from("images")
-                        .download(product.image_name);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const { data, error } = await supabase
+                .from("products")
+                .select("*")
+            if (error) {
+                displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
+            } else {
+                const productsWithImages = await Promise.all(
+                    data.map(async product => {
+                        const { data: imgData, error: imgError } = await supabase
+                            .storage
+                            .from("images")
+                            .download(product.image_name);
 
-                    if (imgError) {
-                        displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
-                    } else {
-                        product.imageUrl = URL.createObjectURL(imgData);
-                    }
-                    return product;
-                })
-            );
+                        if (imgError) {
+                            displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+                        } else {
+                            product.imageUrl = URL.createObjectURL(imgData);
+                        }
+                        return product;
+                    })
+                );
 
-            setProducts(productsWithImages)
-        }
-    };
-    fetchProducts();
+                setProducts(productsWithImages)
+            }
+        };
+        fetchProducts();
+    }, [update]);
 
     return (
         <>
