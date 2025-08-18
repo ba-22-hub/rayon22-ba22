@@ -1,9 +1,8 @@
 import { supabase, supabaseAdmin } from "@lib/supabaseClient";
+import { displayNotification } from '@lib/displayNotification.js'
 
 async function deleteUser(userId) {
   try {
-    console.log("Suppression de l'utilisateur avec ID :", userId);
-
     // delete from the SQL User Table
     const { data, error } = await supabase
       .from('User')        //table user
@@ -11,7 +10,7 @@ async function deleteUser(userId) {
       .eq('id', userId);   // filter by id 
 
     if (error) {
-      console.error("Erreur lors de la suppression :", error.message);
+      displayNotification("Erreur lors de la suppression de l'utilisateur avec ID : " + userId, error.message, "danger")
       return null;
     }
 
@@ -25,11 +24,12 @@ async function deleteUser(userId) {
       throw new Error("Erreur suppression auth.users : " + authError.message);
     }
 
-    console.log("Utilisateur supprimé :", data);
+    displayNotification("Utilisateur supprimé", "ID : " + userId, "success")
     return data;
 
   } catch (err) {
-    console.error("Erreur inattendue :", err.message);
+    displayNotification("Erreur inattendue", err.message, "danger")
+    console.error("Erreur inattendue :", err);
     return null;
   }
 }

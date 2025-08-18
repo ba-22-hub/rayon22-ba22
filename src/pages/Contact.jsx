@@ -4,6 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
 import { useAuthor } from '../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormTextArea from "../common/FormTextArea"
@@ -81,8 +82,8 @@ function Contact() {
 			const { success, error } = await uploadPDF(formData.file, name, "messages")
 
 			if (!success) {
-				console.error("❌ Upload échoué :", error);
-				alert("Erreur lors de l'upload du fichier PDF.");
+				displayNotification("Échec de l'upload du fichier PDF", error.message, "danger")
+				//alert("Erreur lors de l'upload du fichier PDF.");
 				uploadSuccess = false;
 			}
 		}
@@ -101,12 +102,12 @@ function Contact() {
 			.insert([newMessage]);
 
 		if (insertError) {
-			console.error("❌ Erreur lors de l'insertion :", insertError.message);
-			alert("Erreur lors de l'envoi du message.");
+			displayNotification("Erreur lors de l'envoi du message", insertError.message, "danger")
+			//alert("Erreur lors de l'envoi du message.");
 			return;
 		}
 
-		console.log("✅ Message inséré avec succès !", newMessage);
+		displayNotification("Message envoyé avec succès", "", "success")
 
 		// Third step: Reset the form
 
@@ -170,7 +171,10 @@ function Contact() {
 									type='file'
 									accept='.pdf'
 									name='file'
-									onChange={(e) => { console.log("Fichier sélectionné :", e.target.files[0]); handleFileChange(e); }}
+									onChange={(e) => {
+										displayNotification("Fichier sélectionné :", e.target.files[0], "info")
+										handleFileChange(e);
+									}}
 									ref={fileInputRef}
 									className="mb-6 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#2E2EFF] file:text-white hover:file:bg-blue-700"
 								/>

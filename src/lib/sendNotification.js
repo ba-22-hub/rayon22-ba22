@@ -1,5 +1,6 @@
 // Importing dependencies
 import sendMail from '@lib/sendMail.js';
+import { displayNotification } from '@lib/displayNotification.js'
 
 const templateID = 'template_k4m4rco';
 
@@ -11,11 +12,12 @@ function sendNotification({ email, name }) {
 
     return sendMail(templateID, templateParams)
         .then(response => {
-            console.log('Notification sent successfully:', response);
+            displayNotification("Notification envoyée avec succès", response, "success")
             return response;
         })
         .catch(error => {
             console.error('Error sending notification:', error);
+            displayNotification("Erreur lors de l'envoi de la notification", error.message, "danger")
             throw error;
         });
 }

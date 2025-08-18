@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState, useEffect } from 'react';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "../common/FormInput"
@@ -42,7 +43,7 @@ function RegisterStep1({ data, onDataChange, onNext }) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        console.log("Form submitted with data:", formData);
+        displayNotification("Formulaire soumis avec succès", "", "success")
         onNext();
 
     }
@@ -75,13 +76,13 @@ function RegisterStep1({ data, onDataChange, onNext }) {
 
                 <button type="submit" className='text-center-white bg-rayonorange w-[50%] ml-[25%] mb-3 mt-[10%] h-[2rem]'>Suivant</button>
             </form>
-            <PageButton 
+            <PageButton
                 className='text-center text-rayonorange bg-white w-[50%] ml-[25%] mb-[4%] h-[2rem] rounded-lg border border-rayonorange '
                 buttonText="J'ai déjà un compte"
                 page="../Login"
             />
         </>
-            )
+    )
 }
 
-            export default RegisterStep1;
+export default RegisterStep1;

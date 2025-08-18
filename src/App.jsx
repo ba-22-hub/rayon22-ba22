@@ -6,11 +6,15 @@ import {
   useNavigate,
   Outlet,
 } from "react-router-dom";
+import React from 'react';
+import { ReactNotifications } from 'react-notifications-component'
+
 
 import { useAuthor } from "./context/AuthorContext.jsx";
 
 // Importing the style
 import './styles/navbar.css'
+import 'react-notifications-component/dist/theme.css'
 
 
 // Importing assets
@@ -32,6 +36,7 @@ import News from './pages/News.jsx'
 import Register from './pages/Register.jsx'
 import Sponsor from './pages/Sponsor.jsx'
 import Account from "./pages/Account.jsx";
+import PaymentSuccess from "./pages/PaymentSuccess.jsx";
 
 // Importing common components
 import Footer from "./common/Footer.jsx";
@@ -44,6 +49,7 @@ function App() {
   const { user } = useAuthor()
   return (
     <div className="min-h-screen bg-[#FEF7F1]">
+      <ReactNotifications />
 
       {/* Horizontal navigation bar to choose the page of the website we want to visit */}
       <nav className="bg-white shadow-lg border-b border-gray-200 mb-8 mt-8">
@@ -82,9 +88,11 @@ function App() {
 
             {/* Right side - Inscription button and Avatar */}
             <div className="flex items-center space-x-4">
-              <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
-                S'inscrire
-              </Link>
+              {!user && (
+                <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
+                  S'inscrire
+                </Link>
+              )}
               <Link to={`${user ? '/account' : '/login'}`} className="flex-shrink-0">
                 <div className="bg-[#FF8200] p-1 rounded-lg h-10 w-10 flex items-center justify-center">
                   <img src={avatar} alt="User avatar" className="h-8 w-8 rounded-full" />
@@ -110,6 +118,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
         {/* {/* Redirecting to Error404 page if the route does not exist */}
         {/* <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />  */}
       </Routes>

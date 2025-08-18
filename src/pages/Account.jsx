@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "../context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
+import { displayNotification } from '@lib/displayNotification.js';
 
 import Loading from "../common/Loading.jsx";
 
@@ -40,20 +41,18 @@ function Account() {
                     .single();
 
                 if (dberror && dberror.code !== 'PGRST116') {
-                    // other error
-                    console.error("Erreur lors de la vérification du user:", dberror.message);
+                    displayNotification("Erreur lors de la vérification de l'utilisateur", dberror.message, "danger")
                     return;
                 }
 
                 setClientEdit(userdata);
                 setClient(userdata);
             } catch (error) {
-                console.error("Erreur inattendue:", error.message);
+                displayNotification("Erreur inattendue", error.message, "danger")
             }
         }
         const checkRequest = async () => {
             try {
-                console.log("Checking requests ...")
                 const { data, error: dberror } = await supabase
                     .from('Requests')
                     .select('id') // optimisation
@@ -61,16 +60,14 @@ function Account() {
                     .limit(1); // no need to reseach several requests
 
                 if (dberror && dberror.code !== 'PGRST116') {
-                    console.error("Erreur lors de la vérification des requêtes :", dberror.message);
+                    displayNotification("Erreur lors de la vérification des requêtes", dberror.message, "danger")
                     return;
                 }
-                console.log("request found : ", data)
                 setActiveRequest(data.length > 0)
             } catch (error) {
-                console.error("Erreur inattendue:", error.message);
+                displayNotification("Erreur inattendue", error.message, "danger")
             }
         }
-        console.log(loading, isAdmin)
         checkIsAdmin(user.id) // needed otherwise the update of 'isAdmin' isn't fast enough
             .then(fetchUserData())
             .then(() => checkRequest())
@@ -101,13 +98,11 @@ function Account() {
     function handleCancel() {
         setClientEdit(client)
         setEditing(false)
-        console.log("editmod disable")
     }
 
     // handle the edit of the personnal informations
     async function handleEdit(e) {
         e.preventDefault(); // Empêche le rechargement de la page
-        console.log("sending ", clientEdit, "to API...")
 
         try {
             const { data, error } = await supabase
@@ -120,21 +115,19 @@ function Account() {
                 throw error;
             }
 
-            console.log("Data changed : ", data)
             setEditing(false)
-            alert("Les informations ont été modifiées avec succès")
+            // alert("Les informations ont été modifiées avec succès")
+            displayNotification("Informations mises à jour avec succès", "", "success")
         } catch (err) {
-            alert("Erreur lors de l'ajout dans la base de donnée")
-            console.error("Error uptdating client... ", err.message)
+            //alert("Erreur lors de l'ajout dans la base de donnée")
+            displayNotification("Erreur lors de la mise à jour des informations", err.message, "danger")
         }
     }
 
     function handleFileSelection(e) {
-        console.log("Un fichier a été déposé")
         const incomingFile = e.target.files[0]
-        console.log(incomingFile)
+        displayNotification("Le fichier " + incomingFile.name + " a été déposé", "", "info")
         setFile(incomingFile)
-        console.log(incomingFile.name)
     }
 
     async function handleFileSubmit() {
@@ -143,8 +136,8 @@ function Account() {
         const name = `${Date.now()}_${file.name}`
         const { success, error } = await uploadPDF(file, name, "requests")
         if (!success) {
-            console.error("❌ Upload échoué :", error);
-            alert("Erreur lors de l'upload du fichier PDF.");
+            displayNotification("Échec de l'upload du fichier PDF", error.message, "danger")
+            // alert("Erreur lors de l'upload du fichier PDF.");
             uploadSuccess = false;
         }
 
@@ -161,12 +154,12 @@ function Account() {
             .insert([newRequest]);
 
         if (insertError) {
-            console.error("❌ Erreur lors de l'insertion :", insertError.message);
-            alert("Erreur lors de l'envoi de la requête.");
+            displayNotification("Erreur lors de l'envoi de la requête", insertError.message, "danger")
+            // alert("Erreur lors de l'envoi de la requête.");
             return;
         }
 
-        console.log("✅ Requetes inséré avec succès !", newRequest);
+        displayNotification("Requête envoyée avec succès", "", "success")
 
         // manually emptying the file field
         if (fileInputRef.current) {
@@ -180,7 +173,6 @@ function Account() {
 
     function handleDeconnection() {
         logout()
-        console.log("Deconnexion...")
         navigate('/login')
     }
 
@@ -303,23 +295,24 @@ function Account() {
                                     {client.has_right ? client.end_right : "Compte invalide"}
                                 </p>
 
-                                <label className="font-semibold">Poids maximum mensuel :</label>
-                                <p className="text-right">{client.weight_limit} kg</p>
 
-                                <label className="font-semibold">Poids restant ce mois-ci :</label>
-                                <p className="text-right">{client.weight_limit - client.current_weight} kg</p>
+                                <label className="font-semibold">Poids maximum mensuel :</label>
+                                <p className="text-right">{client.weight_limit === null ? "Pas de limite" : `${(client.weight_limit.toFixed(2) / 1000)} kg`}</p>
+
+                                <label className="font-semibold">{client.weight_limit === null ? "Poids déjà acheté ce mois-ci :" : "Poids restant ce mois-ci :"}</label>
+                                <p className="text-right">{client.weight_limit === null ? `${(client.current_weight.toFixed(2) / 1000)} kg` : `${((client.weight_limit - client.current_weight).toFixed(2) / 1000)} kg`}</p>
 
                                 <label className="font-semibold">Budget maximum mensuel :</label>
-                                <p className="text-right">{client.price_limit.toFixed(2)} €</p>
+                                <p className="text-right">{client.price_limit === null ? "Pas de limite" : `${client.price_limit.toFixed(2)} €`}</p>
 
-                                <label className="font-semibold">Budget restant ce mois-ci :</label>
-                                <p className="text-right">{(client.price_limit - client.current_price).toFixed(2)} €</p>
+                                <label className="font-semibold">{client.price_limit === null ? "Budget déjà dépensé ce mois-ci :" : "Budget restant ce mois-ci :"}</label>
+                                <p className="text-right">{client.price_limit === null ? `${client.current_price.toFixed(2)} €` : `${(client.price_limit - client.current_price).toFixed(2)} €`}</p>
 
                                 <label className="font-semibold">Nombre de commandes maximum :</label>
-                                <p className="text-right">{client.order_limit}</p>
+                                <p className="text-right">{client.order_limit === null ? "Pas de limite" : `${client.order_limit}`}</p>
 
-                                <label className="font-semibold">Commandes restantes ce mois-ci :</label>
-                                <p className="text-right">{client.order_limit - client.current_order}</p>
+                                <label className="font-semibold">{client.order_limit === null ? "Nombre de commandes déjà effectuées ce mois-ci :" : "Commandes restantes ce mois-ci :"}</label>
+                                <p className="text-right">{client.order_limit === null ? `${client.current_order}` : `${client.order_limit - client.current_order}`}</p>
                             </div>
                         </div>
 
@@ -352,7 +345,6 @@ function Account() {
                                 className="text-white text-center bg-rayonorange w-[30vw] ml-[10vw] mb-3 mt-[10vh] h-[2rem]"
                                 onClick={() => {
                                     setEditing(true)
-                                    console.log("editmod enabled")
                                 }
                                 }
                             >Modifier 🖉</button>

@@ -4,6 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -13,6 +14,9 @@ import Loading from '@common/Loading.jsx';
 // Importing assets
 import roundLogo from "../../assets/logos/roundLogo.png"
 
+// Importing styles
+import 'react-notifications-component/dist/theme.css'
+
 function ProductTable() {
   const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]
 
@@ -20,8 +24,11 @@ function ProductTable() {
   const [search, setSearch] = useState("");
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedValues, setEditedValues] = useState({});
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);    // new product form expanded or not
+  const [expandedSettings, setExpandedSettings] = useState(false);
   const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
+  const [productImages, setProductImages] = useState({});
+  const [stockIncertainThreshold, setStockIncertainThreshold] = useState(null);     // threshold for 'Stock Incertain' label
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -39,8 +46,30 @@ function ProductTable() {
 
   const fetchProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
-    if (error) console.error("Erreur chargement produits :", error);
-    else setProducts(data);
+    if (error) {
+      console.error("Erreur chargement produits :", error)
+      displayNotification("Erreur lors du chargment des produits", error.message, "danger")
+    }
+    else {
+      setProducts(data)
+      data.forEach(async product => {
+        const { data: imgData, error: imgError } = await supabase
+          .storage
+          .from("images")
+          .download(product.image_name);
+
+        if (imgError) {
+          displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+        } else {
+          const url = URL.createObjectURL(imgData);
+          setProductImages(prev => ({
+            ...prev,
+            [product.id]: url
+          }));;
+        }
+        return product;
+      })
+    }
   };
 
   const { isAdmin, loading } = useAuthor()
@@ -64,27 +93,33 @@ function ProductTable() {
   const handleChangeInProd = (e) => {
     setEditedValues({ ...editedValues, [e.target.name]: e.target.value });
     if (e.target.name == "image_name") {
-      console.log("Setting image")
       const { files } = e.target;
       setImage(files[0])
     }
   };
 
   const removeProd = async (product) => {
-    console.log("Suppression :", product.id)
     // Removing image from bucket
     const { error } = await supabase
       .storage
       .from('images')
       .remove([product.image_name])
-    if (error) console.error("Erreur suppression image :", error);
+    if (error) {
+      console.error("Erreur suppression image :", error)
+      displayNotification("Erreur lors de la suppression de l'image " + product.image_name, error.message, "danger")
+    }
 
     // Removing product row from 'products' table
-    const response = await supabase
+    const { response, errorDelete } = await supabase
       .from("products")
       .delete()
       .eq('id', product.id)
-    console.log("response :" + response)
+    if (errorDelete) {
+      console.error("Erreur lors de la suppression du produit " + product.name + errorDelete)
+      displayNotification("Erreur lors de la suppression du produit " + product.name, errorDelete.message, "danger")
+    } else {
+      displayNotification("Produit " + product.name + " supprimé avec succès", response, "success")
+    }
     fetchProducts()
   }
 
@@ -98,27 +133,36 @@ function ProductTable() {
   }
 
   const handleValidate = async () => {
-    console.log("editedValues : " + editedValues)
     if (oldImageName != "") {
       // Removing old image from bucket
       const { error } = await supabase
         .storage
         .from('images')
         .remove([oldImageName])
-      if (error) console.error("Erreur suppression ancienne image :", error);
+      if (error) {
+        console.error("Erreur suppression ancienne image :", error)
+        displayNotification("Erreur lors de la suppression de l'ancienne image " + oldImageName + " de la base de données", error.message, "danger")
+      }
     }
 
     if (image != "") {
       // Uploading new image to bucket
       await uploadImage(image, image.name)
+      const url = URL.createObjectURL(image);
+      setProductImages(prev => ({
+        ...prev,
+        [editingProductId]: url
+      }));;
     }
 
     const { error } = await supabase
       .from("products")
       .update(editedValues)
       .eq("id", editingProductId);
-    if (error) console.error("Erreur update :", error);
-    else {
+    if (error) {
+      console.error("Erreur update :", error)
+      displayNotification("Erreur lors de la mise à jour du produit", error.message, "danger")
+    } else {
       setProducts((prev) =>
         prev.map((p) => (p.id === editingProductId ? editedValues : p))
       );
@@ -133,22 +177,22 @@ function ProductTable() {
   );
 
   async function handleSubmit(e) {
+    e.preventDefault();
 
-    console.log("Form submitted with data:", formData, "Need API call to send this data");
-
-    // Adding a new row to the 'Products' database
+    // Adding a new row to the 'products' database
     const { error } = await supabase
       .from('products')
       .insert(formData)
 
     if (error) {
-      console.error("Erreur lors de la création Supabase:", error.message);
+      console.error("Erreur lors de l'ajout du nouveau produit", error);
+      displayNotification("Erreur lors de l'ajout du nouveau produit", error.message, "danger")
       return;
     }
 
     // Uploading the image to the 'images' bucket
-    if (image != "") {
-      uploadImage(image, image.name)
+    if (image.name != "") {
+      await uploadImage(image, image.name)
     }
     setImage("")
 
@@ -221,10 +265,10 @@ function ProductTable() {
 
         if (error && Object.keys(error.message).length > 0) {
           console.error("Erreur lors du téléchargement du nom de de l'image : ", error.message);
+          displayNotification("Erreur lors du téléchargement du nom de de l'image", error.message, "danger")
           return;
         }
 
-        console.log("data : " + data)
         setOldImageName(data.image_name);
       }
       await fetchOldImageName();    // waiting for old image name to be fetched before uploading new image
@@ -259,34 +303,45 @@ function ProductTable() {
     );
   };
 
-  function DisplayImage({ product }) {
-    const [imageUrl, setImageUrl] = useState(null);
+  async function fetchCurrentStockIncertainThreshold() {
+    setExpandedSettings(true)
+    const { data, error } = await supabase
+      .from('constants')
+      .select('value')
+      .eq("name", "stockIncertainThreshold")
+      .maybeSingle();
+    if (!error) {
+      setStockIncertainThreshold(data.value)
+    } else {
+      console.error("Erreur lors du téléchargement de l'ancienne valeur seuil ", error)
+      displayNotification("Erreur lors du téléchargement de l'ancienne valeur seuil", error.message, "danger")
+    }
+  }
 
-    useEffect(() => {
-      async function fetchImage() {
-        const { data, error } = await supabase
-          .storage
-          .from("images")
-          .download(product.image_name);
+  function handleChangeStockIncertainThreshold(e) {
+    const { value } = e.target;
+    setStockIncertainThreshold(value)
+  }
 
-        if (error && Object.keys(error.message).length > 0) {
-          console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-          return
-        }
+  async function handleSubmitSettings(e) {
+    e.preventDefault();
 
-        const url = URL.createObjectURL(data);
-        setImageUrl(url);
+    const { error } = await supabase
+      .from("constants")
+      .update({value: stockIncertainThreshold})
+      .eq("name", "stockIncertainThreshold");
 
+    if (error) {
+      let message = error.message
+      if (error.code === "22P02") {
+        message = "Le seuil doit être un entier"
       }
+      console.error("Erreur lors de la mise à jour du seuil", error);
+      displayNotification("Erreur lors de la mise à jour du seuil", message, "danger")
+      return;
+    }
 
-      if (product.image_name != "") {
-        fetchImage();
-      }
-    }, [product.image_name]);
-
-    return <>
-      <img src={imageUrl || roundLogo} alt={product.name} className="w-[50%] h-20 object-contain" />
-    </>
+    setExpandedSettings(false);
   }
 
   return (
@@ -405,7 +460,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
-                        <td><DisplayImage product={p}></DisplayImage></td>
+                        <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
                             className="bg-blue-600 text-white px-2 py-1 rounded"
@@ -500,6 +555,32 @@ function ProductTable() {
                 </div>
                 <div>
                   <BrowseImage newProduct={true}></BrowseImage>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#038709] text-white rounded mx-[20%]">
+                Valider
+              </button>
+            </form>
+          )}
+          <FunctionButton
+            className="bg-rayonorange  w-[1/2] content-center ml-30 my-4 text-white px-10 py-1 rounded"
+            buttonText={expandedSettings ? 'Annuler' : 'Modifier les paramètres'}
+            fun={expandedSettings ? (() => setExpandedSettings(false)) : (() => fetchCurrentStockIncertainThreshold())}
+          />
+          {expandedSettings && (
+            <form onSubmit={handleSubmitSettings}>
+              <div className="grid grid-cols-2 gap-4 text-sm mb-4 items-center">
+                <div>
+                  <FormInput
+                    name="threshold"
+                    type="number"
+                    value={stockIncertainThreshold ?? ""}
+                    inputText="Seuil en deçà duquel le label 'Stock Incertain' apparaît dans le catalogue utilisateur"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeStockIncertainThreshold} />
                 </div>
               </div>
               <button

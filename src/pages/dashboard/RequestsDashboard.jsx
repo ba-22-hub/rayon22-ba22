@@ -6,6 +6,7 @@ import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
@@ -50,6 +51,7 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de chargement des demandes:', error);
+            displayNotification("Erreur de chargment des demandes", error.message, "danger")
         } else {
             setRequests(data);
         }
@@ -59,7 +61,6 @@ function RequestsDashboard() {
     // Function to handle deletion of the request
     const handleDelete = async (id) => {
         const fileName = requests.find(req => req.id === id)?.pdf_name;
-        console.log(`Suppression de la demande ${id} avec le fichier ${fileName}`);
         deletePDF(fileName);
         const { error } = await supabase
             .from('Requests')
@@ -68,20 +69,20 @@ function RequestsDashboard() {
 
         if (error) {
             console.error('Erreur de suppression:', error);
+            displayNotification("Erreur de suppression de la demande " + id + " avec le fichier " + fileName, error.message, "danger")
         } else {
+            displayNotification("Suppression de la demande " + id + " avec le fichier " + fileName + " effectuée avec succès", "", "success")
             setRequests((prev) => prev.filter((req) => req.id !== id));
         }
     };
 
     // Functioon to open the PDF file in a new tab
     const handleDownloadPDF = (pdfName) => {
-        console.log('Ouverture de:', pdfName);
         openPDF(pdfName, 10, "requests");
     };
 
     // Function to handle approval and deletion of the request
     const handleApprove = async (id, user_id) => {
-        console.log(`Approbation de la demande ${id} de : ${user_id}`);
         // updated user informations
         try {
             // Date + 1 year
@@ -99,19 +100,21 @@ function RequestsDashboard() {
                 .select();
 
             if (error) {
-                console.error("Erreur lors de la mise à jour des droits :", error.message);
+                console.error("Erreur lors de la mise à jour des droits :", error);
+                displayNotification("Erreur lors de la mise à jour des droits", error.message, "danger")
             } else {
+                displayNotification("Droits mis à jour avec succès", "", "success")
                 handleDelete(id);
             }
         } catch (err) {
-            console.error("Erreur inattendue :", err.message);
+            console.error("Erreur inattendue :", err);
+            displayNotification("Erreur inattendue", err.message, "danger")
         }
 
     }
 
     // Function to handle decline and deletion of the request
     const handleDecline = async (id) => {
-        console.log(`Refus de la demande ${id}`);
         handleDelete(id);
     }
 

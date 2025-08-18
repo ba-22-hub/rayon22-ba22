@@ -1,8 +1,8 @@
 // Importing dependencies
 import { useState } from 'react';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
 import FormInput from "../common/FormInput";
 
 // Importing assets
@@ -20,10 +20,10 @@ function RegisterStep3({ onNext, onDataChange }) {
 	});
 
 	const [criteriaPassword, setCriteriaPassword] = useState({
-		'minLength' : false, 
-		'hasUppercase' : false, 
-		'hasLowercase' : false, 
-		'hasNumber' : false
+		'minLength': false,
+		'hasUppercase': false,
+		'hasLowercase': false,
+		'hasNumber': false
 	})
 
 	// function to set the new formData value whenever the inputs are changed
@@ -37,15 +37,15 @@ function RegisterStep3({ onNext, onDataChange }) {
 		});
 
 
-		if(field == "password"){	
+		if (field == "password") {
 			onDataChange({ "password": pass })
 			// check if the password respect some instructions
 			setCriteriaPassword({
-				"minLength" :  pass.length >= 8, 
-				"hasLowercase" : /[a-z]/.test(pass), 
-				"hasUppercase" : /[A-Z]/.test(pass), 
-				"hasNumber" : /[0-9]/.test(pass)
-				
+				"minLength": pass.length >= 8,
+				"hasLowercase": /[a-z]/.test(pass),
+				"hasUppercase": /[A-Z]/.test(pass),
+				"hasNumber": /[0-9]/.test(pass)
+
 			})
 		}
 	}
@@ -53,18 +53,18 @@ function RegisterStep3({ onNext, onDataChange }) {
 	// function to hadle the form submit
 	function handleSubmit(e) {
 		e.preventDefault();
-		// printing the formData content in the console for now
-		console.log(formData);
 
 		// checking if the 2 password are identical 
-		if (formData.password != formData.passwordConfirm){
-			alert("Les mots de passe renseignés sont différents")
-		// checking if the password respect the instructions
-		} else if (criteriaPassword.minLength && criteriaPassword.hasLowercase && criteriaPassword.hasUppercase && criteriaPassword.hasNumber){
+		if (formData.password != formData.passwordConfirm) {
+			//alert("Les mots de passe renseignés sont différents")
+			displayNotification("Les mots de passe renseignés sont différents", "", "danger")
+		} else if (criteriaPassword.minLength && criteriaPassword.hasLowercase && criteriaPassword.hasUppercase && criteriaPassword.hasNumber) {
+			// checking if the password respect the instructions
 			onNext({ "password": formData.password })
-		// if not, alert the client
 		} else {
-			alert("Le mot de passe ne respecte pas les consignes")
+			// if not, alert the client
+			//alert("Le mot de passe ne respecte pas les consignes")
+			displayNotification("Le mot de passe ne respecte pas les consignes", "", "danger")
 		}
 	}
 

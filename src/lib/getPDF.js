@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { displayNotification } from '@lib/displayNotification.js'
 
 /**
  * Generates a signed URL for a PDF file stored in Supabase storage.
@@ -15,11 +16,12 @@ async function getSignedPDFUrl(fileName, expiresInSeconds = 60) {
 
     // Check if there was an error creating the signed URL
     if (error) {
-        console.error('Erreur lors de la création de l’URL signée :', error.message)
+        console.error('Erreur lors de la création de l’URL signée :', error)
+        displayNotification("Erreur lors de la création de l’URL signée", error.message, "danger")
         throw error
     }
 
-    console.log('URL signée créée avec succès :', data.signedUrl)
+    displayNotification("URL signée créée avec succès", data.signedUrl, "success")
     // Return the signed URL
     return data.signedUrl
 }

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useAuthor } from '../../context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
+import { displayNotification } from '@lib/displayNotification.js';
 
 import sendReply from '@lib/sendReply.js';
 import { supabase } from '@lib/supabaseClient';
@@ -49,6 +50,7 @@ function MessagesDashboard() {
 
     if (error) {
       console.error('Erreur de chargement des messages:', error);
+      displayNotification("Erreur de chargement des messages", error.message, "danger")
     } else {
       setMessages(data);
     }
@@ -62,13 +64,16 @@ function MessagesDashboard() {
   };
 
   const handleReplySend = async (id, reply) => {
-    console.log(`Réponse au message ${id} :`, reply);
+    displayNotification("Réponse au message " + id + " :", reply, "info", duration=0)
     const email = messages.find(msg => msg.id === id)?.User.email;
     const firstName = messages.find(msg => msg.id === id)?.User.firstName;
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
-    console.log('Email de l’utilisateur:', email);
+    displayNotification("E-mail de l'utilisateur :", email, "info", duration=0)
 
-    if (!email) return console.error("Aucun email trouvé.");
+    if (!email) {
+      displayNotification("Aucun e-mail trouvé", "", "danger")
+      return console.error("Aucun email trouvé.");
+    }
 
     try {
       const result = sendReply({
@@ -77,16 +82,16 @@ function MessagesDashboard() {
         reply: reply,
       });
 
-      console.log('Email envoyé !', result.text);
+      displayNotification("E-mail envoyé avec succès", "", "success")
     } catch (error) {
       console.error('Erreur d’envoi :', error);
+      displayNotification("Erreur d'envoi de l'e-mail", error.message, "danger")
     }
     handleDelete(id); // Delete the message after sending the reply
   };
 
   const handleDelete = async (id) => {
     const fileName = messages.find(msg => msg.id === id)?.pdf_name;
-    console.log('Suppression du message avec ID:', id, 'et fichier:', fileName);
     deletePDF(fileName)
     const { data, error } = await supabase
       .from('Messages')
@@ -94,13 +99,15 @@ function MessagesDashboard() {
       .eq('id', id);
     if (error) {
       console.error('Erreur de suppression:', error);
+      displayNotification("Erreur de suppression", error.message, "danger")
     } else {
+      displayNotification("Suppression effectuée avec succès", "", "success" )
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
     }
   };
 
   const handleDownloadPDF = (pdfName) => {
-    console.log('Ouverture de:', pdfName);
+    displayNotification("Ouverture de " + pdfName, "ID du message : " + id + " et fichier : " + fileName, "info")
     // Open the PDF in a new tab
     openPDF(pdfName, 10, "messages");
   };

@@ -1,18 +1,16 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from 'react';
+import { useCart } from "../context/CartContext.jsx";
+import Slider from "react-slick";
+import { supabase } from "../lib/supabaseClient";
+import { useAuthor } from '../context/AuthorContext'
 
 // Importing common components
 import FunctionButton from "../common/FunctionButton"
 
-
-import Slider from "react-slick";
-import { supabase } from "../lib/supabaseClient";
-
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png"
-
-const stockIncertainLimit = 3   // Limit (included) under which the 'Stock Incertain' label is displayed
 
 {/* CAROUSEL ARROWS */ }
 function SampleNextArrow(props) {
@@ -38,6 +36,23 @@ function SamplePrevArrow(props) {
 }
 
 function ProductCarousel({ data }) {
+  const { user, loading } = useAuthor()
+  const { cart, setCart } = useCart()
+
+  const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
+
+  const fetchStockIncertainThreshold = async () => {
+    const { data, error } = await supabase
+      .from('constants')
+      .select('value')
+      .eq("name", "stockIncertainThreshold")
+      .maybeSingle();
+    if (!error) {
+      setStockIncertainThreshold(data.value)
+    }
+  };
+  fetchStockIncertainThreshold();
+
   const settings = {
     infinite: false,
     speed: 500,
@@ -53,60 +68,57 @@ function ProductCarousel({ data }) {
 
   function DisplayProduct({ product }) {
     function DisplayButtons({ product }) {
-      const [nbProd, setNbProd] = useState(product.nbInCart)
+      if (user) {
 
-      const AddToCart = () => {
-        setNbProd(nbProd + 1)
-        product.nbInCart = nbProd
-      }
-
-      const RemoveFromCart = () => {
-        if (nbProd > 0) {
-          setNbProd(nbProd - 1)
-          product.nbInCart = nbProd
-        }
-      }
-
-      if (nbProd > 0) {
-        return <div className="flex jusitfy-end">
-          <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
-          <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{nbProd}</p>
-          <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
-        </div>
-      }
-      else {
-        return <div className="flex jusitfy-end">
-          <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
-        </div>
-      }
-    }
-
-    function DisplayImage({ product }) {
-      const [imageUrl, setImageUrl] = useState(null);
-
-      useEffect(() => {
-        async function fetchImage() {
-          const { data, error } = await supabase
-            .storage
-            .from("images")
-            .download(product.image_name);
-
-          if (error) {
-            console.error("Erreur lors du téléchargement de l'image " + product.image_name + " : ", error.message);
-            return
+        const AddToCart = () => {
+          if (Object.keys(cart).includes(product.id)) {
+            // Product already in cart
+            setCart(prevData => ({
+              ...prevData,
+              [product.id]: prevData[product.id] + 1
+            }))
           }
-
-          const url = URL.createObjectURL(data);
-          setImageUrl(url);
-
+          else {
+            // New product added to cart
+            setCart(prevData => ({
+              ...prevData,
+              [product.id]: 1
+            }))
+          }
         }
 
-        fetchImage();
-      }, [product.image_name]);
+        const RemoveFromCart = () => {
+          if (Object.keys(cart).includes(product.id)) {   // Should always be true when function called
+            if (cart[product.id] <= 1) {
+              // Removing last item of this product from cart : product removed from cart
+              setCart(prevData => {
+                const newCart = { ...prevData };
+                delete newCart[product.id];
+                return newCart;
+              });
+            }
+            else {
+              setCart(prevData => ({
+                ...prevData,
+                [product.id]: prevData[product.id] - 1
+              }))
+            }
+          }
+        }
 
-      return <>
-        <img src={imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
-      </>
+        if (Object.keys(cart).includes(product.id) && cart[product.id] > 0) {
+          return <div className="flex jusitfy-end">
+            <FunctionButton className="text-white bg-[#FF8200] hover:bg-[#ff9800] rounded-full text-sm px-2 py-0.5 mb-2" buttonText="-" fun={RemoveFromCart} />
+            <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">{cart[product.id] || ""}</p>
+            <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
+          </div>
+        }
+        else {
+          return <div className="flex jusitfy-end">
+            <FunctionButton className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right" buttonText="+" fun={AddToCart} />
+          </div>
+        }
+      }
     }
 
     return <>
@@ -121,13 +133,13 @@ function ProductCarousel({ data }) {
           <div className="text-[#ff6161] text-xs ml-0">Prix en magasin : {product.price}€</div>
         </div>
         <div className="relative text-center">
-          <DisplayImage product={product}></DisplayImage>
-          {product.stock <= stockIncertainLimit && (
-          <div className="w-full absolute top-0 left-0 text-center mt-0">
-            <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
-              STOCK INCERTAIN
-            </p>
-          </div>
+          <img src={product.imageUrl || roundLogo} alt={product.name} className="w-full h-40 object-contain" />
+          {product.stock <= stockIncertainThreshold && (
+            <div className="w-full absolute top-0 left-0 text-center mt-0">
+              <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
+                STOCK INCERTAIN
+              </p>
+            </div>
           )}
         </div>
         <div className="p-4">

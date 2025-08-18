@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { displayNotification } from '@lib/displayNotification.js'
 
 async function uploadPDF(file, fileName, folder) {
     console.log('Uploading file:', fileName, { upsert: false });
@@ -14,11 +15,12 @@ async function uploadPDF(file, fileName, folder) {
         });
 
     if (uploadError) {
-        console.error('Erreur lors de l’upload :', uploadError.message);
+        console.error('Erreur lors de l’upload :', uploadError);
+        displayNotification("Erreur lors de l'envoi de l'upload du fichier " + fileName, uploadError.message, "danger")
         return { success: false, error: uploadError };;
     }
 
-    console.log('Upload terminé avec succès :', uploadData);
+    displayNotification("Upload terminé avec succès", uploadData, "success")
     return { success: true, data: uploadData };
 }
 

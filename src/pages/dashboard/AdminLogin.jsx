@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuthor } from '../../context/AuthorContext';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "@common/FormInput.jsx";
@@ -38,12 +39,13 @@ function AdminLogin() {
         });
 
         if (loginError) {
-            console.error("Erreur login:", loginError.message);
+            console.error("Erreur login:", loginError);
+            displayNotification("Erreur lors de la connexion", loginError.message, "danger")
             return;
         }
 
         const userId = loginData.user.id;
-        console.log("User ID:", userId);
+        displayNotification("ID de l'utilisateur :", userId, "info")
 
         // 2. Check if the user is an admin
         const [adminAnswer] = await Promise.all([
@@ -51,7 +53,7 @@ function AdminLogin() {
         ]);
 
         if (adminAnswer) {
-            console.log('Success: admin logged in');
+            displayNotification("Connexion admin effectuée avec succès", "success", "top")
             navigate('/admin/users')
             return;
         } else {

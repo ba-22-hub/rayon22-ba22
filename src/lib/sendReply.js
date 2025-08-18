@@ -1,5 +1,6 @@
 // Importing dependencies
 import sendMail from '@lib/sendMail.js';
+import { displayNotification } from '@lib/displayNotification.js'
 
 const templateID = 'template_t2ldyj5';
 
@@ -12,11 +13,12 @@ function sendReply({ email, name, reply }) {
 
     return sendMail(templateID, templateParams)
         .then(response => {
-            console.log('Reply sent successfully:', response);
+            displayNotification("Réponse envoyée avec succès", response, "success")
             return response;
         })
         .catch(error => {
             console.error('Error sending reply:', error);
+            displayNotification("Erreur lors de l'envoi de la réponse", error.message, "danger")
             throw error;
         });
 }

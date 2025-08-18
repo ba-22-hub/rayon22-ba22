@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState, useEffect } from 'react';
+import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FormInput from "../common/FormInput"
@@ -44,7 +45,7 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        console.log("Form submitted with data:", formData);
+        displayNotification("Formulaire soumis avec succès", "", "success")
 
         onNext();
 
@@ -125,7 +126,7 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
                     />
                     <label className="text-rayonblue ml-2">J’ai lu et j'accepte les conditions d’utilisation.    </label>
                 </div>
-                    <span href="" className='text-rayonlightblue text-sm ml-[20%]'>Lire les conditions d'utilisation</span> <br />
+                <span href="" className='text-rayonlightblue text-sm ml-[20%]'>Lire les conditions d'utilisation</span> <br />
 
                 <button type="submit" className='text-center-white w-[50%] ml-[25%] mb-3 mt-[5%] h-[2rem] bg-rayonorange'>Valider</button> <br />
                 <button onClick={onPrevious} className='text-center text-rayonorange bg-white w-[50%] ml-[25%] mb-[4%] h-[2rem] rounded-lg border border-rayonorange '>⮪ Précédent</button>
