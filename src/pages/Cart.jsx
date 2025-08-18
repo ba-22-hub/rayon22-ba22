@@ -38,7 +38,7 @@ function Cart() {
     const [loading, setLoading] = useState(true);
 
     const { user, loading: authorLoading, checkHasRights } = useAuthor()
-    const { cart, setCart } = useCart()
+    const { cart, setCart, clearCart } = useCart()
 
     let navigate = useNavigate()
 
@@ -290,6 +290,8 @@ function Cart() {
             } else {
                 console.error("Aucune URL Stripe renvoyée par la fonction edge.");
             }
+
+            clearCart();
         } catch (err) {
             console.error("Erreur Stripe :", err);
         }

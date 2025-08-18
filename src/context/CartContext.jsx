@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useAuthor } from './AuthorContext'
+import { displayNotification } from '../lib/displayNotification'
 
 /*
 HOW TO USE THE CONTEXT ?? 
@@ -22,8 +23,13 @@ function CartProvider({ children }) {
     useEffect(() => {
         if (!loading) {
             if (user?.id) {
-                const saved = localStorage.getItem(user.id)
-                setCart(saved ? JSON.parse(saved) : {})
+                try {
+                    const saved = localStorage.getItem(user.id)
+                    setCart(saved ? JSON.parse(saved) : {})
+                } catch (e) {
+                    displayNotification("Erreur de récupération du panier", "", "danger")
+                    setCart({})
+                }
             } else {
                 setCart({})
             }
@@ -37,8 +43,15 @@ function CartProvider({ children }) {
         }
     }, [cart, user])
 
+    function clearCart() {
+        if (user?.id) {
+            localStorage.setItem(user.id, JSON.stringify({}))
+            setCart({})
+        }
+    }
+
     return (
-        <CartContext.Provider value={{ cart, setCart }}>
+        <CartContext.Provider value={{ cart, setCart, clearCart }}>
             {children}
         </CartContext.Provider>
     );
