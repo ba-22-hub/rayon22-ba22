@@ -52,12 +52,12 @@ function Cart() {
         } else {
             checkHasRights(user.id) // user doesn't have rights
                 .then((rights) => {
-                    if(!rights){
+                    if (!rights) {
                         notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
-                        navigate('/account') 
+                        navigate('/account')
                     }
                 })
-            
+
         }
         // end author routine 
 
@@ -184,7 +184,6 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
             )
             return;
         }
