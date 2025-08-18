@@ -12,19 +12,19 @@ Cette plateforme vise à fluidifier la gestion administrative tout en amélioran
 
 
 ## 📂 Table des matières
-- [Guide d'installation](#📥-guide-dinstallation)
-    - [Cloner le projet](#💻-1-cloner-le-projet-mode-développeur)
-    - [Exécutable Electron](#▶️-2-utiliser-lexécutable-electron-mode-simplifié)
-- [Guide d'utilisation](#🧑‍💼-guide-dutilisation)
-    - [Gestion des utilisateurs](#👥-gestion-des-utilisateurs)
-    - [Gestion des produits](#🧾-gestion-des-produits)
-- [Guide de programmation](#🧑‍💻-guide-de-programmation)
-    - [Technologie utilisées](#⚙️-technologies-utilisées)
-    - [Installation du projet](#🚀-installation-du-projet)
-    - [Strucutre du projet](#📂-structure-du-projet)
-- [Informations complémentaires](#📌-informations-complémentaires)
-    - [Équipe](#👥-équipe)
-    - [License](#📝-licence)
+- [Guide d'installation](#-guide-dinstallation)
+    - [Cloner le projet](#-1-cloner-le-projet-mode-développeur)
+    - [Exécutable Electron](#-2-utiliser-lexécutable-electron-mode-simplifié)
+- [Guide d'utilisation](#-guide-dutilisation)
+    - [Gestion des utilisateurs](#-gestion-des-utilisateurs)
+    - [Gestion des produits](#-gestion-des-produits)
+- [Guide de programmation](#-guide-de-programmation)
+    - [Technologie utilisées](#-technologies-utilisées)
+    - [Installation du projet](#-installation-du-projet)
+    - [Strucutre du projet](#-structure-du-projet)
+- [Informations complémentaires](#-informations-complémentaires)
+    - [Équipe](#-équipe)
+    - [License](#-licence)
 
 ## 📥 Guide d'installation
 
@@ -118,7 +118,7 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 - Avant la validation du panier, une **notification** avertit si un produit n’est plus disponible.
 
-<img width="1920" alt="notification-stock" src="https://github.com/user-attachments/assets/xxxxx" />
+<img width="404" height="99" alt="image" src="https://github.com/user-attachments/assets/c4b21d8c-d05f-4be8-9a5e-6e3f401e84b1" />
 
 - Le paiement peut ensuite être effectué via **Stripe**, en carte bancaire ou solutions alternatives (cartes prépayées, etc.).
 
