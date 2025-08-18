@@ -192,7 +192,6 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
             )
             return;
         }
@@ -201,7 +200,6 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
             )
             return;
         }
