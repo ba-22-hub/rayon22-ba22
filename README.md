@@ -92,8 +92,6 @@ Cette solution est recommandée pour une démonstration rapide ou un test utilis
 
 ### 🧾 Gestion des produits
 
-### 🧾 Gestion des produits
-
 - L’utilisateur a accès à un **catalogue** listant les différents produits disponibles (alimentaires, hygiène, etc.) avec leurs caractéristiques (nom, prix, poids…).
 
 <img width="1920" height="931" alt="image" src="https://github.com/user-attachments/assets/bd16a389-75e2-4813-9799-b6f659988539" />
