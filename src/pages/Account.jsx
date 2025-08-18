@@ -20,6 +20,7 @@ function Account() {
     const [file, setFile] = useState(null)
     const [activeRequests, setActiveRequest] = useState(false)
     const { user, logout, isAdmin, loading, checkIsAdmin } = useAuthor()
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fileInputRef = useRef(null);
 
@@ -134,44 +135,44 @@ function Account() {
     }
 
     async function handleFileSubmit() {
-        // 1) upload the file 
-        let uploadSuccess = true
-        const name = `${Date.now()}_${file.name}`
-        const { success, error } = await uploadPDF(file, name, "requests")
-        if (!success) {
-            displayNotification("Échec de l'upload du fichier PDF", error.message, "danger")
-            // alert("Erreur lors de l'upload du fichier PDF.");
-            uploadSuccess = false;
-        }
-
-        // 2) if the file has been uploaded, add the request in the db 
-        if (!uploadSuccess) return;
-
-        const newRequest = {
-            user_id: user.id,
-            pdf_name: name,
-        };
-
-        const { error: insertError } = await supabase
-            .from('Requests')
-            .insert([newRequest]);
-
-        if (insertError) {
-            displayNotification("Erreur lors de l'envoi de la requête", insertError.message, "danger")
-            // alert("Erreur lors de l'envoi de la requête.");
+        if (!file) {
+            displayNotification("Veuillez sélectionner un fichier avant de valider", "", "warning");
             return;
         }
 
-        displayNotification("Requête envoyée avec succès", "", "success")
+        setIsSubmitting(true); // start the loading
 
-        // manually emptying the file field
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+        try {
+            // 1) upload the fichier
+            const name = `${Date.now()}_${file.name}`;
+            const { success, error } = await uploadPDF(file, name, "requests");
+
+            if (!success) {
+                displayNotification("Échec de l'upload du fichier PDF", error.message, "danger");
+                return;
+            }
+
+            // 2) Insertyion in the db
+            const newRequest = { user_id: user.id, pdf_name: name };
+            const { error: insertError } = await supabase.from('Requests').insert([newRequest]);
+
+            if (insertError) {
+                displayNotification("Erreur lors de l'envoi de la requête", insertError.message, "danger");
+                return;
+            }
+
+            displayNotification("Requête envoyée avec succès", "", "success");
+
+            // reset file input
+            if (fileInputRef.current) fileInputRef.current.value = '';
+            setFile(null);
+            setActiveRequest(true);
+
+        } catch (err) {
+            displayNotification("Erreur inattendue", err.message, "danger");
+        } finally {
+            setIsSubmitting(false); // stop the loading
         }
-        setFile(null)
-        setActiveRequest(false)
-        alert("La requête à bien été prise en compte ! ")
-
     }
 
     function handleDeconnection() {
@@ -327,6 +328,8 @@ function Account() {
                             <h2 className="text-rayonblue text-[1.5em] font-semibold">Renouveler votre éligibilité</h2>
                             {activeRequests ? (
                                 <p>Une requête est en cours de traitement...</p>
+                            ) : isSubmitting ? (
+                                <Loading />
                             ) : (
                                 <div className="flex flex-row">
                                     <input
