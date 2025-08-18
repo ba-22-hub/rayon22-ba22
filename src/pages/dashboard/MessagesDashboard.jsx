@@ -64,11 +64,11 @@ function MessagesDashboard() {
   };
 
   const handleReplySend = async (id, reply) => {
-    displayNotification("Réponse au message " + id + " :", reply, "info", duration = 0)
+    displayNotification("Réponse au message " + id + " :", reply, "info", 0)
     const email = messages.find(msg => msg.id === id)?.User.email;
     const firstName = messages.find(msg => msg.id === id)?.User.firstName;
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
-    displayNotification("E-mail de l'utilisateur :", email, "info", duration = 0)
+    displayNotification("E-mail de l'utilisateur :", email, "info", 0)
 
     if (!email) {
       displayNotification("Aucun e-mail trouvé", "", "danger")

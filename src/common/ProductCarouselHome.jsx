@@ -25,7 +25,7 @@ function ProductCarousel({ data }) {
         {data.map((product, idx) => (
           <div key={idx} className="p-4">
             <div className="bg-white shadow-md rounded-xl overflow-hidden text-center">
-              <img src={product.image} alt={product.name} className="w-full h-40 object-contain" />
+              <img src={product.imageUrl} alt={product.name} className="w-full h-40 object-contain" />
               <div className="p-4">
                 <h3 className="text-[#3435FF] text-lg font-semibold mb-2">{product.name}</h3>
                 <p className="text-gray-500 line-through">{product.price || ''}€</p>

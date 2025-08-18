@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useAuthor } from './AuthorContext'
+import { displayNotification } from '../lib/displayNotification'
 
 /*
 HOW TO USE THE CONTEXT ?? 
@@ -15,26 +16,42 @@ setCart : to update the cart
 const CartContext = createContext()
 
 function CartProvider({ children }) {
-    const { user } = useAuthor()
-    
-    const [cart, setCart] = useState(() => {
-        if (user?.id) {
-            const saved = localStorage.getItem(user.id);
-            return saved ? JSON.parse(saved) : {};
-        }
-        return {}; // No user connected : empty cart
-    });
+    const { user, loading } = useAuthor()
+    const [cart, setCart] = useState(null)
 
+    // Retrieving old cart
     useEffect(() => {
-        if (user?.id) {
-            localStorage.setItem(user.id, JSON.stringify(cart));
-        } else {
-            setCart({});
+        if (!loading) {
+            if (user?.id) {
+                try {
+                    const saved = localStorage.getItem(user.id)
+                    setCart(saved ? JSON.parse(saved) : {})
+                } catch (e) {
+                    displayNotification("Erreur de récupération du panier", "", "danger")
+                    setCart({})
+                }
+            } else {
+                setCart({})
+            }
         }
-    }, [user]);
+    }, [user, loading])
+
+    // Updating cart
+    useEffect(() => {
+        if (user?.id && cart !== null) {
+            localStorage.setItem(user.id, JSON.stringify(cart))
+        }
+    }, [cart, user])
+
+    function clearCart() {
+        if (user?.id) {
+            localStorage.setItem(user.id, JSON.stringify({}))
+            setCart({})
+        }
+    }
 
     return (
-        <CartContext.Provider value={{ cart, setCart }}>
+        <CartContext.Provider value={{ cart, setCart, clearCart }}>
             {children}
         </CartContext.Provider>
     );

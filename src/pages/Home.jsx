@@ -1,3 +1,7 @@
+// Importing dependencies
+import { useEffect, useState } from 'react';
+import { supabase } from '@lib/supabaseClient.js';
+
 // Importing common components
 import PageButton from "@common/PageButton"
 import ShapeNumber from "@common/ShapeNumber"
@@ -21,50 +25,46 @@ import tuna from "@assets/Photos/Thon.png"
 import sponges from "@assets/Photos/Eponges.png"
 
 {/* Data product carousel */ }
-const dataProductCarousel = [
-    {
-        name: "Pâte torti",
-        image: pasta,
-        price: "0.50",
-        salePrice: "0.05",
-    },
-    {
-        name: "Riz 10 minutes",
-        image: rice,
-        price: "0.50",
-        salePrice: "0.10",
-    },
-    {
-        name: "Lentilles cuisinées",
-        image: lentil,
-        price: "0.50",
-        salePrice: "0.05",
-    },
-    {
-        name: "Haricot vert extra-fin",
-        image: bean,
-        price: "1",
-        salePrice: "0.10",
-    },
-    {
-        name: "Thon",
-        image: tuna,
-        price: "1.50",
-        salePrice: "0.15",
-    },
-    {
-        name: "3 gratte éponge",
-        image: sponges,
-        price: "1.50",
-        salePrice: "0.15",
-    },
-];
 
 /**
  * The Home page.
  * @returns {React.ReactElement} Home component.
  */
+
 function Home() {
+    const [products, setProducts] = useState([])
+    const [update, setUpdate] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const { data, error } = await supabase
+                .from("products")
+                .select("*")
+            if (error) {
+                displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
+            } else {
+                const productsWithImages = await Promise.all(
+                    data.map(async product => {
+                        const { data: imgData, error: imgError } = await supabase
+                            .storage
+                            .from("images")
+                            .download(product.image_name);
+
+                        if (imgError) {
+                            displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+                        } else {
+                            product.imageUrl = URL.createObjectURL(imgData);
+                        }
+                        return product;
+                    })
+                );
+
+                setProducts(productsWithImages)
+            }
+        };
+        fetchProducts();
+    }, [update]);
+
     return (
         <>
             {/* Hero section with blue background */}
@@ -173,7 +173,7 @@ function Home() {
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <ProductCarousel data={dataProductCarousel} />
+            <ProductCarousel data={products} />
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">

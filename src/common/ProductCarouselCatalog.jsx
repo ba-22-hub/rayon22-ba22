@@ -1,6 +1,6 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCart } from "../context/CartContext.jsx";
 import Slider from "react-slick";
 import { supabase } from "../lib/supabaseClient";
@@ -36,7 +36,7 @@ function SamplePrevArrow(props) {
 }
 
 function ProductCarousel({ data }) {
-  const { user, loading } = useAuthor()
+  const { user } = useAuthor()
   const { cart, setCart } = useCart()
 
   const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
