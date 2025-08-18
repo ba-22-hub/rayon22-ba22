@@ -1,3 +1,7 @@
+// Importing dependencies
+import { useState } from 'react';
+import { supabase } from '@lib/supabaseClient.js';
+
 // Importing common components
 import PageButton from "@common/PageButton"
 import ShapeNumber from "@common/ShapeNumber"
@@ -65,6 +69,36 @@ const dataProductCarousel = [
  * @returns {React.ReactElement} Home component.
  */
 function Home() {
+    const [products, setProducts] = useState([])
+
+    const fetchProducts = async () => {
+        const { data, error } = await supabase
+            .from("products")
+            .select("*")
+        if (error) {
+            displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
+        } else {
+            const productsWithImages = await Promise.all(
+                data.map(async product => {
+                    const { data: imgData, error: imgError } = await supabase
+                        .storage
+                        .from("images")
+                        .download(product.image_name);
+
+                    if (imgError) {
+                        displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+                    } else {
+                        product.imageUrl = URL.createObjectURL(imgData);
+                    }
+                    return product;
+                })
+            );
+
+            setProducts(productsWithImages)
+        }
+    };
+    fetchProducts();
+
     return (
         <>
             {/* Hero section with blue background */}
@@ -173,7 +207,7 @@ function Home() {
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <ProductCarousel data={dataProductCarousel} />
+            <ProductCarousel data={products} />
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">
