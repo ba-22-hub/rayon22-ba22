@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
-import { useAuthor } from '../../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 
@@ -64,11 +64,11 @@ function MessagesDashboard() {
   };
 
   const handleReplySend = async (id, reply) => {
-    displayNotification("Réponse au message " + id + " :", reply, "info", duration=0)
+    displayNotification("Réponse au message " + id + " :", reply, "info", duration = 0)
     const email = messages.find(msg => msg.id === id)?.User.email;
     const firstName = messages.find(msg => msg.id === id)?.User.firstName;
     const lastName = messages.find(msg => msg.id === id)?.User.lastName;
-    displayNotification("E-mail de l'utilisateur :", email, "info", duration=0)
+    displayNotification("E-mail de l'utilisateur :", email, "info", duration = 0)
 
     if (!email) {
       displayNotification("Aucun e-mail trouvé", "", "danger")
@@ -101,7 +101,7 @@ function MessagesDashboard() {
       console.error('Erreur de suppression:', error);
       displayNotification("Erreur de suppression", error.message, "danger")
     } else {
-      displayNotification("Suppression effectuée avec succès", "", "success" )
+      displayNotification("Suppression effectuée avec succès", "", "success")
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
     }
   };

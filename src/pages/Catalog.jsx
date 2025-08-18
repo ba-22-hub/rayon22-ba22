@@ -4,7 +4,8 @@ import { supabase } from '@lib/supabaseClient.js';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import ProductCarousel from "../common/ProductCarouselCatalog"
+import ProductCarousel from "@common/ProductCarouselCatalog"
+import Loading from "@common/Loading.jsx"
 
 /**
  * The Catalog page.
@@ -14,15 +15,17 @@ import ProductCarousel from "../common/ProductCarouselCatalog"
 const SearchBar = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
-  const [update, setUpdate] = useState(true)
+  const [update, setUpdate] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from('products')
         .select('*');
       if (error) {
-                    displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
+        displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
       } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
@@ -32,7 +35,7 @@ const SearchBar = () => {
               .download(product.image_name);
 
             if (imgError) {
-                    displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+              displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }
@@ -42,6 +45,7 @@ const SearchBar = () => {
 
         setProducts(productsWithImages);
       }
+      setLoading(false);
     };
 
     fetchProducts()
@@ -62,8 +66,7 @@ const SearchBar = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-
-      <ProductCarousel data={filteredProducts}></ProductCarousel>
+      {loading ? <Loading /> : <ProductCarousel data={filteredProducts}></ProductCarousel>}
     </div>
   );
 }
@@ -71,6 +74,7 @@ const SearchBar = () => {
 function Catalog() {
   const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]
   const [productsByCategory, setProductsByCategory] = useState({})
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductsFromCategory = async (category) => {
@@ -79,7 +83,7 @@ function Catalog() {
         .select("*")
         .eq('category', category);
       if (error) {
-                    displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
+        displayNotification("Erreur lors du téléchargement des produits", error.message, "danger")
       } else {
         const productsWithImages = await Promise.all(
           data.map(async product => {
@@ -89,7 +93,7 @@ function Catalog() {
               .download(product.image_name);
 
             if (imgError) {
-                    displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
+              displayNotification("Erreur lors du téléchargement de l'image " + product.image_name, imgError.message, "warning")
             } else {
               product.imageUrl = URL.createObjectURL(imgData);
             }
@@ -105,11 +109,9 @@ function Catalog() {
     };
 
     const fetchProductsByCategories = async () => {
-      {
-        categoriesList.map((category) => (
-          fetchProductsFromCategory(category)
-        ))
-      }
+      setLoading(true);
+      await Promise.all(categoriesList.map((category) => fetchProductsFromCategory(category)));
+      setLoading(false);
     }
     fetchProductsByCategories()
   }, []);
@@ -126,22 +128,24 @@ function Catalog() {
         </p>
       </div>
 
-      <div>
-        {categoriesList.map((category) => {
-          const products = productsByCategory[category] || [];
-          if (products.length > 0) {
-            return <div key={category}>
-              <div className="flex items-start ...">
-                <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0, 1).toUpperCase() + category.slice(1, category.length)}</p>
+      {loading ? <Loading /> : (
+        <div>
+          {categoriesList.map((category) => {
+            const products = productsByCategory[category] || [];
+            if (products.length > 0) {
+              return <div key={category}>
+                <div className="flex items-start ...">
+                  <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0, 1).toUpperCase() + category.slice(1, category.length)}</p>
+                </div>
+                <ProductCarousel data={products} />
               </div>
-              <ProductCarousel data={products} />
-            </div>
-          }
-          else {
-            return null
-          }
-        })}
-      </div>
+            }
+            else {
+              return null
+            }
+          })}
+        </div>
+      )}
     </>
   )
 }

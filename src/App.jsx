@@ -10,7 +10,7 @@ import React from 'react';
 import { ReactNotifications } from 'react-notifications-component'
 
 
-import { useAuthor } from "./context/AuthorContext.jsx";
+import { useAuthor } from "@context/AuthorContext.jsx";
 
 // Importing the style
 import './styles/navbar.css'
@@ -18,28 +18,27 @@ import 'react-notifications-component/dist/theme.css'
 
 
 // Importing assets
-import rayonLogo from "./assets/logos/roundLogo.png"
-import banqueLogo from "./assets/logos/banquesAlimentaires.png"
-import avatar from "./assets/Assets/avatar2.png"
+import rayonLogo from "@assets/logos/roundLogo.png"
+import avatar from "@assets/Assets/avatar2.png"
 
 // Importing all the pages
-import About from './pages/About.jsx'
-import Cart from './pages/Cart.jsx'
-import Catalog from './pages/Catalog.jsx'
-import Contact from './pages/Contact.jsx'
-import ForgotPassword from './pages/ForgotPassword.jsx'
-import Home from './pages/Home.jsx'
-import HowItWorks from './pages/HowItWorks.jsx'
-import Login from './pages/Login.jsx'
-import More from './pages/More.jsx'
-import News from './pages/News.jsx'
-import Register from './pages/Register.jsx'
-import Sponsor from './pages/Sponsor.jsx'
-import Account from "./pages/Account.jsx";
-import PaymentSuccess from "./pages/PaymentSuccess.jsx";
+import About from '@pages/About.jsx'
+import Cart from '@pages/Cart.jsx'
+import Catalog from '@pages/Catalog.jsx'
+import Contact from '@pages/Contact.jsx'
+import ForgotPassword from '@pages/ForgotPassword.jsx'
+import Home from '@pages/Home.jsx'
+import HowItWorks from '@pages/HowItWorks.jsx'
+import Login from '@pages/Login.jsx'
+import More from '@pages/More.jsx'
+import News from '@pages/News.jsx'
+import Register from '@pages/Register.jsx'
+import Sponsor from '@pages/Sponsor.jsx'
+import Account from "@pages/Account.jsx";
+import PaymentSuccess from "@pages/PaymentSuccess.jsx";
 
 // Importing common components
-import Footer from "./common/Footer.jsx";
+import Footer from "@common/Footer.jsx";
 
 /**
  * A component wrapping all the website pages.

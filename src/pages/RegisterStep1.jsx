@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
-import FormInput from "../common/FormInput"
-import PageButton from '../common/PageButton';
+import FormInput from "@common/FormInput"
+import PageButton from '@common/PageButton';
 
 
 

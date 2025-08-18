@@ -1,63 +1,63 @@
 // Importing common components
-import PageButton from "../common/PageButton"
-import ShapeNumber from "../common/ShapeNumber"
-import ProductCarousel from "../common/ProductCarouselHome"
+import PageButton from "@common/PageButton"
+import ShapeNumber from "@common/ShapeNumber"
+import ProductCarousel from "@common/ProductCarouselHome"
 
 // Importing assets
-import orangeWoman from "../assets/Photos/giletorange2.png"
-import instagram from "../assets/logos/instagram.png"
-import dpd from "../assets/logos/dpd.png"
-import mondialRelay from "../assets/logos/mondialRelay.png"
-import pickup from "../assets/logos/pickup.png"
-import avatar from "../assets/Assets/avatar.png"
-import file from "../assets/Assets/file.png"
-import cart from "../assets/Assets/cart.png"
-import phoneApp from "../assets/Photos/phoneApp.png"
-import pasta from "../assets/Photos/Tortis.png"
-import rice from "../assets/Photos/Riz.png"
-import lentil from "../assets/Photos/Lentilles.png"
-import bean from "../assets/Photos/Haricot.png"
-import tuna from "../assets/Photos/Thon.png"
-import sponges from "../assets/Photos/Eponges.png"
+import orangeWoman from "@assets/Photos/giletorange2.png"
+import instagram from "@assets/logos/instagram.png"
+import dpd from "@assets/logos/dpd.png"
+import mondialRelay from "@assets/logos/mondialRelay.png"
+import pickup from "@assets/logos/pickup.png"
+import avatar from "@assets/Assets/avatar.png"
+import file from "@assets/Assets/file.png"
+import cart from "@assets/Assets/cart.png"
+import phoneApp from "@assets/Photos/phoneApp.png"
+import pasta from "@assets/Photos/Tortis.png"
+import rice from "@assets/Photos/Riz.png"
+import lentil from "@assets/Photos/Lentilles.png"
+import bean from "@assets/Photos/Haricot.png"
+import tuna from "@assets/Photos/Thon.png"
+import sponges from "@assets/Photos/Eponges.png"
 
-{/* Data product carousel */}
+{/* Data product carousel */ }
 const dataProductCarousel = [
-  {
-    name: "Pâte torti",
-    image: pasta,
-    price: "0.50",
-    salePrice: "0.05",
-  },
-  {
-    name: "Riz 10 minutes",
-    image: rice,
-    price: "0.50",
-    salePrice: "0.10",
-  },
-  {
-    name: "Lentilles cuisinées",
-    image: lentil,
-    price: "0.50",
-    salePrice: "0.05",
-  },
-  {
-    name: "Haricot vert extra-fin",
-    image: bean,
-    price: "1",
-    salePrice: "0.10",
-  },
-  {
-    name: "Thon",
-    image: tuna,
-    price: "1.50",
-    salePrice: "0.15",
-  },
-  {
-    name: "3 gratte éponge",
-    image: sponges,
-    price: "1.50",
-    salePrice: "0.15",
-  },
+    {
+        name: "Pâte torti",
+        image: pasta,
+        price: "0.50",
+        salePrice: "0.05",
+    },
+    {
+        name: "Riz 10 minutes",
+        image: rice,
+        price: "0.50",
+        salePrice: "0.10",
+    },
+    {
+        name: "Lentilles cuisinées",
+        image: lentil,
+        price: "0.50",
+        salePrice: "0.05",
+    },
+    {
+        name: "Haricot vert extra-fin",
+        image: bean,
+        price: "1",
+        salePrice: "0.10",
+    },
+    {
+        name: "Thon",
+        image: tuna,
+        price: "1.50",
+        salePrice: "0.15",
+    },
+    {
+        name: "3 gratte éponge",
+        image: sponges,
+        price: "1.50",
+        salePrice: "0.15",
+    },
 ];
 
 /**
@@ -81,7 +81,7 @@ function Home() {
                     <img src={orangeWoman} className="ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
                 </div>
                 <div className="ml-20 mb-8">
-                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
+                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'} />
                 </div>
             </div>
 
@@ -94,7 +94,7 @@ function Home() {
                         Suivez-nous sur Instagram
                     </a>
                 </div>
-                
+
                 {/* Partners Section */}
                 <div className="w-1/2 h-52 border border-rayonblue box-border bg-gray-50 flex flex-col items-center justify-between py-4">
                     <div className="flex items-center">
@@ -114,7 +114,7 @@ function Home() {
             {/* Comment commander section */}
             <div className="py-16 bg-gray-50">
                 <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Comment commander ?</h2>
-                
+
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start justify-center px-8">
                     {/* Column 1 - Inscription */}
                     <div className="flex-1 text-center px-8">
@@ -129,10 +129,10 @@ function Home() {
                             Crée ton espace et remplis le formulaire d'inscription.
                         </p>
                     </div>
-                    
+
                     {/* Vertical Line 1 */}
                     <div className="hidden md:block w-px bg-[#3435FF] h-80 mx-4"></div>
-                    
+
                     {/* Column 2 - Étude de dossier */}
                     <div className="flex-1 text-center px-8">
                         <div className="flex justify-center mb-4">
@@ -146,10 +146,10 @@ function Home() {
                             Une fois ton dossier envoyé, il est étudié par notre équipe. Dans certains cas, un rendez-vous avec une assistante sociale de proximité sera nécessaire. Dans tout les cas, une validation des conditions de ressources sera réalisée. Tu peux suivre l'évolution de ton dossier à tout moment.
                         </p>
                     </div>
-                    
+
                     {/* Vertical Line 2 */}
                     <div className="hidden md:block w-px bg-[#3435FF] h-80 mx-4"></div>
-                    
+
                     {/* Column 3 - À vos courses */}
                     <div className="flex-1 text-center px-8">
                         <div className="flex justify-center mb-4">
@@ -164,41 +164,41 @@ function Home() {
                         </p>
                     </div>
                 </div>
-                
+
                 {/* Button */}
                 <div className="flex justify-center mt-12">
-                    <PageButton buttonText={'Je m\'inscris ➔'} page={'/register'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'}/>
+                    <PageButton buttonText={'Je m\'inscris ➔'} page={'/register'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'} />
                 </div>
             </div>
 
             {/* Nos Produits */}
             <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Nos produits</h2>
-            <ProductCarousel data={dataProductCarousel}/>
+            <ProductCarousel data={dataProductCarousel} />
 
             {/* Chiffres clés à retenir section */}
             <div className="py-16 bg-white">
                 <h2 className="text-center text-[#3435FF] text-4xl font-bold mb-12">Chiffres clés à retenir</h2>
-                
+
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center px-8">
                     {/* Stat 1 - CCAS */}
                     <div className="flex-1 text-center px-8">
                         <div className="text-6xl font-bold text-black mb-2">69</div>
                         <div className="text-xl font-semibold text-black">CCAS*</div>
                     </div>
-                    
+
                     {/* Stat 2 - Repas */}
                     <div className="flex-1 text-center px-8">
                         <div className="text-6xl font-bold text-black mb-2">1 100 000</div>
                         <div className="text-xl font-semibold text-black">Repas/an distribués</div>
                     </div>
-                    
+
                     {/* Stat 3 - Épiceries */}
                     <div className="flex-1 text-center px-8">
                         <div className="text-6xl font-bold text-black mb-2">4</div>
                         <div className="text-xl font-semibold text-black">Épiceries solidaires</div>
                     </div>
                 </div>
-                
+
                 <div className="text-center mt-8">
                     <p className="text-sm text-gray-600">*CCAS : Centre Communal d'Action Sociale</p>
                 </div>
@@ -213,14 +213,14 @@ function Home() {
                             <img src={phoneApp} alt="Phone App" className="object-contain" />
                         </div>
                     </div>
-                    
+
                     {/* Content */}
                     <div className="flex-1 pl-0 md:pl-12">
                         <h2 className="text-3xl font-bold mb-6">
                             <span className="text-[#3435FF]">Le rayon est une initiative des </span>
                             <span className="text-[#FF8200]">banque alimentaires.</span>
                         </h2>
-                        
+
                         <div className="space-y-4 mb-8">
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
@@ -229,7 +229,7 @@ function Home() {
                                     <span className="text-[#3435FF] font-semibold text-3xl"> vivent avec moins de 200€ par mois.</span>
                                 </p>
                             </div>
-                            
+
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
@@ -237,7 +237,7 @@ function Home() {
                                     <span className="text-[#3435FF] font-semibold text-3xl"> est en insécurité alimentaire.</span>
                                 </p>
                             </div>
-                            
+
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
@@ -246,13 +246,13 @@ function Home() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="mb-6">
                             <p className="text-sm italic text-[#3435FF]">Source : La fage</p>
                         </div>
-                        
+
                         <div>
-                            <PageButton buttonText={'Toujours plus ➔'} page={'/more'} className={'text-white bg-rayonorange rounded-tight w-[70%] h-[2em]'}/>
+                            <PageButton buttonText={'Toujours plus ➔'} page={'/more'} className={'text-white bg-rayonorange rounded-tight w-[70%] h-[2em]'} />
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,9 @@ export default defineConfig({
     alias: {
       '@lib': path.resolve(__dirname, 'src/lib'),
       '@common': path.resolve(__dirname, 'src/common'),
+      '@assets': path.resolve(__dirname, 'src/assets'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@context': path.resolve(__dirname, 'src/context'),
     },
   },
   build: {

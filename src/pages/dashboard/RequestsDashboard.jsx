@@ -1,10 +1,9 @@
 // Importing dependencies
 import { useEffect, useState } from 'react';
-import emailjs from '@emailjs/browser';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
-import { useAuthor } from '../../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 

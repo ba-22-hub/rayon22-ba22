@@ -4,14 +4,14 @@ import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 
-import { useAuthor } from "../context/AuthorContext.jsx"
+import { useAuthor } from "@context/AuthorContext.jsx"
 
 // Importing common components
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
 import RegisterStep4 from './RegisterStep4';
-import Steper from '../common/Steper';
+import Steper from '@common/Steper';
 
 
 /**

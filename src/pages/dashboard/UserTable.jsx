@@ -4,7 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { deleteUser } from '@lib/deleteUser';
 import { patchUser } from '@lib/patchUser';
 import sendNotification from '@lib/sendNotification.js';
-import { useAuthor } from '../../context/AuthorContext';
+import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.js';
 

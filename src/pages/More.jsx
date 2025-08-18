@@ -1,8 +1,8 @@
 // Importing common components
-import LoremIpsum from "../common/LoremIpsum"
+import LoremIpsum from "@common/LoremIpsum"
 
 // Importing assets
-import student from "../assets/Photos/etudiante1.png"
+import student from "@assets/Photos/etudiante1.png"
 
 /**
  * The More page.
@@ -16,7 +16,7 @@ function More() {
                 <h1 className="ml-[480px] pt-10 mb-12 text-7xl font-bold">Toujours plus !</h1>
                 <img src={student} className="w-full h-[411px] object-cover" alt="Student" />
             </div>
-            
+
             {/* Info pratique section */}
             <div className="pt-20">
                 <h2 className="ml-20 text-4xl text-[#3435FF] font-semibold mb-4">Infos pratique</h2>

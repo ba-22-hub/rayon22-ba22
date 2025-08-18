@@ -1,23 +1,23 @@
+// Importing dependencies
 import { useState, useEffect, useRef } from 'react';
-import { useAuthor } from '../context/AuthorContext.jsx'
+import { useAuthor } from '@context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
-import { useCart } from "../context/CartContext.jsx";
+import { useCart } from "@context/CartContext.jsx";
 import { supabase } from "@lib/supabaseClient";
-import { stripePromise } from '@lib/stripeClient.js'
 import { displayNotification } from '@lib/displayNotification.js';
 
 // Importing common components
 import FunctionButton from "@common/FunctionButton"
 import PageButton from "@common/PageButton.jsx";
-import Loading from '@common/Loading.jsx';
+import Loading from "@common/Loading.jsx";
 
 // Importing assets
-import receipt from "../assets/Assets/ticket-caisse-ecriture.png"
-import orangeLine from "../assets/Assets/Trait orange.png"
-import orangeShape from "../assets/Assets/Coup crayon orange.svg"
-import blueRayonShape from "../assets/Assets/Rayons traits bleus.svg"
-import orangeCircle from "../assets/Assets/Cercle orange crayon.png"
-import roundLogo from "../assets/logos/roundLogo.png"
+import receipt from "@assets/Assets/ticket-caisse-ecriture.png"
+import orangeLine from "@assets/Assets/Trait orange.png"
+import orangeShape from "@assets/Assets/Coup crayon orange.svg"
+import blueRayonShape from "@assets/Assets/Rayons traits bleus.svg"
+import orangeCircle from "@assets/Assets/Cercle orange crayon.png"
+import roundLogo from "@assets/logos/roundLogo.png"
 
 // Importing styles
 import 'react-notifications-component/dist/theme.css'
@@ -35,15 +35,16 @@ function Cart() {
     const [productsNumberTotal, setProductsNumberTotal] = useState(0)
     const [shippingCost, setShippingCost] = useState(1)
     const isNotified = useRef(false)
+    const [loading, setLoading] = useState(true);
 
-    const { user, loading, hasRights, checkHasRights } = useAuthor()
+    const { user, loading: authorLoading } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
 
     useEffect(() => {
         // star author routine 
-        if (loading) return; // no needs to exec the useEffect if the rights aren't known
+        if (authorLoading) return; // no needs to exec the useEffect if the rights aren't known
 
         if (!user) { // user not login 
             navigate('/login')
@@ -60,7 +61,7 @@ function Cart() {
         }
         // end author routine 
 
-    }, [loading])
+    }, [authorLoading])
 
     // function to avoid double notification in the login routine
     function notify(message) {
@@ -76,6 +77,7 @@ function Cart() {
 
     useEffect(() => {
         const fetchDataProductsInCart = async () => {
+            setLoading(true);
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
@@ -101,6 +103,7 @@ function Cart() {
 
                 setProductsInCart(productsWithImages);
             }
+            setLoading(false);
         };
 
         const fetchShippingCost = async () => {
@@ -150,7 +153,7 @@ function Cart() {
             }
         }
 
-        // Vérifications limites utilisateur
+        // User's limits check
         const { data: userData, error: userError } = await supabase
             .from("User")
             .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
@@ -204,7 +207,7 @@ function Cart() {
             return;
         }
 
-        // Vérifier stock
+        // Check stock
         const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
         if (!areAvailableProducts) {
             displayNotification("Échec de validation du panier", "Stock de " + product.name + " insuffisant", "danger", duration = 7000)
@@ -380,7 +383,7 @@ function Cart() {
 
     return (
         <>
-            {!hasRights ? (
+            {loading || authorLoading ? (
                 <Loading />
             ) : (
                 <>
