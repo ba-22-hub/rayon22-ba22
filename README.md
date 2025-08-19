@@ -14,7 +14,7 @@ Cette plateforme vise à fluidifier la gestion administrative tout en amélioran
 ## 📂 Table des matières
 - [Guide d'installation](#-guide-dinstallation)
     - [Cloner le projet](#-1-cloner-le-projet-mode-développeur)
-    - [Exécutable Electron](#-2-utiliser-lexécutable-electron-mode-simplifié)
+    - [Exécutable Electron](#-2-utiliser-lexécutable-electron-mode-simplifié-non-maintenu)
 - [Guide d'utilisation](#-guide-dutilisation)
     - [Gestion des utilisateurs](#-gestion-des-utilisateurs)
     - [Gestion des produits](#-gestion-des-produits)
@@ -43,7 +43,7 @@ Vous pouvez :
 
 💡 Pour plus de détails, veuillez vous référer au [Guide de programmation](#guide-de-programmation).
 
-### ▶️ 2. Utiliser l’exécutable Electron (mode simplifié)
+### ~~▶️ 2. Utiliser l’exécutable Electron (mode simplifié)~~ (non maintenu)
 
 Un exécutable a été compilé pour permettre un lancement rapide et sans configuration :
 
@@ -52,6 +52,10 @@ Un exécutable a été compilé pour permettre un lancement rapide et sans confi
 - Une fois l’installation terminée, une fenêtre s’ouvrira automatiquement avec l’application web prête à l’emploi
 
 Cette solution est recommandée pour une démonstration rapide ou un test utilisateur sans connaissance technique particulière.
+
+⚠️ **L’exécutable Electron n’est plus maintenu dans ce projet.  
+Il avait été mis en place uniquement à des fins de test durant le développement.  
+Maintenant que le projet est finalisé, il n’est plus nécessaire et l’installation doit se faire exclusivement en clonant le dépôt et en suivant la procédure prévue.**
 
 ## 🧑‍💼 Guide d'utilisation
 
@@ -170,7 +174,7 @@ git clone git@github.com:dallatIkes/rayon22.git
 
 Installez les modules nécessaires au bon fonctionnement de l’application :
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 **4. Configuration des variables d’environnement**
