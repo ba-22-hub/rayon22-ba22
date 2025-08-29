@@ -41,6 +41,8 @@ function ProductTable() {
     salePrice: '',
     category: '',
     weight: '',
+    stock: '',
+    description: '',
     image_name: '',
   });
 
@@ -368,6 +370,7 @@ function ProductTable() {
                   <th className="p-2">Poids (gramme)</th>
                   <th className="p-2">Catégorie</th>
                   <th className="p-2">Stock</th>
+                  <th className="p-2">Description</th>
                   <th className="p-2">Image</th>
                   <th className="p-2">Actions</th>
                 </tr>
@@ -437,6 +440,15 @@ function ProductTable() {
                           />
                         </td>
                         <td className="p-2">
+                          <textarea
+                            name="description"
+                            value={editedValues["description"] || ""}
+                            onChange={handleChangeInProd}
+                            className="border p-1 rounded w-full"
+                            rows={2}
+                          />
+                        </td>
+                        <td className="p-2">
                           <BrowseImageChange product={p}></BrowseImageChange>
                         </td>
                         <td className="p-2 space-x-2">
@@ -460,6 +472,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
+                        <td className="p-2">{p.description || "-"}</td>
                         <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
                           <FunctionButton
@@ -548,6 +561,17 @@ function ProductTable() {
                     type="number"
                     value={formData["weight"] ?? ""}
                     inputText="Poids (g)"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <div>
+                  <FormInput
+                    name="description"
+                    type="text"
+                    value={formData["description"] ?? ""}
+                    inputText="Description (optionnel)"
                     labelClassName="ml-[8%]"
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
                     onChange={handleChangeInForm}
