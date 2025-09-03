@@ -52,7 +52,7 @@ function Cart() {
         } else {
             checkHasRights(user.id) // user doesn't have rights
                 .then((rights) => {
-                    if  (!rights)  {
+                    if (!rights) {
                         notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
                         navigate('/account')
                     }
@@ -90,7 +90,7 @@ function Cart() {
     }
 
     useEffect(() => {
-        if(cart===null) {
+        if (cart === null) {
             setLoading(true)
             return;
         }
@@ -255,12 +255,12 @@ function Cart() {
             const productNames = lowStockProduct.map(p => p.name).join(", ");
             if (lowStockProduct.length > 1) {
                 if (!confirm("Stocks de " + productNames + " incertains. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
-                return;
-            }
+                    return;
+                }
             } else {
                 if (!confirm("Stock de " + productNames + " incertain. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
-                return;
-            }
+                    return;
+                }
             }
         }
 
@@ -364,7 +364,7 @@ function Cart() {
 
         if (Object.keys(cart).includes(product.id)) {
             return (
-                <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
+                <div key={idx} className="grid grid-cols-7 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
                         <img src={product.imageUrl || roundLogo} alt={product.name} className="ml-2 flex-left w-[60%] object-contain" />
                     </div>
@@ -373,10 +373,13 @@ function Cart() {
                         <p className="text-s">{product.weight}g, {product.category}</p>
                         <DisplayButtons product={product} />
                     </div>
-                    <div className="col-span-1 col-start-5 content-center">
-                        <p className="text-3xl font-semibold text-right mr-2">{product.salePrice}€</p>
+                    <div className="col-span-3 col-start-5 content-center">
+                        <p className="text-3xl font-semibold text-right px-5 whitespace-nowrap">
+                            {cart[product.id]} × {product.salePrice} = {roundTwoDigits(cart[product.id] * product.salePrice)}€
+                        </p>
                     </div>
                 </div>
+
             )
         }
     }
