@@ -266,14 +266,31 @@ const UserTable = () => {
 															</div>
 														))}
 
-														{/* weight limit */}
+														{/* weight limits */}
 														<div>
-															<strong>Limite de poids :</strong>{' '}
+															<strong>Limite de poids maximal :</strong>{' '}
 															{editMode === user.id ? (
 																<input
 																	name="weight_limit"
 																	type="number"
 																	value={editedUser.weight_limit ?? ''}
+																	onChange={handleChange}
+																	className="border px-2 py-1 rounded w-full mt-1"
+																/>
+															) : (
+																<span className="ml-1">
+																	{user.current_weight} / {user.weight_limit}
+																</span>
+															)}
+														</div>
+
+														<div>
+															<strong>Limite de poids minimal :</strong>{' '}
+															{editMode === user.id ? (
+																<input
+																	name="weight_min_limit"
+																	type="number"
+																	value={editedUser.weight_min_limit ?? ''}
 																	onChange={handleChange}
 																	className="border px-2 py-1 rounded w-full mt-1"
 																/>
