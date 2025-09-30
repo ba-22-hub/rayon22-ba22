@@ -175,7 +175,7 @@ function Cart() {
         // User's limits check
         const { data: userData, error: userError } = await supabase
             .from("User")
-            .select("weight_limit, current_weight, price_limit, current_price, order_limit, current_order")
+            .select("weight_limit, weight_min_limit, current_weight, price_limit, current_price, order_limit, current_order")
             .eq('id', user.id)
             .single();
 
@@ -202,6 +202,15 @@ function Cart() {
             displayNotification(
                 "Échec de validation du panier",
                 "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
+                "danger",
+                0
+            )
+            return;
+        }
+        if (limits.weight_min_limit && productsWeightTotal < limits.weight_min_limit) {
+            displayNotification(
+                "Échec de validation du panier",
+                "Condition de poids non respectée : Le poids du panier doit être d'au moins " + limits.weight_min_limit/1000 + "kg.",
                 "danger",
                 0
             )
