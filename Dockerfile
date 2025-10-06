@@ -16,6 +16,18 @@ COPY package.json package-lock.json* ./
 # Cette option est nécessaire car vous avez des conflits entre React 19 et certaines dépendances
 RUN npm install --legacy-peer-deps
 
+# Déclarer les variables d'environnement comme arguments de build
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_ANON_KEY
+ARG VITE_SUPABASE_SERVICE_ROLE_KEY
+ARG VITE_STRIPE_PUBLIC_KEY
+
+# Définir les variables d'environnement pour Vite
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
+ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
+ENV VITE_SUPABASE_SERVICE_ROLE_KEY=$VITE_SUPABASE_SERVICE_ROLE_KEY
+ENV VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
+
 # Copier tout le code source de l'application
 COPY . .
 
