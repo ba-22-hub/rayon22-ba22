@@ -66,7 +66,7 @@ const UserTable = () => {
 
 					if (updateError) {
 						console.error(`Erreur lors de la mise à jour de l'utilisateur ${user.id}:`, updateError);
-						displayNotification("Erreur lors de la mise à jour de l'utilisateur " + user.id, update.message, "danger")
+						displayNotification("Erreur lors de la mise à jour de l'utilisateur " + user.id, updateError.message, "danger")
 					} else {
 						displayNotification("Notification envoyée à " + user.email, "", "success")
 					}
