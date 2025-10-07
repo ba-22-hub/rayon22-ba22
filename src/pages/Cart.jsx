@@ -38,7 +38,7 @@ function Cart() {
     const [loading, setLoading] = useState(true);
 
     const { user, loading: authorLoading, checkHasRights } = useAuthor()
-    const { cart, setCart } = useCart()
+    const { cart, setCart, clearCart } = useCart()
 
     let navigate = useNavigate()
 
@@ -52,16 +52,30 @@ function Cart() {
         } else {
             checkHasRights(user.id) // user doesn't have rights
                 .then((rights) => {
-                    if(!rights){
+                    if (!rights) {
                         notify("Vous n'avez pas (encore ?) les droits. Pour passer une commande, veuillez déposer un fichier dans votre espace compte")
-                        navigate('/account') 
+                        navigate('/account')
                     }
                 })
-            
+
         }
         // end author routine 
 
     }, [authorLoading])
+
+    const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
+
+    const fetchStockIncertainThreshold = async () => {
+        const { data, error } = await supabase
+            .from('constants')
+            .select('value')
+            .eq("name", "stockIncertainThreshold")
+            .maybeSingle();
+        if (!error) {
+            setStockIncertainThreshold(data.value)
+        }
+    };
+    fetchStockIncertainThreshold();
 
     // function to avoid double notification in the login routine
     function notify(message) {
@@ -76,6 +90,11 @@ function Cart() {
     }
 
     useEffect(() => {
+        if (cart === null) {
+            setLoading(true)
+            return;
+        }
+
         const fetchDataProductsInCart = async () => {
             const { data, error } = await supabase
                 .from('products')
@@ -183,7 +202,7 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
@@ -192,7 +211,7 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
@@ -201,16 +220,47 @@ function Cart() {
                 "Échec de validation du panier",
                 "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.",
                 "danger",
-                duration = 0
+                0
             )
             return;
         }
 
         // Check stock
-        const areAvailableProducts = productsInCart.every(p => cart[p.id] <= p.stock);
-        if (!areAvailableProducts) {
-            displayNotification("Échec de validation du panier", "Stock de " + product.name + " insuffisant", "danger", duration = 7000)
-            return;
+        const outOfStockProducts = productsInCart.filter(p => cart[p.id] > p.stock);
+        if (outOfStockProducts.length > 0) {
+            const productNames = outOfStockProducts.map(p => p.name).join(", ");
+            if (outOfStockProducts.length > 1) {
+                displayNotification(
+                    "Échec de validation du panier",
+                    "Stocks de " + productNames + " insuffisants",
+                    "danger",
+                    7000
+                );
+                return;
+            } else {
+                const productNames = outOfStockProducts.map(p => p.name).join(", ");
+                displayNotification(
+                    "Échec de validation du panier",
+                    "Stock de " + productNames + " insuffisant",
+                    "danger",
+                    7000
+                );
+                return;
+            }
+        }
+
+        const lowStockProduct = productsInCart.filter(p => p.stock < stockIncertainThreshold);
+        if (lowStockProduct.length > 0) {
+            const productNames = lowStockProduct.map(p => p.name).join(", ");
+            if (lowStockProduct.length > 1) {
+                if (!confirm("Stocks de " + productNames + " incertains. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
+                    return;
+                }
+            } else {
+                if (!confirm("Stock de " + productNames + " incertain. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
+                    return;
+                }
+            }
         }
 
         try {
@@ -239,6 +289,8 @@ function Cart() {
             } else {
                 console.error("Aucune URL Stripe renvoyée par la fonction edge.");
             }
+
+            clearCart();
         } catch (err) {
             console.error("Erreur Stripe :", err);
         }
@@ -311,7 +363,7 @@ function Cart() {
 
         if (Object.keys(cart).includes(product.id)) {
             return (
-                <div key={idx} className="grid grid-cols-5 text-[#3435FF]">
+                <div key={idx} className="grid grid-cols-7 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
                         <img src={product.imageUrl || roundLogo} alt={product.name} className="ml-2 flex-left w-[60%] object-contain" />
                     </div>
@@ -320,10 +372,13 @@ function Cart() {
                         <p className="text-s">{product.weight}g, {product.category}</p>
                         <DisplayButtons product={product} />
                     </div>
-                    <div className="col-span-1 col-start-5 content-center">
-                        <p className="text-3xl font-semibold text-right mr-2">{product.salePrice}€</p>
+                    <div className="col-span-3 col-start-5 content-center">
+                        <p className="text-3xl font-semibold text-right px-5 whitespace-nowrap">
+                            {cart[product.id]} × {product.salePrice} = {roundTwoDigits(cart[product.id] * product.salePrice)}€
+                        </p>
                     </div>
                 </div>
+
             )
         }
     }
