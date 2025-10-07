@@ -14,6 +14,7 @@ Cette plateforme vise à fluidifier la gestion administrative tout en amélioran
 ## 📂 Table des matières
 - [Guide d'installation](#-guide-dinstallation)
     - [Cloner le projet](#-1-cloner-le-projet-mode-développeur)
+    - [Docker]()
     - [Exécutable Electron](#-2-utiliser-lexécutable-electron-mode-simplifié-non-maintenu)
 - [Guide d'utilisation](#-guide-dutilisation)
     - [Gestion des utilisateurs](#-gestion-des-utilisateurs)
@@ -42,6 +43,19 @@ Vous pouvez :
 - Lancer l'application en local
 
 💡 Pour plus de détails, veuillez vous référer au [Guide de programmation](#guide-de-programmation).
+
+### 🐋 Docker
+
+Pour lancer le build docker du projet, tout se fait avec :
+```sh
+sudo ./build-docker.sh
+```
+Ce build permet à Vite d'aller chercher les variables d'environnement dans le .env
+
+Et pour le lancement :
+```sh
+sudo ./run-docker.sh
+```
 
 ### ~~▶️ 2. Utiliser l’exécutable Electron (mode simplifié)~~ (non maintenu)
 

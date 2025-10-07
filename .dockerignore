@@ -1,8 +1,5 @@
 # Dossiers de dépendances
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Fichiers de build
 dist
@@ -12,20 +9,8 @@ build
 .cache
 .parcel-cache
 
-# Logs
-logs
-*.log
-
 # Fichiers de configuration IDE
 .vscode
-.idea
-*.swp
-*.swo
-*~
-
-# Fichiers système
-.DS_Store
-Thumbs.db
 
 # Fichiers Git
 .git
@@ -33,30 +18,14 @@ Thumbs.db
 
 # Fichiers Docker
 Dockerfile*
-docker-compose*
 .dockerignore
 
-# Fichiers de test
-coverage
-.nyc_output
-
-# Fichiers d'environnement (attention : gardez .env.example si vous en avez un)
+# Fichiers des variables d'environnement
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Fichiers temporaires
-tmp
-temp
 
 # Documentation
 README.md
 *.md
 
 # Electron (pour éviter de copier les binaires inutiles)
-electron/node_modules
-
-# Autres
-.eslintcache
+electron

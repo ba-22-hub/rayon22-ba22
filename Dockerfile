@@ -1,78 +1,26 @@
-# Dockerfile pour l'application Rayon22
-# Application React avec Vite, Stripe, Supabase et autres dépendances
+# Dockerfile pour le projet Rayon22
 
-# ========================================
-# ÉTAPE 1: BUILD (Construction de l'application)
-# ========================================
-FROM node:20-alpine AS builder
+# On utilise une image officielle de Node.js comme image de base
+FROM node:22
 
-# Définir le répertoire de travail dans le conteneur
+# définition du répertoire de l'application
 WORKDIR /app
 
-# Copier les fichiers de configuration des dépendances
-COPY package.json package-lock.json* ./
+# Copie des fichiers de l'application (package.json et package-lock.json)
+COPY package*.json ./
 
-# Installer les dépendances en utilisant --legacy-peer-deps pour résoudre les conflits
-# Cette option est nécessaire car vous avez des conflits entre React 19 et certaines dépendances
+# Installation des dépendances (avec legacy-peer-deps pour éviter les conflits de dépendances)
 RUN npm install --legacy-peer-deps
 
-# Déclarer les variables d'environnement comme arguments de build
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_ANON_KEY
-ARG VITE_SUPABASE_SERVICE_ROLE_KEY
-ARG VITE_STRIPE_PUBLIC_KEY
-
-# Définir les variables d'environnement pour Vite
-ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
-ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
-ENV VITE_SUPABASE_SERVICE_ROLE_KEY=$VITE_SUPABASE_SERVICE_ROLE_KEY
-ENV VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
-
-# Copier tout le code source de l'application
+# Copie du reste des fichiers de l'application
 COPY . .
 
-# Construire l'application pour la production
-# Cela va créer le dossier 'dist' avec les fichiers optimisés
+# Construction de l'application
 RUN npm run build
 
-# ========================================
-# ÉTAPE 2: PRODUCTION (Serveur web léger)
-# ========================================
-FROM nginx:alpine AS production
+# Exposition du port sur lequel l'application va tourner
+ENV PORT=8080
+EXPOSE 8080
 
-# Copier les fichiers construits depuis l'étape de build
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Créer la configuration Nginx pour les applications React SPA
-RUN echo 'server { \
-    listen 80; \
-    server_name localhost; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    \
-    # Configuration pour les applications React SPA (Single Page Application) \
-    # Toutes les routes sont redirigées vers index.html \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-    \
-    # Cache des assets statiques (CSS, JS, images) \
-    location ~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ { \
-        expires 1y; \
-        add_header Cache-Control "public, immutable"; \
-    } \
-    \
-    # Configuration de sécurité \
-    add_header X-Frame-Options "SAMEORIGIN" always; \
-    add_header X-Content-Type-Options "nosniff" always; \
-    add_header X-XSS-Protection "1; mode=block" always; \
-    \
-    # Gestion des erreurs \
-    error_page 404 /index.html; \
-}' > /etc/nginx/conf.d/default.conf
-
-# Exposer le port 80 pour l'accès web
-EXPOSE 80
-
-# Commande par défaut pour démarrer Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Démarrage de l'application
+CMD ["npm", "start"]
