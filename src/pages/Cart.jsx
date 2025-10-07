@@ -96,7 +96,6 @@ function Cart() {
         }
 
         const fetchDataProductsInCart = async () => {
-            setLoading(true);
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
