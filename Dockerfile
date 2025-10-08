@@ -1,26 +1,73 @@
-# Dockerfile pour le projet Rayon22
+# Dockerfile sécurisé pour l'application Rayon22
+# Variables d'environnement injectées au RUNTIME (pas au build)
 
-# On utilise une image officielle de Node.js comme image de base
-FROM node:22
+# ========================================
+# ÉTAPE 1: BUILD (Construction de l'application)
+# ========================================
+FROM node:20-alpine AS builder
 
-# définition du répertoire de l'application
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copie des fichiers de l'application (package.json et package-lock.json)
-COPY package*.json ./
+# Copier les fichiers de configuration des dépendances
+COPY package.json package-lock.json* ./
 
-# Installation des dépendances (avec legacy-peer-deps pour éviter les conflits de dépendances)
+# Installer les dépendances en utilisant --legacy-peer-deps pour résoudre les conflits
 RUN npm install --legacy-peer-deps
 
-# Copie du reste des fichiers de l'application
+# Copier tout le code source de l'application
 COPY . .
 
-# Construction de l'application
+# Construire l'application SANS variables d'environnement
+# Les fichiers seront modifiés au runtime
 RUN npm run build
 
-# Exposition du port sur lequel l'application va tourner
-ENV PORT=8080
-EXPOSE 8080
+# ========================================
+# ÉTAPE 2: PRODUCTION (Serveur web avec injection runtime)
+# ========================================
+FROM nginx:alpine AS production
 
-# Démarrage de l'application
-CMD ["npm", "start"]
+# Installer gettext pour envsubst (substitution de variables)
+RUN apk add --no-cache gettext
+
+# Copier les fichiers construits depuis l'étape de build
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Créer un script d'entrypoint pour injecter les variables au runtime
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Créer la configuration Nginx pour les applications React SPA
+RUN echo 'server { \
+    listen 80; \
+    server_name localhost; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    \
+    # Configuration pour les applications React SPA (Single Page Application) \
+    # Toutes les routes sont redirigées vers index.html \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+    \
+    # Cache des assets statiques (CSS, JS, images) \
+    location ~* \\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ { \
+        expires 1y; \
+        add_header Cache-Control "public, immutable"; \
+    } \
+    \
+    # Configuration de sécurité \
+    add_header X-Frame-Options "SAMEORIGIN" always; \
+    add_header X-Content-Type-Options "nosniff" always; \
+    add_header X-XSS-Protection "1; mode=block" always; \
+    \
+    # Gestion des erreurs \
+    error_page 404 /index.html; \
+}' > /etc/nginx/conf.d/default.conf
+
+# Exposer le port 80 pour l'accès web
+EXPOSE 80
+
+# Utiliser notre script d'entrypoint au lieu de démarrer nginx directement
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
