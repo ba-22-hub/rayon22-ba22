@@ -236,7 +236,7 @@ function Account() {
             ) : (
                 isAdmin ? (
                     <>
-                        <div className="w-full max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16 flex flex-col items-center text-center">
+                        <div className="w-full lg:max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16 flex flex-col items-center text-center">
                             <p className="text-rayonblue text-4xl md:text-5xl">Ce compte est administrateur</p>
                             <br />
                             <p>Il ne possède donc par conséquent pas de données personnelles</p>
