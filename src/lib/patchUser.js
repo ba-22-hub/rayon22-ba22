@@ -21,7 +21,7 @@ async function patchUser(userId, newUser) {
             return null;
         }
 
-        displayNotification("Utilisateur mis à jour", data[0], "success")
+        displayNotification("Utilisateur mis à jour", `${data[0].firstName} ${data[0].lastName}`, "success")
         return data[0];
     } catch (err) {
         console.error("Erreur inattendue :", err);
