@@ -1,23 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Fonction pour récupérer les variables d'environnement avec fallback
-const getEnvVar = (key) => {
-  // 1. Variables injectées au runtime par Docker
-  if (typeof window !== 'undefined' && window.RUNTIME_CONFIG && window.RUNTIME_CONFIG[key]) {
-    return window.RUNTIME_CONFIG[key];
-  }
-  
-  // 2. Variables Vite (développement local)
-  if (import.meta.env[key]) {
-    return import.meta.env[key];
-  }
-  
-  throw new Error(`Variable d'environnement manquante: ${key}`);
-};
+// Utiliser les variables injectées au runtime ou fallback sur les variables de build
+const supabaseUrl = window.RUNTIME_CONFIG?.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = window.RUNTIME_CONFIG?.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
 
-const supabaseUrl = getEnvVar('VITE_SUPABASE_URL')
-const supabaseKey = getEnvVar('VITE_SUPABASE_ANON_KEY')
-const supabaseAdminKey = getEnvVar('VITE_SUPABASE_SERVICE_ROLE_KEY')
+if (!supabaseUrl) {
+    console.error('Variable d\'environnement manquante: VITE_SUPABASE_URL')
+    throw new Error('VITE_SUPABASE_URL is required')
+}
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseAdminKey)
+if (!supabaseAnonKey) {
+    console.error('Variable d\'environnement manquante: VITE_SUPABASE_ANON_KEY')
+    throw new Error('VITE_SUPABASE_ANON_KEY is required')
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
