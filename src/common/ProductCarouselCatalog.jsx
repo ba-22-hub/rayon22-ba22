@@ -133,10 +133,10 @@ function ProductCarousel({ data }) {
 
     return (
       <>
-        <div className="bg-white shadow-md rounded-xl overflow-hidden w-60 ml-0.1">
-          <div className="p-4">
+        <div className="bg-white shadow-md lg:rounded-xl overflow-hidden lg:w-60 w-44 ml-0.1">
+          <div className="p-2 lg:p-4">
             <div className="flex justify-between">
-              <h3 className="text-[#3435FF] text-3xl font-semibold text-left">
+              <h3 className="text-[#3435FF] text-2xl lg:text-3xl font-semibold text-left">
                 {product.salePrice}€
               </h3>
               <DisplayButtons product={product} />
@@ -149,17 +149,17 @@ function ProductCarousel({ data }) {
             <img
               src={product.imageUrl || roundLogo}
               alt={product.name}
-              className="w-full h-40 object-contain"
+              className="w-full h-28 lg:h-40 object-contain"
             />
             {product.stock <= stockIncertainThreshold && (
               <div className="w-full absolute top-0 left-0 text-center mt-0">
-                <p className="text-xl text-white bg-rayonorange bg-opacity-80 text-center">
+                <p className="lg:text-xl text-white bg-rayonorange bg-opacity-80 text-center">
                   STOCK INCERTAIN
                 </p>
               </div>
             )}
           </div>
-          <div className="p-4">
+          <div className="p-2 lg:p-4">
             <p className="text-[#3435FF] text-lg font-semibold">
               {product.name}
             </p>
@@ -167,7 +167,7 @@ function ProductCarousel({ data }) {
               {product.weight}g, {product.category || ""}
             </p>
             <button
-              className="mt-2 text-[#FF8200] underline"
+              className="mt-2 text-[#FF8200] underline text-sm lg:text-lg"
               onClick={() => setSelectedProduct(product)}
             >
               Voir plus
@@ -179,7 +179,7 @@ function ProductCarousel({ data }) {
   }
 
   return (
-    <div className="px-8 mx-auto mb-12">
+    <div className="px-8 mx-auto mb-12 bg-rayonblue lg:bg-inherit">
       <Slider {...settings}>
         {data.map((product, idx) => (
           <div key={idx} className="p-4">
