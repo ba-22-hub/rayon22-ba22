@@ -97,7 +97,7 @@ function Home() {
                             <span className="text-2xl">★★★★★</span>
                         </div>
                     </div>
-                    <div className="flex flex-col flex-row items-center justify-between px-8 w-full">
+                    <div className="flex flex-col lg:flex-row items-center justify-between px-8 w-full">
                         <img src={dpd} alt="DPD" className="h-28 object-contain" />
                         <img src={mondialRelay} alt="Mondial Relay" className="h-28 object-contain" />
                         <img src={pickup} alt="Pickup" className="h-28 object-contain" />
