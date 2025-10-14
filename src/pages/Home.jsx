@@ -63,26 +63,26 @@ function Home() {
         <>
             {/* Hero section with blue background */}
             <div className="text-white bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] box-border pb-12">
-                <h1 className="w-[47vw] pt-8 pl-20 text-7xl font-semibold mb-8">Pour <span className="text-rayonorange">accéder</span> à notre épicerie en ligne </h1>
-                <div className="flex">
-                    <p className="ml-20 mt-4 w-[39.31vw] text-xl">
+                <h1 className="lg:w-[47vw] pt-8 pl-5 lg:pl-20 text-5xl lg:text-7xl font-semibold mb-8">Pour <span className="text-rayonorange">accéder</span> à notre épicerie en ligne </h1>
+                <div className="flex flex-col lg:flex-row">
+                    <p className=" mx-5 lg:ml-20 lg:mr-0 mt-4 lg:w-[39.31vw] text-xl">
                         Le <strong>Rayon 22</strong> est une épicerie sociale et solidaire dont l'objectif est d'accompagner les personnes pour qui une aide alimentaire représente un soutien non négligeable pour leurs quotidiens, en leur donnant accès à des produits alimentaires à petits prix, partout sur le territoire des Côtes-d'Armor.
                         <span className="block mt-4"></span>
                         Le <strong>Rayon 22</strong>  permet aussi de donner accès à l'aide alimentaire aux personnes qui ne peuvent se rendre aux distributions de nos partenaires.
                         <span className="block mt-4"></span>
                         Afin de pouvoir commander des produits, il vous faut vous connecter à un compte.
                     </p>
-                    <img src={orangeWoman} className="ml-40 w-[600px] h-[452px]" alt="Woman in orange" />
+                    <img src={orangeWoman} className="m-5 lg:m-0 lg:ml-40 lg:w-[600px] lg:h-[452px]" alt="Woman in orange" />
                 </div>
-                <div className="ml-20 mb-8">
-                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[20rem] h-[2em]'} />
+                <div className="mx-[10%] lg:ml-20 lg:mr-0 lg:mb-8">
+                    <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className={'text-white bg-rayonorange rounded-tight w-[100%] lg:w-[20rem] h-[2em]'} />
                 </div>
             </div>
 
             {/* Instagram and Partners sections */}
-            <div className="flex justify-center">
+            <div className="flex flex-col lg:flex-row justify-center">
                 {/* Instagram Section */}
-                <div className="w-1/2 h-52 border border-rayonblue box-border bg-white flex flex-col items-center justify-center">
+                <div className="lg:w-1/2 h-52 border border-rayonblue box-border bg-white flex flex-col items-center justify-center">
                     <img src={instagram} alt="Instagram" className="w-20 h-20 mb-4" />
                     <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/banque.alimentaire22/" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
                         Suivez-nous sur Instagram
@@ -90,14 +90,14 @@ function Home() {
                 </div>
 
                 {/* Partners Section */}
-                <div className="w-1/2 h-52 border border-rayonblue box-border bg-gray-50 flex flex-col items-center justify-between py-4">
+                <div className="lg:w-1/2 lg:h-52 border border-rayonblue box-border bg-gray-50 flex flex-col items-center justify-between py-4">
                     <div className="flex items-center">
                         <h3 className="text-[#3435FF] font-semibold text-[32px] mr-4">Nos partenaires</h3>
                         <div className="flex text-[#3435FF]">
                             <span className="text-2xl">★★★★★</span>
                         </div>
                     </div>
-                    <div className="flex items-center justify-between px-8 w-full">
+                    <div className="flex flex-col flex-row items-center justify-between px-8 w-full">
                         <img src={dpd} alt="DPD" className="h-28 object-contain" />
                         <img src={mondialRelay} alt="Mondial Relay" className="h-28 object-contain" />
                         <img src={pickup} alt="Pickup" className="h-28 object-contain" />
