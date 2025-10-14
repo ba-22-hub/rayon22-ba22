@@ -69,7 +69,7 @@ function RegisterStep1({ data, onDataChange, onNext }) {
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Nom" name="lastName" value={formData.lastName} onChange={handleChange} isStarred={true} />
 
                 <label className="text-rayonblue ml-[8%]">Date de naissance <a className="text-red">*</a></label><br />
-                <input className="rounded-lg border border-rayonblue h-[2.3rem] ml-[8%] text-rayonlightblue mt-1 mb-[-10px] w-[20%]" type="date" name="birthday" value={formData.birthday} onChange={handleChange} /><br /><br />
+                <input className="rounded-lg border border-rayonblue h-[2.3rem] ml-[8%] text-rayonlightblue mt-1 mb-[-10px] w-[9em]" type="date" name="birthday" value={formData.birthday} onChange={handleChange} /><br /><br />
 
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Téléphone" name="phone" value={formData.phone} onChange={handleChange} isStarred={true} />
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Adresse mail" name="email" value={formData.email} onChange={handleChange} isStarred={true} />
