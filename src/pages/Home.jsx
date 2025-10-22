@@ -176,25 +176,25 @@ function Home() {
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center px-8">
                     {/* Stat 1 - CCAS */}
                     <div className="flex-1 text-center px-8">
-                        <div className="text-6xl font-bold text-black mb-2">69</div>
+                        <div className="text-6xl font-bold text-black mb-2">67</div>
                         <div className="text-xl font-semibold text-black">CCAS*</div>
                     </div>
 
                     {/* Stat 2 - Repas */}
                     <div className="flex-1 text-center px-8">
-                        <div className="text-6xl font-bold text-black mb-2">1 100 000</div>
+                        <div className="text-6xl font-bold text-black mb-2">1 400 000</div>
                         <div className="text-xl font-semibold text-black">Repas/an distribués</div>
                     </div>
 
                     {/* Stat 3 - Épiceries */}
                     <div className="flex-1 text-center px-8">
-                        <div className="text-6xl font-bold text-black mb-2">4</div>
+                        <div className="text-6xl font-bold text-black mb-2">6</div>
                         <div className="text-xl font-semibold text-black">Épiceries solidaires</div>
                     </div>
                 </div>
 
                 <div className="text-center mt-8">
-                    <p className="text-sm text-gray-600">*CCAS : Centre Communal d'Action Sociale</p>
+                    <p className="text-sm text-gray-600">*CCAS : Centre Communaux d'Action Sociale, Associations et épiceries solidaires</p>
                 </div>
             </div>
 
@@ -212,7 +212,7 @@ function Home() {
                     <div className="flex-1 pl-0 md:pl-12">
                         <h2 className="text-3xl font-bold mb-6">
                             <span className="text-[#3435FF]">Le rayon est une initiative des </span>
-                            <span className="text-[#FF8200]">banque alimentaires.</span>
+                            <span className="text-[#FF8200]">banques alimentaires.</span>
                         </h2>
 
                         <div className="space-y-4 mb-8">
@@ -220,14 +220,14 @@ function Home() {
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
                                     <span className="text-[#FF8200] font-semibold text-3xl">85%</span>
-                                    <span className="text-[#3435FF] font-semibold text-3xl"> vivent avec moins de 200€ par mois.</span>
+                                    <span className="text-[#3435FF] font-semibold text-3xl"> des personnes aidées vivent avec moins de 200€ par mois.</span>
                                 </p>
                             </div>
 
                             <div className="flex items-start">
                                 <span className="text-[#3435FF] text-3xl mr-3 font-bold">→</span>
                                 <p className="text-lg">
-                                    <span className="text-[#3435FF] font-semibold text-3xl">1 sur 5</span>
+                                    <span className="text-[#FF8200] font-semibold text-3xl">1 sur 5</span>
                                     <span className="text-[#3435FF] font-semibold text-3xl"> est en insécurité alimentaire.</span>
                                 </p>
                             </div>
