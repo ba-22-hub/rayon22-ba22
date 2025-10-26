@@ -52,7 +52,7 @@ function About() {
               </div>
               <h2 className="text-[#3435FF] font-bold text-2xl mb-3 text-center">La banque alimentaire des côtes d’Armor</h2>
               <p className="text-center text-base text-[#3435FF] mb-2">
-                La banque alimentaire des côtes d’Armor a été créée le 16 octobre 1984, elle est une des toutes première en France !
+                La banque alimentaire des côtes d’Armor a été créée le 10 décembre 1984, elle est une des toutes première en France !
               </p>
               <p className="text-center text-base text-[#3435FF] mb-2">
                 Avec le <span className="font-bold">RAYON 22 Epicerie en ligne</span>, la Banque Alimentaire des Côtes d’Armor innove dans le domaine de la distribution alimentaire.

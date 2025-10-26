@@ -84,7 +84,7 @@ function Register() {
         });
 
         if (error) {
-            displayNotification("Échec de la soumission du formulaire", insertError.message, "danger")
+            displayNotification("Échec de la soumission du formulaire", error.message, "danger")
             return;
         }
 
