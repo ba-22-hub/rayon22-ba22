@@ -1,12 +1,12 @@
 #!/bin/bash
+set -e
 
-# Charger les variables depuis .env
-export $(grep -v '^#' .env | xargs)
+# build local si nécessaire (optionnel)
+# ./build-docker.sh
 
-# Lancer le conteneur avec les variables
-docker run -p 8080:80 \
-  -e VITE_SUPABASE_URL="$VITE_SUPABASE_URL" \
-  -e VITE_SUPABASE_ANON_KEY="$VITE_SUPABASE_ANON_KEY" \
-  -e VITE_SUPABASE_SERVICE_ROLE_KEY="$VITE_SUPABASE_SERVICE_ROLE_KEY" \
-  -e VITE_STRIPE_PUBLIC_KEY="$VITE_STRIPE_PUBLIC_KEY" \
+# Utiliser --env-file pour charger proprement .env
+# Map host 8080 -> container 8080 (corriger selon votre Dockerfile)
+docker run -d --rm --name rayon22-local \
+  --env-file .env \
+  -p 8080:8080 \
   rayon22-app

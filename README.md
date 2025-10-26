@@ -50,7 +50,7 @@ Pour lancer le build docker du projet, tout se fait avec :
 ```sh
 sudo ./build-docker.sh
 ```
-Ce build permet à Vite d'aller chercher les variables d'environnement dans le .env
+*Les variables d'environnement ne sont prise qu'au runtime*
 
 Et pour le lancement :
 ```sh
