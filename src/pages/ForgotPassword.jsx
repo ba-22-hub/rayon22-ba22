@@ -1,5 +1,6 @@
 // Importing dependencies
 import { useState } from 'react';
+import { supabase } from '@lib/supabaseClient.js';
 
 // Importing common components
 import FormInput from "@common/FormInput";
@@ -13,30 +14,30 @@ import illustration from "@assets/logos/password.png"
  */
 function Login() {
   // useState init to store the form data in a JSON format
-  const [formData, setFormData] = useState({
-    password: '',
-    passwordConfirm: ''
-  });
+  const [formData, setFormData] = useState('');
+  const [mailSent, setMailSent] = useState(false);
 
   // function to set the new formData value whenever the inputs are changed
   function handleChange(e) {
     // we set the formData value to the current input value
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData(e.target.value);
   }
 
   // function to hadle the form submit
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     console.log(formData);
 
-    // resets the inputs and formData to blank
-    setFormData({
-      password: '',
-      passwordConfirm: ''
-    });
+    await supabase.auth.resetPasswordForEmail(formData.replaceAll(' ', ''), {
+      redirectTo: 'http://localhost:5173/reset-password',
+    })
+      .then((response) => {
+        if (response.error) {
+          alert('Erreur lors de la demande de réinitialisation du mot de passe : ' + response.error.message);
+        } else {
+          setMailSent(true);
+        }
+      })
   }
 
   return (
@@ -52,8 +53,10 @@ function Login() {
         {/* Illustration */}
         <img src={illustration} alt="Illustration" className="hidden lg:block w-64 mt-10 mb-6" />
 
-        
-        {/* Formulaire */}
+
+        {mailSent ?( 
+          <p className='text-[#2E2EFF] text-2xl lg:text-4xl font-bold leading-tight'>Un email à été envoyé à l'addresse indiquée : <span className='text-rayonorange'>{formData}</span></p>
+        ) : (
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
           <FormInput
             inputText={<span className="text-rayonblue">Addresse mail liée au compte</span>}
@@ -68,9 +71,9 @@ function Login() {
             type="submit"
             className="w-full bg-[#FF8200] text-white py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition"
           >
-            Créer mon mot de passe
+            Envoyer un mail
           </button>
-        </form>
+        </form>)}
       </div>
     </>
   )
