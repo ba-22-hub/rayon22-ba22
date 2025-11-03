@@ -125,9 +125,9 @@ function Contact() {
 						<h1 className="text-5xl font-bold">Contactez-nous</h1>
 					</div>
 
-					<div className="flex justify-center bg-[#FFF8F4] pb-20">
+					<div className="lg:flex justify-center bg-[#FFF8F4] pb-20">
 						{/* Left Text Section */}
-						<div className="w-[35%] mt-24 pr-16">
+						<div className="pl-5 lg:w-[35%] mt-10 lg:mt-24 pr-5 lg:pr-16">
 							<h2 className="text-[#2E2EFF] text-3xl font-bold mb-6">Un contact si besoin</h2>
 							<p className="text-[#2E2EFF] text-xl leading-relaxed">
 								Quelque soit le sujet (une réclamation, un problème de livraison ou de délais, un contenu défectueux...)
@@ -136,11 +136,11 @@ function Contact() {
 								<br /><br />
 								Je serai recontacté au numéro de téléphone ou l’adresse mail donné lors de mon inscription.
 							</p>
-							<img src={roundLogo} alt="Logo" className="w-80 mt-16 ml-12 -rotate-[13.55deg]" />
+							<img src={roundLogo} alt="Logo" className="hidden lg:flex w-80 mt-16 ml-12 -rotate-[13.55deg]" />
 						</div>
 
 						{/* Right Form Section */}
-						<div className="bg-white shadow-md rounded-xl px-10 py-8 w-[45%] h-[45%] mt-16">
+						<div className="bg-white shadow-md rounded-xl px-10 py-8 lg:w-[45%] h-[45%] mt-5 lg:mt-16 mx-3 lg:mx-0">
 							<h2 className="text-[#2E2EFF] text-2xl font-bold mb-6">Formulaire de contact</h2>
 
 							<form onSubmit={handleSubmit}>

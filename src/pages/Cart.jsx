@@ -374,16 +374,16 @@ function Cart() {
             return (
                 <div key={idx} className="grid grid-cols-7 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
-                        <img src={product.imageUrl || roundLogo} alt={product.name} className="ml-2 flex-left w-[60%] object-contain" />
+                        <img src={product.imageUrl || roundLogo} alt={product.name} className="lg:ml-2 flex-left w-[60%] object-contain" />
                     </div>
                     <div className="col-span-3 col-start-2 content-center">
-                        <p className="text-2xl font-semibold">{product.name}</p>
+                        <p className="text-xl lg:text-2xl font-semibold">{product.name}</p>
                         <p className="text-s">{product.weight}g, {product.category}</p>
                         <DisplayButtons product={product} />
                     </div>
-                    <div className="col-span-3 col-start-5 content-center">
-                        <p className="text-3xl font-semibold text-right px-5 whitespace-nowrap">
-                            {cart[product.id]} × {product.salePrice} = {roundTwoDigits(cart[product.id] * product.salePrice)}€
+                    <div className="col-span-2 col-start-6 lg:col-span-3 lg:col-start-5  content-center">
+                        <p className="text-xl lg:text-2xl flex flex-line font-semibold text-right pl-2 whitespace-nowrap">
+                            <span className='hidden lg:block mr-2'>{cart[product.id]} × {product.salePrice} = </span>{roundTwoDigits(cart[product.id] * product.salePrice)}€
                         </p>
                     </div>
                 </div>
@@ -396,40 +396,51 @@ function Cart() {
 
         return (
             <>
-                <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-xs text-rayonorange"} />
-                <div className="grid grid-flow-col grid-rows-7 gris-cols-3 gap-4 text-[#3435FF] mx-10">
-                    <div className="col-span-2 col-start-1 row-start-1 content-right">
-                        Total produits
-                    </div>
-                    <div className="col-span-1 col-start-3 row-start-1 content-right">
-                        {productsPriceTotal}€
-                    </div>
-                    <div className="col-span-2 col-start-1 row-start-2 content-right">
-                        Poids total du colis
-                    </div>
-                    <div className="col-span-1 col-start-3 row-start-2 content-right">
-                        {productsWeightTotal / 1000}kg
-                    </div>
-                    <div className="col-span-2 col-start-1 row-start-3 content-right">
-                        Frais de transport
-                    </div>
-                    <div className="col-span-1 col-start-3 row-start-3 content-right">
-                        {shippingCost}€
-                    </div>
-                    <div className="col-span-2 col-start-1 row-start-4 content-right">
-                        Nombre de produits
-                    </div>
-                    <div className="col-span-1 col-start-3 row-start-4 content-right">
-                        {productsNumberTotal}
-                    </div>
-                    <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-5 content-right">
-                        <div className="relative">
-                            <img src={orangeCircle}></img>
-                            <div className="absolute top-4 left-7">Total</div>
+                <PageButton buttonText={'Voir tous nos produits...'} page={'/catalog'} className={"mt-0 mb-5 mx-10 text-sm text-rayonorange"} />
+                <div className="flex flex-col mx-10 w-[100%] text-rayonblue">
+                    <div className='flex flex-line'>
+                        <div className="w-[70%] my-2">
+                            Total produits
+                        </div>
+                        <div className="w-[10%] my-2 font-bold">
+                            {productsPriceTotal}€
                         </div>
                     </div>
-                    <div className="mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-5 content-right">
-                        {productsPriceTotal + shippingCost}€
+                    <div className='flex flex-line'>
+                        <div className="w-[70%] my-2">
+                            Poids total du colis
+                        </div>
+                        <div className="w-[10%] my-2 font-bold">
+                            {productsWeightTotal / 1000}kg
+                        </div>
+                    </div>
+                    <div className='flex flex-line'>
+                        <div className="w-[70%] my-2">
+                            Frais de transport
+                        </div>
+                        <div className="w-[10%] my-2 font-bold">
+                            {shippingCost}€
+                        </div>
+                    </div>
+                    <div className='flex flex-line'>
+                        <div className="w-[70%] my-2">
+                            Nombre de produits
+                        </div>
+                        <div className="w-[10%] my-2 font-bold">
+                            {productsNumberTotal}
+                        </div>
+                    </div>
+                    <div className='flex flex-line'>
+                        <div className="mt-8 text-4xl font-extrabold col-span-2 col-start-1 row-span-3 row-start-5 content-right">
+                            <div className=" relative">
+                                <img className='hidden lg:block' src={orangeCircle}></img>
+                                <div className="flex lg:absolute lg:top-4 lg:left-7">Total</div>
+                            </div>
+                        </div>
+                        <span className='mx-2 text-4xl mt-8 font-semibold lg:hidden'>=</span>
+                        <div className="mt-8 w-[20%] lg:mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-5 content-right">
+                            {productsPriceTotal + shippingCost}€
+                        </div>
                     </div>
                 </div>
                 <FunctionButton
@@ -451,27 +462,31 @@ function Cart() {
             ) : (
                 <>
                     {/* TITLE */}
-                    <div className="ml-10 mb-6">
-                        <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">Panier</h1>
+                    <div className="ml-10 mb-50">
+                        <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight">Panier</h1>
                         <img src={orangeLine}></img>
                     </div>
 
-                    <div>
-                        <img className="absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
-                        <img className="absolute left-28 w-[15%]" src={orangeShape}></img>
+                    <div className='mb-10 lg:mb-0'>
+                        <img className="hidden lg:block absolute top-28 right-20 w-[15%]" src={blueRayonShape}></img>
+                        <img className="hidden lg:block absolute left-28 w-[15%]" src={orangeShape}></img>
 
-                        <div className="relative bg-no-repeat bg-cover mx-auto" style={{ backgroundImage: `url(${receipt})`, aspectRatio: '1/2', width: '700px' }}>
-
+                        <div
+                            className="relative bg-no-repeat bg-cover lg:mx-auto aspect-[1/2] lg:w-[700px]"
+                            style={{
+                                backgroundImage: window.innerWidth >= 1024 ? `url(${receipt})` : 'none'
+                            }}
+                        >
                             {/* PRODUCTS IN CART */}
-                            <div className="m-10">
+                            <div className="mx-5 mt-5 lg:m-10 p-0 border-2 border-rayonorange rounded-lg lg:border-0 lg:bg-[url('/path/to/ticket.png')] lg:bg-cover lg:bg-center">
                                 <a className="text-[#3435FF] m-10"></a>
-                                <div className="overflow-y-auto h-[700px] text-[#3435FF] m-5">
+                                <div className="lg:overflow-y-auto lg:h-[700px] text-[#3435FF] mx-5">
                                     {productsInCart.map((product, idx) => (displayProductOnReceipt(product, idx)))}
                                 </div>
                             </div>
 
                             {/* INFO ON CART */}
-                            <div className="absolute inset-x-0 text-xl h-16 ml-10 mr-28">
+                            <div className="flex flex-col lg:block lg:absolute lg:inset-x-0 text-xl lg:h-16 lg:ml-10 mr-10 lg:mr-28 mb-10 lg:mb-0">
                                 {displayInfoOnCart(productsInCart)}
                             </div>
                         </div>

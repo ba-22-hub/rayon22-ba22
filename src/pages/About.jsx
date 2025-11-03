@@ -34,19 +34,19 @@ function About() {
       </section>
 
       {/* TICKET LOGO OVERLAPPING */}
-      <img src={ticketLogo} alt="ticket logo" className="absolute top-[400px] right-8 w-32 md:w-48 rotate-6 drop-shadow-2xl z-50" />
+      <img src={ticketLogo} alt="ticket logo" className="hidden lg:block lg:absolute top-[400px] right-8 w-32 md:w-48 rotate-6 drop-shadow-2xl z-50" />
 
       {/* MAIN IMAGE WITH OVERLAPPING CARDS */}
-      <div className="w-full relative">
-        <div className="w-full h-[621px] overflow-hidden">
-          <img src={womanShelf} alt="Woman at shelf" className="w-[210%] h-[210%] object-cover origin-top-left object-left-top transform -translate-y-[15%]" />
+      <div className="bg-[#FFF8F4] lg:bg-white w-full relative">
+        <div className="hidden lg:block w-full h-[621px] overflow-hidden">
+          <img src={womanShelf} alt="Woman at shelf" className="hidden lg:block w-[210%] h-[210%] lg:object-cover origin-top-left object-left-top transform -translate-y-[15%]" />
         </div>
 
         {/* INFO CARDS STARTING AT IMAGE MIDPOINT */}
-        <div className="absolute top-[310px] left-0 right-0 flex justify-center px-2 sm:px-8 md:px-0">
-          <div className="flex flex-col md:flex-row gap-[25%] w-full max-w-5xl">
+        <div className="flex lg:absolute lg:top-[310px] left-0 right-0 flex justify-center px-2 ">
+          <div className="flex flex-col md:flex-row lg:gap-[25%] w-full max-w-5xl">
             {/* LEFT CARD */}
-            <div className="flex-1 bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
+            <div className="my-10 lg:my-0 flex-1 bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
               <div className="flex items-center justify-center mb-4">
                 <img src={birdLogo} alt="Banque Alimentaire logo" className="w-32 h-32 object-contain" />
               </div>
@@ -63,7 +63,7 @@ function About() {
               <a href="https://www.banquealimentaire.org/" className="mt-2 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all">site national BA →</a>
             </div>
             {/* RIGHT CARD */}
-            <div className="flex-1 bg-[#F3F4FF] rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
+            <div className="my-10 lg:my-0 flex-1 bg-[#F3F4FF] rounded-2xl shadow-xl p-8 flex flex-col items-center border border-[#F3F4F6]">
               <div className="flex items-center justify-center w-40 h-40 bg-[#F3F4FF] rounded-full mb-4">
                 <img src={logo} alt="RAYON logo" className="w-28 h-28 object-contain" />
               </div>
@@ -81,7 +81,7 @@ function About() {
       </div>
 
       {/* SPACER TO ACCOUNT FOR CARD OVERFLOW */}
-      <div className="h-80"></div>
+      <div className="hidden lg:block h-80"></div>
     </div>
   )
 }

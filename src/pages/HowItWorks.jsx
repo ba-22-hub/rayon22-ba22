@@ -16,19 +16,20 @@ function HowItWorks() {
     return (
         <>
             {/* Hero section with blue background */}
-            <div className="text-white bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] box-border pl-20 flex">
+            <div className="text-white bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] box-border pl-[6vw] lg:pl-20 flex">
                 <div>
-                    <h1 className="w-[44.81vw] mt-20 mb-8 text-7xl font-semibold">Faites vos <span className="text-rayonorange">courses</span> à petit prix en ligne et recevez-les près de <span className="text-rayonorange">chez vous !</span></h1>
-                    <p className="text-2xl">
+                    <h1 className="lg:w-[44.81vw] mt-8 lg:mt-20 mb-8 text-5xl lg:text-7xl font-semibold">Faites vos <span className="text-rayonorange">courses</span> à petit prix en ligne et recevez-les près de <span className="text-rayonorange">chez vous !</span></h1>
+                    <p className="text-xl lg:text-2xl max-w-[84vw] lg:max-w-none">
                         <strong>Je commande</strong> par internet quand je veux à mon épicerie solidaire et je me fais livrer où je veux en <strong>point relais</strong> près de chez moi ou de mon lieu d'étude.
                         <span className="block mt-4"></span>
                     </p>
-                    <p className="text-3xl mt-0 mb-0">
+                    <p className="text-2xl lg:text-3xl mt-0 mb-0 max-w-[88vw] lg:max-w-none">
                         <strong><span className="text-rayonorange">Un accès équitable</span> à l'essentiel : Payez moins et choisissez mieux.</strong>
                     </p>
-                    <p className="text-2xl">
+                    <p className="text-xl lg:text-2xl max-w-[88vw] lg:max-w-none">
                         <span className="block mt-4"></span>
-                        Les prix sont encadrés entre <strong>10% et 30%</strong> de leur valeur en magasin. J'ai le choix de produits variés en alimentaire (produit secs) ou d'hygiène et d'entretien avec toutefois une <strong>limitation mensuelle par mois</strong>.
+                        Les prix sont encadrés entre <strong>10% et 30%</strong> de leur valeur en magasin. J'ai le choix de produits variés en alimentaire (produit secs) ou d'hygiène et d'entretien avec toutefois une <strong>limitation mensuelle</strong>.            
+                        Une contribution aux frais d’envoi de 1,35€ soit <strong>le prix d’un timbre.</strong>
                         <span className="block mt-4"></span>
                         <strong>L'inscription est indispensable</strong> car l'accès à l'épicerie en ligne est sous conditions de ressources.
                     </p>
@@ -36,7 +37,7 @@ function HowItWorks() {
                         <PageButton buttonText={'Se Connecter ➜'} page={'/login'} className="bg-rayonorange w-80 h-10" />
                     </div>
                 </div>
-                <img src={mosaique} className="w-[555px] h-[469px] mr-32 mt-20" alt="Mosaique" />
+                <img src={mosaique} className="hidden lg:flex w-[555px] h-[469px] mr-32 mt-20" alt="Mosaique" />
             </div>
 
             {/* Info livraison section */}
@@ -107,7 +108,7 @@ function HowItWorks() {
             </div>
 
             {/* Contact and more info section */}
-            <div className="py-16 bg-white">
+            <div className="pb-16 lg:pt-16 bg-white">
                 <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row items-center">
                     {/* Left content */}
                     <div className="flex-1 lg:pr-16">
@@ -145,7 +146,7 @@ function HowItWorks() {
                     </div>
 
                     {/* Right logo */}
-                    <div className="flex-1 flex justify-center lg:justify-end mt-12 lg:mt-0">
+                    <div className="hidden flex-1 lg:flex justify-center lg:justify-end mt-12 lg:mt-0">
                         <img src={bigRoundLogo} className="w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] object-contain" alt="RAYON 22 en ligne logo" />
                     </div>
                 </div>

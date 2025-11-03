@@ -30,8 +30,6 @@ function Login() {
   // function to hadle the form submit
   function handleSubmit(e) {
     e.preventDefault();
-    // printing the formData content in the console for now
-    // TODO : connect with the server
     console.log(formData);
 
     // resets the inputs and formData to blank
@@ -43,50 +41,28 @@ function Login() {
 
   return (
     <>
-      <div className="bg-[#ffffff] w-[70vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm flex flex-col items-center justify-start py-16 px-4">
+      <div className="bg-[#ffffff] lg:w-[70vw] mx-auto lg:mt-32 lg:mb-10 rounded-2xl shadow-sm flex flex-col items-center justify-start py-5 lg:py-16 px-4">
         {/* Titre principal */}
         <div className="text-center">
-          <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight">
-            Vous avez presque terminé !
-            <br />
-            Plus qu’une étape !
+          <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight mb-5 lg:mb0">
+            Changement de mot de passe
           </h1>
         </div>
 
         {/* Illustration */}
-        <img src={illustration} alt="Illustration" className="w-64 mt-10 mb-6" />
+        <img src={illustration} alt="Illustration" className="hidden lg:block w-64 mt-10 mb-6" />
 
-        {/* Sous-titre */}
-        <h2 className="text-[#2E2EFF] text-4xl font-bold mb-6">Création du mot de passe</h2>
-
+        
         {/* Formulaire */}
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
           <FormInput
-            inputText={<span className="text-rayonblue">Mot de passe <span className="text-red-500">*</span></span>}
-            name="password"
+            inputText={<span className="text-rayonblue">Addresse mail liée au compte</span>}
+            name="email"
             value={formData.password}
             onChange={handleChange}
             className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+            isStarred={true}
           />
-          <FormInput
-            inputText={<span className="text-rayonblue">Confirmation du mot de passe <span className="text-red-500">*</span></span>}
-            name="passwordConfirm"
-            value={formData.passwordConfirm}
-            onChange={handleChange}
-            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-          />
-
-          {/* Bloc règles */}
-          <div className="bg-[#F0F0F0] rounded-lg px-6 py-4 text-sm text-[#2E2EFF] font-medium leading-relaxed mt-6">
-            <p className="mb-1 font-bold">Règles pour définir le mot de passe</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Doit contenir au moins 8 caractères</li>
-              <li>Doit contenir au moins un caractère en majuscule</li>
-              <li>Doit contenir au moins un caractère en minuscule</li>
-              <li>Doit contenir au moins un nombre</li>
-            </ul>
-          </div>
-
           {/* Bouton */}
           <button
             type="submit"
