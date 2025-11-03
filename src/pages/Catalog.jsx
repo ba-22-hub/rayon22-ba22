@@ -66,7 +66,7 @@ const SearchBar = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      {loading ? <Loading /> : <ProductCarousel data={filteredProducts}></ProductCarousel>}
+      {loading ? <Loading /> : (search == '') ? <></> : <ProductCarousel data={filteredProducts}></ProductCarousel>}
     </div>
   );
 }
@@ -118,12 +118,12 @@ function Catalog() {
 
   return (
     <>
-      <h1 className="text-[#2E2EFF] text-7xl font-extrabold leading-tight ml-10 mb-6">Nos produits</h1>
+      <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight ml-5 mt-5">Nos produits</h1>
 
       <SearchBar></SearchBar>
 
-      <div className="my-4 items-center justify-center text-3xl text-center">
-        <p className="m-auto text-center w-[60%] text-rayonorange mb-2">
+      <div className="my-4 items-center justify-center text-sm font-bold lg:text-2xl text-center">
+        <p className="m-auto text-center w-[75%] text-rayonorange mb-2">
           À noter que les images des produits sont non contractuelles et peuvent ne pas refléter fidèlement les marques ou références effectivement proposées.
         </p>
       </div>
@@ -135,7 +135,7 @@ function Catalog() {
             if (products.length > 0) {
               return <div key={category}>
                 <div className="flex items-start ...">
-                  <p className="ml-5 text-[#3435FF] text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0, 1).toUpperCase() + category.slice(1, category.length)}</p>
+                  <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">{category.slice(0, 1).toUpperCase() + category.slice(1, category.length)}</p>
                 </div>
                 <ProductCarousel data={products} />
               </div>

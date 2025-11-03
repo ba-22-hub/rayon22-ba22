@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import React from 'react';
 import { ReactNotifications } from 'react-notifications-component'
+import { useState } from "react";
 
 
 import { useAuthor } from "@context/AuthorContext.jsx";
@@ -36,6 +37,7 @@ import Register from '@pages/Register.jsx'
 import Sponsor from '@pages/Sponsor.jsx'
 import Account from "@pages/Account.jsx";
 import PaymentSuccess from "@pages/PaymentSuccess.jsx";
+import ResetPassword from "./pages/ResetPassword";
 
 // Importing common components
 import Footer from "@common/Footer.jsx";
@@ -46,12 +48,12 @@ import Footer from "@common/Footer.jsx";
  */
 function App() {
   const { user } = useAuthor()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#FEF7F1]">
       <ReactNotifications />
 
-      {/* Horizontal navigation bar to choose the page of the website we want to visit */}
-      <nav className="bg-white shadow-lg border-b border-gray-200 mb-8 mt-8">
+      <nav className="bg-white shadow-lg border-b border-gray-200 lg:mx-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -61,8 +63,8 @@ function App() {
               </Link>
             </div>
 
-            {/* Navigation Links */}
-            <div className="hidden md:block">
+            {/* Navigation Links - visible à partir de lg */}
+            <div className="hidden lg:block">
               <div className="ml-10 flex items-baseline space-x-8">
                 <Link to="/about" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                   Qui sommes-nous ?
@@ -85,8 +87,8 @@ function App() {
               </div>
             </div>
 
-            {/* Right side - Inscription button and Avatar */}
-            <div className="flex items-center space-x-4">
+            {/* Right side - visible à partir de lg */}
+            <div className="hidden lg:flex items-center space-x-4">
               {!user && (
                 <Link to="/register" className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors h-10 flex items-center">
                   S'inscrire
@@ -98,6 +100,83 @@ function App() {
                 </div>
               </Link>
             </div>
+
+            {/* Mobile (< lg) : Avatar + Burger */}
+            <div className="flex lg:hidden items-center space-x-4">
+              <Link to={`${user ? '/account' : '/login'}`} className="flex-shrink-0">
+                <div className="bg-[#FF8200] p-1 rounded-lg h-10 w-10 flex items-center justify-center">
+                  <img src={avatar} alt="User avatar" className="h-8 w-8 rounded-full" />
+                </div>
+              </Link>
+
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-rayonblue text-2xl text-bold hover:text-[#3435FF] focus:outline-none transition-colors"
+              >
+                {isMenuOpen ? "X" : "☰"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Menu mobile dépliable (< lg uniquement) */}
+        <div
+          className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            }`}
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-50 border-t border-gray-200">
+            <Link
+              to="/about"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Qui sommes-nous ?
+            </Link>
+            <Link
+              to="/how-it-works"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Comment ça marche ?
+            </Link>
+            <Link
+              to="/more"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Toujours plus
+            </Link>
+            <Link
+              to="/catalog"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Nos produits
+            </Link>
+            <Link
+              to="/cart"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Mon panier
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Nous contacter
+            </Link>
+
+            {!user && (
+              <Link
+                to="/register"
+                onClick={() => setIsMenuOpen(false)}
+                className="block bg-[#FF8200] hover:bg-[#ff9800] text-white px-3 py-3 rounded-lg text-base font-medium transition-colors text-center mx-3 mt-4"
+              >
+                S'inscrire
+              </Link>
+            )}
           </div>
         </div>
       </nav>
@@ -117,6 +196,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         {/* {/* Redirecting to Error404 page if the route does not exist */}
         {/* <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />  */}
