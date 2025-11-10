@@ -26,6 +26,7 @@ import avatar from "@assets/Assets/avatar2.png"
 import About from '@pages/About.jsx'
 import Cart from '@pages/Cart.jsx'
 import Catalog from '@pages/Catalog.jsx'
+import Delivery from '@pages/Delivery.jsx'
 import Contact from '@pages/Contact.jsx'
 import ForgotPassword from '@pages/ForgotPassword.jsx'
 import Home from '@pages/Home.jsx'
@@ -80,6 +81,9 @@ function App() {
                 </Link>
                 <Link to="/cart" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                   Mon panier
+                </Link>
+                <Link to="/delivery" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
+                  Mes livraisons
                 </Link>
                 <Link to="/contact" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                   Nous contacter
@@ -161,6 +165,13 @@ function App() {
               Mon panier
             </Link>
             <Link
+              to="/delivery"
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
+            >
+              Mes livraisons
+            </Link>
+            <Link
               to="/contact"
               onClick={() => setIsMenuOpen(false)}
               className="block text-[#3435FF] hover:bg-gray-100 hover:text-[#5253ff] px-3 py-3 rounded-md text-base font-medium transition-colors"
@@ -187,6 +198,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/catalog" element={<Catalog />} />
+        <Route path="/delivery" element={<Delivery />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
