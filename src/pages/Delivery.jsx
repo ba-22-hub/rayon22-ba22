@@ -7,6 +7,7 @@ import { displayNotification } from '@lib/displayNotification.js';
 // Importing common components
 import Loading from "@common/Loading.jsx"
 import FunctionButton from '@common/FunctionButton.jsx';
+import ProductCarousel from "@common/ProductCarouselDelivery"
 
 /**
  * The Delivery page.
@@ -17,8 +18,9 @@ function Delivery() {
   const [loading, setLoading] = useState(false);
   const [ongoingDeliveries, setOngoingDeliveries] = useState([]);
   const [pastDeliveries, setPastDeliveries] = useState([]);
-  const { user, loading: authorLoading } = useAuthor();
   const [expanded, setExpanded] = useState(null);
+
+  const { user, loading: authorLoading } = useAuthor();
 
   useEffect(() => {
     if (loading || authorLoading) return; // wait for the author informations to be fetch
@@ -58,16 +60,15 @@ function Delivery() {
     fetchPastDeliveries();
   }, [authorLoading, loading]);
 
-  console.log("livraisons en cours", ongoingDeliveries)
-
   const toggleExpand = (id) => {
     setExpanded(prev => (prev === id ? null : id));
-    setEditMode(null);
   };
+
+  console.log("ongoingDeliveries", ongoingDeliveries);
 
   return (
     <>
-      <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight ml-5 mt-5">Mes livraisons</h1>
+      <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight ml-5 mt-5">Livraisons</h1>
 
 
       {loading ? <Loading /> : (
@@ -75,7 +76,7 @@ function Delivery() {
           {/*Ongoing deliveries*/}
           <div key="OngoingDeliveries">
             <div className="flex items-start ...">
-              <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">En cours</p>
+              <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Mes livraisons en cours</p>
             </div>
 
             <div className="overflow-x-auto bg-white shadow rounded">
@@ -83,25 +84,15 @@ function Delivery() {
                 <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
                   <tr>
                     <th className="px-6 py-3">Date de commande</th>
-                    <th className="px-6 py-3">Nombre de produits</th>
-                    <th className="px-6 py-3">Date estimée de livraison</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 text-sm">
                   {ongoingDeliveries.map(delivery => (
                     <React.Fragment key={delivery.id}>
                       <tr>
-                        {/* Date de commande */}
+                        {/* Command date */}
                         <td className="px-6 py-4">
-                          {Date(delivery.created_at).toLocaleString("fr")}
-                        </td>
-                        {/* Nombre de produits */}
-                        <td className="px-6 py-4">
-                          {delivery.content.length}
-                        </td>
-                        {/* Date estimée de livraison */}
-                        <td className="px-6 py-4">
-                          À déterminer
+                          {delivery.created_at}
                         </td>
 
                         {/* Fold / unfold buttons */}
@@ -114,7 +105,59 @@ function Delivery() {
                         </td>
                       </tr>
                       {expanded === delivery.id && (
-                        <></>
+                        <>
+                          <tr className="bg-gray-50">
+                            <div colSpan="5" className="px-6 py-4">
+                              <h2 className="text-rayonblue font-bold text-2xl mb-3">Avancement de la livraison</h2>
+                              <div class="max-w-screen-lg bg-white rounded-lg p-4">
+                                {/* Map container */}
+                                <div class="gap-4">
+                                  <img
+                                    src="https://placehold.co/600x400"
+                                    alt="Plan des points relais à proximité"
+                                    class="rounded-lg"
+                                  />
+                                </div>
+
+                                {/* Info about the delivery */}
+                                <div class="p-4">
+                                  <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur la livraison</h2>
+                                  <p>Information sur la livraison</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div colSpan="5" className="px-6 py-4">
+                              <h2 className="text-rayonblue font-bold text-2xl mb-3">Récapitulatif de la livraison</h2>
+                              <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                                {[
+                                  ['price', 'Prix'],
+                                ].map(([field, label]) => (
+                                  <div key={field}>
+                                    <strong>{label}:</strong>{' '}
+                                    {
+                                      <span className="ml-1">
+                                        {delivery[field] || '—'}
+                                      </span>}
+                                  </div>
+                                ))}
+
+                                {/* Weight */}
+                                <div>
+                                  <strong>Poids du colis :</strong>{' '}
+                                  {
+                                    <span className="ml-1">
+                                      À déterminer
+                                    </span>
+                                  }
+                                </div>
+
+                                {/* Content */}
+                                
+                              </div>
+                            </div>
+                          </tr>
+                        </>
                       )}
                     </React.Fragment>
                   ))}
@@ -130,61 +173,29 @@ function Delivery() {
             </div>
           </div>
 
-          {/*Past deliveries*/}
-          <div key="PastDeliveries">
+          {/* Relay points nearby */}
+          <div key="RelayPointsNearby">
             <div className="flex items-start ...">
-              <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Passées</p>
+              <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Points relais proches de moi</p>
             </div>
 
-            <div className="overflow-x-auto bg-white shadow rounded">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
-                  <tr>
-                    <th className="px-6 py-3">Date de commande</th>
-                    <th className="px-6 py-3">Nombre de produits</th>
-                    <th className="px-6 py-3">Date de livraison</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 text-sm">
-                  {pastDeliveries.map(delivery => (
-                    <React.Fragment key={delivery.id}>
-                      <tr>
-                        {/* Date de commande */}
-                        <td className="px-6 py-4">
-                          new Date({delivery.created_at})
-                        </td>
-                        {/* Nombre de produits */}
-                        <td className="px-6 py-4">
-                          {delivery.content.length}
-                        </td>
-                        {/* Date estimée de livraison */}
-                        <td className="px-6 py-4">
-                          À déterminer
-                        </td>
+            <div class="flex justify-center items-center bg-white">
+              <div class="max-w-screen-lg bg-white rounded-lg p-4">
+                {/* Map container */}
+                <div class="gap-4">
+                  <img
+                    src="https://placehold.co/600x400"
+                    alt="Plan des points relais à proximité"
+                    class="rounded-lg"
+                  />
+                </div>
 
-                        {/* Fold / unfold buttons */}
-                        <td className="px-6 py-4">
-                          <FunctionButton
-                            buttonText={expanded === delivery.id ? 'Fermer' : 'Déplier'}
-                            fun={() => toggleExpand(delivery.id)}
-                            className="text-blue-600 hover:underline mr-4 bg-transparent p-0 shadow-none"
-                          />
-                        </td>
-                      </tr>
-                      {expanded === delivery.id && (
-                        <></>
-                      )}
-                    </React.Fragment>
-                  ))}
-                  {pastDeliveries.length === 0 && (
-                    <tr>
-                      <td colSpan="5" className="px-6 py-4 text-center text-gray">
-                        Aucune livraison passée.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                {/* Info about a relay point */}
+                <div class="p-4">
+                  <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur un point de relais</h2>
+
+                </div>
+              </div>
             </div>
           </div>
         </>
