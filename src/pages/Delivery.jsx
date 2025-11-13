@@ -11,7 +11,6 @@ import L from "leaflet";
 // Importing common components
 import Loading from "@common/Loading.jsx"
 import FunctionButton from '@common/FunctionButton.jsx';
-import ProductCarousel from "@common/ProductCarouselDelivery"
 
 /**
  * The Delivery page.
@@ -29,6 +28,15 @@ function Delivery() {
   const [expandedRelayPoint, setExpandedRelayPoint] = useState(null);
 
   const { user, loading: authorLoading } = useAuthor();
+
+  const redIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
 
   useEffect(() => {
     if (loading || authorLoading) return; // wait for the author informations to be fetch
@@ -57,19 +65,18 @@ function Delivery() {
     setExpanded(prev => (prev === id ? null : id));
   };
 
-  const redIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
 
   return (
     <>
       <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight ml-5 mt-5">Livraisons</h1>
-
 
       {loading ? <Loading /> : (
         <>
@@ -92,7 +99,7 @@ function Delivery() {
                       <tr>
                         {/* Command date */}
                         <td className="px-6 py-4">
-                          {delivery.created_at}
+                          {new Date(delivery.created_at).toLocaleString('fr-FR', options)}
                         </td>
 
                         {/* Fold / unfold buttons */}
@@ -164,30 +171,56 @@ function Delivery() {
                             <div colSpan="5" className="px-6 py-4">
                               <h2 className="text-rayonblue font-bold text-2xl mb-3">Récapitulatif de la livraison</h2>
                               <div className="grid grid-cols-2 gap-4 text-sm mb-4">
-                                {[
-                                  ['price', 'Prix'],
-                                ].map(([field, label]) => (
-                                  <div key={field}>
-                                    <strong>{label}:</strong>{' '}
-                                    {
-                                      <span className="ml-1">
-                                        {delivery[field] || '—'}
-                                      </span>}
-                                  </div>
-                                ))}
-
-                                {/* Weight */}
+                                {/* Command date */}
                                 <div>
-                                  <strong>Poids du colis :</strong>{' '}
+                                  <strong>Date de la commande :</strong>{' '}
                                   {
                                     <span className="ml-1">
-                                      À déterminer
+                                      {new Date(delivery.created_at).toLocaleString('fr-FR', options)}
+                                    </span>
+                                  }
+                                </div>
+
+                                {/* Price */}
+                                <div>
+                                  <strong>Prix :</strong>{' '}
+                                  {
+                                    <span className="ml-1">
+                                      {delivery["price"]} €
                                     </span>
                                   }
                                 </div>
 
                                 {/* Content */}
+                                <div>
+                                  <strong>Contenu du colis :</strong>{' '}
+                                  <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
+                                      <tr>
+                                        <th className="px-6 py-3">Produit</th>
+                                        <th className="px-6 py-3">Quantité</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                      {delivery.content.map((product) => (
+                                        <tr key={product.id}>
+                                          <td className="px-6 py-4">{product.name}</td>
+                                          <td className="px-6 py-4">{product.quantity}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
 
+                                {/* Number of products */}
+                                <div>
+                                  <strong>Nombre total d'articles :</strong>{' '}
+                                  {
+                                    <span className="ml-1">
+                                      {delivery.content.reduce((sum, product) => sum + product.quantity, 0)}
+                                    </span>
+                                  }
+                                </div>
                               </div>
                             </div>
                           </tr>
