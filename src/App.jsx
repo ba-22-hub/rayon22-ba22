@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import { ReactNotifications } from 'react-notifications-component'
 import { useState } from "react";
+import 'leaflet/dist/leaflet.css';
 
 
 import { useAuthor } from "@context/AuthorContext.jsx";
@@ -66,7 +67,7 @@ function App() {
 
             {/* Navigation Links - visible à partir de lg */}
             <div className="hidden lg:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+              <div className="ml-10 flex items-center space-x-8">
                 <Link to="/about" className="text-[#3435FF] hover:text-[#5253ff] px-3 py-2 text-sm font-medium transition-colors">
                   Qui sommes-nous ?
                 </Link>
