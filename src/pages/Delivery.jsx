@@ -5,6 +5,7 @@ import { useAuthor } from '@context/AuthorContext.jsx'
 import { displayNotification } from '@lib/displayNotification.js';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
+import L from "leaflet";
 
 
 // Importing common components
@@ -23,6 +24,8 @@ function Delivery() {
   const [expanded, setExpanded] = useState(null);
   const [currentLatitude, setCurrentLatitude] = useState(48.7453);
   const [currentLongitude, setCurrentLongitude] = useState(-3.4700);
+  const [currentLatitudeDelivery, setCurrentLatitudeDelivery] = useState(null);
+  const [currentLongitudeDelivery, setCurrentLongitudeDelivery] = useState(null);
   const [expandedRelayPoint, setExpandedRelayPoint] = useState(null);
 
   const { user, loading: authorLoading } = useAuthor();
@@ -49,8 +52,19 @@ function Delivery() {
   }, [authorLoading, loading]);
 
   const toggleExpand = (id) => {
+    setCurrentLatitudeDelivery(48.7453);
+    setCurrentLongitudeDelivery(-3.4700);
     setExpanded(prev => (prev === id ? null : id));
   };
+
+  const redIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
 
   return (
     <>
@@ -95,29 +109,56 @@ function Delivery() {
                           <tr className="bg-gray-50">
                             <div colSpan="5" className="px-6 py-4">
                               <h2 className="text-rayonblue font-bold text-2xl mb-3">Avancement de la livraison</h2>
-                              <div className="max-w-screen-lg bg-white rounded-lg p-4">
-                                <div className="w-screen bg-white">
-                                  <div id="map" className="h-96 w-full">
-                                    <MapContainer
-                                      className="h-full w-full"
-                                      center={[currentLatitude, currentLongitude]}
-                                      zoom={13}
-                                      scrollWheelZoom={false}
-                                    >
-                                      <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                      />
-                                    </MapContainer>
+                              {(currentLatitudeDelivery && currentLongitudeDelivery) ? (
+                                <div className="max-w-screen-lg bg-white rounded-lg p-4">
+                                  <div className="w-screen bg-white">
+                                    <div id="map" className="h-96 w-full">
+                                      <MapContainer
+                                        className="h-full w-full"
+                                        center={[currentLatitude, currentLongitude]}
+                                        zoom={13}
+                                        scrollWheelZoom={false}
+                                      >
+                                        <TileLayer
+                                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker
+                                          position={[currentLatitudeDelivery, currentLongitudeDelivery]}
+                                          eventHandlers={{
+                                            click: () => {
+                                              setExpandedRelayPoint("");
+                                            },
+                                          }}
+                                        >
+                                          <Popup>Votre colis 📦</Popup>
+                                        </Marker>
+
+                                        <Marker
+                                          position={[currentLatitude, currentLongitude]}
+                                          icon={redIcon}
+                                          eventHandlers={{
+                                            click: () => {
+                                              setExpandedRelayPoint("");
+                                            },
+                                          }}
+                                        >
+                                          <Popup>Vous êtes ici 📍</Popup>
+                                        </Marker>
+                                      </MapContainer>
+                                    </div>
+                                  </div>
+
+                                  {/* Info about a relay point */}
+                                  <div className="p-4">
+                                    <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur la livraison</h2>
+                                    <p>Information sur la livraison</p>
                                   </div>
                                 </div>
-
-                                {/* Info about a relay point */}
-                                <div class="p-4">
-                                  <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur la livraison</h2>
-                                  <p>Information sur la livraison</p>
-                                </div>
-                              </div>
+                              ) : (
+                                <div>Information indisponible</div>
+                              )
+                              }
                             </div>
 
                             <div colSpan="5" className="px-6 py-4">
@@ -189,6 +230,7 @@ function Delivery() {
 
                       <Marker
                         position={[currentLatitude, currentLongitude]}
+                        icon={redIcon}
                         eventHandlers={{
                           click: () => {
                             setExpandedRelayPoint("");
