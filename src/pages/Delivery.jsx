@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from '@context/AuthorContext.jsx'
 import { displayNotification } from '@lib/displayNotification.js';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
 
@@ -20,10 +20,10 @@ import ProductCarousel from "@common/ProductCarouselDelivery"
 function Delivery() {
   const [loading, setLoading] = useState(false);
   const [ongoingDeliveries, setOngoingDeliveries] = useState([]);
-  const [pastDeliveries, setPastDeliveries] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [currentLatitude, setCurrentLatitude] = useState(48.7453);
   const [currentLongitude, setCurrentLongitude] = useState(-3.4700);
+  const [expandedRelayPoint, setExpandedRelayPoint] = useState(null);
 
   const { user, loading: authorLoading } = useAuthor();
 
@@ -46,23 +46,6 @@ function Delivery() {
       setLoading(false);
     };
     fetchOngoingDeliveries();
-
-    const fetchPastDeliveries = async () => {
-      console.log(user.id)
-      const { data, error } = await supabase
-        .from('cart')
-        .select('*')
-        .eq('client_id', user.id)
-        .eq('delivered', true);
-      if (error) {
-        console.error('Erreur de chargement des livraisons passées :', error)
-        displayNotification("Erreur de chargement des livraisons passées", error.message, "danger")
-      }
-      else
-        setPastDeliveries(data);
-      setLoading(false);
-    };
-    fetchPastDeliveries();
   }, [authorLoading, loading]);
 
   const toggleExpand = (id) => {
@@ -203,6 +186,17 @@ function Delivery() {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       />
+
+                      <Marker
+                        position={[currentLatitude, currentLongitude]}
+                        eventHandlers={{
+                          click: () => {
+                            setExpandedRelayPoint("");
+                          },
+                        }}
+                      >
+                        <Popup>Vous êtes ici 📍</Popup>
+                      </Marker>
                     </MapContainer>
                   </div>
                 </div>
