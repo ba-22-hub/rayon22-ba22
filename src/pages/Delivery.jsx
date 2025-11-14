@@ -100,25 +100,23 @@ function Delivery() {
                         {/* Command date */}
                         <td className="px-6 py-4">
                           {new Date(delivery.created_at).toLocaleString('fr-FR', options)}
-                        </td>
 
-                        {/* Fold / unfold buttons */}
-                        <td className="px-6 py-4">
+                          {/* Fold / unfold buttons */}
                           <FunctionButton
                             buttonText={expanded === delivery.id ? 'Fermer' : 'Déplier'}
                             fun={() => toggleExpand(delivery.id)}
                             className="text-blue-600 hover:underline mr-4 bg-transparent p-0 shadow-none"
                           />
                         </td>
+
                       </tr>
                       {expanded === delivery.id && (
                         <>
                           <tr className="bg-gray-50">
-                            <div colSpan="5" className="px-6 py-4">
-                              <h2 className="text-rayonblue font-bold text-2xl mb-3">Avancement de la livraison</h2>
+                              <h2 className="text-rayonblue font-bold text-2xl mb-3 px-4 mt-4">Avancement de la livraison</h2>
                               {(currentLatitudeDelivery && currentLongitudeDelivery) ? (
-                                <div className="max-w-screen-lg bg-white rounded-lg p-4">
-                                  <div className="w-screen bg-white">
+                                <div className="bg-white rounded-lg p-4">
+                                  <div className="w-full bg-white">
                                     <div id="map" className="h-96 w-full">
                                       <MapContainer
                                         className="h-full w-full"
@@ -166,11 +164,10 @@ function Delivery() {
                                 <div>Information indisponible</div>
                               )
                               }
-                            </div>
 
                             <div colSpan="5" className="px-6 py-4">
                               <h2 className="text-rayonblue font-bold text-2xl mb-3">Récapitulatif de la livraison</h2>
-                              <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                              <div className="grid grid-cols-3 gap-4 text-sm mb-4">
                                 {/* Command date */}
                                 <div>
                                   <strong>Date de la commande :</strong>{' '}
@@ -187,6 +184,16 @@ function Delivery() {
                                   {
                                     <span className="ml-1">
                                       {delivery["price"]} €
+                                    </span>
+                                  }
+                                </div>
+
+                                {/* Number of products */}
+                                <div>
+                                  <strong>Nombre total d'articles :</strong>{' '}
+                                  {
+                                    <span className="ml-1">
+                                      {delivery.content.reduce((sum, product) => sum + product.quantity, 0)}
                                     </span>
                                   }
                                 </div>
@@ -210,16 +217,6 @@ function Delivery() {
                                       ))}
                                     </tbody>
                                   </table>
-                                </div>
-
-                                {/* Number of products */}
-                                <div>
-                                  <strong>Nombre total d'articles :</strong>{' '}
-                                  {
-                                    <span className="ml-1">
-                                      {delivery.content.reduce((sum, product) => sum + product.quantity, 0)}
-                                    </span>
-                                  }
                                 </div>
                               </div>
                             </div>
@@ -246,8 +243,8 @@ function Delivery() {
               <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Points relais proches de moi</p>
             </div>
 
-            <div className="flex justify-center items-center bg-white">
-              <div className="max-w-screen-lg bg-white rounded-lg p-4">
+            <div className="flex items-center bg-white">
+              <div className="max-w-screen-lg bg-white rounded-lg p-0">
                 <div className="w-screen bg-white">
                   <div id="map" className="h-96 w-full">
                     <MapContainer
