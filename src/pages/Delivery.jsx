@@ -7,10 +7,12 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
 
-
 // Importing common components
 import Loading from "@common/Loading.jsx"
 import FunctionButton from '@common/FunctionButton.jsx';
+
+// Importing assets
+import redMarker from "@assets/Assets/marker-icon-2x-red.png"
 
 /**
  * The Delivery page.
@@ -36,8 +38,7 @@ function Delivery() {
   const { user, loading: authorLoading } = useAuthor();
 
   const redIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+    iconUrl: redMarker,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
