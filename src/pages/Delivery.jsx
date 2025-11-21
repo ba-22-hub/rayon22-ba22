@@ -23,19 +23,23 @@ function Delivery() {
   const [loading, setLoading] = useState(false);
   const [ongoingDeliveries, setOngoingDeliveries] = useState([]);
   const [expanded, setExpanded] = useState(null);
-  const [currentLatitude, setCurrentLatitude] = useState(48.7453);
-  const [currentLongitude, setCurrentLongitude] = useState(-3.4700);
+  const [currentLatitude, setCurrentLatitude] = useState(null);
+  const [currentLongitude, setCurrentLongitude] = useState(null);
   const [currentLatitudeDelivery, setCurrentLatitudeDelivery] = useState(null);
   const [currentLongitudeDelivery, setCurrentLongitudeDelivery] = useState(null);
   const [expandedRelayPoint, setExpandedRelayPoint] = useState(null);
+  const [enableGeolocalisation, setEnableGeolocalisation] = useState(false);
 
-  // --- States pour tracking colis ---
-  const [parcelNumber, setParcelNumber] = useState("");
-  const [trackingResult, setTrackingResult] = useState(null);
-  const [loadingTrack, setLoadingTrack] = useState(false);
-  const [errorTrack, setErrorTrack] = useState(null);
+  // --- States pour points relais ---
+  const [chosenPostalCode, setChosenPostalCode] = useState("");
+  const [chosenCoords, setChosenCoords] = useState({});
+  const [pickupPoints, setPickupPoints] = useState([]);
+  const [loadingPickup, setLoadingPickup] = useState(false);
+  const [errorPickup, setErrorPickup] = useState(null);
 
   const { user, loading: authorLoading } = useAuthor();
+
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
   const redIcon = L.icon({
     iconUrl: redMarker,
@@ -47,6 +51,34 @@ function Delivery() {
 
   useEffect(() => {
     if (loading || authorLoading) return; // wait for the author informations to be fetch
+
+    // Getting user's position
+    const getLocation = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords
+            setCurrentLatitude(latitude)
+            setCurrentLongitude(longitude)
+          },
+          (error) => {
+            displayNotification("Impossible d'accéder à votre localisation", error.message, "warning")
+          }
+        )
+      } else {
+        displayNotification("Impossible d'accéder à votre localisation", "La fonctionnalité de géolocalisation n'est pas supportée par votre navigateur", "warning")
+      }
+      if (currentLatitude != null && currentLongitude != null) {
+        const code = await reverseGeocode(currentLatitude, currentLongitude)
+        fetchPickupPoints(code)
+      }
+    }
+
+    const setChosenPosition = async () => {
+      if (chosenPostalCode != null) {
+        setChosenCoords(await geocode(chosenPostalCode));
+      }
+    }
 
     const fetchOngoingDeliveries = async () => {
       const { data, error } = await supabase
@@ -62,31 +94,67 @@ function Delivery() {
         setOngoingDeliveries(data);
       setLoading(false);
     };
-    fetchOngoingDeliveries();
-  }, [authorLoading, loading]);
 
-  // --- Fonction pour tracker un colis ---
-  const fetchTracking = async () => {
-    setLoadingTrack(true);
-    setErrorTrack(null);
+    fetchOngoingDeliveries();
+    getLocation();
+    setChosenPosition();
+  }, [authorLoading, loading, enableGeolocalisation, chosenPostalCode]);
+
+  // --- Fonction pour récupérer les points relais ---
+  const fetchPickupPoints = async (postalCode) => {
+    setLoadingPickup(true);
+    setErrorPickup(null);
     try {
       const res = await fetch(
-        "https://gmpkdrwiebwyyujfrdvf.functions.supabase.co/dpd_tracking",
+        "https://gmpkdrwiebwyyujfrdvf.functions.supabase.co/dpd_pickup_points",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ parcelNumber }),
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": supabaseKey,
+            "Authorization": `Bearer ${supabaseKey}`,
+          },
+          body: JSON.stringify({ postalCode, countryCode: "FR", city: "", address: "", }),
         }
       );
-      if (!res.ok) throw new Error("Erreur serveur tracking");
+      if (!res.ok) throw new Error("Erreur serveur points relais");
       const data = await res.json();
-      setTrackingResult(data);
+      setPickupPoints(data);
     } catch (e) {
-      setErrorTrack(e.message);
+      setErrorPickup(e.message);
+      displayNotification("Erreur lors de la récupération des points de relais proches", e.message, "danger")
     } finally {
-      setLoadingTrack(false);
+      setLoadingPickup(false);
     }
   };
+
+  async function reverseGeocode(lat, lon) {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+
+    const response = await fetch(url, {
+      headers: { "User-Agent": "Rayon22" }
+    });
+
+    const data = await response.json();
+    return data.address.postcode || null;
+  }
+
+  async function geocode(postcode, country = "fr") {
+    const url = `https://nominatim.openstreetmap.org/search?postalcode=${postcode}&country=${country}&format=json&limit=1`;
+
+    const response = await fetch(url, {
+      headers: { "User-Agent": "Rayon22" }
+    });
+
+    const data = await response.json();
+
+    if (!data || data.length === 0) return null;
+
+    return {
+      latitude: parseFloat(data[0].lat),
+      longitude: parseFloat(data[0].lon)
+    };
+  }
 
   const toggleExpand = (id) => {
     setCurrentLatitudeDelivery(48.7453);
@@ -105,30 +173,6 @@ function Delivery() {
 
   return (
     <>
-      <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-        <h2>Tracking Colis DPD</h2>
-        <input
-          type="text"
-          placeholder="Numéro de colis"
-          value={parcelNumber}
-          onChange={(e) => setParcelNumber(e.target.value)}
-        />
-        <button onClick={fetchTracking} disabled={loadingTrack}>
-          {loadingTrack ? "Chargement..." : "Suivre le colis"}
-        </button>
-        {errorTrack && <p style={{ color: "red" }}>{errorTrack}</p>}
-        {trackingResult && (
-          <div>
-            <p>
-              <strong>Statut :</strong> {trackingResult.status || "N/A"}
-            </p>
-            <p>
-              <strong>Localisation :</strong> {trackingResult.location || "N/A"}
-            </p>
-          </div>
-        )}
-      </div>
-
       <h1 className="text-[#2E2EFF] text-5xl lg:text-7xl font-extrabold leading-tight ml-5 mt-5">Livraisons</h1>
 
       {loading ? <Loading /> : (
@@ -296,43 +340,93 @@ function Delivery() {
               <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Points relais proches de moi</p>
             </div>
 
-            <div className="flex items-center bg-white">
-              <div className="max-w-screen-lg bg-white rounded-lg p-0">
-                <div className="w-screen bg-white">
-                  <div id="map" className="h-96 w-full">
-                    <MapContainer
-                      className="h-full w-full"
-                      center={[currentLatitude, currentLongitude]}
-                      zoom={13}
-                      scrollWheelZoom={false}
-                    >
-                      <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
 
-                      <Marker
-                        position={[currentLatitude, currentLongitude]}
-                        icon={redIcon}
-                        eventHandlers={{
-                          click: () => {
-                            setExpandedRelayPoint("");
-                          },
-                        }}
+            <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+              <h2>Dans quelle ville souhaitez-vous récupérer cotre colis ?</h2>
+              <input
+                type="text"
+                placeholder="Code postal"
+                value={chosenPostalCode}
+                onChange={(e) => setChosenPostalCode(e.target.value)}
+              />
+              <FunctionButton
+                buttonText={loadingPickup ? "Chargement..." : "Rechercher"}
+                fun={async () => { fetchPickupPoints(chosenPostalCode), setEnableGeolocalisation(false) }}
+                disabled={loadingPickup}
+                className="bg-rayonorange mt-3 w-80 h-10"
+              />
+              <FunctionButton
+                buttonText={"Me localiser"}
+                fun={async () => setEnableGeolocalisation(true)}
+                className="bg-rayonorange mt-3 w-80 h-10"
+              />
+              {errorPickup && <p style={{ color: "red" }}>{errorPickup}</p>}
+              {pickupPoints.length > 0 && (
+                <ul>
+                  {pickupPoints.map((p, i) => (
+                    <li key={i}>
+                      <strong>{p.name}</strong> - {p.address}, {p.postalCode} {p.city}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <hr style={{ margin: "2rem 0" }} />
+            </div>
+
+            {(currentLatitude != null && currentLongitude != null) ? (
+              <div className="flex items-center bg-white">
+                <div className="max-w-screen-lg bg-white rounded-lg p-0">
+                  <div className="w-screen bg-white">
+                    <div id="map" className="h-96 w-full">
+                      <MapContainer
+                        className="h-full w-full"
+                        center={[currentLatitude, currentLongitude]}
+                        zoom={13}
+                        scrollWheelZoom={false}
                       >
-                        <Popup>Vous êtes ici 📍</Popup>
-                      </Marker>
-                    </MapContainer>
+                        <TileLayer
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+
+                        <Marker
+                          position={[currentLatitude, currentLongitude]}
+                          icon={redIcon}
+                          eventHandlers={{
+                            click: () => {
+                              setExpandedRelayPoint("");
+                            },
+                          }}
+                        >
+                          <Popup>Vous êtes ici 📍</Popup>
+                        </Marker>
+                        {pickupPoints != [] &&
+                          pickupPoints.points?.map((pickupPoint) => (
+                            <Marker
+                              key={pickupPoint.id}
+                              position={[
+                                parseFloat(pickupPoint.latitude.replace(",", ".")),
+                                parseFloat(pickupPoint.longitude.replace(",", ".")),
+                              ]}
+                              eventHandlers={{
+                                click: () => {
+                                  setExpandedRelayPoint("");
+                                },
+                              }}
+                            >
+                              <Popup>{pickupPoint.name} 📬</Popup>
+                            </Marker>
+                          ))
+                        }
+                      </MapContainer>
+                    </div>
                   </div>
                 </div>
-
-                {/* Info about a relay point */}
-                <div className="p-4">
-                  <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur un point de relais</h2>
-
-                </div>
               </div>
-            </div>
+            ) : (
+              <>Localisation indisponible</>
+            )}
           </div>
         </>
       )}
