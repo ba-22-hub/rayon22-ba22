@@ -84,7 +84,7 @@ function Register() {
         });
 
         if (error) {
-            displayNotification("Échec de la soumission du formulaire", insertError.message, "danger")
+            displayNotification("Échec de la soumission du formulaire", error.message, "danger")
             return;
         }
 
@@ -103,7 +103,7 @@ function Register() {
     if (user) {
         return (
             <>
-                <div className="w-[66vw] mx-auto p-[4vw] bg-white rounded-2xl shadow-sm mb-[4vw] flex flex-col items-center text-center">
+                <div className="lg:w-[66vw] mx-auto p-[4vw] bg-white rounded-2xl shadow-sm mb-[4vw] flex flex-col items-center text-center">
                     <h1 className="text-center text-rayonblue text-[5em] leading-tight pt-[2%] font-bold">Vous possédez déjà un compte</h1>
                     <p>Pour accéder à la création d'un compte, merci de vous déconnecter</p>
                     <button
@@ -125,9 +125,9 @@ function Register() {
     } else {
         return (
             <>
-                <div className="bg-white w-[60%] ml-[20%] mb-[5%]">
+                <div className="bg-white lg:w-[60%] lg:ml-[20%] mb-[5%]">
 
-                    <h1 className="text-center text-rayonblue text-[5em] leading-tight pt-[2%] font-bold">Création d’un compte</h1>
+                    <h1 className="text-center text-rayonblue text-5xl lg:text-7xl leading-tight pt-[2%] font-bold">Création d’un compte</h1>
                     <Steper steps={['Étape 1', 'Étape 2', 'Mot de passe', 'Confirmation']} currentStep={step} />
                     {step == 1 && (<RegisterStep1
                         data={formData.step1}

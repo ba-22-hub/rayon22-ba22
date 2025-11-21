@@ -181,9 +181,9 @@ function Account() {
     }
 
     // on factorise l'élément le plus volumineux 
-    const renderField = (label, fieldName) => (
-        <div className="flex flex-row items-center text-rayonblue mb-2">
-            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+    const renderField = (label, fieldName, minWidth = 180 ) => (
+        <div className="flex flex-row items-center text-rayonblue mb-2 text-sm lg:text-base">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap lg:mr-4 mr-0">{label} :</label>
             <div className="flex-1">
                 {editing ? (
                     <input
@@ -200,26 +200,24 @@ function Account() {
     );
 
 
-    const renderRadio = (label, fieldName, options) => (
-        <div className="flex flex-row items-center text-rayonblue mb-2">
-            <label className="font-semibold min-w-[180px] whitespace-nowrap mr-4">{label} :</label>
+    const renderSelect = (label, fieldName, options) => (
+        <div className="flex flex-row items-center text-rayonblue mb-2 text-sm lg:text-base">
+            <label className="font-semibold min-w-[180px] whitespace-nowrap lg:mr-4 mr-0">{label} :</label>
             <div className="flex-1">
                 {editing ? (
-                    <div className="flex flex-wrap gap-4 text-rayonorange">
+                    <select
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-rayonorange bg-white focus:outline-none focus:ring-2 focus:ring-rayonorange"
+                        name={fieldName}
+                        value={clientEdit[fieldName]}
+                        onChange={handleChange}
+                    >
+                        <option value="">Sélectionner...</option>
                         {options.map((option) => (
-                            <label key={option} className="flex items-center">
-                                <input
-                                    className="mr-1"
-                                    type="radio"
-                                    name={fieldName}
-                                    value={option}
-                                    checked={clientEdit[fieldName] === option}
-                                    onChange={handleChange}
-                                />
+                            <option key={option} value={option}>
                                 {option}
-                            </label>
+                            </option>
                         ))}
-                    </div>
+                    </select>
                 ) : (
                     <p className="text-rayonblue">{clientEdit[fieldName]}</p>
                 )}
@@ -236,7 +234,7 @@ function Account() {
             ) : (
                 isAdmin ? (
                     <>
-                        <div className="w-full max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16 flex flex-col items-center text-center">
+                        <div className="w-full lg:max-w-5xl mx-auto p-8 bg-white rounded-2xl shadow-sm mb-16 flex flex-col items-center text-center">
                             <p className="text-rayonblue text-4xl md:text-5xl">Ce compte est administrateur</p>
                             <br />
                             <p>Il ne possède donc par conséquent pas de données personnelles</p>
@@ -273,7 +271,7 @@ function Account() {
                                 <h2 className="text-rayonblue text-xl font-semibold mb-4">État civil</h2>
                                 {renderField("Nom", "lastName")}
                                 {renderField("Prénom", "firstName")}
-                                {renderRadio("Genre", "gender", genderOptions)}
+                                {renderSelect("Genre", "gender", genderOptions)}
                             </div>
 
                             <div className="border border-rayonblue rounded-lg p-4 flex-1 min-w-0">
@@ -289,15 +287,15 @@ function Account() {
 
                         <div className="border border-rayonblue rounded-lg p-4 mt-6 w-full max-w-full">
                             <h2 className="text-rayonblue text-xl font-semibold mb-4">Déclarations</h2>
-                            {renderRadio("Situation", "situation", situationOptions)}
+                            {renderSelect("Situation", "situation", situationOptions)}
                             {renderField("Quotient familial (CAF)", "quotient")}
-                            {renderRadio("Type de salaire", "wageType", wageOptions)}
+                            {renderSelect("Type de salaire", "wageType", wageOptions)}
                         </div>
 
                         {/* rights */}
                         <div className="border border-rayonblue rounded-lg p-4 mt-6 w-full max-w-full overflow-x-auto">
                             <h2 className="text-rayonblue text-xl font-semibold mb-4">Vos droits</h2>
-                            <div className="grid grid-cols-[minmax(0,300px)_minmax(0,120px)] gap-x-3 text-rayonblue">
+                            <div className="grid grid-cols-[minmax(0,300px)_minmax(0,120px)] gap-x-3 text-rayonblue text-sm lg:text-base gap-y-2">
                                 {/* contenu inchangé */}
                                 <label className="font-semibold">Date de validité du compte :</label>
                                 <p className="text-right">{client.has_right ? client.end_right : "Compte invalide"}</p>
@@ -364,7 +362,7 @@ function Account() {
                                     Annuler ✖
                                 </button>
                                 <button
-                                    className="text-rayonorange text-center bg-white w-full md:w-1/3 mb-3 mt-10 h-10 border border-rayonorange"
+                                    className="text-rayonorange text-center bg-white w-full md:w-1/3 mb-3 mt-2 lg:mt-10 h-10 border border-rayonorange"
                                     onClick={handleEdit}
                                 >
                                     Valider 🗸
