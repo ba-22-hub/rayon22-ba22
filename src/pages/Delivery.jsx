@@ -14,6 +14,7 @@ import FunctionButton from '@common/FunctionButton.jsx';
 
 // Importing assets
 import redMarker from "@assets/Assets/marker-icon-2x-red.png"
+import orangeMarker from "@assets/Assets/marker-icon-2x-orange.png"
 
 /**
  * The Delivery page.
@@ -45,6 +46,14 @@ function Delivery() {
 
     const redIcon = L.icon({
         iconUrl: redMarker,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+    });
+
+    const orangeIcon = L.icon({
+        iconUrl: orangeMarker,
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
@@ -430,21 +439,26 @@ function Delivery() {
                                                 >
                                                     <Popup>Vous êtes ici 📍</Popup>
                                                 </Marker>
-                                                {pickupPoints != [] &&
-                                                    pickupPoints.points?.map((pickupPoint) => (
+                                                {pickupPoints.length > 0 &&
+                                                    pickupPoints.map((pickupPoint, index) => (
                                                         <Marker
-                                                            key={pickupPoint.id}
+                                                            key={pickupPoint.id || index}
                                                             position={[
                                                                 parseFloat(pickupPoint.latitude.replace(",", ".")),
                                                                 parseFloat(pickupPoint.longitude.replace(",", ".")),
                                                             ]}
+                                                            icon={orangeIcon}
                                                             eventHandlers={{
                                                                 click: () => {
-                                                                    setExpandedRelayPoint("");
+                                                                    setExpandedRelayPoint(pickupPoint.id);
                                                                 },
                                                             }}
                                                         >
-                                                            <Popup>{pickupPoint.name} 📬</Popup>
+                                                            <Popup>
+                                                                <strong>{pickupPoint.name}</strong> 📬<br />
+                                                                {pickupPoint.address}<br />
+                                                                {pickupPoint.postalCode} {pickupPoint.city}
+                                                            </Popup>
                                                         </Marker>
                                                     ))
                                                 }
