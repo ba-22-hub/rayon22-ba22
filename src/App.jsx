@@ -40,6 +40,7 @@ import Sponsor from '@pages/Sponsor.jsx'
 import Account from "@pages/Account.jsx";
 import PaymentSuccess from "@pages/PaymentSuccess.jsx";
 import ResetPassword from "./pages/ResetPassword";
+import ChosePickUpPoint from "@pages/ChosePickUpPoint.jsx";
 
 // Importing common components
 import Footer from "@common/Footer.jsx";
@@ -211,6 +212,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/chose-pickup-point" element={<ChosePickUpPoint />} />
         {/* {/* Redirecting to Error404 page if the route does not exist */}
         {/* <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />  */}
       </Routes>

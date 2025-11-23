@@ -61,7 +61,7 @@ function PaymentSuccess() {
             }
 
             // Finale redirection
-            navigate("/catalog");
+            navigate("/chose-pickup-point")
         };
 
         confirmPayment();
