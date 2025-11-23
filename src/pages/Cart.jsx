@@ -38,7 +38,7 @@ function Cart() {
     const [loading, setLoading] = useState(true);
 
     const { user, loading: authorLoading, checkHasRights } = useAuthor()
-    const { cart, setCart, clearCart } = useCart()
+    const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
 
@@ -99,7 +99,7 @@ function Cart() {
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
-                .in("id", Object.keys(cart));
+                .in("id", Object.keys(cart).filter(k => k !== "id"));
             if (error) {
                 displayNotification("Erreur de chargement des produits", error.message, "danger")
             } else {
@@ -148,7 +148,7 @@ function Cart() {
         if (productsInCart.length > 0) {
             setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
             setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart[product.id]))).reduce((weightTotal, weight) => weightTotal + weight)))
-            setProductsNumberTotal(Object.values(cart).reduce((acc, number) => acc + number, 0))
+            setProductsNumberTotal(Object.keys(cart).filter(k => k !== "id").map(k => cart[k]).reduce((acc, number) => acc + number, 0))
         } else {
             setProductsPriceTotal(0)
             setProductsWeightTotal(0)
@@ -157,7 +157,7 @@ function Cart() {
     }
 
     async function handleValidate() {
-        if (Object.keys(cart).length === 0) {
+        if (Object.keys(cart).filter(k => k !== "id").length === 0) {
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
         } else {
@@ -195,7 +195,7 @@ function Cart() {
             .map(p => parseFloat(p.salePrice) * cart[p.id])
             .reduce((a, b) => a + b, 0);
 
-        const productsNumberTotal = Object.values(cart).reduce((a, b) => a + b, 0);
+        const productsNumberTotal = Object.keys(cart).filter(k => k !== "id").map(k => cart[k]).reduce((a, b) => a + b, 0);
 
         if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
             displayNotification(
@@ -299,7 +299,6 @@ function Cart() {
                 console.error("Aucune URL Stripe renvoyée par la fonction edge.");
             }
 
-            clearCart();
         } catch (err) {
             console.error("Erreur Stripe :", err);
         }
@@ -311,7 +310,7 @@ function Cart() {
 
         function DisplayButtons({ product }) {
             const AddToCart = () => {
-                if (Object.keys(cart).includes(product.id)) {
+                if (Object.keys(cart).filter(k => k !== "id").includes(product.id)) {
                     // Product already in cart
                     setCart(prevData => ({
                         ...prevData,
@@ -329,7 +328,7 @@ function Cart() {
             }
 
             const RemoveFromCart = () => {
-                if (Object.keys(cart).includes(product.id)) {   // Should always be true when function called
+                if (Object.keys(cart).filter(k => k !== "id").includes(product.id)) {   // Should always be true when function called
                     if (cart[product.id] <= 1) {
                         // Removing last item of this product from cart : product removed from cart
                         setCart(prevData => {
@@ -370,7 +369,7 @@ function Cart() {
             }
         }
 
-        if (Object.keys(cart).includes(product.id)) {
+        if (Object.keys(cart).filter(k => k !== "id").includes(product.id)) {
             return (
                 <div key={idx} className="grid grid-cols-7 text-[#3435FF]">
                     <div className="col-span-1 col-start-1 content-center">
@@ -445,7 +444,7 @@ function Cart() {
                 </div>
                 <FunctionButton
                     buttonText={'Valider ma commande'}
-                    className={`mx-4 sm:mx-10 w-full mt-4 sm:mt-5 px-4 sm:px-8 py-2 sm:py-3 rounded-lg font-mono text-lg sm:text-xl md:text-2xl font-semibold shadow ${Object.keys(cart).length === 0
+                    className={`mx-4 sm:mx-10 w-full mt-4 sm:mt-5 px-4 sm:px-8 py-2 sm:py-3 rounded-lg font-mono text-lg sm:text-xl md:text-2xl font-semibold shadow ${Object.keys(cart).filter(k => k !== "id").length === 0
                         ? 'bg-[#878787] text-white'
                         : 'bg-[#FF8200] text-white hover:bg-[#ff9800]'
                         }`}

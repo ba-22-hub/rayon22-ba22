@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { displayNotification } from '@lib/displayNotification.js';
+import { useCart } from "@context/CartContext.jsx";
 
 // Importing common components
 import Loading from "@common/Loading.jsx";
@@ -10,6 +11,7 @@ import Loading from "@common/Loading.jsx";
 function PaymentSuccess() {
     const navigate = useNavigate();
     const hasRun = useRef(false);
+    const { cart, setCart } = useCart()
 
     useEffect(() => {
         if (hasRun.current) return;
@@ -44,13 +46,19 @@ function PaymentSuccess() {
                 console.log("✅ Paiement validé, insertion dans la base...");
                 displayNotification("Paiement validé", "", "success")
 
-                const { error: insertError } = await supabase
+                const { data:insertedCartId, error: insertError } = await supabase
                     .from("cart")
-                    .insert(data.cartToValidate);
+                    .insert(data.cartToValidate)
+                    .select("id")
+                    .single();
 
                 if (insertError) {
                     console.error("💥 Erreur insertion commande :", insertError);
                 } else {
+                    setCart(prevData => ({
+                        ...prevData,
+                        "id": insertedCartId.id
+                    }))
                     console.log("🛒 Commande insérée avec succès !");
                 }
 

@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
-import { useAuthor } from '@context/AuthorContext.jsx'
+import { useAuthor } from '@context/AuthorContext.jsx';
+import { useCart } from "@context/CartContext.jsx";
 import { displayNotification } from '@lib/displayNotification.js';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
 
@@ -22,8 +23,7 @@ import orangeMarker from "@assets/Assets/marker-icon-2x-orange.png"
  */
 
 function ChosePickUpPoint() {
-    const [loading, setLoading] = useState(true); // Changé à true pour démarrer en loading
-    const [ongoingDeliveries, setOngoingDeliveries] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(null);
     const [currentLongitude, setCurrentLongitude] = useState(null);
 
@@ -37,6 +37,8 @@ function ChosePickUpPoint() {
     const [errorPickup, setErrorPickup] = useState(null);
 
     const { user } = useAuthor();
+    const { cart, clearCart } = useCart()
+    console.log(cart);
     const navigate = useNavigate()
 
     const redIcon = L.icon({
@@ -81,30 +83,15 @@ function ChosePickUpPoint() {
                 displayNotification("Impossible d'accéder à votre localisation", "La fonctionnalité de géolocalisation n'est pas supportée par votre navigateur", "warning")
             }
         }
-        const fetchOngoingDeliveries = async () => {
-            if (!user) return;
-            
-            const { data, error } = await supabase
-                .from('cart')
-                .select('*')
-                .eq('client_id', user.id)
-                .eq('delivered', false);
-            if (error) {
-                console.error('Erreur de chargement des livraisons en cours :', error)
-                displayNotification("Erreur de chargement des livraisons en cours", error.message, "danger")
-            } else {
-                setOngoingDeliveries(data);
-            }
-            setLoading(false);
-        };
 
-        fetchOngoingDeliveries();
         getLocation();
     }, [user]);
 
     function selectPoint( point ){
         console.log("Point selectionné : ", point )
         setCurrPoint(point)
+        createLabel()
+        clearCart()
     } 
 
     // --- Fonction pour récupérer les points relais ---
@@ -177,6 +164,26 @@ function ChosePickUpPoint() {
         }
         // Position par défaut (France)
         return [46.603354, 1.888334];
+    };
+
+    // Creating the label
+    const createLabel = async () => {
+        try {
+            const { data, error } = await supabase.functions.invoke('dpd_create_label', {
+                body: JSON.stringify({
+                    cartId: cart.id
+                })
+            })
+            if (error) {
+                throw new Error(error)
+            } else {
+                console.log(data)
+                console.log(cart.id)
+                // setLabel(data.points);
+            }
+        } catch (e) {
+            displayNotification("Erreur lors de la création de l'étiquette associée à votre colis", e.message, "danger")
+        }
     };
 
     return (
@@ -269,11 +276,6 @@ function ChosePickUpPoint() {
                                             <Marker
                                                 position={[currentLatitude, currentLongitude]}
                                                 icon={redIcon}
-                                                eventHandlers={{
-                                                    click: () => {
-                                                        setExpandedRelayPoint("");
-                                                    },
-                                                }}
                                             >
                                                 <Popup>Vous êtes ici 📍</Popup>
                                             </Marker>
@@ -288,11 +290,6 @@ function ChosePickUpPoint() {
                                                         parseFloat(pickupPoint.longitude.replace(",", ".")),
                                                     ]}
                                                     icon={orangeIcon}
-                                                    eventHandlers={{
-                                                        click: () => {
-                                                            setExpandedRelayPoint(pickupPoint.id);
-                                                        },
-                                                    }}
                                                 >
                                                     <Popup>
                                                         <strong>{pickupPoint.name}</strong> 📬<br />
