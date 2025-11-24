@@ -89,17 +89,15 @@ function ResetPassword() {
 
                 {/* Formulaire */}
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
-                    <FormInput
+                    <PasswrdInput
                         inputText={<span>Mot de passe</span>}
-                        type="password"
                         name="password"
                         onChange={handleChange}
                         className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                         isStarred={true}
                     />
-                    <FormInput
+                    <PasswrdInput
                         inputText={<span>Confirmation du mot de passe</span>}
-                        type="password"
                         name="passwordConfirm"
                         onChange={handleChange}
                         className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"

@@ -8,6 +8,7 @@ import { displayNotification } from '@lib/displayNotification.js';
 // Importing common components
 import FormInput from "@common/FormInput";
 import PageButton from "@common/PageButton";
+import PasswrdInput from '../common/PasswrdInput';
 
 /**
  * The Login page.
@@ -141,13 +142,12 @@ return (
 					/>
 				</div>
 				<div className="w-[65%] mx-auto">
-					<FormInput
+					<PasswrdInput
 						inputText={<span className="text-rayonblue">Mot de passe</span>}
 						name={'password'}
 						value={formData.password}
 						onChange={handleChange}
 						isStarred={true}
-						type="password"
 						className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
 					/>
 				</div>
