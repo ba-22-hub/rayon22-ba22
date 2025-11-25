@@ -60,47 +60,25 @@ function RegisterStep2({ data, onDataChange, onNext, onPrevious }) {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className='mlr-[8%] mt-[6rem]'>
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} />
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Complément d'adresse :" name="addAddress" value={formData.addr} onChange={handleChange} />
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Votre commune :" name="city" value={formData.region} onChange={handleChange} isStarred={true} />
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Code postal :" name="postalCode" value={formData.postalCode} onChange={handleChange} isStarred={true} />
-
-                <div>
-                    <label className="text-rayonblue ml-[8%]">Situation <a className="text-red">*</a></label><br />
-                    <input className="ml-[8%]" type="radio" name="situation" value="Employé" checked={formData.situation === "Employé"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salarié</a>
-                    <input className="ml-8" type="radio" name="situation" value="Sans emploi" checked={formData.situation === "Sans enploi"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Sans emploi</a>
-                    <input className="ml-8" type="radio" name="situation" value="Étudiant" checked={formData.situation === "Étudiant"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Étudiant</a>
-                    <input className="ml-8" type="radio" name="situation" value="Retraité" checked={formData.situation === "Retraité"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Retraité</a>
-                </div><br />
-
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Quotient familial (attestation CAF) :" name="quotient" value={formData.quotient} onChange={handleChange} isStarred={true} />
-
-                <div>
-                    <label className="text-rayonblue ml-[8%]">Vos revenus <a className="text-red">*</a></label><br />
-                    <input className="ml-[8%]" type="radio" name="wageType" value="Salaire" checked={formData.wageType === "Salaire"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Salaire ou pension</a>
-                    <input className="ml-8" type="radio" name="wageType" value="Bourse" checked={formData.wageType === "Bourse"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Bourse</a>
-                    <input className="ml-8" type="radio" name="wageType" value="Aides" checked={formData.wageType === "Aides"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Aide (RSA, APL)</a>
-                    <input className="ml-8" type="radio" name="wageType" value="Autre" checked={formData.wageType === "Autre"} onChange={handleChange} /> <a className="text-rayonblue ml-1">Autres</a>
-                    {formData.wageType === "Autre" && (
-                        <>
-                            <br />
-                            <input
-                                className="w-[20em] h-[1.5rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
-                                type="text"
-                                name="otherWage"
-                                value={formData.otherWage}
-                                onChange={handleOtherWageChange}
-                                placeholder="Précisez vos revenus"
-                            />
-                        </>
-                    )}
-                </div><br />
-
-
-
-                <div className="lg:w-[25rem] w-[90%] ml-[5%] bg-gray p-4 rounded-lg lg:ml-[8%]">
-                    <p className="text-rayonblue">L’inscription nécessitera un contact avec nos équipes. Dans certains cas, un rendez-vous avec une assistante sociale de proximité sera nécessaire. Dans tous les cas, une validation des conditions de ressources sera réalisée. Au plus vite inscrit, au plus vite livré.</p>
+            <form onSubmit={handleSubmit} className='mlr-[8%] mt-[4rem]'>
+                <div className='bg-[#A9F5EA] text-rayonblue w-[84%] ml-[8%] mb-10 p-4 rounded-lg'>
+                    <h2 className='text-xl'>Pour pouvoir valider votre compte, vous devez</h2>
+                    <p> - Prendre rendez vous avec un travailleur social qui doit vous transmettre une autorisation avec les
+                        Informations suivantes : date de début et de fin de droit, la composition de la famille en indiquant le
+                        nombre d’enfants et âges.</p><br />
+                    <p>- Si vous êtes étudiant boursier, nous transmettre la copie du document. L’inscription sera déterminée en
+                        fonction de votre échelon de bourse. la durée de validité sera l’année scolaire en cours.</p>
+                </div>
+                <div className='text-red w-[84%] ml-[8%] mb-10 p-4'>
+                    Toutes les informations transmises sont strictement confidentielles, seulement accessibles aux personnes qui
+                    valident le dossier et ne seront conservées que le temps de validité de votre inscription.
+                </div>
+                <div className="lg:w-[84%] w-[90%] ml-[5%] bg-gray p-4 rounded-lg lg:ml-[8%]">
+                    <p className="">Pour nous envoyer vos documents, cliquer sur <a className='underline text-rayonblue'>Nous contacter</a>. Vous ne pourrez pas commander de
+                        marchandises tant que votre dossier ne sera pas complet et validé par nos équipes. <br />
+                        Un mail vous sera envoyé pour vous informer de votre inscription. <br /><br />
+                        Les colis seront disponibles en point relais entre 3 et 12 jours après la commande. <br /><br />
+                        Pour plus d’information, cliquer sur les conditions générales de vente en bas de page.</p>
                     <div className="flex items-center mt-2">
                         <input
                             className="w-[1.4rem] h-[1.4rem] rounded-lg border border-rayonblue"

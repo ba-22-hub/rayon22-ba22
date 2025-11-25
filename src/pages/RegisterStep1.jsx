@@ -50,31 +50,36 @@ function RegisterStep1({ data, onDataChange, onNext }) {
 
     return (
         <>
-            <span style={{ display: 'block', marginTop: '6rem' }}></span>
+            <span style={{ display: 'block', marginTop: '4rem' }}></span>
             <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables pour instruire votre dossier.</p>
             <span style={{ display: 'block', marginTop: '2rem' }}></span>
-            <p className='text-center text-black m-[1rem] text-[1.3rem] mr-[8%]'>
-                Essayez de remplir le maximum de rubriques en ligne et préparez vos réponses pour compléter en direct les rubriques lors du rappel de nos équipes.<br />
-                Ajoutez vos dépenses au même titre que vos revenus
-            </p>
+            
             <form onSubmit={handleSubmit}>
+                {/* Gender */}
                 <div>
                     <label className="ml-[8%] text-rayonblue">Genre <a className="text-red">*</a></label><br />
                     <input className="ml-[8%]" type="radio" name="gender" value="Homme" checked={formData.gender === "Homme"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Homme</a>
                     <input className="ml-8" type="radio" name="gender" value="Femme" checked={formData.gender === "Femme"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Femme</a>
                     <input className="ml-8" type="radio" name="gender" value="Autre" checked={formData.gender === "Autre"} onChange={handleChange} required /> <a className="text-rayonblue ml-1">Autre</a>
                 </div><br />
-
+                {/* First name  */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Prénom" name="firstName" value={formData.firstName} onChange={handleChange} isStarred={true} />
+                {/* Last name  */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Nom" name="lastName" value={formData.lastName} onChange={handleChange} isStarred={true} />
-
-                <label className="text-rayonblue ml-[8%]">Date de naissance <a className="text-red">*</a></label><br />
-                <input className="rounded-lg border border-rayonblue h-[2.3rem] ml-[8%] text-rayonlightblue mt-1 mb-[-10px] w-[9em]" type="date" name="birthday" value={formData.birthday} onChange={handleChange} /><br /><br />
-
+                {/* Phone number */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Téléphone" name="phone" value={formData.phone} onChange={handleChange} isStarred={true} />
+                {/* Mail */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Adresse mail" name="email" value={formData.email} onChange={handleChange} isStarred={true} />
+                {/* Street */}
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} isStarred={true}/>
+                {/* add addresse */}
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Complément d'adresse :" name="addAddress" value={formData.addr} onChange={handleChange} />
+                {/* City  */}
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Votre commune :" name="city" value={formData.region} onChange={handleChange} isStarred={true} />
+                {/* Post code */}
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Code postal :" name="postalCode" value={formData.postalCode} onChange={handleChange} isStarred={true} />
 
-                <button type="submit" className='text-center-white bg-rayonorange w-[80%] ml-[10%] lg:w-[50%] lg:ml-[25%] mb-3 mt-[10%] h-[2rem]'>Suivant</button>
+                <button type="submit" className='text-center-white bg-rayonorange w-[80%] ml-[10%] lg:w-[50%] lg:ml-[25%] mb-3 mt-10 h-[2rem]'>Suivant</button>
             </form>
             <PageButton
                 className='text-center text-rayonorange bg-white w-[80%] ml-[10%] lg:w-[50%] lg:ml-[25%] mb-[4%] h-[2rem] rounded-lg border border-rayonorange '

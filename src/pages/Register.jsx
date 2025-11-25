@@ -24,23 +24,18 @@ function Register() {
     // useState init to store the form data in a JSON format
     const [formData, setFormData] = useState({
         'step1': {
-
             gender: '',
             firstName: '',
             lastName: '',
-            birthday: '',
             phone: '',
             email: '',
-        },
-        'step2': {
             address: '',
             addAddress: '',
             city: '',
             postalCode: '',
             situation: '',
-            quotient: '',
-            wageType: '',
-            otherWage: '',
+        },
+        'step2' : {
             readInfo: false,
             acceptTerms: false
         },
@@ -60,7 +55,7 @@ function Register() {
         setStep(step);
     }
 
-    // Fonction pour mettre à jour les données d'une étape
+    // Function to update the data of a step
     const updateStepData = (step, data) => {
 
         setFormData(prev => ({
