@@ -142,7 +142,7 @@ function ProductCarousel({ data }) {
               <DisplayButtons product={product} />
             </div>
             <div className="text-[#ff6161] text-xs ml-0">
-              Prix en magasin : {product.price}€
+              Prix moyen en magasin : {product.price}€
             </div>
           </div>
           <div className="relative text-center">
@@ -222,7 +222,7 @@ function ProductCarousel({ data }) {
                   <strong>Poids :</strong> {selectedProduct.weight} g
                 </li>
                 <li>
-                  <strong>Prix en magasin :</strong> {selectedProduct.salePrice} €
+                  <strong>Prix moyen en magasin :</strong> {selectedProduct.salePrice} €
                 </li>
                 <li>
                   <strong>Prix au rayon :</strong> {selectedProduct.price} €
