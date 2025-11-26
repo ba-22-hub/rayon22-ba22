@@ -3,7 +3,8 @@ import {supabase} from './supabaseClient.js';
 
 async function uploadImage(image, imageName) {
   // Uploads the image to Supabase public bucket
-  if (imageName != '') {
+  if (imageName) {
+    console.log(imageName);
     const {data: uploadData, error: uploadError} =
         await supabase.storage.from('images').upload(
             imageName, image, {upsert: true});

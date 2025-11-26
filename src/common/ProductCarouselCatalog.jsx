@@ -151,7 +151,7 @@ function ProductCarousel({ data }) {
               alt={product.name}
               className="w-full h-28 lg:h-40 object-contain"
             />
-            {product.stock <= stockIncertainThreshold && (
+            {((product.productStockIncertainThreshold && product.stock <= product.productStockIncertainThreshold) || (product.stock <= stockIncertainThreshold)) && (
               <div className="w-full absolute top-0 left-0 text-center mt-0">
                 <p className="lg:text-xl text-white bg-rayonorange bg-opacity-80 text-center">
                   STOCK INCERTAIN

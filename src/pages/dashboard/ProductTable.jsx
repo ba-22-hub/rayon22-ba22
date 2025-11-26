@@ -42,6 +42,7 @@ function ProductTable() {
     category: '',
     weight: '',
     stock: '',
+    productStockIncertainThreshold: '',
     description: '',
     image_name: '',
   });
@@ -85,7 +86,12 @@ function ProductTable() {
     }
 
     fetchProducts();
-  }, [loading]);
+    fetchCurrentStockIncertainThreshold();
+    setFormData(prevData => ({
+      ...prevData,
+      productStockIncertainThreshold: stockIncertainThreshold
+    }))
+  }, [loading, stockIncertainThreshold]);
 
   const handleEdit = (product) => {
     setEditingProductId(product.id);
@@ -207,6 +213,7 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
+      productStockIncertainThreshold: stockIncertainThreshold,
       image_name: '',
     })
 
@@ -306,6 +313,7 @@ function ProductTable() {
   };
 
   async function fetchCurrentStockIncertainThreshold() {
+    // Fetches global stock incertain threshold
     setExpandedSettings(true)
     const { data, error } = await supabase
       .from('constants')
@@ -321,6 +329,7 @@ function ProductTable() {
   }
 
   function handleChangeStockIncertainThreshold(e) {
+    // Handles change in the global stock incertain threshold
     const { value } = e.target;
     setStockIncertainThreshold(value)
   }
@@ -370,6 +379,7 @@ function ProductTable() {
                   <th className="p-2">Poids (gramme)</th>
                   <th className="p-2">Catégorie</th>
                   <th className="p-2">Stock</th>
+                  <th className="p-2">Limite stock incertain</th>
                   <th className="p-2">Description</th>
                   <th className="p-2">Image</th>
                   <th className="p-2">Actions</th>
@@ -440,6 +450,15 @@ function ProductTable() {
                           />
                         </td>
                         <td className="p-2">
+                          <input
+                            name="productStockIncertainThreshold"
+                            value={editedValues["productStockIncertainThreshold"] || stockIncertainThreshold}
+                            onChange={handleChangeInProd}
+                            type="number"
+                            className="border p-1 rounded w-full"
+                          />
+                        </td>
+                        <td className="p-2">
                           <textarea
                             name="description"
                             value={editedValues["description"] || ""}
@@ -472,6 +491,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
+                        <td className="p-2">{p.productStockIncertainThreshold ? p.productStockIncertainThreshold : stockIncertainThreshold}</td>
                         <td className="p-2">{p.description || "-"}</td>
                         <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
@@ -557,6 +577,17 @@ function ProductTable() {
                 </div>
                 <div>
                   <FormInput
+                    name="productStockIncertainThreshold"
+                    type="number"
+                    value={formData["productStockIncertainThreshold"] ?? ""}
+                    inputText="Limite stock incertain"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={true} />
+                </div>
+                <div>
+                  <FormInput
                     name="weight"
                     type="number"
                     value={formData["weight"] ?? ""}
@@ -575,7 +606,7 @@ function ProductTable() {
                     labelClassName="ml-[8%]"
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
                     onChange={handleChangeInForm}
-                    isStarred={true} />
+                    isStarred={false} />
                 </div>
                 <div>
                   <BrowseImage newProduct={true}></BrowseImage>
