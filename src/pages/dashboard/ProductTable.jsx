@@ -91,6 +91,7 @@ function ProductTable() {
     }
 
     fetchProducts();
+    fetchCurrentStockIncertainThreshold();
   }, [loading]);
 
   const handleEdit = (product) => {
