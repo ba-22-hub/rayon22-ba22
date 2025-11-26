@@ -87,10 +87,6 @@ function ProductTable() {
 
     fetchProducts();
     fetchCurrentStockIncertainThreshold();
-    setFormData(prevData => ({
-      ...prevData,
-      productStockIncertainThreshold: stockIncertainThreshold
-    }))
   }, [loading, stockIncertainThreshold]);
 
   const handleEdit = (product) => {
@@ -184,8 +180,19 @@ function ProductTable() {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  async function nullProductStockIncertainThreshold() {
+    if (formData.productStockIncertainThreshold == "") {
+      setFormData(prevData => ({
+        ...prevData,
+        "productStockIncertainThreshold": null
+      }));
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+
+    await nullProductStockIncertainThreshold();
 
     // Adding a new row to the 'products' database
     const { error } = await supabase
@@ -213,7 +220,7 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
-      productStockIncertainThreshold: stockIncertainThreshold,
+      productStockIncertainThreshold: '',
       image_name: '',
     })
 
@@ -584,7 +591,7 @@ function ProductTable() {
                     labelClassName="ml-[8%]"
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
                     onChange={handleChangeInForm}
-                    isStarred={true} />
+                    isStarred={false} />
                 </div>
                 <div>
                   <FormInput
