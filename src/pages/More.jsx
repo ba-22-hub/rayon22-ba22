@@ -4,6 +4,7 @@ import PageButton from "@common/PageButton"
 
 // Importing assets
 import student from "@assets/Photos/etudiante1.png"
+import ministere from "@assets/Assets/logo_ministere.png"
 
 /**
  * The More page.
@@ -29,6 +30,12 @@ function More() {
                     buttonText="Une question ? Un message ?"
                     page="/contact"
                 />
+                <p className="text-rayonblue pl-10 mt-4 font-semibold">
+                    Notre Épicerie Sociale et Solidaire distribue
+                    des denrées alimentaires dont l’achat est
+                    financé par l’État français.
+                </p>
+                <img src={ministere} alt="logo du ministère des solidarités et de la santé" className="hidden lg:flex w-[40em] mt-5 ml-10 "/>
             </div>
 
             {/* Retours presse section */}
