@@ -222,10 +222,10 @@ function ProductCarousel({ data }) {
                   <strong>Poids :</strong> {selectedProduct.weight} g
                 </li>
                 <li>
-                  <strong>Prix moyen en magasin :</strong> {selectedProduct.salePrice} €
+                  <strong>Prix au rayon :</strong> {selectedProduct.salePrice} €
                 </li>
                 <li>
-                  <strong>Prix au rayon :</strong> {selectedProduct.price} €
+                  <strong>Prix moyen en magasin :</strong> {selectedProduct.price} €
                 </li>
                 <li>
                   <strong>Stock :</strong> {selectedProduct.stock}
