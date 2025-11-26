@@ -9,9 +9,13 @@ import {
 import App from "./App.jsx";
 import AdminApp from "./AdminApp.jsx";
 
+// Importing the CookiePopup component
+import CookiePopup from "@common/CookiePopup.jsx";
+
 export default function Root() {
   return (
     <Router>
+      <CookiePopup />
       <Routes>
         <Route path="/*" element={<App />} />
         <Route path="/admin/*" element={<AdminApp />} />
