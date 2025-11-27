@@ -1,6 +1,6 @@
 // Importing dependencies
 import emailjs from '@emailjs/browser';
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 const serviceID = 'service_ebvylqd'
 const publicKey = '_QJu22XnilS4i04rg'

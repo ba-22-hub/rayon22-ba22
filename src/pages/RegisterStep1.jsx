@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState, useEffect } from 'react';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -53,7 +53,7 @@ function RegisterStep1({ data, onDataChange, onNext }) {
             <span style={{ display: 'block', marginTop: '4rem' }}></span>
             <p className='text-red text-center text-[1.2rem] mlr-[8%] '>Les informations avec une étoile rouge sont indispensables pour instruire votre dossier.</p>
             <span style={{ display: 'block', marginTop: '2rem' }}></span>
-            
+
             <form onSubmit={handleSubmit}>
                 {/* Gender */}
                 <div>
@@ -71,7 +71,7 @@ function RegisterStep1({ data, onDataChange, onNext }) {
                 {/* Mail */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Adresse mail" name="email" value={formData.email} onChange={handleChange} isStarred={true} />
                 {/* Street */}
-                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} isStarred={true}/>
+                <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Rue :" name="address" value={formData.street} onChange={handleChange} isStarred={true} />
                 {/* add addresse */}
                 <FormInput labelClassName="ml-[8%]" className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1" inputText="Complément d'adresse :" name="addAddress" value={formData.addr} onChange={handleChange} />
                 {/* City  */}

@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient.js'
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 /** * Lists PDF files in the Supabase storage bucket.
  * @returns {Promise<void>} Logs the list of files or an error if the operation fails

@@ -4,7 +4,7 @@ import { useAuthor } from '@context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
 import { useCart } from "@context/CartContext.jsx";
 import { supabase } from "@lib/supabaseClient";
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FunctionButton from "@common/FunctionButton"
@@ -19,8 +19,6 @@ import blueRayonShape from "@assets/Assets/Rayons traits bleus.svg"
 import orangeCircle from "@assets/Assets/Cercle orange crayon.png"
 import roundLogo from "@assets/logos/roundLogo.png"
 
-// Importing styles
-import 'react-notifications-component/dist/theme.css'
 
 /**
  * The Cart page.
@@ -209,7 +207,7 @@ function Cart() {
         if (limits.weight_min_limit && productsWeightTotal < limits.weight_min_limit) {
             displayNotification(
                 "Échec de validation du panier",
-                "Condition de poids non respectée : Le poids du panier doit être d'au moins " + limits.weight_min_limit/1000 + "kg.",
+                "Condition de poids non respectée : Le poids du panier doit être d'au moins " + limits.weight_min_limit / 1000 + "kg.",
                 "danger",
                 0
             )
@@ -416,7 +414,7 @@ function Cart() {
                     </div>
                     <div className='flex flex-line'>
                         <div className="w-[70%] my-2">
-                            Frais de transport
+                            Participation solidaire aux frais de livraison
                         </div>
                         <div className="w-[10%] my-2 font-bold">
                             {shippingCost}€

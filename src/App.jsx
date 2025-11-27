@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import React from 'react';
-import { ReactNotifications } from 'react-notifications-component'
+import { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 
@@ -15,7 +15,6 @@ import { useAuthor } from "@context/AuthorContext.jsx";
 
 // Importing the style
 import './styles/navbar.css'
-import 'react-notifications-component/dist/theme.css'
 
 
 // Importing assets
@@ -51,7 +50,7 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#FEF7F1]">
-      <ReactNotifications />
+      <Toaster position="top-right" />
 
       <nav className="bg-white shadow-lg border-b border-gray-200 lg:mx-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
