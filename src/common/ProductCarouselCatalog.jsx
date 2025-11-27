@@ -11,6 +11,7 @@ import FunctionButton from "../common/FunctionButton";
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png";
+import { displayNotification } from "../lib/displayNotification.js";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -69,16 +70,21 @@ function ProductCarousel({ data }) {
     function DisplayButtons({ product }) {
       if (user) {
         const AddToCart = () => {
-          if (Object.keys(cart).includes(product.id)) {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: prevData[product.id] + 1,
-            }));
+          const productAmountInCart = cart[product.id] || 0
+          if (product.stock >= productAmountInCart) {
+            if (Object.keys(cart).includes(product.id)) {
+              setCart((prevData) => ({
+                ...prevData,
+                [product.id]: prevData[product.id] + 1,
+              }));
+            } else {
+              setCart((prevData) => ({
+                ...prevData,
+                [product.id]: 1,
+              }));
+            }
           } else {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: 1,
-            }));
+            displayNotification("Stock de " + product.name + " insuffisant", "", "danger")
           }
         };
 

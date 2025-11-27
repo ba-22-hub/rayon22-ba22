@@ -414,7 +414,7 @@ function Cart() {
                     </div>
                     <div className='flex flex-line'>
                         <div className="w-[70%] my-2">
-                            Frais de transport
+                            Participation solidaire aux frais de livraison
                         </div>
                         <div className="w-[10%] my-2 font-bold">
                             {shippingCost}€
