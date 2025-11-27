@@ -1,6 +1,6 @@
 // Importing dependencies
 import { useState } from 'react';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FormInput from "@common/FormInput";

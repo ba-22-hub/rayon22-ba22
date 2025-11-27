@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 import { useAuthor } from "@context/AuthorContext.jsx"
 
@@ -35,7 +35,7 @@ function Register() {
             postalCode: '',
             situation: '',
         },
-        'step2' : {
+        'step2': {
             readInfo: false,
             acceptTerms: false
         },
