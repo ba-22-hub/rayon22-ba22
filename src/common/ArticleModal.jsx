@@ -1,10 +1,9 @@
-
-function  ArticleModal({ article, isOpen, onClose }){
+function ArticleModal({ article, isOpen, onClose }) {
   if (!isOpen || !article) return null;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -18,15 +17,21 @@ function  ArticleModal({ article, isOpen, onClose }){
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-lg shadow-xl overflow-hidden flex flex-col">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      onClick={onClose} // Fermer en cliquant sur le fond
+    >
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-lg shadow-xl overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()} // Empêcher la fermeture en cliquant sur le modal
+      >
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-gray-200">
           <div className="flex-1 pr-4">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {article.title}
             </h2>
-            {article.updated_at && (
+            {article.edited_at && (
               <div className="flex items-center text-sm text-gray-500">
                 Dernière modification : {formatDate(article.edited_at)}
               </div>
@@ -45,11 +50,12 @@ function  ArticleModal({ article, isOpen, onClose }){
         <div className="flex-1 overflow-y-auto p-6">
           {/* Image */}
           {article.image && (
-            <div className="mb-6">
+            <div className="mb-6 flex justify-center">
               <img
                 src={article.image}
                 alt={article.title}
-                className="w-full rounded-lg shadow-md object-cover max-h-96"
+                className="rounded-lg shadow-md object-contain w-full h-auto max-h-[500px]"
+                style={{ maxWidth: '100%' }}
               />
             </div>
           )}
@@ -64,7 +70,7 @@ function  ArticleModal({ article, isOpen, onClose }){
           {/* File Attachment */}
           {article.file && (
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-3">
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-blue-100 rounded flex items-center justify-center mr-3">
                     <svg
@@ -83,16 +89,16 @@ function  ArticleModal({ article, isOpen, onClose }){
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {article.file || 'Attached File'}
+                      {article.file || 'Fichier joint'}
                     </p>
-                    <p className="text-xs text-gray-500">PDF Document</p>
+                    <p className="text-xs text-gray-500">Document PDF</p>
                   </div>
                 </div>
                 <button
                   onClick={handleDownload}
                   className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Download
+                  Télécharger
                 </button>
               </div>
             </div>
@@ -105,12 +111,12 @@ function  ArticleModal({ article, isOpen, onClose }){
             onClick={onClose}
             className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
           >
-            Close
+            Fermer
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default  ArticleModal
+export default ArticleModal;
