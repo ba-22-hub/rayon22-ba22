@@ -270,37 +270,7 @@ function Cart() {
             }
         }
 
-        try {
-            // We invoke the supabase edge function to create the Stripe checkout session
-            const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-                body: {
-                    cart: productsInCart.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        salePrice: p.salePrice,
-                        weight: p.weight,
-                        quantity: cart[p.id]
-                    })),
-                    userId: user.id,
-                    successUrl: `${window.location.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-                    cancelUrl: `${window.location.origin}/cart`,
-                }
-            });
-
-            if (error) {
-                console.error("Erreur fonction edge Stripe :", error);
-                return;
-            }
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                console.error("Aucune URL Stripe renvoyée par la fonction edge.");
-            }
-
-        } catch (err) {
-            console.error("Erreur Stripe :", err);
-        }
+        navigate("/chose-pickup-point")
     }
 
 

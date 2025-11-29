@@ -27,7 +27,7 @@ function ChosePickUpPoint() {
     const [currentLatitude, setCurrentLatitude] = useState(null);
     const [currentLongitude, setCurrentLongitude] = useState(null);
 
-    const [currPoint, setCurrPoint] = useState({id : 0})
+    const [currPoint, setCurrPoint] = useState({ id: 0 })
 
     // --- States pour points relais ---
     const [chosenPostalCode, setChosenPostalCode] = useState("");
@@ -35,10 +35,11 @@ function ChosePickUpPoint() {
     const [pickupPoints, setPickupPoints] = useState([]);
     const [loadingPickup, setLoadingPickup] = useState(false);
     const [errorPickup, setErrorPickup] = useState(null);
+    const [isChosenPickupPoint, setIsChosenPickupPoint] = useState(false);
 
     const { user } = useAuthor();
     const { cart, clearCart } = useCart()
-    console.log(cart);
+    console.log("cart", cart);
     const navigate = useNavigate()
 
     const redIcon = L.icon({
@@ -87,12 +88,12 @@ function ChosePickUpPoint() {
         getLocation();
     }, [user]);
 
-    function selectPoint( point ){
-        console.log("Point selectionné : ", point )
+    function selectPoint(point) {
+        console.log("Point selectionné : ", point)
         setCurrPoint(point)
         createLabel()
-        clearCart()
-    } 
+        setIsChosenPickupPoint(true)
+    }
 
     // --- Fonction pour récupérer les points relais ---
     const fetchPickupPoints = async (postalCode) => {
@@ -103,7 +104,7 @@ function ChosePickUpPoint() {
             const coords = await geocode(postalCode);
             if (coords) {
                 setChosenCoords(coords);
-                console.log(coords)
+                console.log("coords", coords)
             }
 
             const { data, error } = await supabase.functions.invoke('dpd_pickup_points', {
@@ -115,7 +116,7 @@ function ChosePickUpPoint() {
             if (error) {
                 throw new Error(error)
             } else {
-                console.log(data)
+                console.log("pickup points", data)
                 setPickupPoints(data.points);
             }
         } catch (e) {
@@ -177,14 +178,52 @@ function ChosePickUpPoint() {
             if (error) {
                 throw new Error(error)
             } else {
-                console.log(data)
-                console.log(cart.id)
+                console.log("label", data)
+                console.log("cart id", cart.id)
                 // setLabel(data.points);
             }
         } catch (e) {
             displayNotification("Erreur lors de la création de l'étiquette associée à votre colis", e.message, "danger")
         }
     };
+
+    async function handleValidate() {
+        if (isChosenPickupPoint) {
+            try {
+                // We invoke the supabase edge function to create the Stripe checkout session
+                const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+                    body: {
+                        cart: productsInCart.map(p => ({
+                            id: p.id,
+                            name: p.name,
+                            salePrice: p.salePrice,
+                            weight: p.weight,
+                            quantity: cart[p.id]
+                        })),
+                        userId: user.id,
+                        successUrl: `${window.location.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+                        cancelUrl: `${window.location.origin}/cart`,
+                    }
+                });
+
+                if (error) {
+                    console.error("Erreur fonction edge Stripe :", error);
+                    return;
+                }
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    console.error("Aucune URL Stripe renvoyée par la fonction edge.");
+                }
+
+            } catch (err) {
+                console.error("Erreur Stripe :", err);
+            }
+        } else {
+            displayNotification("Aucun point relais selectionné", "Veuillez sélectionner un point relais", "danger");
+        }
+    }
 
     return (
         <>
@@ -203,7 +242,7 @@ function ChosePickUpPoint() {
                                 </p>
                             </div>
                             <h2 className="mb-4">Dans quelle ville souhaitez-vous récupérer votre colis ?</h2>
-                            
+
                             <div className="mb-4">
                                 <input
                                     type="text"
@@ -241,14 +280,23 @@ function ChosePickUpPoint() {
                                 className="bg-rayonorange mt-3 w-80 h-10"
                             />
 
+                            <FunctionButton
+                                buttonText="Valider le point relais"
+                                fun={handleValidate}
+                                className={`mt-3 w-80 h-10 ${isChosenPickupPoint
+                                    ? 'bg-[#FF8200] text-white hover:bg-[#ff9800]'
+                                    : 'bg-[#878787] text-white'
+                                    }`}
+                            />
+
                             {errorPickup && <p style={{ color: "red" }} className="mt-4">{errorPickup}</p>}
-                            
+
                             {pickupPoints.length > 0 && (
                                 <div className="mt-6">
                                     <h3 className="font-bold mb-3">Points relais disponibles :</h3>
                                     <ul className="space-y-2">
                                         {pickupPoints.map((p, i) => (
-                                            <li key={p.id} className={p.id == currPoint.id ? "border p-1 rounded hover:bg-gray-50 bg-[#8FF29F] hover:bg-[#00C921]" : "border p-1 rounded hover:bg-gray-50 hover:bg-[#cccccc]"} onClick={() => selectPoint(p) } >
+                                            <li key={p.id} className={p.id == currPoint.id ? "border p-1 rounded hover:bg-gray-50 bg-[#8FF29F] hover:bg-[#00C921]" : "border p-1 rounded hover:bg-gray-50 hover:bg-[#cccccc]"} onClick={() => selectPoint(p)} >
                                                 <strong>{p.name}</strong> - {p.address1.toLowerCase()}, {p.zipCode} {p.city}
                                             </li>
                                         ))}
