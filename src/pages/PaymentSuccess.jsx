@@ -61,8 +61,6 @@ function PaymentSuccess() {
                     return;
                 }
 
-                console.log("dataOldCounters", dataOldCounters)
-
                 const oldWeight = dataOldCounters.current_weight
                 const oldOrder = dataOldCounters.current_order
                 const oldPrice = dataOldCounters.current_price
@@ -71,16 +69,6 @@ function PaymentSuccess() {
                 const cartWeight = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.weight) * parseFloat(product.quantity))).reduce((weightTotal, weight) => weightTotal + weight))
                 const cartOrder = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.quantity))).reduce((orderTotal, order) => orderTotal + order))
                 const cartPrice = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.salePrice) * parseFloat(product.quantity))).reduce((priceTotal, price) => priceTotal + price))
-
-                console.log(data.cartToValidate.content.map((product) => (parseFloat(product.price) * parseFloat(product.quantity))).reduce((priceTotal, price) => priceTotal + price))
-                console.log(data.cartToValidate.content.map((product) => (parseFloat(product.price) * parseFloat(product.quantity))))
-
-                console.log("oldWeight", oldWeight)
-                console.log("cartWeight", cartWeight)
-                console.log("oldOrder", oldOrder)
-                console.log("cartOrder", cartOrder)
-                console.log("oldPrice", oldPrice)
-                console.log("cartPrice", cartPrice)
 
                 const { error: insertError } = await supabase
                     .from("cart")
