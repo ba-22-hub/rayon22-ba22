@@ -280,6 +280,7 @@ function Cart() {
                         id: p.id,
                         name: p.name,
                         salePrice: p.salePrice,
+                        weight: p.weight,
                         quantity: cart[p.id]
                     })),
                     userId: user.id,
@@ -439,7 +440,7 @@ function Cart() {
                         </div>
                         <span className='mx-2 text-4xl mt-8 font-semibold lg:hidden'>=</span>
                         <div className="mt-8 w-[20%] lg:mt-12 text-4xl font-extrabold col-span-1 col-start-3 row-span-3 row-start-5 content-right">
-                            {productsPriceTotal + shippingCost}€
+                            {roundTwoDigits(productsPriceTotal + shippingCost)}€
                         </div>
                     </div>
                 </div>
