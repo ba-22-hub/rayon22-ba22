@@ -17,10 +17,12 @@ import ProductTable from "@pages/dashboard/ProductTable.jsx";
 import MessagesDashboard from "@pages/dashboard/MessagesDashboard.jsx";
 import RequestsDashboard from "@pages/dashboard/RequestsDashboard.jsx";
 import OrderTable from "@pages/dashboard/OrderTable.jsx";
+import MoreManagement from "@pages/dashboard/MoreManagement.jsx"
 
 // Importing common components
 import PageButton from "@common/PageButton.jsx";
 import Loading from "@common/Loading.jsx";
+
 
 function AdminNavbar() {
   const { logout } = useAuthor();
@@ -39,6 +41,7 @@ function AdminNavbar() {
         <Link to="/admin/messages" className="hover:underline">Messages</Link>
         <Link to="/admin/requests" className="hover:underline">Demandes</Link>
         <Link to="/admin/orders" className="hover:underline">Commandes</Link>
+        <Link to="/admin/more" className="hover:underline">Articles</Link>
       </div>
       <div className="flex items-center space-x-4">
         <PageButton
@@ -84,6 +87,7 @@ function AdminApp() {
             <Route path="messages" element={<MessagesDashboard />} />
             <Route path="requests" element={<RequestsDashboard />} />
             <Route path="orders" element={<OrderTable />} />
+            <Route path="more" element={<MoreManagement />} />
             <Route path="*" element={<p>404 - Page inconnue</p>} />
           </Route>
         )}

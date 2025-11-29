@@ -29,7 +29,6 @@ function Contact() {
 
 	// State to manage form submission
 	const [submitting, setSubmitting] = useState(false);
-
 	const isNotified = useRef(false)
 
 	useEffect(() => {

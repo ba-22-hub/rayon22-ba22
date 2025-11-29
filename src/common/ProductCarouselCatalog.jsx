@@ -11,7 +11,7 @@ import FunctionButton from "../common/FunctionButton";
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png";
-import { displayNotification } from "../lib/displayNotification.js";
+import { displayNotification } from "../lib/displayNotification.jsx";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
