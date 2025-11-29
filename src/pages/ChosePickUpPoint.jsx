@@ -26,6 +26,7 @@ function ChosePickUpPoint() {
     const [loading, setLoading] = useState(false);
     const [currentLatitude, setCurrentLatitude] = useState(null);
     const [currentLongitude, setCurrentLongitude] = useState(null);
+    const [productsInCart, setProductsInCart] = useState({})
 
     const [currPoint, setCurrPoint] = useState({ id: 0 })
 
@@ -38,8 +39,9 @@ function ChosePickUpPoint() {
     const [isChosenPickupPoint, setIsChosenPickupPoint] = useState(false);
 
     const { user } = useAuthor();
-    const { cart, clearCart } = useCart()
+    const { cart, setCart } = useCart()
     console.log("cart", cart);
+    console.log("products in cart", productsInCart)
     const navigate = useNavigate()
 
     const redIcon = L.icon({
@@ -65,6 +67,8 @@ function ChosePickUpPoint() {
             navigate('/login')
             return;
         }
+
+        fetchProductsInCart();
     }, [user, loading, navigate])
 
     useEffect(() => {
@@ -91,7 +95,7 @@ function ChosePickUpPoint() {
     function selectPoint(point) {
         console.log("Point selectionné : ", point)
         setCurrPoint(point)
-        createLabel()
+        // createLabel()
         setIsChosenPickupPoint(true)
     }
 
@@ -187,8 +191,26 @@ function ChosePickUpPoint() {
         }
     };
 
+    const fetchProductsInCart = async () => {
+        const { data, error } = await supabase
+            .from('products')
+            .select('id, name, salePrice, weight')
+            .in("id", Object.keys(cart.content));
+        if (error) {
+            displayNotification("Erreur de chargement des produits du panie", error.message, "danger")
+            return;
+        }
+
+        setProductsInCart(data)
+    }
+
     async function handleValidate() {
         if (isChosenPickupPoint) {
+            setCart(prev => ({
+                ...prev,
+                pickupPoint: { currPoint }
+            }));
+
             try {
                 // We invoke the supabase edge function to create the Stripe checkout session
                 const { data, error } = await supabase.functions.invoke("create-checkout-session", {
@@ -198,7 +220,7 @@ function ChosePickUpPoint() {
                             name: p.name,
                             salePrice: p.salePrice,
                             weight: p.weight,
-                            quantity: cart[p.id]
+                            quantity: cart.content[p.id]
                         })),
                         userId: user.id,
                         successUrl: `${window.location.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,

@@ -21,9 +21,12 @@ function PaymentSuccess() {
         if (hasRun.current) return;
         hasRun.current = true;
 
+
         const confirmPayment = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const session_id = urlParams.get("session_id");
+
+            console.log("cart", cart)
 
             if (!session_id) {
                 console.error("❌ Aucun session_id dans l'URL");
@@ -51,9 +54,9 @@ function PaymentSuccess() {
                 displayNotification("Paiement validé", "", "success")
 
                 // Fecthing old counters
-                const { data: dataOldCounters, error: errorOldCounters } = await supabase  
-                    .from('User')  
-                    .select('current_weight, current_price, current_order')  
+                const { data: dataOldCounters, error: errorOldCounters } = await supabase
+                    .from('User')
+                    .select('current_weight, current_price, current_order')
                     .eq('id', data.cartToValidate.client_id)
                     .single();
 
@@ -102,7 +105,7 @@ function PaymentSuccess() {
             }
 
             // Finale redirection
-            navigate("/chose-pickup-point")
+            navigate("/delivery")
         };
 
         confirmPayment();

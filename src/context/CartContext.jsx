@@ -48,7 +48,7 @@ function CartProvider({ children }) {
 
     function clearCart() {
         if (user?.id) {
-            localStorage.setItem(user.id, JSON.stringify({}))
+            localStorage.setItem(user.id, JSON.stringify({"content": {}}))
             setCart({"content": {}})
         }
     }
