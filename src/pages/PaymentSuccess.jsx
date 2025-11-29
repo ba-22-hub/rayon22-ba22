@@ -72,7 +72,7 @@ function PaymentSuccess() {
                 const cartOrder = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.quantity))).reduce((orderTotal, order) => orderTotal + order))
                 const cartPrice = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.salePrice) * parseFloat(product.quantity))).reduce((priceTotal, price) => priceTotal + price))
 
-                const { data:insertedCartId, error: insertError } = await supabase
+                const { error: insertError } = await supabase
                     .from("cart")
                     .insert(data.cartToValidate)
                     .select("id")
@@ -81,10 +81,6 @@ function PaymentSuccess() {
                 if (insertError) {
                     console.error("💥 Erreur insertion commande :", insertError);
                 } else {
-                    setCart(prevData => ({
-                        ...prevData,
-                        "id": insertedCartId.id
-                    }))
                     console.log("🛒 Commande insérée avec succès !");
                 }
 
