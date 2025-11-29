@@ -1,5 +1,5 @@
 import { supabase } from "@lib/supabaseClient";
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 async function patchUser(userId, newUser) {
     try {
@@ -29,4 +29,4 @@ async function patchUser(userId, newUser) {
         return null;
     }
 }
-export {patchUser}
+export { patchUser }

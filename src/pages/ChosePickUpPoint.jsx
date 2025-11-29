@@ -4,7 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuthor } from '@context/AuthorContext.jsx';
 import { useCart } from "@context/CartContext.jsx";
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from "leaflet";

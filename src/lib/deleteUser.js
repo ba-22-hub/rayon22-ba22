@@ -1,5 +1,5 @@
 import { supabase, supabaseAdmin } from "@lib/supabaseClient";
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 async function deleteUser(userId) {
   try {

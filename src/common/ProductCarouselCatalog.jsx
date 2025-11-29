@@ -11,6 +11,7 @@ import FunctionButton from "../common/FunctionButton";
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png";
+import { displayNotification } from "../lib/displayNotification.jsx";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -69,16 +70,21 @@ function ProductCarousel({ data }) {
     function DisplayButtons({ product }) {
       if (user) {
         const AddToCart = () => {
-          if (Object.keys(cart).includes(product.id)) {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: prevData[product.id] + 1,
-            }));
+          const productAmountInCart = cart[product.id] || 0
+          if (product.stock >= productAmountInCart) {
+            if (Object.keys(cart).includes(product.id)) {
+              setCart((prevData) => ({
+                ...prevData,
+                [product.id]: prevData[product.id] + 1,
+              }));
+            } else {
+              setCart((prevData) => ({
+                ...prevData,
+                [product.id]: 1,
+              }));
+            }
           } else {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: 1,
-            }));
+            displayNotification("Stock de " + product.name + " insuffisant", "", "danger")
           }
         };
 
@@ -142,7 +148,7 @@ function ProductCarousel({ data }) {
               <DisplayButtons product={product} />
             </div>
             <div className="text-[#ff6161] text-xs ml-0">
-              Prix en magasin : {product.price}€
+              Prix moyen en magasin : {product.price}€
             </div>
           </div>
           <div className="relative text-center">
@@ -151,7 +157,7 @@ function ProductCarousel({ data }) {
               alt={product.name}
               className="w-full h-28 lg:h-40 object-contain"
             />
-            {product.stock <= stockIncertainThreshold && (
+            {((product.productStockIncertainThreshold && product.stock <= product.productStockIncertainThreshold) || (product.stock <= stockIncertainThreshold)) && (
               <div className="w-full absolute top-0 left-0 text-center mt-0">
                 <p className="lg:text-xl text-white bg-rayonorange bg-opacity-80 text-center">
                   STOCK INCERTAIN
@@ -191,7 +197,7 @@ function ProductCarousel({ data }) {
       {/* Details */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg w-3/4 max-w-4xl p-6 relative flex">
+          <div className="bg-white rounded-xl shadow-lg w-3/4 max-w-4xl p-6 relative flex flex-col md:flex-row ">
             {/* Close button */}
             <button
               className="absolute top-2 right-2 text-black hover:text-red text-7xl"
@@ -201,7 +207,7 @@ function ProductCarousel({ data }) {
             </button>
 
             {/* Picture */}
-            <div className="w-1/2 flex items-center justify-center">
+            <div className="md:w-1/2 flex items-center justify-center">
               <img
                 src={selectedProduct.imageUrl || roundLogo}
                 alt={selectedProduct.name}
@@ -210,7 +216,7 @@ function ProductCarousel({ data }) {
             </div>
 
             {/* Informations */}
-            <div className="w-1/2 pl-6 text-left">
+            <div className="md:w-1/2 pl-6 text-left">
               <h2 className="text-2xl font-bold text-[#3435FF] mb-4">
                 {selectedProduct.name}
               </h2>
@@ -222,10 +228,10 @@ function ProductCarousel({ data }) {
                   <strong>Poids :</strong> {selectedProduct.weight} g
                 </li>
                 <li>
-                  <strong>Prix en magasin :</strong> {selectedProduct.salePrice} €
+                  <strong>Prix au rayon :</strong> {selectedProduct.salePrice} €
                 </li>
                 <li>
-                  <strong>Prix au rayon :</strong> {selectedProduct.price} €
+                  <strong>Prix moyen en magasin :</strong> {selectedProduct.price} €
                 </li>
                 <li>
                   <strong>Stock :</strong> {selectedProduct.stock}

@@ -4,7 +4,7 @@ import { supabase } from '@lib/supabaseClient.js';
 import { uploadPDF } from '@lib/sendPDF.js';
 import { useAuthor } from '@context/AuthorContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FormTextArea from "@common/FormTextArea"
@@ -29,7 +29,6 @@ function Contact() {
 
 	// State to manage form submission
 	const [submitting, setSubmitting] = useState(false);
-
 	const isNotified = useRef(false)
 
 	useEffect(() => {
