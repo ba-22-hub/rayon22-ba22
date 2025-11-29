@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from '@lib/supabaseClient.js';
 import { useAuthor } from "@context/AuthorContext.jsx";
 import { uploadPDF } from '@lib/sendPDF.js'
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import Loading from "@common/Loading.jsx";
@@ -181,7 +181,7 @@ function Account() {
     }
 
     // on factorise l'élément le plus volumineux 
-    const renderField = (label, fieldName, minWidth = 180 ) => (
+    const renderField = (label, fieldName, minWidth = 180) => (
         <div className="flex flex-row items-center text-rayonblue mb-2 text-sm lg:text-base">
             <label className="font-semibold min-w-[180px] whitespace-nowrap lg:mr-4 mr-0">{label} :</label>
             <div className="flex-1">

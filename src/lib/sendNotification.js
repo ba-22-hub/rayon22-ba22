@@ -1,6 +1,6 @@
 // Importing dependencies
 import sendMail from '@lib/sendMail.js';
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 const templateID = 'template_k4m4rco';
 

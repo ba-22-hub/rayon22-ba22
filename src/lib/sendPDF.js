@@ -1,6 +1,6 @@
 // Importing dependencies
 import { supabase } from './supabaseClient.js';
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 /** * Uploads a PDF file to Supabase storage.
  * @param {File} file - The PDF file to upload.

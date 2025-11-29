@@ -4,7 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
 import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -14,8 +14,6 @@ import Loading from '@common/Loading.jsx';
 // Importing assets
 import roundLogo from "@assets/logos/roundLogo.png"
 
-// Importing styles
-import 'react-notifications-component/dist/theme.css'
 
 function ProductTable() {
   const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]

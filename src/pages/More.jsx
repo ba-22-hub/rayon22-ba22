@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react"
+import { supabase } from '@lib/supabaseClient.js'
 // Importing common components
-import LoremIpsum from "@common/LoremIpsum"
 import PageButton from "@common/PageButton"
+import ArticleCard from "../common/ArticleCard"
+import ArticleModal from "../common/ArticleModal"
 
 // Importing assets
 import student from "@assets/Photos/etudiante1.png"
@@ -11,6 +14,69 @@ import ministere from "@assets/Assets/logo_ministere.png"
  * @returns {React.ReactElement} More component.
  */
 function More() {
+    const [articles, setArticles] = useState([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedArticle, setSelectedArticle] = useState(null)
+
+
+    useEffect(() => {
+        fetchArticles()
+    }, [])
+
+    const fetchArticles = async () => {
+        const { data, error } = await supabase
+            .from('Articles')
+            .select(`
+              id,
+              edited_at, 
+              title, 
+              content, 
+              image, 
+              file
+            `)
+            .order('edited_at', { ascending: false });
+
+        if (error) {
+            console.error('Erreur de chargement des articles:', error);
+            displayNotification("Erreur de chargement des articles", error.message, "danger")
+        } else {
+            console.log(data)
+            setArticles(data);
+        }
+    }
+
+    const handleArticleClick = async (article) => {
+        let imageUrl = null;
+        let fileUrl = null;
+
+        if (article.image) {
+            const { data } = supabase.storage
+                .from('articles')
+                .getPublicUrl(`images/${article.image}`);
+            imageUrl = data?.publicUrl;
+        }
+
+        if (article.file) {
+            const { data } = supabase.storage
+                .from('articles')
+                .getPublicUrl(`files/${article.file}`);
+            fileUrl = data?.publicUrl;
+        }
+
+        const articleWithUrls = {
+            ...article,
+            image: imageUrl,
+            file_url: fileUrl
+        };
+
+        setSelectedArticle(articleWithUrls);
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedArticle(null);
+    }
     return (
         <>
             {/* Hero section with blue background */}
@@ -35,14 +101,27 @@ function More() {
                     des denrées alimentaires dont l’achat est
                     financé par l’État français.
                 </p>
-                <img src={ministere} alt="logo du ministère des solidarités et de la santé" className="hidden lg:flex w-[40em] mt-5 ml-10 "/>
+                <img src={ministere} alt="logo du ministère des solidarités et de la santé" className="hidden lg:flex w-[40em] mt-5 ml-10 " />
             </div>
 
             {/* Retours presse section */}
-            <div className="pt-36">
+            <div className="pt-36 lg:w-[90%] lg:ml-[5%]">
                 <h2 className="ml-20 text-4xl text-[#3435FF] font-semibold mb-4">Retours presse</h2>
-                <LoremIpsum />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 p">
+                    {articles.map((article) => (
+                        <ArticleCard
+                            key={article.id}
+                            article={article}
+                            onClick={() => handleArticleClick(article)}
+                        />
+                    ))}
+                </div>
             </div>
+            <ArticleModal
+                article={selectedArticle}
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+            />
         </>
     )
 }
