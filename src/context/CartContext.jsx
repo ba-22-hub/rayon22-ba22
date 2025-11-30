@@ -20,7 +20,7 @@ const CartContext = createContext()
 
 function CartProvider({ children }) {
     const { user, loading } = useAuthor()
-    const [cart, setCart] = useState({"content": {}})
+    const [cart, setCart] = useState({ "content": {} })
 
     // Retrieving old cart
     useEffect(() => {
@@ -28,13 +28,13 @@ function CartProvider({ children }) {
             if (user?.id) {
                 try {
                     const saved = localStorage.getItem(user.id)
-                    setCart(saved ? JSON.parse(saved) : {"content": {}})
+                    setCart(saved ? JSON.parse(saved) : { "content": {} })
                 } catch (e) {
                     displayNotification("Erreur de récupération du panier", "", "danger")
-                    setCart({"content": {}})
+                    setCart({ "content": {} })
                 }
             } else {
-                setCart({"content": {}})
+                setCart({ "content": {} })
             }
         }
     }, [user, loading])
@@ -48,8 +48,8 @@ function CartProvider({ children }) {
 
     function clearCart() {
         if (user?.id) {
-            localStorage.setItem(user.id, JSON.stringify({"content": {}}))
-            setCart({"content": {}})
+            localStorage.setItem(user.id, JSON.stringify({ "content": {} }))
+            setCart({ "content": {} })
         }
     }
 

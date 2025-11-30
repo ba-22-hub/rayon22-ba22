@@ -21,6 +21,36 @@ function PaymentSuccess() {
         if (hasRun.current) return;
         hasRun.current = true;
 
+        // Creating the label
+        const createAndInsertLabel = async (cartId) => {
+            try {
+                const { data, error } = await supabase.functions.invoke('dpd_create_label', {
+                    body: JSON.stringify({
+                        cartId: cartId
+                    })
+                })
+                if (error) {
+                    throw new Error(error)
+                } else {
+                    console.log("label", data)
+                    console.log("cart id", cartId)
+                    // setLabel(data.points);
+
+                    // Inserting useful label datas associated to cart in database
+                    const { error: labelError } = await supabase
+                        .from("cart")
+                        .update({ orderReference: data.orderReference, trackingUrl: data.trackingUrl })
+                        .eq('id', cartId)
+
+                    if (labelError) {
+                        displayNotification("Échec de l'enregistrement des références de votre colis", labelError.message, "danger")
+                        console.error("Échec de l'enregistrement des références de votre colis", labelError.message)
+                    }
+                }
+            } catch (e) {
+                displayNotification("Erreur lors de la création de l'étiquette associée à votre colis", e.message, "danger")
+            }
+        };
 
         const confirmPayment = async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -75,7 +105,7 @@ function PaymentSuccess() {
                 const cartOrder = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.quantity))).reduce((orderTotal, order) => orderTotal + order))
                 const cartPrice = roundTwoDigits(data.cartToValidate.content.map((product) => (parseFloat(product.salePrice) * parseFloat(product.quantity))).reduce((priceTotal, price) => priceTotal + price))
 
-                const { error: insertError } = await supabase
+                const { data: dataInsertedCart, error: insertError } = await supabase
                     .from("cart")
                     .insert(data.cartToValidate)
                     .select("id")
@@ -87,6 +117,7 @@ function PaymentSuccess() {
                     console.log("🛒 Commande insérée avec succès !");
                 }
 
+                // Updating the counters
                 const { error: updateError } = await supabase
                     .from("User")
                     .update({ current_weight: oldWeight + cartWeight, current_price: oldPrice + cartPrice, current_order: oldOrder + cartOrder })
@@ -97,6 +128,8 @@ function PaymentSuccess() {
                     displayNotification("Échec de mise à jour des compteurs liés au compte", "" + updateError.message, "danger")
                     return;
                 }
+
+                createAndInsertLabel(dataInsertedCart.id)
 
                 // Empty the cart in localStorage
                 localStorage.removeItem(data.cartToValidate.client_id);

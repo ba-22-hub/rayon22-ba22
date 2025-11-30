@@ -171,26 +171,6 @@ function ChosePickUpPoint() {
         return [46.603354, 1.888334];
     };
 
-    // Creating the label
-    const createLabel = async () => {
-        try {
-            const { data, error } = await supabase.functions.invoke('dpd_create_label', {
-                body: JSON.stringify({
-                    cartId: cart.id
-                })
-            })
-            if (error) {
-                throw new Error(error)
-            } else {
-                console.log("label", data)
-                console.log("cart id", cart.id)
-                // setLabel(data.points);
-            }
-        } catch (e) {
-            displayNotification("Erreur lors de la création de l'étiquette associée à votre colis", e.message, "danger")
-        }
-    };
-
     const fetchProductsInCart = async () => {
         const { data, error } = await supabase
             .from('products')
@@ -220,7 +200,8 @@ function ChosePickUpPoint() {
                             name: p.name,
                             salePrice: p.salePrice,
                             weight: p.weight,
-                            quantity: cart.content[p.id]
+                            quantity: cart.content[p.id],
+                            pickupPointId: currPoint.id
                         })),
                         userId: user.id,
                         successUrl: `${window.location.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
