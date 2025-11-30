@@ -68,7 +68,7 @@ function Delivery() {
             navigate('/login')
             return;
         }
-    }, [loading])
+    }, [loading, user])
 
     // re-render the map componant
     useEffect(() => {
@@ -100,6 +100,7 @@ function Delivery() {
             }
         }
 
+        if (!user) return;
         const fetchOngoingDeliveries = async () => {
             const { data, error } = await supabase
                 .from('cart')
@@ -110,8 +111,10 @@ function Delivery() {
                 console.error('Erreur de chargement des livraisons en cours :', error)
                 displayNotification("Erreur de chargement des livraisons en cours", error.message, "danger")
             }
-            else
+            else {
                 setOngoingDeliveries(data);
+                console.log("ongoingDeliveries", data)
+            }
             setLoading(false);
         };
 
@@ -230,61 +233,9 @@ function Delivery() {
                                                 </td>
 
                                             </tr>
-                                            {expanded === delivery.id && (
+                                            {(user && expanded === delivery.id) && (
                                                 <>
                                                     <tr className="bg-gray-50">
-                                                        <h2 className="text-rayonblue font-bold text-2xl mb-3 px-4 mt-4">Avancement de la livraison</h2>
-                                                        {(currentLatitudeDelivery && currentLongitudeDelivery) ? (
-                                                            <div className="bg-white rounded-lg p-4">
-                                                                <div className="w-full bg-white">
-                                                                    <div id="map" className="h-96 w-full">
-                                                                        <MapContainer
-                                                                            className="h-full w-full"
-                                                                            center={[currentLatitude, currentLongitude]}
-                                                                            zoom={13}
-                                                                            scrollWheelZoom={false}
-                                                                        >
-                                                                            <TileLayer
-                                                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                                            />
-                                                                            <Marker
-                                                                                position={[currentLatitudeDelivery, currentLongitudeDelivery]}
-                                                                                eventHandlers={{
-                                                                                    click: () => {
-                                                                                        setExpandedRelayPoint("");
-                                                                                    },
-                                                                                }}
-                                                                            >
-                                                                                <Popup>Votre colis 📦</Popup>
-                                                                            </Marker>
-
-                                                                            <Marker
-                                                                                position={[currentLatitude, currentLongitude]}
-                                                                                icon={redIcon}
-                                                                                eventHandlers={{
-                                                                                    click: () => {
-                                                                                        setExpandedRelayPoint("");
-                                                                                    },
-                                                                                }}
-                                                                            >
-                                                                                <Popup>Vous êtes ici 📍</Popup>
-                                                                            </Marker>
-                                                                        </MapContainer>
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Info about a relay point */}
-                                                                <div className="p-4">
-                                                                    <h2 className="text-rayonblue font-bold text-2xl mb-3">Infos sur la livraison</h2>
-                                                                    <p>Information sur la livraison</p>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <div>Information indisponible</div>
-                                                        )
-                                                        }
-
                                                         <div colSpan="5" className="px-6 py-4">
                                                             <h2 className="text-rayonblue font-bold text-2xl mb-3">Récapitulatif de la livraison</h2>
                                                             <div className="grid grid-cols-3 gap-4 text-sm mb-4">
@@ -355,121 +306,6 @@ function Delivery() {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    {/* Relay points nearby */}
-                    <div key="RelayPointsNearby">
-                        <div className="flex items-start">
-                            <p className="ml-5 text-[#3435FF] text-3xl lg:text-4xl mb-2 mt-10 font-extrabold text-left">Points relais proches de moi</p>
-                        </div>
-
-
-                        <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-                            <h2>Dans quelle ville souhaitez-vous récupérer cotre colis ?</h2>
-                            <input
-                                type="text"
-                                placeholder="Code postal"
-                                value={chosenPostalCode}
-                                onChange={(e) => setChosenPostalCode(e.target.value)}
-                            />
-                            <FunctionButton
-                                buttonText={loadingPickup ? "Chargement..." : "Rechercher"}
-                                fun={async () => { fetchPickupPoints(chosenPostalCode), setEnableGeolocalisation(false) }}
-                                disabled={loadingPickup}
-                                className="bg-rayonorange mt-3 w-80 h-10"
-                            />
-                            <FunctionButton
-                                buttonText={loadingPickup ? "Chargement..." : "Me localiser"}
-                                fun={async () => {
-                                    if (!currentLatitude || !currentLongitude) {
-                                        displayNotification("Géolocalisation non disponible", "Veuillez autoriser l'accès à votre position", "warning");
-                                        return;
-                                    }
-                                    setChosenCoords({});
-                                    setEnableGeolocalisation(true); // Active le flag
-                                    const code = await reverseGeocode(currentLatitude, currentLongitude);
-                                    if (code) {
-                                        await fetchPickupPoints(code);
-                                    }
-                                }}
-                                className="bg-rayonorange mt-3 w-80 h-10"
-                            />
-                            {errorPickup && <p style={{ color: "red" }}>{errorPickup}</p>}
-                            {pickupPoints.length > 0 && (
-                                <ul>
-                                    {pickupPoints.map((p, i) => (
-                                        <li key={i}>
-                                            <strong>{p.name}</strong> - {p.address}, {p.postalCode} {p.city}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-
-                            <hr style={{ margin: "2rem 0" }} />
-                        </div>
-
-                        {(currentLatitude !== null && currentLongitude !== null) ? (
-                            <div className="flex items-center bg-white">
-                                <div className="max-w-screen-lg bg-white rounded-lg p-0">
-                                    <div className="w-screen bg-white">
-                                        <div id="map" className="h-96 w-full">
-                                            <MapContainer
-                                                className="h-full w-full"
-                                                center={chosenCoords.latitude && chosenCoords.longitude
-                                                    ? [chosenCoords.latitude, chosenCoords.longitude]
-                                                    : [currentLatitude, currentLongitude]
-                                                }
-                                                zoom={13}
-                                                scrollWheelZoom={false}
-                                                key={mapReload}
-                                            >
-                                                <TileLayer
-                                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                />
-
-                                                <Marker
-                                                    position={[currentLatitude, currentLongitude]}
-                                                    icon={redIcon}
-                                                    eventHandlers={{
-                                                        click: () => {
-                                                            setExpandedRelayPoint("");
-                                                        },
-                                                    }}
-                                                >
-                                                    <Popup>Vous êtes ici 📍</Popup>
-                                                </Marker>
-                                                {pickupPoints.length > 0 &&
-                                                    pickupPoints.map((pickupPoint, index) => (
-                                                        <Marker
-                                                            key={pickupPoint.id || index}
-                                                            position={[
-                                                                parseFloat(pickupPoint.latitude.replace(",", ".")),
-                                                                parseFloat(pickupPoint.longitude.replace(",", ".")),
-                                                            ]}
-                                                            icon={orangeIcon}
-                                                            eventHandlers={{
-                                                                click: () => {
-                                                                    setExpandedRelayPoint(pickupPoint.id);
-                                                                },
-                                                            }}
-                                                        >
-                                                            <Popup>
-                                                                <strong>{pickupPoint.name}</strong> 📬<br />
-                                                                {pickupPoint.address}<br />
-                                                                {pickupPoint.postalCode} {pickupPoint.city}
-                                                            </Popup>
-                                                        </Marker>
-                                                    ))
-                                                }
-                                            </MapContainer>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <>Localisation indisponible</>
-                        )}
                     </div>
                 </>
             )}

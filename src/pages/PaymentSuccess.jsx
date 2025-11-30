@@ -11,7 +11,7 @@ import Loading from "@common/Loading.jsx";
 function PaymentSuccess() {
     const navigate = useNavigate();
     const hasRun = useRef(false);
-    const { cart, setCart } = useCart()
+    const { cart, clearCart } = useCart()
 
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
@@ -132,7 +132,7 @@ function PaymentSuccess() {
                 createAndInsertLabel(dataInsertedCart.id)
 
                 // Empty the cart in localStorage
-                localStorage.removeItem(data.cartToValidate.client_id);
+                clearCart();
             } else {
                 console.warn("⚠️ Paiement non validé ou panier manquant.");
             }
