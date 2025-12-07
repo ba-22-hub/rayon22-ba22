@@ -32,10 +32,6 @@ function PaymentSuccess() {
                 if (error) {
                     throw new Error(error)
                 } else {
-                    console.log("label", data)
-                    console.log("cart id", cartId)
-                    // setLabel(data.points);
-
                     // Inserting useful label datas associated to cart in database
                     const { error: labelError } = await supabase
                         .from("cart")
@@ -55,8 +51,6 @@ function PaymentSuccess() {
         const confirmPayment = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const session_id = urlParams.get("session_id");
-
-            console.log("cart", cart)
 
             if (!session_id) {
                 console.error("❌ Aucun session_id dans l'URL");
