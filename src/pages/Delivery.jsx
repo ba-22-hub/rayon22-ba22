@@ -4,17 +4,11 @@ import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuthor } from '@context/AuthorContext.jsx'
 import { displayNotification } from '@lib/displayNotification.jsx';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
-import L from "leaflet";
 
 // Importing common components
 import Loading from "@common/Loading.jsx"
 import FunctionButton from '@common/FunctionButton.jsx';
-
-// Importing assets
-import redMarker from "@assets/Assets/marker-icon-2x-red.png"
-import orangeMarker from "@assets/Assets/marker-icon-2x-orange.png"
 
 /**
  * The Delivery page.
@@ -25,40 +19,9 @@ function Delivery() {
     const [loading, setLoading] = useState(false);
     const [ongoingDeliveries, setOngoingDeliveries] = useState([]);
     const [expanded, setExpanded] = useState(null);
-    const [currentLatitude, setCurrentLatitude] = useState(null);
-    const [currentLongitude, setCurrentLongitude] = useState(null);
-    const [currentLatitudeDelivery, setCurrentLatitudeDelivery] = useState(null);
-    const [currentLongitudeDelivery, setCurrentLongitudeDelivery] = useState(null);
-    const [expandedRelayPoint, setExpandedRelayPoint] = useState(null);
-    const [enableGeolocalisation, setEnableGeolocalisation] = useState(false);
-
-    const [mapReload, setMapReload] = useState(0);
-
-    // --- States pour points relais ---
-    const [chosenPostalCode, setChosenPostalCode] = useState("");
-    const [chosenCoords, setChosenCoords] = useState({});
-    const [pickupPoints, setPickupPoints] = useState([]);
-    const [loadingPickup, setLoadingPickup] = useState(false);
-    const [errorPickup, setErrorPickup] = useState(null);
 
     const { user } = useAuthor();
     const navigate = useNavigate()
-
-    const redIcon = L.icon({
-        iconUrl: redMarker,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-    });
-
-    const orangeIcon = L.icon({
-        iconUrl: orangeMarker,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-    });
 
     // only accessible to users (this page needs user info)
     useEffect(() => {
@@ -70,35 +33,9 @@ function Delivery() {
         }
     }, [loading, user])
 
-    // re-render the map componant
-    useEffect(() => {
-        if (chosenCoords.latitude && chosenCoords.longitude) {
-            setMapReload(prev => prev + 1);
-        } else if (enableGeolocalisation && currentLatitude && currentLongitude) {
-            // Forcer le reload quand on utilise la géolocalisation
-            setMapReload(prev => prev + 1);
-        }
-    }, [chosenCoords, enableGeolocalisation, currentLatitude, currentLongitude]);
-
     useEffect(() => {
         if (loading) return;
         // Récupérer la position de l'utilisateur UNE SEULE FOIS au chargement
-        const getLocation = () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords
-                        setCurrentLatitude(latitude)
-                        setCurrentLongitude(longitude)
-                    },
-                    (error) => {
-                        displayNotification("Impossible d'accéder à votre localisation", error.message, "warning")
-                    }
-                )
-            } else {
-                displayNotification("Impossible d'accéder à votre localisation", "La fonctionnalité de géolocalisation n'est pas supportée par votre navigateur", "warning")
-            }
-        }
 
         if (!user) return;
         const fetchOngoingDeliveries = async () => {
@@ -119,72 +56,9 @@ function Delivery() {
         };
 
         fetchOngoingDeliveries();
-        getLocation();
     }, [loading]);
 
-    // --- Fonction pour récupérer les points relais ---
-    const fetchPickupPoints = async (postalCode) => {
-        setLoadingPickup(true);
-        setErrorPickup(null);
-        try {
-            // Récupérer les coordonnées du code postal
-            const coords = await geocode(postalCode);
-            if (coords) {
-                setChosenCoords(coords);
-                console.log(coords)
-            }
-
-            const { data, error } = await supabase.functions.invoke('dpd_pickup_points', {
-                body: JSON.stringify({
-                    postalCode: postalCode,
-                    countryCode: 'FR'
-                })
-            })
-            if (error) {
-                throw new Error(error)
-            } else {
-                console.log(data)
-                setPickupPoints(data.points);
-            }
-        } catch (e) {
-            setErrorPickup(e.message);
-            displayNotification("Erreur lors de la récupération des points de relais proches", e.message, "danger")
-        } finally {
-            setLoadingPickup(false);
-        }
-    };
-
-    async function reverseGeocode(lat, lon) {
-        const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
-
-        const response = await fetch(url, {
-            headers: { "User-Agent": "Rayon22" }
-        });
-
-        const data = await response.json();
-        return data.address.postcode || null;
-    }
-
-    async function geocode(postcode, country = "fr") {
-        const url = `https://nominatim.openstreetmap.org/search?postalcode=${postcode}&country=${country}&format=json&limit=1`;
-
-        const response = await fetch(url, {
-            headers: { "User-Agent": "Rayon22" }
-        });
-
-        const data = await response.json();
-
-        if (!data || data.length === 0) return null;
-
-        return {
-            latitude: parseFloat(data[0].lat),
-            longitude: parseFloat(data[0].lon)
-        };
-    }
-
     const toggleExpand = (id) => {
-        setCurrentLatitudeDelivery(48.7453);
-        setCurrentLongitudeDelivery(-3.4700);
         setExpanded(prev => (prev === id ? null : id));
     };
 
