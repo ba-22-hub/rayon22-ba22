@@ -289,6 +289,24 @@ function Delivery() {
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
+
+                                                                {/* Order reference */}
+                                                                <div>
+                                                                    <strong>Référence de la commande :</strong>{' '}
+                                                                    {
+                                                                        <span className="ml-1">
+                                                                            {delivery["orderReference"]}
+                                                                        </span>
+                                                                    }
+                                                                </div>
+
+                                                                <div>
+                                                                    <a
+                                                                        href={delivery["trackingUrl"] ?? delivery["trackingUrl"]}
+                                                                        className="mt-2 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all"
+                                                                        target="_blank"
+                                                                    >Suivre mon colis</a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </tr>
