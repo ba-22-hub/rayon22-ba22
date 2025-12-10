@@ -93,7 +93,6 @@ function ChosePickUpPoint() {
     function selectPoint(point) {
         console.log("Point selectionné : ", point)
         setCurrPoint(point)
-        // createLabel()
         setIsChosenPickupPoint(true)
     }
 
@@ -338,6 +337,12 @@ function ChosePickUpPoint() {
                                                         parseFloat(pickupPoint.longitude.replace(",", ".")),
                                                     ]}
                                                     icon={orangeIcon}
+                                                    eventHandlers={{
+                                                        click: () => {
+                                                            setCurrPoint(pickupPoint)
+                                                            setIsChosenPickupPoint(true)
+                                                        },
+                                                    }}
                                                 >
                                                     <Popup>
                                                         <strong>{pickupPoint.name}</strong> 📬<br />
