@@ -31,7 +31,7 @@ function Cart() {
     const [productsPriceTotal, setProductsPriceTotal] = useState(0)
     const [productsWeightTotal, setProductsWeightTotal] = useState(0)
     const [productsNumberTotal, setProductsNumberTotal] = useState(0)
-    const [shippingCost, setShippingCost] = useState(1)
+    const [shippingCost, setShippingCost] = useState(1.35)
     const isNotified = useRef(false)
     const [loading, setLoading] = useState(true);
 
@@ -93,7 +93,6 @@ function Cart() {
             return;
         }
 
-        console.log('cart', cart)
         const fetchDataProductsInCart = async () => {
             const { data, error } = await supabase
                 .from('products')
@@ -131,6 +130,10 @@ function Cart() {
                 .maybeSingle();
             if (!error) {
                 setShippingCost(data.value)
+                setCart(prev => ({
+                    ...prev,
+                    shippingCost: data.value,
+                }));
             }
         };
 

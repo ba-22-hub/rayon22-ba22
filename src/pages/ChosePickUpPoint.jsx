@@ -40,8 +40,6 @@ function ChosePickUpPoint() {
 
     const { user } = useAuthor();
     const { cart, setCart } = useCart()
-    console.log("cart", cart);
-    console.log("products in cart", productsInCart)
     const navigate = useNavigate()
 
     const redIcon = L.icon({
@@ -108,7 +106,6 @@ function ChosePickUpPoint() {
             const coords = await geocode(postalCode);
             if (coords) {
                 setChosenCoords(coords);
-                console.log("coords", coords)
             }
 
             const { data, error } = await supabase.functions.invoke('dpd_pickup_points', {
@@ -120,7 +117,6 @@ function ChosePickUpPoint() {
             if (error) {
                 throw new Error(error)
             } else {
-                console.log("pickup points", data)
                 setPickupPoints(data.points);
             }
         } catch (e) {
@@ -203,6 +199,7 @@ function ChosePickUpPoint() {
                             quantity: cart.content[p.id],
                             pickupPointId: currPoint.id
                         })),
+                        shippingCost: cart.shippingCost,
                         userId: user.id,
                         successUrl: `${window.location.origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
                         cancelUrl: `${window.location.origin}/cart`,
@@ -224,7 +221,7 @@ function ChosePickUpPoint() {
                 console.error("Erreur Stripe :", err);
             }
         } else {
-            displayNotification("Aucun point relais selectionné", "Veuillez sélectionner un point relais", "danger");
+            displayNotification("Aucun point relais selectionné", "", "danger");
         }
     }
 
