@@ -191,7 +191,7 @@ function ProductCarousel({ data }) {
       {/* Details */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg w-3/4 max-w-4xl p-6 relative flex">
+          <div className="bg-white rounded-xl shadow-lg w-3/4 max-w-4xl p-6 relative flex flex-col md:flex-row ">
             {/* Close button */}
             <button
               className="absolute top-2 right-2 text-black hover:text-red text-7xl"
@@ -201,7 +201,7 @@ function ProductCarousel({ data }) {
             </button>
 
             {/* Picture */}
-            <div className="w-1/2 flex items-center justify-center">
+            <div className="md:w-1/2 flex items-center justify-center">
               <img
                 src={selectedProduct.imageUrl || roundLogo}
                 alt={selectedProduct.name}
@@ -210,7 +210,7 @@ function ProductCarousel({ data }) {
             </div>
 
             {/* Informations */}
-            <div className="w-1/2 pl-6 text-left">
+            <div className="md:w-1/2 pl-6 text-left">
               <h2 className="text-2xl font-bold text-[#3435FF] mb-4">
                 {selectedProduct.name}
               </h2>
