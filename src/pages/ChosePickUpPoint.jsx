@@ -36,7 +36,6 @@ function ChosePickUpPoint() {
     const [pickupPoints, setPickupPoints] = useState([]);
     const [loadingPickup, setLoadingPickup] = useState(false);
     const [errorPickup, setErrorPickup] = useState(null);
-    const [isChosenPickupPoint, setIsChosenPickupPoint] = useState(false);
 
     const { user } = useAuthor();
     const { cart, setCart } = useCart()
@@ -57,6 +56,16 @@ function ChosePickUpPoint() {
         popupAnchor: [1, -34],
         shadowSize: [41, 41],
     });
+
+    const daysMap = {
+        1: "Lundi",
+        2: "Mardi",
+        3: "Mercredi",
+        4: "Jeudi",
+        5: "Vendredi",
+        6: "Samedi",
+        7: "Dimanche",
+    };
 
     // only accessible to users (this page needs user info)
     useEffect(() => {
@@ -93,7 +102,6 @@ function ChosePickUpPoint() {
     function selectPoint(point) {
         console.log("Point selectionné : ", point)
         setCurrPoint(point)
-        setIsChosenPickupPoint(true)
     }
 
     // --- Fonction pour récupérer les points relais ---
@@ -180,7 +188,7 @@ function ChosePickUpPoint() {
     }
 
     async function handleValidate() {
-        if (isChosenPickupPoint) {
+        if (currPoint.id != 0) {
             setCart(prev => ({
                 ...prev,
                 pickupPoint: { currPoint }
@@ -282,7 +290,7 @@ function ChosePickUpPoint() {
                             <FunctionButton
                                 buttonText="Valider le point relais"
                                 fun={handleValidate}
-                                className={`mt-3 w-80 h-10 ${isChosenPickupPoint
+                                className={`mt-3 w-80 h-10 ${currPoint.id != 0
                                     ? 'bg-[#FF8200] text-white hover:bg-[#ff9800]'
                                     : 'bg-[#878787] text-white'
                                     }`}
@@ -294,17 +302,49 @@ function ChosePickUpPoint() {
                                 <div className="mt-6">
                                     <h3 className="font-bold mb-3">Points relais disponibles :</h3>
                                     <ul className="space-y-2">
-                                        {pickupPoints.map((p, i) => (
-                                            <li key={p.id} className={p.id == currPoint.id ? "border p-1 rounded hover:bg-gray-50 bg-[#8FF29F] hover:bg-[#00C921]" : "border p-1 rounded hover:bg-gray-50 hover:bg-[#cccccc]"} onClick={() => selectPoint(p)} >
-                                                <strong>{p.name}</strong> - {p.address1.toLowerCase()}, {p.zipCode} {p.city}
-                                            </li>
+                                        {pickupPoints.map((p) => (
+                                            <React.Fragment key={p.id}>
+                                                <li className={p.id == currPoint.id ? "border p-1 rounded hover:bg-gray-50 bg-[#8FF29F] hover:bg-[#00C921]" : "border p-1 rounded hover:bg-gray-50 hover:bg-[#cccccc]"} onClick={() => selectPoint(p)} >
+                                                    <strong>{p.name}</strong> - {p.address1.toLowerCase()}, {p.zipCode} {p.city}
+                                                </li>
+                                                {currPoint.id == p.id && (
+                                                    <div>
+                                                        {currPoint.openingHours != [] ? (
+                                                            <div>
+                                                                <strong>Horaires d'ouverture :</strong>
+
+                                                                {[1, 2, 3, 4, 5, 6, 7].map((dayNb) => {
+                                                                    const slots = p.openingHours.filter(
+                                                                        (d) => Number(d.dayId) === dayNb
+                                                                    );
+
+                                                                    return (
+                                                                        <div key={dayNb}>
+                                                                            {daysMap[dayNb]} :{" "}
+                                                                            {slots.length > 0 ? (
+                                                                                slots
+                                                                                    .map((s) => `${s.startTime} - ${s.endTime}`)
+                                                                                    .join(" | ")
+                                                                            ) : (
+                                                                                "Fermé"
+                                                                            )}
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        ) :(
+                                                            <div>Non renseignées</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
                                         ))}
                                     </ul>
                                 </div>
                             )}
                         </div>
 
-                        <div className="lg:w-1/2 flex items-start justify-center p-4 -mt-10">
+                        <div className="lg:w-1/2 flex items-start justify-center p-4 mt-10">
                             <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-2xl">
                                 <div id="map" className="h-[80vh] w-full">
                                     <MapContainer
@@ -340,7 +380,6 @@ function ChosePickUpPoint() {
                                                     eventHandlers={{
                                                         click: () => {
                                                             setCurrPoint(pickupPoint)
-                                                            setIsChosenPickupPoint(true)
                                                         },
                                                     }}
                                                 >
