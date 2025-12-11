@@ -177,7 +177,10 @@ function Delivery() {
                                                                 <div>
                                                                     <a
                                                                         href={delivery["trackingUrl"] ?? delivery["trackingUrl"]}
-                                                                        className="mt-2 bg-[#FF8200] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#ff9800] transition-all"
+                                                                        className={`mt-2 text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow transition-all ${delivery["trackingUrl"]
+                                                                            ? 'bg-[#FF8200] text-white hover:bg-[#ff9800]'
+                                                                            : 'bg-[#878787] text-white'
+                                                                            }`}
                                                                         target="_blank"
                                                                     >Suivre mon colis</a>
                                                                 </div>
