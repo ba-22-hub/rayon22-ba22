@@ -1,7 +1,7 @@
 // Importing dependencies
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@lib/supabaseClient.js';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import ProductCarousel from "@common/ProductCarouselCatalog"

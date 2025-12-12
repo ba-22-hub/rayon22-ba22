@@ -6,7 +6,7 @@ import { patchUser } from '@lib/patchUser';
 import sendNotification from '@lib/sendNotification.js';
 import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';

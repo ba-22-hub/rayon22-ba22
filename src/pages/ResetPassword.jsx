@@ -1,7 +1,7 @@
 // Importing dependencies
 import { useState } from 'react';
-import { displayNotification } from '@lib/displayNotification.js';
-import {supabase} from '@lib/supabaseClient.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
+import { supabase } from '@lib/supabaseClient.js';
 import { useNavigate } from 'react-router-dom';
 
 // Importing common components
@@ -63,14 +63,14 @@ function ResetPassword() {
         } else if (criteriaPassword.minLength && criteriaPassword.hasLowercase && criteriaPassword.hasUppercase && criteriaPassword.hasNumber) {
             // resseting the password
             await supabase.auth.updateUser({ password: formData.password })
-            .then((response)=> {
-                if (response.error) {
-                    displayNotification("Erreur lors de la réinitialisation du mot de passe : " + response.error.message, "", "danger")
-                } else {
-                    displayNotification("Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.", "", "success")
-                    navigate('/login')
-                }
-            })
+                .then((response) => {
+                    if (response.error) {
+                        displayNotification("Erreur lors de la réinitialisation du mot de passe : " + response.error.message, "", "danger")
+                    } else {
+                        displayNotification("Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.", "", "success")
+                        navigate('/login')
+                    }
+                })
         } else {
             // if not, alert the client
             //alert("Le mot de passe ne respecte pas les consignes")
@@ -89,17 +89,15 @@ function ResetPassword() {
 
                 {/* Formulaire */}
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
-                    <FormInput
+                    <PasswrdInput
                         inputText={<span>Mot de passe</span>}
-                        type="password"
                         name="password"
                         onChange={handleChange}
                         className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
                         isStarred={true}
                     />
-                    <FormInput
+                    <PasswrdInput
                         inputText={<span>Confirmation du mot de passe</span>}
-                        type="password"
                         name="passwordConfirm"
                         onChange={handleChange}
                         className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
