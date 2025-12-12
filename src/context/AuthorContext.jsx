@@ -126,7 +126,7 @@ function AuthorProvider({ children }) {
                 return false;
             }
             setHasRights(data.has_right);
-            return true;
+            return data.has_right;
         } catch (err) {
             console.error("Erreur lors du check des droits :", err.message);
             setHasRights(false);

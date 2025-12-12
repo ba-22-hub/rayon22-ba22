@@ -11,6 +11,7 @@ import FunctionButton from "../common/FunctionButton";
 
 // Importing assets
 import roundLogo from "../assets/logos/roundLogo.png";
+import { displayNotification } from "../lib/displayNotification.jsx";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -69,37 +70,41 @@ function ProductCarousel({ data }) {
     function DisplayButtons({ product }) {
       if (user) {
         const AddToCart = () => {
-          if (Object.keys(cart).includes(product.id)) {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: prevData[product.id] + 1,
+          const productAmountInCart = cart.content[product.id] || 0
+          if (product.stock >= productAmountInCart) {
+            setCart(prev => ({
+              ...prev,
+              content: {
+                ...prev.content,
+                [product.id]: (prev.content[product.id] || 0) + 1,
+              }
             }));
           } else {
-            setCart((prevData) => ({
-              ...prevData,
-              [product.id]: 1,
-            }));
+            displayNotification("Stock de " + product.name + " insuffisant", "", "danger")
           }
         };
 
         const RemoveFromCart = () => {
-          if (Object.keys(cart).includes(product.id)) {
-            if (cart[product.id] <= 1) {
+          if (Object.keys(cart.content).includes(product.id)) {
+            if (cart.content[product.id] <= 1) {
               setCart((prevData) => {
                 const newCart = { ...prevData };
-                delete newCart[product.id];
+                delete newCart.content[product.id];
                 return newCart;
               });
             } else {
-              setCart((prevData) => ({
-                ...prevData,
-                [product.id]: prevData[product.id] - 1,
+              setCart(prev => ({
+                ...prev,
+                content: {
+                  ...prev.content,
+                  [product.id]: prev.content[product.id] -1,
+                }
               }));
             }
           }
         };
-
-        if (Object.keys(cart).includes(product.id) && cart[product.id] > 0) {
+        
+        if (Object.keys(cart.content).includes(product.id) && cart.content[product.id] > 0) {
           return (
             <div className="flex jusitfy-end">
               <FunctionButton
@@ -108,7 +113,7 @@ function ProductCarousel({ data }) {
                 fun={RemoveFromCart}
               />
               <p className="text-[#3435FF] text-xl mr-1 ml-1 font-semibold">
-                {cart[product.id] || ""}
+                {cart.content[product.id] || ""}
               </p>
               <FunctionButton
                 className="text-white bg-[#3435FF] hover:bg-[#5253ff] rounded-full text-sm px-2 py-0.5 mb-2 ml-0 text-right"
@@ -142,7 +147,7 @@ function ProductCarousel({ data }) {
               <DisplayButtons product={product} />
             </div>
             <div className="text-[#ff6161] text-xs ml-0">
-              Prix en magasin : {product.price}€
+              Prix moyen en magasin : {product.price}€
             </div>
           </div>
           <div className="relative text-center">
@@ -151,7 +156,7 @@ function ProductCarousel({ data }) {
               alt={product.name}
               className="w-full h-28 lg:h-40 object-contain"
             />
-            {product.stock <= stockIncertainThreshold && (
+            {((product.productStockIncertainThreshold && product.stock <= product.productStockIncertainThreshold) || (product.stock <= stockIncertainThreshold)) && (
               <div className="w-full absolute top-0 left-0 text-center mt-0">
                 <p className="lg:text-xl text-white bg-rayonorange bg-opacity-80 text-center">
                   STOCK INCERTAIN
@@ -222,10 +227,10 @@ function ProductCarousel({ data }) {
                   <strong>Poids :</strong> {selectedProduct.weight} g
                 </li>
                 <li>
-                  <strong>Prix en magasin :</strong> {selectedProduct.salePrice} €
+                  <strong>Prix au rayon :</strong> {selectedProduct.salePrice} €
                 </li>
                 <li>
-                  <strong>Prix au rayon :</strong> {selectedProduct.price} €
+                  <strong>Prix moyen en magasin :</strong> {selectedProduct.price} €
                 </li>
                 <li>
                   <strong>Stock :</strong> {selectedProduct.stock}

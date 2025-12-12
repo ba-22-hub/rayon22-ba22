@@ -4,7 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { uploadImage } from '@lib/uploadImage.js'
 import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FormInput from "@common/FormInput"
@@ -14,8 +14,6 @@ import Loading from '@common/Loading.jsx';
 // Importing assets
 import roundLogo from "@assets/logos/roundLogo.png"
 
-// Importing styles
-import 'react-notifications-component/dist/theme.css'
 
 function ProductTable() {
   const categoriesList = ["légumes", "fruits", "féculents", "conserves", "hygiène", "autre"]
@@ -28,7 +26,7 @@ function ProductTable() {
   const [expandedSettings, setExpandedSettings] = useState(false);
   const [oldImageName, setOldImageName] = useState("");   // Old image name when product's image changed (so the old image can be removed from the bucket)
   const [productImages, setProductImages] = useState({});
-  const [stockIncertainThreshold, setStockIncertainThreshold] = useState(null);     // threshold for 'Stock Incertain' label
+
   // For image upload
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
@@ -42,9 +40,15 @@ function ProductTable() {
     category: '',
     weight: '',
     stock: '',
+    productStockIncertainThreshold: '',
     description: '',
     image_name: '',
   });
+
+  const [settings, setSettings] = useState({
+    stockIncertainThreshold: '',
+    shippingCost: '',
+  })
 
   const fetchProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
@@ -85,6 +89,7 @@ function ProductTable() {
     }
 
     fetchProducts();
+    fetchCurrentStockIncertainThreshold();
   }, [loading]);
 
   const handleEdit = (product) => {
@@ -178,8 +183,19 @@ function ProductTable() {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  async function nullProductStockIncertainThreshold() {
+    if (formData.productStockIncertainThreshold == "") {
+      setFormData(prevData => ({
+        ...prevData,
+        "productStockIncertainThreshold": null
+      }));
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+
+    await nullProductStockIncertainThreshold();
 
     // Adding a new row to the 'products' database
     const { error } = await supabase
@@ -207,6 +223,7 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
+      productStockIncertainThreshold: '',
       image_name: '',
     })
 
@@ -306,44 +323,54 @@ function ProductTable() {
   };
 
   async function fetchCurrentStockIncertainThreshold() {
-    setExpandedSettings(true)
+    // Fetches global stock incertain threshold
     const { data, error } = await supabase
       .from('constants')
       .select('value')
       .eq("name", "stockIncertainThreshold")
       .maybeSingle();
     if (!error) {
-      setStockIncertainThreshold(data.value)
+      setSettings(prevData => ({
+        ...prevData,
+        stockIncertainThreshold: data.value
+      }))
     } else {
       console.error("Erreur lors du téléchargement de l'ancienne valeur seuil ", error)
       displayNotification("Erreur lors du téléchargement de l'ancienne valeur seuil", error.message, "danger")
     }
   }
 
-  function handleChangeStockIncertainThreshold(e) {
-    const { value } = e.target;
-    setStockIncertainThreshold(value)
-  }
+  const handleChangeInSettings = (e) => {
+    setSettings(prevData => ({
+      ...prevData,
+      [e.target.name]: e.target.value
+    }))
+  };
 
   async function handleSubmitSettings(e) {
     e.preventDefault();
 
+    const updates = Object.entries(settings).map(([key, value]) => ({
+      name: key,
+      value: value,
+    }));
+
     const { error } = await supabase
       .from("constants")
-      .update({ value: stockIncertainThreshold })
-      .eq("name", "stockIncertainThreshold");
+      .upsert(updates);
 
     if (error) {
-      let message = error.message
-      if (error.code === "22P02") {
-        message = "Le seuil doit être un entier"
-      }
-      console.error("Erreur lors de la mise à jour du seuil", error);
-      displayNotification("Erreur lors de la mise à jour du seuil", message, "danger")
-      return;
+      displayNotification("Erreur lors de la mise à jour des paramètres", error.message, "danger")
+    } else {
+      displayNotification("Les paramètres ont été mis à jour avec succès", "", "success")
     }
 
     setExpandedSettings(false);
+  }
+
+  function modifySettings() {
+    fetchCurrentStockIncertainThreshold();
+    setExpandedSettings(true);
   }
 
   return (
@@ -370,6 +397,7 @@ function ProductTable() {
                   <th className="p-2">Poids (gramme)</th>
                   <th className="p-2">Catégorie</th>
                   <th className="p-2">Stock</th>
+                  <th className="p-2">Limite stock incertain</th>
                   <th className="p-2">Description</th>
                   <th className="p-2">Image</th>
                   <th className="p-2">Actions</th>
@@ -440,6 +468,15 @@ function ProductTable() {
                           />
                         </td>
                         <td className="p-2">
+                          <input
+                            name="productStockIncertainThreshold"
+                            value={editedValues["productStockIncertainThreshold"] || settings.stockIncertainThreshold}
+                            onChange={handleChangeInProd}
+                            type="number"
+                            className="border p-1 rounded w-full"
+                          />
+                        </td>
+                        <td className="p-2">
                           <textarea
                             name="description"
                             value={editedValues["description"] || ""}
@@ -472,6 +509,7 @@ function ProductTable() {
                         <td className="p-2">{p["weight"]}</td>
                         <td className="p-2">{p.category}</td>
                         <td className="p-2">{p.stock}</td>
+                        <td className="p-2">{p.productStockIncertainThreshold ? p.productStockIncertainThreshold : settings.stockIncertainThreshold}</td>
                         <td className="p-2">{p.description || "-"}</td>
                         <td><img src={productImages[p.id] || roundLogo} alt={p.name} className="w-[50%] h-20 object-contain" /></td>
                         <td className="p-2 space-x-2">
@@ -557,6 +595,17 @@ function ProductTable() {
                 </div>
                 <div>
                   <FormInput
+                    name="productStockIncertainThreshold"
+                    type="number"
+                    value={formData["productStockIncertainThreshold"] ?? ""}
+                    inputText="Limite stock incertain"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInForm}
+                    isStarred={false} />
+                </div>
+                <div>
+                  <FormInput
                     name="weight"
                     type="number"
                     value={formData["weight"] ?? ""}
@@ -575,7 +624,7 @@ function ProductTable() {
                     labelClassName="ml-[8%]"
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
                     onChange={handleChangeInForm}
-                    isStarred={true} />
+                    isStarred={false} />
                 </div>
                 <div>
                   <BrowseImage newProduct={true}></BrowseImage>
@@ -591,20 +640,30 @@ function ProductTable() {
           <FunctionButton
             className="bg-rayonorange  w-[1/2] content-center ml-30 my-4 text-white px-10 py-1 rounded"
             buttonText={expandedSettings ? 'Annuler' : 'Modifier les paramètres'}
-            fun={expandedSettings ? (() => setExpandedSettings(false)) : (() => fetchCurrentStockIncertainThreshold())}
+            fun={expandedSettings ? (() => setExpandedSettings(false)) : (() => modifySettings())}
           />
           {expandedSettings && (
             <form onSubmit={handleSubmitSettings}>
               <div className="grid grid-cols-2 gap-4 text-sm mb-4 items-center">
                 <div>
                   <FormInput
-                    name="threshold"
+                    name="stockIncertainThreshold"
                     type="number"
-                    value={stockIncertainThreshold ?? ""}
+                    value={settings.stockIncertainThreshold ?? ""}
                     inputText="Seuil en deçà duquel le label 'Stock Incertain' apparaît dans le catalogue utilisateur"
                     labelClassName="ml-[8%]"
                     className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
-                    onChange={handleChangeStockIncertainThreshold} />
+                    onChange={handleChangeInSettings} />
+                </div>
+                <div>
+                  <FormInput
+                    name="shippingCost"
+                    type="number"
+                    value={settings.shippingCost ?? ""}
+                    inputText="Participation solidaire aux frais de livraison"
+                    labelClassName="ml-[8%]"
+                    className="w-[84%] h-[2.3rem] ml-[8%] rounded-lg border border-rayonblue mb-2 mt-1"
+                    onChange={handleChangeInSettings} />
                 </div>
               </div>
               <button

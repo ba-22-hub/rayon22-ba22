@@ -74,7 +74,7 @@ function About() {
               <p className="text-center text-base text-[#3435FF] mb-4">
                 À l’heure actuelle, six <span className="font-bold">épiceries solidaires</span> sont réparties à travers la France.
               </p>
-              <a href="#" className="mt-2 bg-[#3435FF] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#5253ff] transition-all">site national le RAYON →</a>
+              <a href="https://lerayon.banquealimentaire.org" className="mt-2 bg-[#3435FF] text-white px-8 py-3 rounded-lg font-mono text-base font-semibold shadow hover:bg-[#5253ff] transition-all">site national le RAYON →</a>
             </div>
           </div>
         </div>

@@ -1,9 +1,9 @@
 import { supabase } from '@lib/supabaseClient.js';
-import { displayNotification } from '@lib/displayNotification.js'
+import { displayNotification } from '@lib/displayNotification.jsx'
 
 
 // durée de base : 10*60s = 10min 
-async function openPDF(fileName ,expiresIn = 10, folder = null) {
+async function openPDF(fileName, expiresIn = 10, folder = null) {
     const { data, error } = await supabase.storage
         .from('documents')
         .createSignedUrl(folder ? `${folder}/${fileName}` : fileName, expiresIn * 60)

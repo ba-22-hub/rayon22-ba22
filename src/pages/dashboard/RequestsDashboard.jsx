@@ -5,7 +5,7 @@ import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
 import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
-import { displayNotification } from '@lib/displayNotification.js';
+import { displayNotification } from '@lib/displayNotification.jsx';
 
 // Importing common components
 import FunctionButton from '@common/FunctionButton.jsx';
