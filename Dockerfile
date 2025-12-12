@@ -1,4 +1,4 @@
-# Dockerfile sécurisé pour l'application Rayon22
+# Dockerfile sécurisé pour l'application Rayon22 
 # Variables d'environnement injectées au RUNTIME (pas au build)
 
 # ========================================
