@@ -120,7 +120,7 @@ function OrderTable() {
                             <p className="font-semibold">Prix : {order.price.toFixed(2)} €</p>
                             <FunctionButton
                                 fun={() => confirmDelivery(order.id)}
-                                buttonText="Livraison confirmée"
+                                buttonText="Commande validée"
                                 className="text-white bg-green px-3 py-1 rounded hover:bg-green"
                             />
                         </div>
