@@ -159,7 +159,15 @@ function Cart() {
     }
 
     async function handleValidate() {
+        checkHasRights(user.id) // user doesn't have rights
+            .then((rights) => {
+                if (!rights) {
+                    displayNotification("Échec de validation du panier", "Vous n'avez pas les droits", "danger")
+                    return;
+                }
+            })
         if (Object.keys(cart.content).length === 0) {
+            // Empty cart
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
         } else {
