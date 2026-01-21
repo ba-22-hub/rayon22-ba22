@@ -122,9 +122,6 @@ const UserTable = () => {
 	const handleDelete = (id) => {
 		console.log('Suppression utilisateur :', id);
 		deleteUser(id)
-			.then(() =>
-				displayNotification("Suppression effectuée avec succès", "", "success")
-			)
 			.then(() => setUpdate(!update))
 			.catch((e) =>
 				console.error("Erreur inattendue : ", e),
