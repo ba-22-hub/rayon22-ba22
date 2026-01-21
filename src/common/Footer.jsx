@@ -50,8 +50,8 @@ const Footer = () => {
                                 <span style={{ marginLeft: "10px" }}>Instagram</span>
                             </i>
                         </a>
-                        <a href="mailto:ba220@banquealimentaire.org" className="footer-link">
-                            ba220@banquealimentaire.org
+                        <a href="mailto:ba220.epicerie@banquealimentaire.org" className="footer-link">
+                            ba220.epicerie@banquealimentaire.org
                         </a>
                     </div>
 
