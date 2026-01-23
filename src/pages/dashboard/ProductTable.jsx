@@ -1,7 +1,7 @@
 // Importing dependencies
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@lib/supabaseClient";
-import { uploadImage } from '@lib/uploadImage.js'
+import { uploadImage, normalizeFileName } from '@lib/uploadImage.js'
 import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.jsx';
@@ -195,12 +195,16 @@ function ProductTable() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    await nullProductStockIncertainThreshold();
+    // Normalize filename
+    const dataToSubmit = {
+      ...formData,
+      productStockIncertainThreshold: formData.productStockIncertainThreshold === "" ? null : formData.productStockIncertainThreshold
+    };
 
     // Adding a new row to the 'products' database
     const { error } = await supabase
       .from('products')
-      .insert(formData)
+      .insert(dataToSubmit)
 
     if (error) {
       console.error("Erreur lors de l'ajout du nouveau produit", error);
@@ -209,13 +213,10 @@ function ProductTable() {
     }
 
     // Uploading the image to the 'images' bucket
-    if (image.name != "") {
+    if (image && image.name) {
       await uploadImage(image, image.name)
     }
     setImage("")
-
-    // Saving locally the user info to use it after the mail verification
-    localStorage.setItem("pendingUserData", JSON.stringify(formData));
 
     setFormData({
       name: '',
@@ -223,7 +224,9 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
+      stock: '',
       productStockIncertainThreshold: '',
+      description: '',
       image_name: '',
     })
 
@@ -235,17 +238,18 @@ function ProductTable() {
     const handleFileUpload = e => {
       const { files } = e.target;
       if (files && files.length) {
+        const normalizedName = normalizeFileName(files[0].name);
         {
           newProduct ? (
             setFormData(prevData => ({
               ...prevData,
-              image_name: files[0].name
+              image_name: normalizedName
             }))
           ) : (
             () => handleEdit(product),
             setEditedValues(prevData => ({
               ...prevData,
-              image_name: files[0].name
+              image_name: normalizedName
             })),
             () => handleChangeInProd(product)
           )
@@ -294,10 +298,11 @@ function ProductTable() {
 
       const { files } = e.target;
       if (files && files.length) {
+        const normalizedName = normalizeFileName(files[0].name);
         () => handleEdit(product),
           setEditedValues(prevData => ({
             ...prevData,
-            image_name: files[0].name
+            image_name: normalizedName
           }))
       }
       setImage(files[0]);
