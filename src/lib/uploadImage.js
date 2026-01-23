@@ -1,7 +1,7 @@
 import { displayNotification } from '@lib/displayNotification.jsx'
 import { supabase } from './supabaseClient.js';
 
-async function uploadImage(image, imageName, bucket='images') {
+async function uploadImage(image, imageName, bucket = 'images') {
   // Uploads the image to Supabase public bucket
   if (imageName) {
     console.log(imageName);
@@ -21,6 +21,7 @@ async function uploadImage(image, imageName, bucket='images') {
     displayNotification('Upload de l\'image ' + imageName + ' terminé avec succès', "", 'success')
     return { success: true, data: uploadData };
   } else {
+    displayNotification(title = 'Erreur lors de l\'upload de l\'image ', message = error.message, type = 'danger')
     return;
   }
 }
