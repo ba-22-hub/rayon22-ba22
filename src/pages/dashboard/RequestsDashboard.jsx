@@ -140,7 +140,7 @@ function RequestsDashboard() {
                                             <div className="flex items-center justify-between">
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-3 mb-2">
-                                                        <div className="w-10 h-10 bg-rayonblue rounded-full flex items-center justify-center text-white font-semibold">
+                                                        <div className="w-10 h-10 bg-rayonorange rounded-full flex items-center justify-center text-white font-semibold">
                                                             {req.User ? `${req.User.firstName.charAt(0)}${req.User.lastName.charAt(0)}` : '?'}
                                                         </div>
                                                         <div>
