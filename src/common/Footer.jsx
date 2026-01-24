@@ -55,7 +55,7 @@ const Footer = () => {
                         </a>
 
                         <a
-                            href="#"
+                            href="/confidentiality"
                             className="block text-sm text-blue-100 hover:text-rayonorange transition-colors duration-200"
                         >
                             Politique de confidentialité
