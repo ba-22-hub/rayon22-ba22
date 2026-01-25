@@ -48,7 +48,7 @@ const Footer = () => {
                         </h4>
 
                         <a
-                            href="#"
+                            href="/legal-mentions"
                             className="block text-sm text-blue-100 hover:text-rayonorange transition-colors duration-200"
                         >
                             Mentions légales
@@ -62,7 +62,7 @@ const Footer = () => {
                         </a>
 
                         <a
-                            href="#"
+                            href="/operationg-charter"
                             className="block text-sm text-blue-100 hover:text-rayonorange transition-colors duration-200"
                         >
                             Charte de fonctionnement
