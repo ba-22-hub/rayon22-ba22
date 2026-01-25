@@ -1,5 +1,5 @@
 // Importing dependencies
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
 import { useAuthor } from '@context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
 import { useCart } from "@context/CartContext.jsx";
@@ -12,22 +12,128 @@ import Loading from "@common/Loading.jsx";
 // Importing assets
 import roundLogo from "@assets/logos/roundLogo.png"
 
+// Composant mémoïsé pour éviter les re-renders inutiles
+const DisplayProductCard = memo(({ product, quantity, onAdd, onRemove, roundTwoDigits }) => {
+    return (
+        <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-4 border border-gray-100">
+            <div className="flex items-center gap-4">
+                <div className="w-20 h-20 flex-shrink-0 bg-gray-50 rounded-lg p-2">
+                    <img
+                        src={product.imageUrl || roundLogo}
+                        alt={product.name}
+                        className="w-full h-full object-contain"
+                    />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-[#3435FF] font-bold text-lg truncate">
+                        {product.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                        {product.weight}g • {product.category}
+                    </p>
+
+                    <div className="flex items-center gap-2 mt-2">
+                        {quantity === 1 ? (
+                            <button
+                                onClick={onRemove}
+                                className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all shadow-md"
+                            >
+                                <svg viewBox="0 0 32 32" fill="currentColor" className="h-4 w-4">
+                                    <path d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0Zm-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2h7.5Zm2.5 6.5a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0v-10Zm5-1a1 1 0 0 0-1 1v10a1 1 0 1 0 2 0v-10a1 1 0 0 0-1-1Z" />
+                                </svg>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={onRemove}
+                                className="w-8 h-8 bg-[#FF8200] hover:bg-[#ff9800] text-white rounded-full font-bold flex items-center justify-center transition-all shadow-md"
+                            >
+                                −
+                            </button>
+                        )}
+                        <span className="text-[#3435FF] text-xl font-bold min-w-[2rem] text-center">
+                            {quantity}
+                        </span>
+                        <button
+                            onClick={onAdd}
+                            className="w-8 h-8 bg-[#3435FF] hover:bg-[#5253ff] text-white rounded-full font-bold flex items-center justify-center transition-all shadow-md"
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
+
+                <div className="text-right">
+                    <div className="text-sm text-gray-500 hidden lg:block">
+                        {quantity} × {product.salePrice}€
+                    </div>
+                    <div className="text-[#FF8200] text-2xl font-bold">
+                        {roundTwoDigits(quantity * product.salePrice)}€
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}, (prevProps, nextProps) => {
+    // Comparaison personnalisée pour éviter les re-renders inutiles
+    return prevProps.product.id === nextProps.product.id &&
+        prevProps.quantity === nextProps.quantity &&
+        prevProps.product.imageUrl === nextProps.product.imageUrl;
+});
+
+DisplayProductCard.displayName = 'DisplayProductCard';
+
 function Cart() {
     const [productsInCart, setProductsInCart] = useState([])
-    const [productsPriceTotal, setProductsPriceTotal] = useState(0)
-    const [productsWeightTotal, setProductsWeightTotal] = useState(0)
-    const [productsNumberTotal, setProductsNumberTotal] = useState(0)
     const [shippingCost, setShippingCost] = useState(1.35)
     const isNotified = useRef(false)
     const [loading, setLoading] = useState(true);
     const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
     const shippingCostFetched = useRef(false)
-    const prevCartIds = useRef([]) // 🔑 éviter refetch inutile
+    const prevCartIds = useRef([])
 
     const { user, loading: authorLoading, checkHasRights } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
+
+    // Fonction utilitaire mémoïsée
+    const roundTwoDigits = useCallback((nb) => {
+        return Math.round(nb * 100) / 100
+    }, []);
+
+    // Calculs mémoïsés - ne recalculent que si productsInCart ou cart.content changent
+    const { productsPriceTotal, productsWeightTotal, productsNumberTotal } = useMemo(() => {
+        if (productsInCart.length === 0 || !cart?.content) {
+            return {
+                productsPriceTotal: 0,
+                productsWeightTotal: 0,
+                productsNumberTotal: 0
+            };
+        }
+
+        const priceTotal = roundTwoDigits(
+            productsInCart
+                .map((product) => parseFloat(product.salePrice) * parseFloat(cart.content[product.id] || 0))
+                .reduce((total, price) => total + price, 0)
+        );
+
+        const weightTotal = roundTwoDigits(
+            productsInCart
+                .map((product) => parseFloat(product.weight) * parseFloat(cart.content[product.id] || 0))
+                .reduce((total, weight) => total + weight, 0)
+        );
+
+        const numberTotal = Object.keys(cart.content)
+            .map(k => cart.content[k])
+            .reduce((acc, number) => acc + number, 0);
+
+        return {
+            productsPriceTotal: priceTotal,
+            productsWeightTotal: weightTotal,
+            productsNumberTotal: numberTotal
+        };
+    }, [productsInCart, cart?.content, roundTwoDigits]);
 
     // Charger le threshold
     useEffect(() => {
@@ -66,10 +172,6 @@ function Cart() {
         alert(message)
     }
 
-    function roundTwoDigits(nb) {
-        return Math.round(nb * 100) / 100
-    }
-
     // Charger les frais de livraison
     useEffect(() => {
         if (shippingCostFetched.current) return;
@@ -89,7 +191,7 @@ function Cart() {
         fetchShippingCost();
     }, []);
 
-    // 🔥 Charger les produits uniquement quand la liste d'IDs change
+    // Charger les produits uniquement quand la liste d'IDs change
     useEffect(() => {
         if (cart === null) {
             setLoading(true)
@@ -110,7 +212,6 @@ function Cart() {
             cartKeys.some((id, i) => id !== prevKeys[i])
 
         if (!idsChanged) {
-            // seulement quantités → pas de refetch
             setLoading(false)
             return
         }
@@ -155,46 +256,42 @@ function Cart() {
         fetchDataProductsInCart();
     }, [cart]);
 
-    // Recalculer les totaux (rapide, pas de refetch)
-    useEffect(() => {
-        if (productsInCart.length > 0 && cart?.content) {
-            setProductsPriceTotal(
-                roundTwoDigits(
-                    productsInCart
-                        .map((product) => parseFloat(product.salePrice) * parseFloat(cart.content[product.id]))
-                        .reduce((priceTotal, price) => priceTotal + price, 0)
-                )
-            )
+    // Handlers mémoïsés pour éviter de recréer les fonctions à chaque render
+    const handleAddToCart = useCallback((productId) => {
+        setCart(prev => ({
+            ...prev,
+            content: {
+                ...prev.content,
+                [productId]: (prev.content[productId] || 0) + 1,
+            }
+        }));
+    }, [setCart]);
 
-            setProductsWeightTotal(
-                roundTwoDigits(
-                    productsInCart
-                        .map((product) => parseFloat(product.weight) * parseFloat(cart.content[product.id]))
-                        .reduce((weightTotal, weight) => weightTotal + weight, 0)
-                )
-            )
+    const handleRemoveFromCart = useCallback((productId) => {
+        setCart(prevData => {
+            if (!prevData?.content || !prevData.content[productId]) return prevData;
 
-            setProductsNumberTotal(
-                Object.keys(cart.content)
-                    .map(k => cart.content[k])
-                    .reduce((acc, number) => acc + number, 0)
-            )
-        } else {
-            setProductsPriceTotal(0)
-            setProductsWeightTotal(0)
-            setProductsNumberTotal(0)
-        }
-    }, [productsInCart, cart]);
+            if (prevData.content[productId] <= 1) {
+                const newCart = { ...prevData };
+                delete newCart.content[productId];
+                return newCart;
+            } else {
+                return {
+                    ...prevData,
+                    content: {
+                        ...prevData.content,
+                        [productId]: prevData.content[productId] - 1,
+                    }
+                };
+            }
+        });
+    }, [setCart]);
 
-    async function handleValidate() {
-        if (Object.keys(cart.content).length === 0) {
+    const handleValidate = useCallback(async () => {
+        if (!cart?.content || Object.keys(cart.content).length === 0) {
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
         }
-
-        const productsPriceTotal = productsInCart
-            .map(p => parseFloat(p.salePrice) * cart.content[p.id])
-            .reduce((a, b) => a + b, 0);
 
         if (productsPriceTotal < 0.5) {
             displayNotification("Échec de validation du panier", "Le total produits doit être d'au moins 0.5€ pour pouvoir procéder au payement en ligne", "danger")
@@ -213,18 +310,8 @@ function Cart() {
         }
 
         const limits = userData;
-        const isRespectedLimit = (limit, currentAmount, newAmount) =>
-            !limit || (currentAmount + newAmount) <= limit;
 
-        const productsWeightTotal = productsInCart
-            .map(p => parseFloat(p.weight) * cart.content[p.id])
-            .reduce((a, b) => a + b, 0);
-
-        const productsNumberTotal = Object.keys(cart.content)
-            .map(k => cart.content[k])
-            .reduce((a, b) => a + b, 0);
-
-        if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
+        if (limits.weight_limit && (limits.current_weight + productsWeightTotal) > limits.weight_limit) {
             displayNotification("Échec de validation du panier", "Condition de poids non respectée", "danger", 0)
             return;
         }
@@ -236,102 +323,7 @@ function Cart() {
         }
 
         navigate("/chose-pickup-point")
-    }
-
-    function DisplayProductCard({ product, idx }) {
-        const AddToCart = () => {
-            setCart(prev => ({
-                ...prev,
-                content: {
-                    ...prev.content,
-                    [product.id]: (prev.content[product.id] || 0) + 1,
-                }
-            }));
-        }
-
-        const RemoveFromCart = () => {
-            if (cart?.content && Object.keys(cart.content).includes(product.id)) {
-                if (cart.content[product.id] <= 1) {
-                    setCart(prevData => {
-                        const newCart = { ...prevData };
-                        delete newCart.content[product.id];
-                        return newCart;
-                    });
-                } else {
-                    setCart(prev => ({
-                        ...prev,
-                        content: {
-                            ...prev.content,
-                            [product.id]: prev.content[product.id] - 1,
-                        }
-                    }));
-                }
-            }
-        }
-
-        if (!cart?.content || !Object.keys(cart.content).includes(product.id)) return null;
-
-        return (
-            <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all p-4 border border-gray-100">
-                <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 flex-shrink-0 bg-gray-50 rounded-lg p-2">
-                        <img
-                            src={product.imageUrl || roundLogo}
-                            alt={product.name}
-                            className="w-full h-full object-contain"
-                        />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-[#3435FF] font-bold text-lg truncate">
-                            {product.name}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                            {product.weight}g • {product.category}
-                        </p>
-
-                        <div className="flex items-center gap-2 mt-2">
-                            {cart.content[product.id] === 1 ? (
-                                <button
-                                    onClick={RemoveFromCart}
-                                    className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all shadow-md"
-                                >
-                                    <svg viewBox="0 0 32 32" fill="currentColor" className="h-4 w-4">
-                                        <path d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0Zm-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2h7.5Zm2.5 6.5a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0v-10Zm5-1a1 1 0 0 0-1 1v10a1 1 0 1 0 2 0v-10a1 1 0 0 0-1-1Z" />
-                                    </svg>
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={RemoveFromCart}
-                                    className="w-8 h-8 bg-[#FF8200] hover:bg-[#ff9800] text-white rounded-full font-bold flex items-center justify-center transition-all shadow-md"
-                                >
-                                    −
-                                </button>
-                            )}
-                            <span className="text-[#3435FF] text-xl font-bold min-w-[2rem] text-center">
-                                {cart.content[product.id]}
-                            </span>
-                            <button
-                                onClick={AddToCart}
-                                className="w-8 h-8 bg-[#3435FF] hover:bg-[#5253ff] text-white rounded-full font-bold flex items-center justify-center transition-all shadow-md"
-                            >
-                                +
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="text-right">
-                        <div className="text-sm text-gray-500 hidden lg:block">
-                            {cart.content[product.id]} × {product.salePrice}€
-                        </div>
-                        <div className="text-[#FF8200] text-2xl font-bold">
-                            {roundTwoDigits(cart.content[product.id] * product.salePrice)}€
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    }, [cart, productsPriceTotal, productsWeightTotal, productsInCart, user, navigate]);
 
     return (
         <>
@@ -382,8 +374,17 @@ function Cart() {
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
-                                        {productsInCart.map((product, idx) => (
-                                            <DisplayProductCard key={idx} product={product} idx={idx} />
+                                        {productsInCart.map((product) => (
+                                            cart?.content?.[product.id] && (
+                                                <DisplayProductCard
+                                                    key={product.id}
+                                                    product={product}
+                                                    quantity={cart.content[product.id]}
+                                                    onAdd={() => handleAddToCart(product.id)}
+                                                    onRemove={() => handleRemoveFromCart(product.id)}
+                                                    roundTwoDigits={roundTwoDigits}
+                                                />
+                                            )
                                         ))}
                                     </div>
                                 )}
@@ -428,13 +429,13 @@ function Cart() {
 
                                     <button
                                         onClick={handleValidate}
-                                        disabled={Object.keys(cart.content).length === 0}
-                                        className={`w-full py-4 rounded-lg font-bold text-lg transition-all shadow-lg ${Object.keys(cart.content).length === 0
+                                        disabled={!cart?.content || Object.keys(cart.content).length === 0}
+                                        className={`w-full py-4 rounded-lg font-bold text-lg transition-all shadow-lg ${!cart?.content || Object.keys(cart.content).length === 0
                                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                             : 'bg-gradient-to-r from-[#FF8200] to-[#ff9800] hover:from-[#ff9800] hover:to-[#FF8200] text-white hover:shadow-xl transform hover:-translate-y-1'
                                             }`}
                                     >
-                                        {Object.keys(cart.content).length === 0
+                                        {!cart?.content || Object.keys(cart.content).length === 0
                                             ? 'Panier vide'
                                             : 'Valider ma commande'
                                         }
