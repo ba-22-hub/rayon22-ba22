@@ -159,7 +159,15 @@ function Cart() {
     }
 
     async function handleValidate() {
+        checkHasRights(user.id) // user doesn't have rights
+            .then((rights) => {
+                if (!rights) {
+                    displayNotification("Échec de validation du panier", "Vous n'avez pas les droits", "danger")
+                    return;
+                }
+            })
         if (Object.keys(cart.content).length === 0) {
+            // Empty cart
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
         } else {
@@ -294,7 +302,7 @@ function Cart() {
             }
 
             const RemoveFromCart = () => {
-                if (Object.keys(cart.content).includes(product.id)) {   // Should always be true when function called
+                if (Object.keys(cart.content).includes(product.id)) {   // Should always be true when function is called
                     if (cart.content[product.id] <= 1) {
                         // Removing last item of this product from cart : product removed from cart
                         setCart(prevData => {

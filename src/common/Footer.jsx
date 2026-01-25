@@ -107,7 +107,7 @@ const Footer = () => {
                             href="mailto:ba220@banquealimentaire.org"
                             className="block text-sm text-blue-100 hover:text-rayonorange transition-colors duration-200"
                         >
-                            ba220@banquealimentaire.org
+                            ba220.epicerie@banquealimentaire.org
                         </a>
 
                         <a
