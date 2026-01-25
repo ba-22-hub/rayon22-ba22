@@ -302,7 +302,7 @@ function Cart() {
             }
 
             const RemoveFromCart = () => {
-                if (Object.keys(cart.content).includes(product.id)) {   // Should always be true when function called
+                if (Object.keys(cart.content).includes(product.id)) {   // Should always be true when function is called
                     if (cart.content[product.id] <= 1) {
                         // Removing last item of this product from cart : product removed from cart
                         setCart(prevData => {
