@@ -21,14 +21,15 @@ function Cart() {
     const isNotified = useRef(false)
     const [loading, setLoading] = useState(true);
     const [stockIncertainThreshold, setStockIncertainThreshold] = useState(3);
-    const shippingCostFetched = useRef(false) // ✅ Éviter les re-fetch
+    const shippingCostFetched = useRef(false)
+    const prevCartIds = useRef([]) // 🔑 éviter refetch inutile
 
     const { user, loading: authorLoading, checkHasRights } = useAuthor()
     const { cart, setCart } = useCart()
 
     let navigate = useNavigate()
 
-    // ✅ Charger le threshold une seule fois au montage
+    // Charger le threshold
     useEffect(() => {
         const fetchStockIncertainThreshold = async () => {
             const { data, error } = await supabase
@@ -41,7 +42,7 @@ function Cart() {
             }
         };
         fetchStockIncertainThreshold();
-    }, []); // ✅ Dépendances vides = une seule fois
+    }, []);
 
     useEffect(() => {
         if (authorLoading) return;
@@ -69,7 +70,7 @@ function Cart() {
         return Math.round(nb * 100) / 100
     }
 
-    // ✅ Charger les frais de livraison une seule fois
+    // Charger les frais de livraison
     useEffect(() => {
         if (shippingCostFetched.current) return;
 
@@ -81,14 +82,14 @@ function Cart() {
                 .maybeSingle();
             if (!error && data) {
                 setShippingCost(data.value)
-                shippingCostFetched.current = true // ✅ Marquer comme chargé
+                shippingCostFetched.current = true
             }
         };
 
         fetchShippingCost();
-    }, []); // ✅ Une seule fois au montage
+    }, []);
 
-    // ✅ Charger les produits quand le cart change
+    // 🔥 Charger les produits uniquement quand la liste d'IDs change
     useEffect(() => {
         if (cart === null) {
             setLoading(true)
@@ -96,18 +97,30 @@ function Cart() {
         }
 
         if (!cart.content) {
+            setProductsInCart([])
             setLoading(false)
             return;
         }
 
-        console.log('🔄 Rechargement des produits du cart:', cart);
-        const cartKeys = Object.keys(cart.content);
+        const cartKeys = Object.keys(cart.content).sort()
+        const prevKeys = prevCartIds.current
 
-        // Si le panier est vide
+        const idsChanged =
+            cartKeys.length !== prevKeys.length ||
+            cartKeys.some((id, i) => id !== prevKeys[i])
+
+        if (!idsChanged) {
+            // seulement quantités → pas de refetch
+            setLoading(false)
+            return
+        }
+
+        prevCartIds.current = cartKeys
+
         if (cartKeys.length === 0) {
-            setProductsInCart([]);
-            setLoading(false);
-            return;
+            setProductsInCart([])
+            setLoading(false)
+            return
         }
 
         const fetchDataProductsInCart = async () => {
@@ -128,9 +141,7 @@ function Cart() {
                             .from("images")
                             .download(product.image_name);
 
-                        if (imgError) {
-                            displayNotification("Erreur de chargement de l'image : " + product.image_name, imgError.message, "warning")
-                        } else {
+                        if (!imgError && imgData) {
                             product.imageUrl = URL.createObjectURL(imgData);
                         }
                         return product;
@@ -142,14 +153,32 @@ function Cart() {
         };
 
         fetchDataProductsInCart();
-    }, [cart]); // ✅ Seulement quand cart change
+    }, [cart]);
 
-    // ✅ Recalculer les totaux quand les produits changent
+    // Recalculer les totaux (rapide, pas de refetch)
     useEffect(() => {
         if (productsInCart.length > 0 && cart?.content) {
-            setProductsPriceTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.salePrice) * parseFloat(cart.content[product.id]))).reduce((priceTotal, price) => priceTotal + price)))
-            setProductsWeightTotal(roundTwoDigits(productsInCart.map((product) => (parseFloat(product.weight) * parseFloat(cart.content[product.id]))).reduce((weightTotal, weight) => weightTotal + weight)))
-            setProductsNumberTotal(Object.keys(cart.content).map(k => cart.content[k]).reduce((acc, number) => acc + number, 0))
+            setProductsPriceTotal(
+                roundTwoDigits(
+                    productsInCart
+                        .map((product) => parseFloat(product.salePrice) * parseFloat(cart.content[product.id]))
+                        .reduce((priceTotal, price) => priceTotal + price, 0)
+                )
+            )
+
+            setProductsWeightTotal(
+                roundTwoDigits(
+                    productsInCart
+                        .map((product) => parseFloat(product.weight) * parseFloat(cart.content[product.id]))
+                        .reduce((weightTotal, weight) => weightTotal + weight, 0)
+                )
+            )
+
+            setProductsNumberTotal(
+                Object.keys(cart.content)
+                    .map(k => cart.content[k])
+                    .reduce((acc, number) => acc + number, 0)
+            )
         } else {
             setProductsPriceTotal(0)
             setProductsWeightTotal(0)
@@ -161,15 +190,15 @@ function Cart() {
         if (Object.keys(cart.content).length === 0) {
             displayNotification("Échec de validation du panier", "Le panier est vide", "danger")
             return;
-        } else {
-            const productsPriceTotal = productsInCart
-                .map(p => parseFloat(p.salePrice) * cart.content[p.id])
-                .reduce((a, b) => a + b, 0);
+        }
 
-            if (productsPriceTotal < 0.5) {
-                displayNotification("Échec de validation du panier", "Le total produits doit être d'au moins 0.5€ pour pouvoir procéder au payement en ligne", "danger")
-                return;
-            }
+        const productsPriceTotal = productsInCart
+            .map(p => parseFloat(p.salePrice) * cart.content[p.id])
+            .reduce((a, b) => a + b, 0);
+
+        if (productsPriceTotal < 0.5) {
+            displayNotification("Échec de validation du panier", "Le total produits doit être d'au moins 0.5€ pour pouvoir procéder au payement en ligne", "danger")
+            return;
         }
 
         const { data: userData, error: userError } = await supabase
@@ -191,53 +220,19 @@ function Cart() {
             .map(p => parseFloat(p.weight) * cart.content[p.id])
             .reduce((a, b) => a + b, 0);
 
-        const productsPriceTotal = productsInCart
-            .map(p => parseFloat(p.salePrice) * cart.content[p.id])
+        const productsNumberTotal = Object.keys(cart.content)
+            .map(k => cart.content[k])
             .reduce((a, b) => a + b, 0);
 
-        const productsNumberTotal = Object.keys(cart.content).map(k => cart.content[k]).reduce((a, b) => a + b, 0);
-
         if (limits.weight_limit && !isRespectedLimit(limits.weight_limit, limits.current_weight, productsWeightTotal)) {
-            displayNotification("Échec de validation du panier", "Condition de poids non respectée : Seulement " + (limits.weight_limit - limits.current_weight) / 1000 + "kg d'achats possibles restants sur votre compte ce mois-ci.", "danger", 0)
-            return;
-        }
-        if (limits.weight_min_limit && productsWeightTotal < limits.weight_min_limit) {
-            displayNotification("Échec de validation du panier", "Condition de poids non respectée : Le poids du panier doit être d'au moins " + limits.weight_min_limit / 1000 + "kg.", "danger", 0)
-            return;
-        }
-        if (limits.price_limit && !isRespectedLimit(limits.price_limit, limits.current_price, productsPriceTotal)) {
-            displayNotification("Échec de validation du panier", "Condition de prix non respectée : Seulement " + (limits.price_limit - limits.current_price) + "€ d'achats possibles restants sur votre compte ce mois-ci.", "danger", 0)
-            return;
-        }
-        if (limits.order_limit && !isRespectedLimit(limits.order_limit, limits.current_order, productsNumberTotal)) {
-            displayNotification("Échec de validation du panier", "Condition de nombre de produits non respectée : Seulement " + (limits.order_limit - limits.current_order) + " achats possibles restants sur votre compte ce mois-ci.", "danger", 0)
+            displayNotification("Échec de validation du panier", "Condition de poids non respectée", "danger", 0)
             return;
         }
 
         const outOfStockProducts = productsInCart.filter(p => cart.content[p.id] > p.stock);
         if (outOfStockProducts.length > 0) {
-            const productNames = outOfStockProducts.map(p => p.name).join(", ");
-            if (outOfStockProducts.length > 1) {
-                displayNotification("Échec de validation du panier", "Stocks de " + productNames + " insuffisants", "danger", 7000);
-                return;
-            } else {
-                displayNotification("Échec de validation du panier", "Stock de " + productNames + " insuffisant", "danger", 7000);
-                return;
-            }
-        }
-
-        const lowStockProduct = productsInCart.filter(p => p.stock < stockIncertainThreshold);
-        if (lowStockProduct.length > 0) {
-            const productNames = lowStockProduct.map(p => p.name).join(", ");
-            if (lowStockProduct.length > 1) {
-                if (!confirm("Stocks de " + productNames + " incertains. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
-                    return;
-                }
-            } else {
-                if (!confirm("Stock de " + productNames + " incertain. Cela pourrait avoir un impact sur le délai de votre livraison. Voulez-vous quand même confirmer la livraison ?")) {
-                    return;
-                }
-            }
+            displayNotification("Échec de validation du panier", "Stock insuffisant", "danger", 7000);
+            return;
         }
 
         navigate("/chose-pickup-point")
@@ -245,7 +240,6 @@ function Cart() {
 
     function DisplayProductCard({ product, idx }) {
         const AddToCart = () => {
-            console.log('🛒 Ajout depuis Cart page');
             setCart(prev => ({
                 ...prev,
                 content: {
@@ -458,5 +452,4 @@ function Cart() {
         </>
     )
 }
-
 export default Cart
