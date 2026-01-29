@@ -17,11 +17,6 @@ import { useAuthor } from "@context/AuthorContext.jsx";
 // Importing the style
 import './styles/navbar.css'
 
-
-// Importing assets
-import rayonLogo from "@assets/logos/roundLogo.png"
-import avatar from "@assets/Assets/avatar2.png"
-
 // Importing all the pages
 import About from '@pages/About.jsx'
 import Cart from '@pages/Cart.jsx'
