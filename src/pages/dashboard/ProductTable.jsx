@@ -477,7 +477,7 @@ function ProductTable() {
                   {/* Informations principales */}
                   <div className="p-4 grid grid-cols-4 gap-4">
                     <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Prix magasin</p>
+                      <p className="text-xs text-gray-500 mb-1">Prix magasin (€)</p>
                       {editingProductId === p.id ? (
                         <input
                           name="price"
@@ -493,7 +493,7 @@ function ProductTable() {
                     </div>
 
                     <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Prix rayon22</p>
+                      <p className="text-xs text-gray-500 mb-1">Prix rayon22 (€)</p>
                       {editingProductId === p.id ? (
                         <input
                           name="salePrice"
@@ -524,7 +524,7 @@ function ProductTable() {
                     </div>
 
                     <div className="text-center">
-                      <p className="text-xs text-gray-500 mb-1">Poids</p>
+                      <p className="text-xs text-gray-500 mb-1">Poids (grammes)</p>
                       {editingProductId === p.id ? (
                         <input
                           name="weight"
