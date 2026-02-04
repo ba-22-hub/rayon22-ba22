@@ -191,13 +191,20 @@ function HowItWorks() {
                                         <span>À tout moment, je peux contacter la Banque Alimentaire par mail pour un problème de fonctionnement ou concernant ma situation personnelle.</span>
                                     </p>
                                 </div>
-
-                                <button
-                                    onClick={() => window.location.href = '/contact'}
-                                    className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                                >
-                                    Contactez-nous
-                                </button>
+                                <div className="flex">
+                                    <button
+                                        onClick={() => window.location.href = '/contact'}
+                                        className="bg-[#FF8200] hover:bg-[#ff9800] text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                                    >
+                                        Contactez-nous
+                                    </button>
+                                    <button
+                                        onClick={() => window.location.href = '/Faq'}
+                                        className="bg-[#FF8200] hover:bg-[#ff9800] text-white mx-4 px-[100px] py-3 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                                    >
+                                        FAQ
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Et beaucoup plus */}
