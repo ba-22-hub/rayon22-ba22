@@ -64,7 +64,7 @@ function Faq() {
         const [isOpen, setIsOpen] = useState(false);
         return (
             <div
-                className="bg-gray-50 rounded-lg border border-rayonorange border-600 p-6 transition-all duration-300 hover:shadow-lg mb-2"
+                className="bg-gray-50 rounded-lg border border-rayonorange border-600 p-3 lg:p-6 transition-all duration-300 hover:shadow-lg mb-2"
                 id={id}
             >
                 <div
@@ -135,9 +135,9 @@ function Faq() {
                 <h1 className="ml-12 lg:ml-[480px] py-10  mb-120  text-5xl lg:text-7xl font-bold">Foire aux Questions </h1>
             </div>
 
-            <main className="mx-[30px] my-8 px-4 mb-4">
+            <main className="lg:mx-[30px] my-8 px-4 mb-4">
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-6 items-start">
                     <FaqItem id="q1" question="1 Comment m'inscrire sur lerayon22.org ?">
                         <p className="mb-4">L'inscription se fait en 3 étapes :</p>
                         <ol className="list-decimal pl-6 mb-4 space-y-2">
