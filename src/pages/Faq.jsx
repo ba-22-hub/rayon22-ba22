@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Faq() {
     useEffect(() => {
@@ -60,22 +60,42 @@ function Faq() {
         };
     }, []);
 
-    const FaqItem = ({ id, question, children }) => (
-        <div className="bg-gray-50 rounded-lg border border-green-600 p-6 transition-transform hover:-translate-y-1 hover:shadow-lg" id={id}>
-            <div className="text-xl font-bold text-orange-500 mb-3">{question}</div>
-            <div className="text-gray-800 leading-relaxed pl-5">
-                {children}
+    const FaqItem = ({ id, question, children }) => {
+        const [isOpen, setIsOpen] = useState(false);
+        return (
+            <div
+                className="bg-gray-50 rounded-lg border border-rayonorange border-600 p-6 transition-all duration-300 hover:shadow-lg mb-2"
+                id={id}
+            >
+                <div
+                    className="text-xl font-bold text-orange-500 cursor-pointer flex justify-between items-center"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <span>{question}</span>
+                    <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+                        ▼
+                    </span>
+                </div>
+
+                <div className={`
+                overflow-hidden transition-all duration-300 ease-in-out
+                ${isOpen ? 'max-h-[500px] mt-4 opacity-100' : 'max-h-0 opacity-0'}
+            `}>
+                    <div className="text-gray-800 leading-relaxed pl-5 border-l-2 border-orange-200">
+                        {children}
+                    </div>
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     return (
         <div className="min-h-screen bg-white">
             {/* Header */}
-            <header className="bg-green-600 text-white py-4 px-8 text-center">
+            {/* <header className="bg-green-600 text-white py-4 px-8 text-center">
                 <div className="text-3xl font-bold mb-2">Le Rayon 22 – Banque Alimentaire des Côtes-d'Armor</div>
                 
-                {/* Sidebar navigation */}
+                Sidebar navigation realy needed ?? 
                 <div 
                     id="faqSidebar" 
                     className="hidden lg:block fixed left-0 top-[120px] w-[250px] bg-white border-r border-green-600 py-4 h-[calc(100vh-120px)] overflow-y-auto shadow-md z-[100]"
@@ -108,13 +128,16 @@ function Faq() {
                             </li>
                         ))}
                     </ul>
-                </div>
-            </header>
+                </div> 
+            </header> */}
 
-            <main className="max-w-4xl mx-auto my-8 px-4 lg:ml-[280px] lg:max-w-[720px]">
-                <h1 className="text-center text-green-600 mb-8 text-3xl font-bold">FAQ – Comment s'inscrire et commander</h1>
+            <div className="bg-gradient-to-b from-[#3435FF] via-[#2526B7] to-[#1F2099] text-white">
+                <h1 className="ml-12 lg:ml-[480px] py-10  mb-120  text-5xl lg:text-7xl font-bold">Foire aux Questions </h1>
+            </div>
 
-                <div className="flex flex-col gap-6">
+            <main className="mx-[30px] my-8 px-4 mb-4">
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                     <FaqItem id="q1" question="1 Comment m'inscrire sur lerayon22.org ?">
                         <p className="mb-4">L'inscription se fait en 3 étapes :</p>
                         <ol className="list-decimal pl-6 mb-4 space-y-2">
@@ -192,7 +215,7 @@ function Faq() {
                 </div>
 
                 {/* Section contact */}
-                <div className="text-center my-8 p-6 bg-gray-50 rounded-lg border border-green-600">
+                <div className="text-center my-8 p-6 bg-gray-50 rounded-lg border border-rayonorange border-600 lg:w-[40%] lg:ml-[30%]">
                     <h2 className="text-green-600 text-2xl font-bold mb-4">Besoin d'aide supplémentaire ?</h2>
                     <div className="mt-4 text-lg">
                         <p className="mb-2">📧 <a href="mailto:ba220.epicerie@banquealimentaire.org" className="text-orange-500 font-bold hover:underline">ba220.epicerie@banquealimentaire.org</a></p>
@@ -201,10 +224,6 @@ function Faq() {
                     </div>
                 </div>
             </main>
-
-            <footer className="bg-green-600 text-white text-center py-4 mt-8">
-                <p>© 2026 – Le Rayon 22 – Banque Alimentaire des Côtes-d'Armor</p>
-            </footer>
         </div>
     );
 }
