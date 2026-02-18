@@ -247,7 +247,7 @@ function Account() {
                             </button>
 
                             <button
-                                className="text-white bg-red-500 w-full md:w-1/3 mb-3 mt-2 h-10"
+                                className="text-white bg-red w-full md:w-1/3 mb-3 mt-2 h-10"
                                 onClick={handleDeconnection}
                             >
                                 Se déconnecter
