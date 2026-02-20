@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { supabase } from '@lib/supabaseClient.js'
+import {displayNotification} from '@lib/displayNotification.jsx'
 // Importing common components
 import PageButton from "@common/PageButton"
 import ArticleCard from "../common/ArticleCard"
 import ArticleModal from "../common/ArticleModal"
+
 
 // Importing assets
 import student from "@assets/Photos/etudiante1.png"
