@@ -6,6 +6,7 @@ import { useAuthor } from '@context/AuthorContext.jsx'
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '@common/Loading.jsx'
+import ProductCarousel from '@common/ProductCarouselCatalog.jsx'
 /*
  * The Catalog page.
  * @returns {React.ReactElement} Catalog component.
