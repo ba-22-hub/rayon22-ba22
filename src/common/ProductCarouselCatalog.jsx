@@ -151,7 +151,7 @@ function ProductCarousel({ data }) {
         <div className="flex items-center gap-2">
           <button
             onClick={RemoveFromCart}
-            className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full font-bold flex items-center justify-center"
+            className="w-8 h-8 bg-rayonorange hover:bg-[#ff9800] text-white rounded-full font-bold flex items-center justify-center"
           >
             −
           </button>
