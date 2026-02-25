@@ -4,6 +4,7 @@ import { supabase } from "@lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@context/CartContext.jsx";
 import { displayNotification } from '@lib/displayNotification.jsx';
+import { useAuthor } from '@context/AuthorContext.jsx'
 
 // Importing common components
 import Loading from "@common/Loading.jsx";
@@ -12,6 +13,7 @@ function PaymentSuccess() {
     const navigate = useNavigate();
     const hasRun = useRef(false);
     const { setCart } = useCart();
+    const {user} = useAuthor() ; 
     const [isProcessing, setIsProcessing] = useState(true);
     const [shippingCost, setShippingCost] = useState(1.35) // État pour les frais de port
     const shippingCostFetched = useRef(false)
@@ -19,8 +21,10 @@ function PaymentSuccess() {
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
     }
+    
 
     useEffect(() => {
+            if(!user) return ; 
             if (shippingCostFetched.current) return;
     
             const fetchShippingCost = async () => {
@@ -36,10 +40,11 @@ function PaymentSuccess() {
             };
     
             fetchShippingCost();
-        }, []);
+        }, [user]);
 
     useEffect(() => {
-        if (hasRun.current) return;
+        if (hasRun.current || !user) return;
+        console.log(user)
         hasRun.current = true;
 
         // Creating the label
@@ -244,7 +249,7 @@ function PaymentSuccess() {
         };
 
         confirmPayment();
-    }, [navigate, setCart]);
+    }, [navigate, setCart, user]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
