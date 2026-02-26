@@ -35,6 +35,7 @@ import Account from "@pages/Account.jsx";
 import PaymentSuccess from "@pages/PaymentSuccess.jsx";
 import ResetPassword from "./pages/ResetPassword";
 import ChosePickUpPoint from "@pages/ChosePickUpPoint.jsx";
+import Faq from "./pages/Faq";
 import Confidentiality from "@pages/Confidentiality";
 import LegalMentions from "./pages/LegalMentions";
 import OperatingCharter from "./pages/OperatingCharter";
@@ -75,6 +76,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/chose-pickup-point" element={<ChosePickUpPoint />} />
+        <Route path="/Faq" element={<Faq />} />
         <Route path="/confidentiality" element={<Confidentiality />} />
         <Route path="/legal-mentions" element={<LegalMentions />} />
         <Route path="/operationg-charter" element={<OperatingCharter />} />
