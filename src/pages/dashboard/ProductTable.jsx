@@ -805,6 +805,14 @@ function ProductTable() {
                     className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
                     onChange={handleChangeInSettings}
                   />
+                  <FormInput
+                    name="max_order"
+                    type="number"
+                    value={settings.max_order ?? 9}
+                    inputText="Quantité maximale par panier"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInSettings}
+                  />
                 </div>
                 <button
                   type="submit"
