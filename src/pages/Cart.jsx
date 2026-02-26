@@ -169,7 +169,7 @@ function Cart() {
     function notify(message) {
         if (isNotified.current) return;
         isNotified.current = true
-        alert(message)
+        displayNotification(message, "warn")
     }
 
     // Charger les frais de livraison
