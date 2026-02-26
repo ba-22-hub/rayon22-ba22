@@ -7,6 +7,7 @@ import PageButton from "@common/PageButton"
 import ArticleCard from "../common/ArticleCard"
 import ArticleModal from "../common/ArticleModal"
 
+
 // Importing assets
 import student from "@assets/Photos/etudiante1.png"
 import ministere from "@assets/Assets/logo_ministere.png"
