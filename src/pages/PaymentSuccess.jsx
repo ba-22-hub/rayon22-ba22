@@ -109,7 +109,7 @@ function PaymentSuccess() {
 
                     const cartMetadata = data.cartToValidate;
 
-                    // 🔧 RECONSTITUER LES DONNÉES COMPLÈTES DES PRODUITS
+                    // RECONSTITUER LES DONNÉES COMPLÈTES DES PRODUITS
                     const productIds = cartMetadata.items.map(item => item.id);
 
                     const { data: productsData, error: productsError } = await supabase
