@@ -247,7 +247,7 @@ const UserTable = () => {
 												</button>
 												<button
 													onClick={() => setEditMode(null)}
-													className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+													className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
 													title="Annuler"
 												>
 													✕
@@ -264,7 +264,7 @@ const UserTable = () => {
 												</button>
 												<button
 													onClick={() => handleDelete(user.id)}
-													className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+													className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
 													title="Supprimer"
 												>
 													✕
