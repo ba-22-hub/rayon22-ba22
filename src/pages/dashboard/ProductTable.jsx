@@ -32,22 +32,32 @@ function ProductTable() {
   const [image, setImage] = useState("");
   const inputFile = useRef(null);
 
+  const [settings, setSettings] = useState({
+    stockIncertainThreshold: '',
+    shippingCost: '',
+    max_order: '',
+  })
+
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     salePrice: '',
     category: '',
     weight: '',
+    max_order: settings.max_order,
     stock: '',
-    productStockIncertainThreshold: '',
+    productStockIncertainThreshold: settings.stockIncertainThreshold,
     description: '',
     image_name: '',
   });
 
-  const [settings, setSettings] = useState({
-    stockIncertainThreshold: '',
-    shippingCost: '',
-  })
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      max_order: settings.max_order,
+      productStockIncertainThreshold: settings.stockIncertainThreshold
+    }));
+  }, [settings]);
 
   const fetchProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
@@ -209,8 +219,9 @@ function ProductTable() {
       salePrice: '',
       category: '',
       weight: '',
+      max_order: settings.max_order,
       stock: '',
-      productStockIncertainThreshold: '',
+      productStockIncertainThreshold: settings.stockIncertainThreshold,
       description: '',
       image_name: '',
     })
@@ -328,6 +339,21 @@ function ProductTable() {
     } else {
       console.error("Erreur lors du téléchargement de l'ancienne valeur seuil", stockIncertainThresholdError)
       displayNotification("Erreur lors du téléchargement de l'ancienne valeur seuil", stockIncertainThresholdError.message, "danger")
+    }
+
+    const { data: max_orderData, error: max_orderError } = await supabase
+      .from('constants')
+      .select('value')
+      .eq("name", "max_order")
+      .maybeSingle();
+    if (!max_orderError) {
+      setSettings(prevData => ({
+        ...prevData,
+        max_order: max_orderData.value
+      }))
+    } else {
+      console.error("Erreur lors du téléchargement de l'ancienne valeur de la quantité maximale par panier", max_orderError)
+      displayNotification("Erreur lors du téléchargement de l'ancienne valeur de la quantité maximale par panier", max_orderError.message, "danger")
     }
 
     const { data: shippingCostData, error: shippingCostError } = await supabase
@@ -545,6 +571,170 @@ function ProductTable() {
               onChange={(e) => setSearch(e.target.value)}
             />
 
+            {/* Bouton Ajouter un produit */}
+            <FunctionButton
+              className="bg-rayonorange w-full md:w-auto text-white px-8 py-3 rounded-lg mb-4 hover:opacity-90 transition font-semibold"
+              buttonText={expanded ? '✕ Annuler' : '➕ Ajouter un produit'}
+              fun={expanded ? (() => setExpanded(false)) : (() => setExpanded(true))}
+            />
+
+            {/* Formulaire ajout produit */}
+            {expanded && (
+              <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 mb-6">
+                <p className='text-red-500 text-center text-lg mb-4 font-medium'>
+                  Les informations avec une étoile rouge sont obligatoires
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <FormInput
+                    name="name"
+                    type="text"
+                    value={formData.name ?? ""}
+                    inputText="Nom"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="price"
+                    type="number"
+                    step="0.01"
+                    value={formData.price ?? ""}
+                    inputText="Prix en magasin (€)"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="salePrice"
+                    type="number"
+                    step="0.01"
+                    value={formData.salePrice ?? ""}
+                    inputText="Prix rayon22 (€)"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <div>
+                    <p className="text-rayonblue mb-2 font-medium">Catégorie <span className="text-red-500">*</span></p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {categoriesList.map((category) => (
+                        <label key={category} className="flex items-center cursor-pointer">
+                          <input
+                            type="radio"
+                            name="category"
+                            value={category}
+                            onChange={handleChangeInForm}
+                            required
+                            className="mr-2 accent-rayonorange"
+                          />
+                          <span className="text-rayonblue">{category}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <FormInput
+                    name="stock"
+                    type="number"
+                    value={formData.stock ?? ""}
+                    inputText="Stock"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="productStockIncertainThreshold"
+                    type="number"
+                    value={formData.productStockIncertainThreshold ?? ""}
+                    inputText="Limite stock incertain"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="weight"
+                    type="number"
+                    value={formData.weight ?? ""}
+                    inputText="Poids (g)"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="max_order"
+                    type="number"
+                    value={formData.max_order ?? ""}
+                    inputText="Quantité maximale dans un panier"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={true}
+                  />
+                  <FormInput
+                    name="description"
+                    type="text"
+                    value={formData.description ?? ""}
+                    inputText="Description"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInForm}
+                    isStarred={false}
+                  />
+                  <div>
+                    <p className="text-rayonblue mb-2 font-medium">Image du produit</p>
+                    <BrowseImage newProduct={true} />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full md:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition">
+                  ✓ Valider
+                </button>
+              </form>
+            )}
+
+            {/* Bouton Paramètres */}
+            <FunctionButton
+              className="bg-rayonorange w-full md:w-auto text-white px-8 py-3 rounded-lg mb-4 hover:opacity-90 transition font-semibold"
+              buttonText={expandedSettings ? '✕ Annuler' : '⚙️ Modifier les paramètres'}
+              fun={expandedSettings ? (() => setExpandedSettings(false)) : (() => modifySettings())}
+            />
+
+            {/* Formulaire paramètres */}
+            {expandedSettings && (
+              <form onSubmit={handleSubmitSettings} className="bg-white rounded-lg shadow-md p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <FormInput
+                    name="stockIncertainThreshold"
+                    type="number"
+                    value={settings.stockIncertainThreshold ?? 3}
+                    inputText="Seuil en deçà duquel le label 'Stock Incertain' apparaît"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInSettings}
+                  />
+                  <FormInput
+                    name="shippingCost"
+                    type="number"
+                    step="0.01"
+                    value={settings.shippingCost ?? 0}
+                    inputText="Participation solidaire aux frais de livraison (€)"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInSettings}
+                  />
+                  <FormInput
+                    name="max_order"
+                    type="number"
+                    value={settings.max_order ?? 9}
+                    inputText="Quantité maximale par panier"
+                    className="w-full h-10 px-3 rounded-lg border-2 border-rayonblue focus:ring-2 focus:ring-rayonorange"
+                    onChange={handleChangeInSettings}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full md:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition">
+                  ✓ Valider
+                </button>
+              </form>
+            )}
+
             {/* Liste des produits en cartes */}
             <div className="space-y-4 mb-6">
               {filteredProducts.map((p) => (
@@ -595,7 +785,7 @@ function ProductTable() {
                             </button>
                             <button
                               onClick={() => setEditingProductId(null)}
-                              className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+                              className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
                               title="Annuler"
                             >
                               ✕
@@ -612,7 +802,7 @@ function ProductTable() {
                             </button>
                             <button
                               onClick={() => removeProd(p)}
-                              className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+                              className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
                               title="Supprimer"
                             >
                               ✕
@@ -699,13 +889,29 @@ function ProductTable() {
                           {editingProductId === p.id ? (
                             <input
                               name="productStockIncertainThreshold"
-                              value={editedValues.productStockIncertainThreshold || settings.stockIncertainThreshold}
+                              value={editedValues.productStockIncertainThreshold || ''}
                               onChange={handleChangeInProd}
                               type="number"
                               className="w-full border-2 border-rayonblue rounded px-3 py-2"
                             />
                           ) : (
-                            <p className="text-gray-800">{p.productStockIncertainThreshold || settings.stockIncertainThreshold}</p>
+                            <p className="text-gray-800">{p.productStockIncertainThreshold}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-rayonblue block mb-1">
+                            Quantité maximale dans un panier
+                          </label>
+                          {editingProductId === p.id ? (
+                            <input
+                              name="max_order"
+                              value={editedValues.max_order}
+                              onChange={handleChangeInProd}
+                              type="number"
+                              className="w-full border-2 border-rayonblue rounded px-2 py-1 text-center"
+                            />
+                          ) : (
+                            <p className="text-lg font-semibold text-gray-800">{p.max_order}g</p>
                           )}
                         </div>
 
