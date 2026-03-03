@@ -59,7 +59,7 @@ const SearchBar = () => {
     if (authorLoading) return;
     if (!user) {
       navigate('/login')
-      displayNotification("Vous devez être connectés et avoir les droits pour consulter le catalog")
+      displayNotification("Vous devez être connectés et avoir les droits pour consulter le catalogue")
     } else {
       checkHasRights(user.id)
         .then((rights) => {
