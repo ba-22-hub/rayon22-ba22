@@ -18,7 +18,7 @@ function AddUserModal({ isOpen, onClose }) {
         addAddress: '',
         city: '',
         postalCode: '',
-        start_right: Date.now(),
+        start_right: new Date().toISOString().slice(0, 10),
         end_right: '',
         weight_min_limit: '',
         weight_limit: '',
@@ -32,7 +32,7 @@ function AddUserModal({ isOpen, onClose }) {
         if (name == "length") {
             setFormData({
                 ...formData,
-                end_right: formData.start_right + parseInt(value)
+                end_right: new Date(new Date(formData.start_right).getTime() + (parseInt(value) * 86400000)).toISOString().slice(0, 10), 
             })
             setLength(value)
         } else {
