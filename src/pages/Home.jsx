@@ -124,7 +124,7 @@ function Home() {
                                 Se Connecter
                             </button>
                         </div>
-                        <div className="hidden lg:flex-1 relative">
+                        <div className="hidden lg:flex relative">
                             <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
                                 <img
                                     src={orangeWoman}
