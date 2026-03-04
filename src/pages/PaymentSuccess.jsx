@@ -13,7 +13,7 @@ function PaymentSuccess() {
     const navigate = useNavigate();
     const hasRun = useRef(false);
     const { setCart } = useCart();
-    const {user} = useAuthor() ; 
+    const { user } = useAuthor();
     const [isProcessing, setIsProcessing] = useState(true);
     const [shippingCost, setShippingCost] = useState(1.35) // État pour les frais de port
     const shippingCostFetched = useRef(false)
@@ -21,26 +21,26 @@ function PaymentSuccess() {
     function roundTwoDigits(nb) {
         return Math.round(nb * 100) / 100
     }
-    
+
 
     useEffect(() => {
-            if(!user) return ; 
-            if (shippingCostFetched.current) return;
-    
-            const fetchShippingCost = async () => {
-                const { data, error } = await supabase
-                    .from('constants')
-                    .select('value')
-                    .eq("name", "shippingCost")
-                    .maybeSingle();
-                if (!error && data) {
-                    setShippingCost(data.value)
-                    shippingCostFetched.current = true
-                }
-            };
-    
-            fetchShippingCost();
-        }, [user]);
+        if (!user) return;
+        if (shippingCostFetched.current) return;
+
+        const fetchShippingCost = async () => {
+            const { data, error } = await supabase
+                .from('constants')
+                .select('value')
+                .eq("name", "shippingCost")
+                .maybeSingle();
+            if (!error && data) {
+                setShippingCost(data.value)
+                shippingCostFetched.current = true
+            }
+        };
+
+        fetchShippingCost();
+    }, [user]);
 
     useEffect(() => {
         if (hasRun.current || !user) return;
@@ -109,7 +109,7 @@ function PaymentSuccess() {
 
                     const cartMetadata = data.cartToValidate;
 
-                    // 🔧 RECONSTITUER LES DONNÉES COMPLÈTES DES PRODUITS
+                    // RECONSTITUER LES DONNÉES COMPLÈTES DES PRODUITS
                     const productIds = cartMetadata.items.map(item => item.id);
 
                     const { data: productsData, error: productsError } = await supabase
@@ -204,6 +204,21 @@ function PaymentSuccess() {
                         return;
                     } else {
                         console.log("🛒 Commande insérée avec succès ! ID:", dataInsertedCart.id);
+                        // Updating stocks in database
+                        fullCartContent
+                            .map(async (product) => {
+                                const { data: updateStockData, error: updateStockError } = await supabase.rpc("decrement_stock", {
+                                    product_id_input: product.id,
+                                    quantity_input: product.quantity
+                                })
+                                if (updateStockError) {
+                                    displayNotification(
+                                        "Erreur de mise à jour des stocks de " + product.name,
+                                        updateStockError.message,
+                                        "danger"
+                                    );
+                                }
+                            })
                     }
 
                     // Updating the counters

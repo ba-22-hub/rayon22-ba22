@@ -4,7 +4,7 @@ import { useAuthor } from '@context/AuthorContext';
 import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.jsx';
 
-import sendReply from '@lib/sendReply.js';
+import sendMail from '@lib/sendMail.js';
 import { supabase } from '@lib/supabaseClient';
 import { openPDF } from '@lib/openPDF.js';
 import { deletePDF } from '@lib/deletePDF';
@@ -77,13 +77,16 @@ function MessagesDashboard() {
     }
 
     try {
-      const result = sendReply({
+      await sendMail({
         email: email,
-        name: `${firstName} ${lastName}`,
-        reply: reply,
+        templateId: 5,
+        params: {
+          name: `${firstName} ${lastName}`,
+          reply,
+        },
       });
 
-      displayNotification("E-mail envoyé avec succès", "", "success")
+      displayNotification("E-mail envoyé avec succès", "", "success");
     } catch (error) {
       console.error("Erreur d'envoi :", error);
       displayNotification("Erreur d'envoi de l'e-mail", error.message, "danger")
@@ -170,7 +173,7 @@ function MessagesDashboard() {
                             </button>
                             <button
                               onClick={() => handleReplyToggle(msg.id)}
-                              className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+                              className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
                               title="Annuler"
                             >
                               ✕
@@ -187,7 +190,7 @@ function MessagesDashboard() {
                             </button>
                             <button
                               onClick={() => handleDelete(msg.id)}
-                              className="w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
+                              className="w-10 h-10 bg-red hover:bg-red-600 text-white rounded-lg transition flex items-center justify-center text-xl"
                               title="Supprimer"
                             >
                               ✕
