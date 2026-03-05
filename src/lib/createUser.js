@@ -6,7 +6,7 @@ async function createUser(user) {
 
     const newUser = {
         ...user,
-        has_right: true,
+        has_right: false,
     };
 
     try {
