@@ -24,7 +24,7 @@ function ClientNavbar() {
                     {/* Right side - visible à partir de lg */}
                     <div className="hidden lg:flex items-center space-x-4">
                         <Link to={`${user ? '/account' : '/login'}`} className="flex-shrink-0">
-                            <div className="bg-[#FF8200] hover:bg-[#ff9800] p-1 rounded-lg h-11 w-40 flex items-center justify-center shadow-md hover:shadow-lg transition-all text-white">
+                            <div className="bg-[#FF8200] hover:bg-[#ff9800] p-1 rounded-lg h-11 w-40 flex items-center justify-center shadow-md hover:shadow-lg transition-all text-white font-semibold">
                                 {user ? "Mon compte" : "Connexion"}
                             </div>
                         </Link>
