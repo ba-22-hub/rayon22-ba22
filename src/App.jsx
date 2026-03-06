@@ -43,6 +43,7 @@ import OperatingCharter from "./pages/OperatingCharter";
 // Importing common components
 import Footer from "@common/Footer.jsx";
 import ClientNavbar from "@common/ClientNavbar";
+import FirstConnection from "./pages/FirstConnection";
 
 /**
  * A component wrapping all the website pages.
@@ -80,6 +81,7 @@ function App() {
         <Route path="/confidentiality" element={<Confidentiality />} />
         <Route path="/legal-mentions" element={<LegalMentions />} />
         <Route path="/operationg-charter" element={<OperatingCharter />} />
+        <Route path="/first-connection" element={<FirstConnection />} />
         {/* {/* Redirecting to Error404 page if the route does not exist */}
         {/* <Route path="*" element={<div className="text-center mt-20 text-2xl">Page not found</div>} />  */}
       </Routes>

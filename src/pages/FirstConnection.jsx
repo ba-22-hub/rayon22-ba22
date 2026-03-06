@@ -1,14 +1,14 @@
 // Importing dependencies
 import { useState } from 'react';
-import { supabase } from '@lib/supabaseClient.js';
-import { useAuthor } from '@context/AuthorContext.jsx';
-import { useNavigate } from 'react-router-dom';
 import { displayNotification } from '@lib/displayNotification.jsx';
+import { supabase } from '@lib/supabaseClient.js';
+import { useNavigate } from 'react-router-dom';
 
 // Importing common components
-import FormInput from "@common/FormInput";
-import PageButton from "@common/PageButton";
-import PasswrdInput from '../common/PasswrdInput';
+
+import PasswrdInput from "@common/PasswrdInput.jsx"
+// Importing assets
+import illustration from "@assets/logos/password.png"
 
 /**
  * The Login page.
@@ -16,116 +16,118 @@ import PasswrdInput from '../common/PasswrdInput';
  */
 function FirstConnection() {
     // useState init to store the form data in a JSON format
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
-        mail: '',
-        password: ''
+        password: '',
+        passwordConfirm: ''
     });
-    const { setUser } = useAuthor()
-    let navigate = useNavigate()
+
+    const [criteriaPassword, setCriteriaPassword] = useState({
+        'minLength': false,
+        'hasUppercase': false,
+        'hasLowercase': false,
+        'hasNumber': false, 
+        'hasNotRayon22' : true
+    })
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
+        const pass = e.target.value
+        const field = e.target.name
         // we set the formData value to the current input value
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [field]: pass
         });
+
+
+        if (field == "password") {
+            // check if the password respect some instructions
+            setCriteriaPassword({
+                "minLength": pass.length >= 8,
+                "hasLowercase": /[a-z]/.test(pass),
+                "hasUppercase": /[A-Z]/.test(pass),
+                "hasNumber": /[0-9]/.test(pass), 
+                "hasNotRayon22" : !(/rayon22/i.test(pass))
+
+            })
+        }
     }
 
     // function to hadle the form submit
     async function handleSubmit(e) {
         e.preventDefault();
 
-        // Auth Supabase
-        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-            email: formData.mail,
-            password: formData.password
-        });
-
-        if (loginError) {
-            if (loginError.message == "Invalid login credentials") {
-                displayNotification("Échec de connexion", "Adresse e-mail ou mot de passe incorrect", "danger")
-            } else {
-                displayNotification("Échec de la connexion", loginError.message, "danger")
-            }
-            return;
+        // checking if the 2 password are identical 
+        if (formData.password != formData.passwordConfirm) {
+            //alert("Les mots de passe renseignés sont différents")
+            displayNotification("Les mots de passe renseignés sont différents", "", "danger")
+        } else if (criteriaPassword.minLength && criteriaPassword.hasLowercase && criteriaPassword.hasUppercase && criteriaPassword.hasNumber) {
+            // resseting the password
+            await supabase.auth.updateUser({ password: formData.password })
+                .then((response) => {
+                    if (response.error) {
+                        displayNotification("Erreur lors de la réinitialisation du mot de passe : " + response.error.message, "", "danger")
+                    } else {
+                        displayNotification("Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.", "", "success")
+                        navigate('/account')
+                    }
+                })
+        } else {
+            // if not, alert the client
+            //alert("Le mot de passe ne respecte pas les consignes")
+            displayNotification("Le mot de passe ne respecte pas les consignes", "", "danger")
         }
-
-        displayNotification("Connexion réussie", "", "success")
-
-        // resets the inputs and formData to blank
-        setFormData({
-            mail: '',
-            password: ''
-        });
-
-        // update session
-        setUser(loginData.user)
-
     }
 
     return (
         <>
-            <div className="bg-[#ffffff] w-[65.56vw] mx-auto mt-32 mb-10 rounded-2xl shadow-sm py-12 px-6">
-                <h1 className="text-[#2E2EFF] text-7xl font-extrabold text-center leading-tight mb-2">
-                    Bienvenue sur votre Espace Utilisateur
-                </h1>
-                <p className="text-black text-base text-center mb-10 mt-4">
-                    Connectez vous en utilisant le formulaire ci-dessous
-                </p>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="w-[65%] mx-auto">
-                        <FormInput
-                            inputText={<span className="text-rayonblue">Adresse email</span>}
-                            name={'mail'}
-                            value={formData.mail}
-                            onChange={handleChange}
-                            isStarred={true}
-                            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                        />
-                    </div>
-                    <div className="w-[65%] mx-auto">
-                        <PasswrdInput
-                            inputText={<span className="text-rayonblue">Mot de passe</span>}
-                            name={'password'}
-                            value={formData.password}
-                            onChange={handleChange}
-                            isStarred={true}
-                            className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
-                        />
-                    </div>
-                    <div className="text-right w-[65%] mx-auto">
-                        <PageButton
-                            buttonText={'Mot de passe oublié ?'}
-                            page={'/forgot-password'}
-                            className="text-[#2E2EFF] text-sm font-medium underline hover:text-blue-600"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center">
-                        <PageButton
-                            buttonText={'Je me connecte'}
-                            type="submit"
-                            className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
-                        />
-                    </div>
-                </form>
+            <div className="bg-[#ffffff] mx-auto mt-2 mb-10 flex flex-col items-center justify-start py-10 px-4">
+                {/* Illustration */}
+                <img src={illustration} alt="Illustration" className="w-64 mt-3 mb-6" />
 
-                <p className="text-[#2E2EFF] text-sm text-center mt-10 mb-4 font-medium">
-                    Vous n'avez pas encore de compte ?
-                </p>
-                <div className="flex justify-center">
-                    <PageButton
-                        buttonText={'Créez votre compte'}
-                        page={'/register'}
-                        className="w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition"
+                {/* Sous-titre */}
+                <h2 className="text-[#2E2EFF] text-4xl font-bold mb-6">Bienvenue sur le Rayon 22</h2>
+                <p className='text-base text-center mb-10 mt-4'>Avant de continuer, merci de créer un nouveau mot de passe personnalisé <br />
+                Pour plus de sécurité, merci de ne pas intégrer <b className='text-rayonorange'>"rayon22"</b> dans votre mot de passe</p>
+
+                {/* Formulaire */}
+                <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+                    <PasswrdInput
+                        inputText={<span>Mot de passe</span>}
+                        name="password"
+                        onChange={handleChange}
+                        className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                        isStarred={true}
                     />
-                </div>
-                <div className="flex justify-center">
-                    <PageButton
-                        buttonText='Admin'
-                        page='/admin'
-                        className='w-[400px] h-10 bg-[#FF8200] text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition mt-4' />
-                </div>
+                    <PasswrdInput
+                        inputText={<span>Confirmation du mot de passe</span>}
+                        name="passwordConfirm"
+                        onChange={handleChange}
+                        className="border border-[#2E2EFF] rounded-md text-sm px-4 py-2 w-full"
+                        isStarred={true}
+                    />
+
+                    {/* Bloc règles */}
+                    <div className="bg-[#F0F0F0] rounded-lg px-6 py-4 text-sm text-[#2E2EFF] font-medium leading-relaxed mt-6">
+                        <p className="mb-1 font-bold">Règles pour définir le mot de passe</p>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li className={criteriaPassword.minLength ? 'text-green' : 'text-red'}>Doit contenir au moins 8 caractères</li>
+                            <li className={criteriaPassword.hasUppercase ? 'text-green' : 'text-red'}>Doit contenir au moins un caractère en majuscule</li>
+                            <li className={criteriaPassword.hasLowercase ? 'text-green' : 'text-red'}>Doit contenir au moins un caractère en minuscule</li>
+                            <li className={criteriaPassword.hasNumber ? 'text-green' : 'text-red'}>Doit contenir au moins un nombre</li>
+                            <li className={criteriaPassword.hasNotRayon22 ? 'text-green' : 'text-red'}>Ne doit pas contenir "Rayon22"</li>
+                        </ul>
+                    </div>
+
+                    {/* Bouton */}
+                    <button
+                        type="submit"
+                        className="w-full bg-[#FF8200] text-white py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition"
+                    >
+                        Créer mon mot de passe
+                    </button>
+                </form>
             </div>
         </>
     )
