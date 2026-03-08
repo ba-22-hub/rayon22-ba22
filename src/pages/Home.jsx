@@ -149,13 +149,14 @@ function Home() {
                                 </a>
                             </div>
                         </div>
-                        <div className="flex-1 relative">
+                        <div className="hidden lg:flex relative">
                             <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
                                 <img
                                     src={orangeWoman}
                                     className="w-full h-auto max-w-lg xl:max-w-xl mx-auto drop-shadow-2xl"
                                     alt={hero.image.alt}
                                 />
+                                {console.log(orangeWoman)}
                             </div>
                         </div>
                     </div>

@@ -28,6 +28,8 @@ const UserTable = () => {
 	const { isAdmin, loading } = useAuthor()
 	const navigate = useNavigate()
 
+	const selectStatus = ["Enregistré", "Validé", "Actif", "Suspendu", "Résilié", "En attente", "Inactif"]
+
 	let isNotifying = false;
 
 	useEffect(() => {
@@ -110,6 +112,9 @@ const UserTable = () => {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
+		if(name == "status"){
+			setEditedUser(prev => ({ ...prev, ["has_right"]: value == "Actif" }));
+		}
 		setEditedUser(prev => ({ ...prev, [name]: value }));
 	};
 
@@ -145,10 +150,10 @@ const UserTable = () => {
 		<div className="p-6 bg-gray-50 min-h-screen">
 			<div className="max-w-7xl mx-auto">
 				<h1 className="text-3xl font-bold mb-6 text-rayonblue">Gestion des Utilisateurs</h1>
-				<button 
+				<button
 					className='text-white bg-rayonorange ml-[77%] mb-3 w-[23%] 	rounded-lg p-2'
 					onClick={() => setModalOpen(true)}
-					>Inscrire un utilisateur</button>
+				>Inscrire un utilisateur</button>
 				<input
 					type="text"
 					placeholder="🔍 Rechercher par nom, email, téléphone..."
@@ -401,6 +406,7 @@ const UserTable = () => {
 											</label>
 											{editMode === user.id ? (
 												<input
+													type="date"
 													name="start_right"
 													value={editedUser["start_right"] || ''}
 													onChange={handleChange}
@@ -416,6 +422,7 @@ const UserTable = () => {
 											</label>
 											{editMode === user.id ? (
 												<input
+													type="date"
 													name="end_right"
 													value={editedUser["end_right"] || ''}
 													onChange={handleChange}
@@ -430,14 +437,21 @@ const UserTable = () => {
 												Statut du compte
 											</label>
 											{editMode === user.id ? (
-												<input
-													name="has_right"
-													value={editedUser["has_right"] || ''}
+												<select
+													className="w-full px-3 py-2 border border-gray-200 rounded-md text-rayonblue bg-white focus:outline-none focus:ring-2 focus:ring-rayonblue"
+													name="status"
+													value={editedUser["status"]}
 													onChange={handleChange}
-													className="w-full border-2 border-rayonblue rounded px-2 py-1"
-												/>
+												>
+													<option value="">Sélectionner...</option>
+													{selectStatus.map((option) => (
+														<option key={option} value={option}>
+															{option}
+														</option>
+													))}
+												</select>
 											) : (
-												<p className="text-gray-800">{user["has_right"] ? "Actif" : "Inactif"}</p>
+												<p className="text-gray-800">{user["status"] || '—'}</p>
 											)}
 										</div>
 
@@ -456,11 +470,11 @@ const UserTable = () => {
 				</div>
 			</div>
 			<AddUserModal
-                isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
+				isOpen={modalOpen}
+				onClose={() => setModalOpen(false)}
 				onSubmit={() => console.log()}
 
-            />
+			/>
 		</div>
 	);
 };
