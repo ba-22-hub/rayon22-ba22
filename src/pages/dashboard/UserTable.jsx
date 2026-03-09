@@ -469,12 +469,11 @@ const UserTable = () => {
 					)}
 				</div>
 			</div>
+			{/* modal to add a new user */}
 			<AddUserModal
-				isOpen={modalOpen}
-				onClose={() => setModalOpen(false)}
-				onSubmit={() => console.log()}
-
-			/>
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+            />
 		</div>
 	);
 };
