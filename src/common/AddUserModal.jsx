@@ -27,9 +27,10 @@ function AddUserModal({ isOpen, onClose, onSubmit }) {
         const { name, value } = e.target;
 
         if (name == "length") {
+            setLength(parseInt(value));
             setFormData({
                 ...formData,
-                [end_right]: formData.start_right + parseInt(value)
+                end_right: formData.start_right + parseInt(value)
             })
         } else {
             setFormData(prevData => ({
