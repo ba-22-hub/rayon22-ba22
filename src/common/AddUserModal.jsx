@@ -30,6 +30,7 @@ function AddUserModal({ isOpen, onClose }) {
         const { name, value } = e.target;
 
         if (name == "length") {
+            setLength(parseInt(value));
             setFormData({
                 ...formData,
                 end_right: new Date(new Date(formData.start_right).getTime() + (parseInt(value) * 86400000)).toISOString().slice(0, 10), 
