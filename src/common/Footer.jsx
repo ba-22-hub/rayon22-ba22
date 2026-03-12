@@ -67,6 +67,12 @@ const Footer = () => {
                         >
                             Charte de fonctionnement
                         </a>
+                        <a
+                            href="/cgu"
+                            className="block text-sm text-blue-100 hover:text-rayonorange transition-colors duration-200"
+                        >
+                            CGU
+                        </a>
                     </div>
 
                     {/* Colonne 2 */}
