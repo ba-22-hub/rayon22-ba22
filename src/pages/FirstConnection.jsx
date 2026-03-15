@@ -21,7 +21,9 @@ function FirstConnection() {
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         password: '',
-        passwordConfirm: ''
+        passwordConfirm: '',
+        acceptTerms: false
+
     });
     const [dbLoading, setDbLoading] = useState(false)
 
@@ -37,9 +39,17 @@ function FirstConnection() {
 
     // function to set the new formData value whenever the inputs are changed
     function handleChange(e) {
-        const pass = e.target.value
-        const field = e.target.name
+        const { name, value, type, checked } = e.target;
+
+        const pass = value
+        const field = name
         // we set the formData value to the current input value
+        if (type === "checkbox") {
+            setFormData({
+                ...formData,
+                [name]: checked
+            });
+        }
         setFormData({
             ...formData,
             [field]: pass
@@ -80,13 +90,13 @@ function FirstConnection() {
                 if (authError) {
                     displayNotification("Erreur lors de la réinitialisation : " + authError.message, "", "danger");
                     setDbLoading(false);
-                    return; 
+                    return;
                 }
 
                 // update db user
                 const { error: dbError } = await supabase
                     .from('User')
-                    .update({ status: "Actif", has_right: true })
+                    .update({ status: "Actif", has_right: true})
                     .eq('id', user.id);
 
                 if (dbError) {
@@ -156,7 +166,19 @@ function FirstConnection() {
                                 <li className={criteriaPassword.hasNotRayon22 ? 'text-green' : 'text-red'}>Ne doit pas contenir "Rayon22"</li>
                             </ul>
                         </div>
+                        <div className="ml-[5%] lg:ml-[8%] pl-4 flex items-center">
+                            <input
+                                className="w-[1.4rem] h-[1.4rem] rounded-lg border border-rayonblue"
 
+                                type="checkbox"
+                                name="acceptTerms"
+                                checked={formData.acceptTerms}
+                                onChange={handleChange}
+                                required
+                            />
+                            <label className="text-rayonblue ml-2">J’ai lu et j'accepte les conditions d’utilisation.    </label>
+                        </div>                        
+                        <span onClick={() => navigate('/cgu')} className='text-rayonlightblue text-sm ml-[20%] cursor-pointer'>Lire les conditions d'utilisation</span>
                         {/* Bouton */}
                         <button
                             type="submit"
@@ -165,7 +187,7 @@ function FirstConnection() {
                             Créer mon mot de passe
                         </button>
                     </form>)}
-            </div>
+            </div >
         </>
     )
 
