@@ -65,36 +65,51 @@ const CookiePopup = () => {
 
             categories: {
                 necessary: {
-                    enabled: true,  // this category is enabled by default
-                    readOnly: true  // this category cannot be disabled
-                },
-                analytics: {
-                    autoClear: {
-                        cookies: [
-                            {
-                                name: /^_ga/,   // regex: match all cookies starting with '_ga'
-                            },
-                            {
-                                name: '_gid',   // string: exact cookie name
-                            }
-                        ]
-                    },
-
-                    // https://cookieconsent.orestbida.com/reference/configuration-reference.html#category-services
+                    enabled: true,
+                    readOnly: true,
+                    // autoClear: {
+                    //     cookies: [
+                    //         {
+                    //             name: /^_ga/,   // regex: match all cookies starting with '_ga'
+                    //         },
+                    //         {
+                    //             name: '_gid',   // string: exact cookie name
+                    //         }
+                    //     ]
+                    // },
                     services: {
-                        ga: {
-                            label: 'Google Analytics',
+                        session: {
+                            label: 'Cookies de session',
+                            description: 'Test',
                             onAccept: () => { },
                             onReject: () => { }
                         },
-                        youtube: {
-                            label: 'Youtube Embed',
+                        cart: {
+                            label: 'Cookies de panier',
                             onAccept: () => { },
                             onReject: () => { }
                         },
                     }
                 },
-                ads: {}
+                optionals: {
+                    // autoClear: {
+                    //     cookies: [
+                    //         {
+                    //             name: /^_ga/,   // regex: match all cookies starting with '_ga'
+                    //         },
+                    //         {
+                    //             name: '_gid',   // string: exact cookie name
+                    //         }
+                    //     ]
+                    // },
+                    services: {
+                        stats: {
+                            label: 'Cookies statistiques',
+                            onAccept: () => { },
+                            onReject: () => { }
+                        },
+                    }
+                },
             },
 
             language: {
@@ -102,16 +117,12 @@ const CookiePopup = () => {
                 translations: {
                     fr: {
                         consentModal: {
-                            title: 'We use cookies',
-                            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+                            title: 'Nous utilisons des cookies',
+                            description: "Acceptez-vous l'utilisation de cookies suivant notre politique de confidentialité ?",
                             acceptAllBtn: 'Tout accepter',
                             acceptNecessaryBtn: 'Tout refuser',
                             showPreferencesBtn: 'Gérer les préférences',
-                            // closeIconLabel: 'Reject all and close modal',
-                            footer: `
-                        <a href="#path-to-impressum.html" target="_blank">Impressum</a>
-                        <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
-                    `,
+                            footer: `<a href="/confidentiality" target="_blank">Politique de confidentialité</a>`,
                         },
                         preferencesModal: {
                             title: 'Gérer les préférences',
@@ -122,118 +133,48 @@ const CookiePopup = () => {
                             serviceCounterLabel: 'Service|Services',
                             sections: [
                                 {
-                                    title: 'Your Privacy Choices',
-                                    description: `In this panel you can express some preferences related to the processing of your personal information. You may review and change expressed choices at any time by resurfacing this panel via the provided link. To deny your consent to the specific processing activities described below, switch the toggles to off or use the “Reject all” button and confirm you want to save your choices.`,
+                                    title: 'Cookies Rayon22',
+                                    description: `Plusieurs catégories de cookies sont utilisées sur ce site, chacune ayant une finalité propre.`,
                                 },
                                 {
-                                    title: 'Strictly Necessary',
-                                    description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+                                    title: 'Cookies nécessaires',
+                                    description: 'Ces cookies sont indispensables au bon fonctionnement du site et ne peuvent donc pas être décochés.',
 
-                                    //this field will generate a toggle linked to the 'necessary' category
-                                    linkedCategory: 'necessary'
-                                },
-                                {
-                                    title: 'Performance and Analytics',
-                                    description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
-                                    linkedCategory: 'analytics',
+                                    linkedCategory: 'necessary',
                                     cookieTable: {
-                                        caption: 'Cookie table',
+                                        caption: 'Descriptions',
                                         headers: {
                                             name: 'Cookie',
-                                            domain: 'Domain',
                                             desc: 'Description'
                                         },
                                         body: [
                                             {
-                                                name: '_ga',
-                                                domain: location.hostname,
-                                                desc: 'Description 1',
+                                                name: 'Cookies de session',
+                                                desc: "Les cookies de session servent à identifier l'utilisateur et le maintenir authentifié pendant la navigation.",
                                             },
                                             {
-                                                name: '_gid',
-                                                domain: location.hostname,
-                                                desc: 'Description 2',
+                                                name: 'Cookies de panier',
+                                                desc: "Les cookies de panier servent à conserver le contenu du panier pendant la navigation.",
                                             }
                                         ]
                                     }
                                 },
                                 {
-                                    title: 'Targeting and Advertising',
-                                    description: 'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
-                                    linkedCategory: 'ads',
-                                },
-                                {
-                                    title: 'More information',
-                                    description: 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
-                                }
-                            ]
-                        }
-                    },
-                    en: {
-                        consentModal: {
-                            title: 'We use cookies',
-                            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-                            acceptAllBtn: 'Accept all',
-                            acceptNecessaryBtn: 'Reject all',
-                            showPreferencesBtn: 'Manage Individual preferences',
-                            // closeIconLabel: 'Reject all and close modal',
-                            footer: `
-                        <a href="#path-to-impressum.html" target="_blank">Impressum</a>
-                        <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
-                    `,
-                        },
-                        preferencesModal: {
-                            title: 'Manage cookie preferences',
-                            acceptAllBtn: 'Accept all',
-                            acceptNecessaryBtn: 'Reject all',
-                            savePreferencesBtn: 'Accept current selection',
-                            closeIconLabel: 'Close modal',
-                            serviceCounterLabel: 'Service|Services',
-                            sections: [
-                                {
-                                    title: 'Your Privacy Choices',
-                                    description: `In this panel you can express some preferences related to the processing of your personal information. You may review and change expressed choices at any time by resurfacing this panel via the provided link. To deny your consent to the specific processing activities described below, switch the toggles to off or use the “Reject all” button and confirm you want to save your choices.`,
-                                },
-                                {
-                                    title: 'Strictly Necessary',
-                                    description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
-
-                                    //this field will generate a toggle linked to the 'necessary' category
-                                    linkedCategory: 'necessary'
-                                },
-                                {
-                                    title: 'Performance and Analytics',
-                                    description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
-                                    linkedCategory: 'analytics',
+                                    title: 'Cookies optionnels',
+                                    linkedCategory: 'optionals',
                                     cookieTable: {
-                                        caption: 'Cookie table',
+                                        caption: 'Descriptions',
                                         headers: {
                                             name: 'Cookie',
-                                            domain: 'Domain',
                                             desc: 'Description'
                                         },
                                         body: [
                                             {
-                                                name: '_ga',
-                                                domain: location.hostname,
-                                                desc: 'Description 1',
-                                            },
-                                            {
-                                                name: '_gid',
-                                                domain: location.hostname,
-                                                desc: 'Description 2',
+                                                name: 'Cookies statistiques',
+                                                desc: "Les cookies statistiques servent à obtenir des informations telles que : temps de visite, pages les plus visitées, appareil utilisé pour la connexion.",
                                             }
                                         ]
                                     }
-                                },
-                                {
-                                    title: 'Targeting and Advertising',
-                                    description: 'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
-                                    linkedCategory: 'ads',
-                                },
-                                {
-                                    title: 'More information',
-                                    description: 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
                                 }
                             ]
                         }
@@ -242,22 +183,6 @@ const CookiePopup = () => {
             }
         });
     }, []);
-    return (
-        <div>
-            <CookieManager
-                displayType="popup"
-                showManageButton
-                translations={{
-                    title: "Cookies",
-                    message:
-                        "Nous utilisons des cookies pour améliorer votre expérience. Vous pouvez choisir ce que vous acceptez.",
-                    buttonText: "Tout accepter",
-                    declineButtonText: "Tout refuser",
-                    manageButtonText: "Uniquement les nécessaires",
-                }}
-            />
-        </div>
-    );
 }
 
 export default CookiePopup;
