@@ -1,30 +1,19 @@
 import { useEffect } from "react";
 
 // Importing dependencies
-import { CookieManager } from "react-cookie-manager";
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import * as CookieConsent from "vanilla-cookieconsent";
 
 const CookiePopup = () => {
     useEffect(() => {
         CookieConsent.run({
-
-            // root: 'body',
-            // autoShow: true,
-            // disablePageInteraction: true,
-            // hideFromBots: true,
-            // mode: 'opt-in',
-            // revision: 0,
+            autoShow: true,
 
             cookie: {
-                name: 'cc_cookie',
-                // domain: location.hostname,
-                // path: '/',
-                // sameSite: "Lax",
-                // expiresAfterDays: 182,
+                name: 'cookiesRayon22',
+                useLocalStorage: true,
             },
 
-            // https://cookieconsent.orestbida.com/reference/configuration-reference.html#guioptions
             guiOptions: {
                 consentModal: {
                     layout: 'cloud inline',
@@ -81,13 +70,9 @@ const CookiePopup = () => {
                         session: {
                             label: 'Cookies de session',
                             description: 'Test',
-                            onAccept: () => { },
-                            onReject: () => { }
                         },
                         cart: {
                             label: 'Cookies de panier',
-                            onAccept: () => { },
-                            onReject: () => { }
                         },
                     }
                 },
@@ -171,7 +156,7 @@ const CookiePopup = () => {
                                         body: [
                                             {
                                                 name: 'Cookies statistiques',
-                                                desc: "Les cookies statistiques servent à obtenir des informations telles que : temps de visite, pages les plus visitées, appareil utilisé pour la connexion.",
+                                                desc: "Les cookies statistiques servent à obtenir des informations telles que : temps de visite, pages les plus visitées, appareil utilisé pour la connexion...",
                                             }
                                         ]
                                     }
