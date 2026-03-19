@@ -32,6 +32,23 @@ const CookiePopup = () => {
                 console.log('onFirstConsent fired', cookie);
             },
 
+            onConsent: () => {
+                if (CookieConsent.acceptedCategory('optionals')) {
+                    console.log("Les cookies statistiques sont activés");
+
+                } else {
+                    console.log("Les cookies statistiques sont desactivés");
+                }
+            },
+
+            onChange: () => {
+                if (CookieConsent.acceptedCategory('optionals')) {
+                    console.log("Les cookies statistiques ont été activés");
+                } else {
+                    console.log("Les cookies statistiques ont été desactivés");
+                }
+            },
+
             onConsent: ({ cookie }) => {
                 console.log('onConsent fired!', cookie)
             },
@@ -56,16 +73,6 @@ const CookiePopup = () => {
                 necessary: {
                     enabled: true,
                     readOnly: true,
-                    // autoClear: {
-                    //     cookies: [
-                    //         {
-                    //             name: /^_ga/,   // regex: match all cookies starting with '_ga'
-                    //         },
-                    //         {
-                    //             name: '_gid',   // string: exact cookie name
-                    //         }
-                    //     ]
-                    // },
                     services: {
                         session: {
                             label: 'Cookies de session',
@@ -77,16 +84,6 @@ const CookiePopup = () => {
                     }
                 },
                 optionals: {
-                    // autoClear: {
-                    //     cookies: [
-                    //         {
-                    //             name: /^_ga/,   // regex: match all cookies starting with '_ga'
-                    //         },
-                    //         {
-                    //             name: '_gid',   // string: exact cookie name
-                    //         }
-                    //     ]
-                    // },
                     services: {
                         stats: {
                             label: 'Cookies statistiques',
