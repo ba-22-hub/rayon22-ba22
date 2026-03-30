@@ -13,8 +13,6 @@ echo "📋 Arguments reçus: $@"
 if [ -z "$VITE_SUPABASE_URL" ]; then
     echo "❌ Erreur: VITE_SUPABASE_URL est requis."
     echo "📋 Variables disponibles :"
-    env | grep -E "(VITE_|SUPABASE)" || echo "Aucune variable VITE_ trouvée"
-    exit 1
 fi
 
 if [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
@@ -36,7 +34,6 @@ cat > /usr/share/nginx/html/runtime-config.js << EOF
 window.RUNTIME_CONFIG = {
   VITE_SUPABASE_URL: '$VITE_SUPABASE_URL',
   VITE_SUPABASE_ANON_KEY: '$VITE_SUPABASE_ANON_KEY',
-  VITE_SUPABASE_SERVICE_ROLE_KEY: '$VITE_SUPABASE_SERVICE_ROLE_KEY',
   VITE_STRIPE_PUBLIC_KEY: '$VITE_STRIPE_PUBLIC_KEY'
 };
 EOF
@@ -53,7 +50,6 @@ else
 fi
 
 echo "🚀 Démarrage de nginx..."
-
 # Si aucun argument n'est passé, utiliser la commande par défaut
 if [ $# -eq 0 ]; then
     echo "📋 Aucun argument, lancement de nginx par défaut"
