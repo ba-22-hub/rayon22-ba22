@@ -13,6 +13,7 @@ echo "📋 Arguments reçus: $@"
 if [ -z "$VITE_SUPABASE_URL" ]; then
     echo "❌ Erreur: VITE_SUPABASE_URL est requis."
     echo "📋 Variables disponibles :"
+    exit 1
 fi
 
 if [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
