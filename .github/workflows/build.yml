@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: rg.fr-par.scw.cloud
-  IMAGE: rg.fr-par.scw.cloud/rayon22-namespace/ba22-app
+  IMAGE: rg.fr-par.scw.cloud/funcscwrayon22namespaceipzcor69/ba22-app
 
 jobs:
   build-and-push:
