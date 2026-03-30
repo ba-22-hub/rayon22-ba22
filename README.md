@@ -1,6 +1,6 @@
 # Application web de gestion des clients et des produits – Banque Alimentaire des Côtes d'Armor : Rayon22
 
-Rayon22 est une application web conçue pour moderniser et simplifier les échanges entre les bénéficiaires et la Banque Alimentaire des Côtes d'Armor.
+Le Rayon22 est une application web conçue pour moderniser et simplifier les échanges entre les bénéficiaires et la Banque Alimentaire des Côtes d'Armor.
 
 Elle offre une interface intuitive et ergonomique permettant :
 
