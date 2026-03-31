@@ -62,4 +62,4 @@ EXPOSE 8080
 
 # Utiliser l'entrypoint que Scaleway attend
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon", "off"]
+CMD ["nginx", "-g", "daemon off;"]
